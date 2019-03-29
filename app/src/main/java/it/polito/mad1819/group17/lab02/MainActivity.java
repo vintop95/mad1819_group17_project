@@ -27,15 +27,15 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_profile:
-                    fm.beginTransaction().hide(active).show(offersFragment).commit();
+                    fm.beginTransaction().hide(active).show(profileFragment).commit();
                     active = offersFragment;
                     return true;
                 case R.id.navigation_dailyoffer:
-                    fm.beginTransaction().hide(active).show(ordersFragment).commit();
+                    fm.beginTransaction().hide(active).show(offersFragment).commit();
                     active = ordersFragment;
                     return true;
                 case R.id.navigation_orders:
-                    fm.beginTransaction().hide(active).show(profileFragment).commit();
+                    fm.beginTransaction().hide(active).show(ordersFragment).commit();
                     active = profileFragment;
                     return true;
             }
