@@ -28,15 +28,15 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_profile:
                     fm.beginTransaction().hide(active).show(profileFragment).commit();
-                    active = offersFragment;
+                    active = profileFragment;
                     return true;
                 case R.id.navigation_dailyoffer:
                     fm.beginTransaction().hide(active).show(offersFragment).commit();
-                    active = ordersFragment;
+                    active = offersFragment;
                     return true;
                 case R.id.navigation_orders:
                     fm.beginTransaction().hide(active).show(ordersFragment).commit();
-                    active = profileFragment;
+                    active = ordersFragment;
                     return true;
             }
             return false;
