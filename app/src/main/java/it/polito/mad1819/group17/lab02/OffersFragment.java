@@ -3,7 +3,11 @@ package it.polito.mad1819.group17.lab02;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +30,8 @@ public class OffersFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    RecyclerView recyclerView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -58,6 +64,7 @@ public class OffersFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -65,6 +72,17 @@ public class OffersFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_offers, container, false);
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        recyclerView = getActivity().findViewById(R.id.rv);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager rvLiLayoutManager = layoutManager;
+
+        recyclerView.setLayoutManager(rvLiLayoutManager);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -106,3 +124,4 @@ public class OffersFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 }
+
