@@ -69,6 +69,11 @@ public class OffersFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        foodsList = new ArrayList<>();
+        foodsList.add(new ModelFood(R.drawable.food_photo_1,"hamurger","20e", "carne 200g, provola, bacon, insalata" ));
+        foodsList.add(new ModelFood(R.drawable.food_photo_1,"spaghetti","10e", "spaghetti, pomodoro" ));
+
+
     }
 
     @Override
@@ -83,10 +88,12 @@ public class OffersFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         recyclerView = getActivity().findViewById(R.id.rv);
+/*
 
         foodsList = new ArrayList<>();
         foodsList.add(new ModelFood(R.drawable.food_photo_1,"hamurger","20e", "carne 200g, provola, bacon, insalata" ));
         foodsList.add(new ModelFood(R.drawable.food_photo_1,"spaghetti","10e", "spaghetti, pomodoro" ));
+*/
 
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
