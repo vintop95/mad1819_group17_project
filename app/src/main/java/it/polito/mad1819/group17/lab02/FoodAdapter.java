@@ -10,17 +10,25 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
     private Context mContext;
-    FoodAdapter(Context context){
+    private ArrayList<ModelFood> mList;
+
+    FoodAdapter(Context context, ArrayList<ModelFood> list){
         mContext = context;
+        mList = list;
+
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater layoutInflater = LayoutInflater.from((mContext));
+
         View view = layoutInflater.inflate(R.layout.rv_food_items,viewGroup,false);
 
         ViewHolder viewHolder = new ViewHolder(view);
@@ -30,13 +38,28 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int pos) {
+
+        ModelFood fooditem = mList.get(pos);
+
+        ImageView image = viewHolder.item_image;
+        TextView name,place,price;
+
+        name = viewHolder.item_name;
+        place=viewHolder.item_place;
+        price=viewHolder.item_price;
+
+        image.setImageResource(fooditem.getImage());
+        name.setText(fooditem.getName());
+        place.setText(fooditem.getPlace());
+        price.setText(fooditem.getPrice());
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+
+        return mList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
