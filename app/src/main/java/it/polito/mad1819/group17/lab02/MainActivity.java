@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     Fragment active = offersFragment;
 
 
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -27,16 +26,16 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_profile:
+                    fm.beginTransaction().hide(active).show(profileFragment).commit();
+                    active = profileFragment;
+                    return true;
+                case R.id.navigation_dailyoffer:
                     fm.beginTransaction().hide(active).show(offersFragment).commit();
                     active = offersFragment;
                     return true;
-                case R.id.navigation_dailyoffer:
+                case R.id.navigation_orders:
                     fm.beginTransaction().hide(active).show(ordersFragment).commit();
                     active = ordersFragment;
-                    return true;
-                case R.id.navigation_orders:
-                    fm.beginTransaction().hide(active).show(profileFragment).commit();
-                    active = profileFragment;
                     return true;
             }
             return false;
