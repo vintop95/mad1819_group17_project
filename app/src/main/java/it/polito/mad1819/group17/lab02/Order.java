@@ -1,32 +1,99 @@
 package it.polito.mad1819.group17.lab02;
 
-public class Order {
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.HashMap;
+
+public class Order implements Comparable, Serializable {
+
+    public final static String STATE1 = "Accepted";
+    public final static String STATE2 = "In preparation";
+    public final static String STATE3 = "Delivering";
 
     private int number;
     private String customer_name;
     private String customer_phone;
+    private String delivery_date;
     private String delivery_time;
-    private String state;
+    private HashMap<String, String> state_stateTime;
+    private HashMap<String, Integer> item_itemQuantity;
 
-    public String getState() {
+
+
+    private Date delivery_timestamp;
+
+
+
+
+    public Order(int number, String customer_name, String customer_phone, String delivery_time, String delivery_date, HashMap<String, String> state_stateTime, HashMap<String, Integer> item_itemQuantity) {
+        this.number = number;
+        this.customer_name = customer_name;
+        this.customer_phone = customer_phone;
+        this.delivery_time = delivery_time;
+        this.delivery_date = delivery_date;
+        this.state_stateTime = state_stateTime;
+        this.item_itemQuantity = item_itemQuantity;
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        try {
+            this.delivery_timestamp = simpleDateFormat.parse(delivery_date + " " + delivery_time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setItem_itemQuantity(HashMap<String, Integer> item_itemQuantity) {
+        this.item_itemQuantity = item_itemQuantity;
+    }
+
+    public Date getDelivery_timestamp() {
+        return delivery_timestamp;
+    }
+
+    public HashMap<String, String> getState_stateTime() {
+        return state_stateTime;
+    }
+
+    public void setState_stateTime(HashMap<String, String> state_stateTime) {
+        this.state_stateTime = state_stateTime;
+    }
+
+    public HashMap<String, Integer> getItem_itemQuantity() {
+        return item_itemQuantity;
+    }
+
+    /*
+    public void setItem_itemQuantity(HashMap<String, Integer> item_itemQuantity) {
+        this.item_itemQuantity = item_itemQuantity;
+    }*/
+
+
+    public String getCurrentState() {
+        if (state_stateTime.get(STATE3) != null)
+            return STATE3;
+        else if (state_stateTime.get(STATE2) != null)
+            return STATE2;
+        else
+            return STATE1;
+    }
+
+    public int getTotalItemsQuantity() {
+        int totOrderedItems = 0;
+        for (String orderedItem : item_itemQuantity.keySet())
+            totOrderedItems += item_itemQuantity.get(orderedItem);
+        return totOrderedItems;
+    }
+
+    /*public String getState() {
         return state;
     }
 
     public void setState(String state) {
         this.state = state;
-    }
-
-    public Order(int number, String customer_name, String customer_phone, String delivery_time, String state) {
-        this.number = number;
-        this.customer_phone = customer_name;
-        this.customer_name = customer_phone;
-        this.delivery_time = delivery_time;
-        this.state = state;
-    }
-
-
-    //private HashMap<String, Integer> orderedItems_orderedQty;
-    //private HashMap<String, String> state_stateTime;
+    }*/
 
     public String getCustomer_name() {
         return customer_name;
@@ -42,6 +109,14 @@ public class Order {
 
     public void setDelivery_time(String delivery_time) {
         this.delivery_time = delivery_time;
+    }
+
+    public String getDelivery_date() {
+        return delivery_date;
+    }
+
+    public void setDelivery_date(String delivery_date) {
+        this.delivery_date = delivery_date;
     }
 
     /*public HashMap<String, Integer> getOrderedItems_orderedQty() {
@@ -77,14 +152,14 @@ public class Order {
         return customer_phone;
     }
 
+
     public void setCustomer_phone(String customer_phone) {
         this.customer_phone = customer_phone;
     }
 
-    /*public int getTotalOrderdItems(){
-        int totOrderedItems = 0;
-        for(String orderedItem:orderedItems_orderedQty.keySet())
-            totOrderedItems += orderedItems_orderedQty.get(orderedItem);
-        return totOrderedItems;
-    }*/
+
+    @Override
+    public int compareTo(Object o) {
+        return delivery_timestamp.compareTo(((Order) o).getDelivery_timestamp());
+    }
 }

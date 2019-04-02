@@ -47,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fm.beginTransaction().add(R.id.main_container, profileFragment, "3").hide(profileFragment).commit();
-        fm.beginTransaction().add(R.id.main_container, ordersFragment, "2").hide(ordersFragment).commit();
-        fm.beginTransaction().add(R.id.main_container, offersFragment, "1").commit();
+        fm.beginTransaction().add(R.id.main_container, profileFragment, "profile_fragment").hide(profileFragment).commit();
+        fm.beginTransaction().add(R.id.main_container, ordersFragment, "orders_fragment").hide(ordersFragment).commit();
+        fm.beginTransaction().add(R.id.main_container, offersFragment, "offers_fragment").commit();
 //
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
