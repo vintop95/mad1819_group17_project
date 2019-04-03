@@ -72,9 +72,10 @@ public class OrderDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
-        Order selectedOrder = (Order) getIntent().getExtras().getSerializable("selected_order");
+        Order selectedOrder = (Order) getIntent().getExtras().getBundle("bundle_selected_order").getSerializable("selected_order");
 
         locateViews();
+
 
         feedViews(selectedOrder);
 
