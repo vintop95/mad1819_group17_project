@@ -87,10 +87,7 @@ public class OrdersFragment extends Fragment {
         ) {
             @Override
             public void onClick(View view, int position) {
-                Toast.makeText(getContext(), " " + position, Toast.LENGTH_SHORT).show();
-
                 Order selectedOrder = mAdapter.getOrders().get(position);
-                //Toast.makeText(getContext(), " " + selectedOrder.getNumber(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(), OrderDetailsActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("selected_order", selectedOrder);
@@ -113,8 +110,9 @@ public class OrdersFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            Toast.makeText(getContext(), "Position", Toast.LENGTH_SHORT).show();
-        }
+        /*if (requestCode == 1) {
+            int g = data.getExtras().getInt("new_state");
+            Toast.makeText(getContext(), "new state " + g, Toast.LENGTH_SHORT).show();
+        }*/
     }
 }

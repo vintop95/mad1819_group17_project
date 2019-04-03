@@ -3,7 +3,6 @@ package it.polito.mad1819.group17.lab02;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -78,6 +77,21 @@ public class Order implements Comparable, Serializable {
             return STATE2;
         else
             return STATE1;
+    }
+
+    public boolean moveToNextState() {
+        if (getCurrentState() == STATE3)
+            return false;
+        else {
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+            String currentTime = formatter.format(new Date());
+
+            if (getCurrentState() == STATE1)
+                state_stateTime.put(STATE2, currentTime);
+            else if (getCurrentState() == STATE2)
+                state_stateTime.put(STATE3, currentTime);
+            return true;
+        }
     }
 
     public int getTotalItemsQuantity() {
@@ -160,6 +174,31 @@ public class Order implements Comparable, Serializable {
 
     @Override
     public int compareTo(Object o) {
-        return delivery_timestamp.compareTo(((Order) o).getDelivery_timestamp());
+        if (this.getCurrentState() == STATE3)
+            return +1;
+        else
+            return delivery_timestamp.compareTo(((Order) o).getDelivery_timestamp());
+    }
+
+    public String getStateHistoryToString(){
+        String state_history = "";
+        switch (getCurrentState()) {
+            case STATE1:
+                state_history = getState_stateTime().get(Order.STATE1) + " " + Order.STATE1;
+                state_history += System.lineSeparator() + "--:--" + " " + Order.STATE2;
+                state_history += System.lineSeparator() + "--:--" + " " + Order.STATE3;
+                break;
+            case STATE2:
+                state_history = getState_stateTime().get(Order.STATE1) + "  " + Order.STATE1;
+                state_history += System.lineSeparator() + getState_stateTime().get(Order.STATE2) + "  " + Order.STATE2;
+                state_history += System.lineSeparator() + "--:--" + "  " + Order.STATE3;
+                break;
+            case STATE3:
+                state_history = getState_stateTime().get(Order.STATE1) + "  " + Order.STATE1;
+                state_history += System.lineSeparator() + getState_stateTime().get(Order.STATE2) + "  " + Order.STATE2;
+                state_history += System.lineSeparator() + getState_stateTime().get(Order.STATE3) + "  " + Order.STATE3;
+                break;
+        }
+        return state_history;
     }
 }
