@@ -1,5 +1,6 @@
 package it.polito.mad1819.group17.lab02;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -85,16 +86,20 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 Order selectedOrder = orders.get(viewHolder.getAdapterPosition());
-                Bundle orderDetailsFragmentArgs = new Bundle();
-                orderDetailsFragmentArgs.putSerializable("selected_order", selectedOrder);
-                OrderDetailsFragment orderDetailsFragment = new OrderDetailsFragment();
+                Intent intent = new Intent(v.getContext(), OrderDetailsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("selected_order", selectedOrder);
+                intent.putExtras(bundle);
+                v.getContext().startActivity(intent);
+
+                /*OrderDetailsFragment orderDetailsFragment = new OrderDetailsFragment();
                 orderDetailsFragment.setArguments(orderDetailsFragmentArgs);
 
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
                 activity.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.main_container, orderDetailsFragment, "order_detail_fagment")
                         .addToBackStack("orders_fragment")
-                        .commit();
+                        .commit();*/
             }
         });
 

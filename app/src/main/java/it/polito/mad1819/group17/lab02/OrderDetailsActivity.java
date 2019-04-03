@@ -1,14 +1,11 @@
 package it.polito.mad1819.group17.lab02;
 
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
-public class OrderDetailsFragment extends Fragment {
+public class OrderDetailsActivity extends AppCompatActivity {
 
     private TextView txt_order_number;
     private TextView txt_delivery_time;
@@ -18,15 +15,14 @@ public class OrderDetailsFragment extends Fragment {
     private TextView txt_customer_phone;
     private TextView txt_state_history;
 
-
-    private void locateViews(View view) {
-        txt_order_number = view.findViewById(R.id.txt_order_number);
-        txt_delivery_time = view.findViewById(R.id.txt_delivery_time);
-        txt_delivery_date = view.findViewById(R.id.txt_delivery_date);
-        txt_order_content = view.findViewById(R.id.txt_order_content);
-        txt_customer_name = view.findViewById(R.id.txt_customer_name);
-        txt_customer_phone = view.findViewById(R.id.txt_customer_phone);
-        txt_state_history = view.findViewById(R.id.txt_state_history);
+    private void locateViews() {
+        txt_order_number = findViewById(R.id.txt_order_number);
+        txt_delivery_time = findViewById(R.id.txt_delivery_time);
+        txt_delivery_date = findViewById(R.id.txt_delivery_date);
+        txt_order_content = findViewById(R.id.txt_order_content);
+        txt_customer_name = findViewById(R.id.txt_customer_name);
+        txt_customer_phone = findViewById(R.id.txt_customer_phone);
+        txt_state_history = findViewById(R.id.txt_state_history);
     }
 
     private void feedViews(Order selctedOrder) {
@@ -66,19 +62,29 @@ public class OrderDetailsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_order_details, container, false);
-//        Order selectedOrder = (Order) savedInstanceState.getSerializable("selected_order");
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_order_details);
 
-        Order selectedOrder = (Order) getArguments().getSerializable("selected_order");
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        locateViews(view);
+
+        Order selectedOrder = (Order) getIntent().getExtras().getSerializable("selected_order");
+
+        locateViews();
 
         feedViews(selectedOrder);
 
-        return view;
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
 
 }
