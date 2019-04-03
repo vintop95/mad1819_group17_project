@@ -1,11 +1,17 @@
 package it.polito.mad1819.group17.lab02;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
 public class OrderDetailsActivity extends AppCompatActivity {
+
+    private final static int STATE_CHANGED = 1;
+    private final static int STATE_NOT_CHANGED = 0;
 
     private TextView txt_order_number;
     private TextView txt_delivery_time;
@@ -14,6 +20,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     private TextView txt_customer_name;
     private TextView txt_customer_phone;
     private TextView txt_state_history;
+    private Button btn_next_state;
 
     private void locateViews() {
         txt_order_number = findViewById(R.id.txt_order_number);
@@ -23,6 +30,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         txt_customer_name = findViewById(R.id.txt_customer_name);
         txt_customer_phone = findViewById(R.id.txt_customer_phone);
         txt_state_history = findViewById(R.id.txt_state_history);
+        btn_next_state = findViewById(R.id.btn_next_state);
     }
 
     private void feedViews(Order selctedOrder) {
@@ -39,25 +47,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         }
         txt_order_content.setText(order_content);
 
-        String state_history = "";
-        switch (selctedOrder.getCurrentState()) {
-            case Order.STATE1:
-                state_history = selctedOrder.getState_stateTime().get(Order.STATE1) + " " + Order.STATE1;
-                state_history += System.lineSeparator() + "--:--" + " " + Order.STATE2;
-                state_history += System.lineSeparator() + "--:--" + " " + Order.STATE3;
-                break;
-            case Order.STATE2:
-                state_history = selctedOrder.getState_stateTime().get(Order.STATE1) + "  " + Order.STATE1;
-                state_history += System.lineSeparator() + selctedOrder.getState_stateTime().get(Order.STATE2) + "  " + Order.STATE2;
-                state_history += System.lineSeparator() + "--:--" + "  " + Order.STATE3;
-                break;
-            case Order.STATE3:
-                state_history = selctedOrder.getState_stateTime().get(Order.STATE1) + "  " + Order.STATE1;
-                state_history += System.lineSeparator() + selctedOrder.getState_stateTime().get(Order.STATE2) + "  " + Order.STATE2;
-                state_history += System.lineSeparator() + selctedOrder.getState_stateTime().get(Order.STATE3) + "  " + Order.STATE3;
-                break;
-        }
-        txt_state_history.setText(state_history);
+        txt_state_history.setText(selctedOrder.getStateHistoryToString());
 
     }
 
@@ -71,12 +61,28 @@ public class OrderDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
-        Order selectedOrder = (Order) getIntent().getExtras().getSerializable("selected_order");
+        final Order selectedOrder = (Order) getIntent().getExtras().getBundle("bundle_selected_order").getSerializable("selected_order");
 
         locateViews();
 
+        btn_next_state.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedOrder.moveToNextState())
+                    setResult(STATE_CHANGED, new Intent().putExtra("order_number", selectedOrder.getNumber()));
+                else
+                    setResult(STATE_NOT_CHANGED);
+
+                txt_state_history.setText(selectedOrder.getStateHistoryToString());
+            }
+        });
+
         feedViews(selectedOrder);
+
+
+
+
+        //setResult(1, new Intent().putExtra("new_state", 5));
 
     }
 
