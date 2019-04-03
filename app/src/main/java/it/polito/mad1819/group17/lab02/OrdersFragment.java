@@ -69,7 +69,6 @@ public class OrdersFragment extends Fragment {
 
         // If you know that the size of each element in the recycler view will not change, then you specify this and performance will improve
         recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         // Define some data as example
        exampleData();

@@ -39,8 +39,6 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             txt_delivery_time = itemView.findViewById(R.id.txt_delivery_time);
             txt_delivery_date = itemView.findViewById(R.id.txt_delivery_date);
             txt_order_number = itemView.findViewById(R.id.txt_order_number);
-            txt_customer_name = itemView.findViewById(R.id.txt_customer_name);
-            txt_customer_phone = itemView.findViewById(R.id.txt_customer_phone);
             txt_total_items = itemView.findViewById(R.id.txt_total_items);
             txt_order_state = itemView.findViewById(R.id.txt_order_state);
 
@@ -61,8 +59,6 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             this.txt_delivery_time.setText(order.getDelivery_time());
             this.txt_delivery_date.setText(order.getDelivery_date());
             this.txt_order_number.setText("" + order.getNumber());
-            this.txt_customer_name.setText(order.getCustomer_name());
-            this.txt_customer_phone.setText(order.getCustomer_phone());
             this.txt_total_items.setText("" + order.getTotalItemsQuantity());
             this.txt_order_state.setText(order.getCurrentState());
         }
