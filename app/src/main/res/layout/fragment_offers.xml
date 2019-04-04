@@ -7,55 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".OffersFragment">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:fitsSystemWindows="true"
-        android:background="@android:color/background_light"
-        android:theme="@style/AppTheme"
-        >
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            android:fitsSystemWindows="true"
-            app:contentScrim="@android:color/white"
-            >
-
-            <ImageButton
-                android:background="@android:color/white"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/food_photo_1"
-                android:contentDescription="@string/app_name"
-                android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Daily Offer"
-                android:textColor="@android:color/white"
-                android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title"
-                android:layout_gravity="bottom"
-                android:textStyle="italic"
-                android:layout_margin="10dp"/>
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-
-    </android.support.design.widget.AppBarLayout>
 
 
 <!-- android:fillViewport="true"
 
          -->
 
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
 
         <android.support.v7.widget.RecyclerView
@@ -63,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </android.support.v4.widget.NestedScrollView>
+    </ScrollView>
 
 
     <android.support.design.widget.FloatingActionButton
