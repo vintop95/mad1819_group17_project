@@ -10,5 +10,4 @@
     android:padding="1dp"
     android:id="@+id/main_container">
 
-
 </FrameLayout>
