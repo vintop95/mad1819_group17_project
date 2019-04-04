@@ -18,6 +18,11 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
     private Context mContext;
     private ArrayList<ModelFood> mList;
 
+    public void updateList(ArrayList<ModelFood> updatedData) {
+        mList = updatedData;
+        notifyDataSetChanged();
+    }
+
     FoodAdapter(Context context, ArrayList<ModelFood> list){
         mContext = context;
         mList = list;
