@@ -3,4 +3,11 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="colorState1">#FF9933</color>
+    <color name="colorState2">#F4B042</color>
+    <color name="colorState3">#33CC33</color>
+
+    <color name="button_disabled_text">#808080</color>
+
 </resources>

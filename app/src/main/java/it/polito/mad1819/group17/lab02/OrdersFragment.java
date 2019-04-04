@@ -1,18 +1,13 @@
 package it.polito.mad1819.group17.lab02;
 
-/*import android.content.Context;
-import android.net.Uri;*/
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +25,6 @@ public class OrdersFragment extends Fragment {
 
 
     private OrdersAdapter.RecyclerViewClickListener listener;
-
 
 
     interface OrdersFragmentObserver {
@@ -78,21 +72,17 @@ public class OrdersFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.rv_orders);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        // If you know that the size of each element in the recycler view will not change, then you specify this and performance will improve
         recyclerView.setHasFixedSize(true);
 
         // Define some data as example
         exampleData();
 
-        /*OrdersAdapter.RecyclerViewClickListener */listener = new OrdersAdapter.RecyclerViewClickListener() {
+        listener = new OrdersAdapter.RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Order selectedOrder = mAdapter.getOrders().get(position);
                 Intent intent = new Intent(getContext(), OrderDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                /*bundle.putSerializable("selected_order", selectedOrder);
-                intent.putExtra("bundle_selected_order", bundle);*/
 
                 bundle.putSerializable("orders", mAdapter.getOrders());
                 bundle.putInt("position", position);
@@ -103,21 +93,6 @@ public class OrdersFragment extends Fragment {
             }
         };
 
-
-        // Define the adapter for our data, then set bind it to the recycle view
-        /*Collections.sort(orders, new Comparator<Order>() {
-            @Override
-            public int compare(Order o1, Order o2) {
-                if (o1.getCurrentState() == Order.STATE3)
-                    return 1;
-                else
-                    return o1.getDelivery_timestamp().compareTo(o2.getDelivery_timestamp());
-            }
-        });
-        mAdapter = new OrdersAdapter(orders, listener);
-        recyclerView.setAdapter(mAdapter);*/
-
-        Log.d("AAA", "onCreateView");
         return view;
     }
 
@@ -134,7 +109,7 @@ public class OrdersFragment extends Fragment {
                     return o1.getDelivery_timestamp().compareTo(o2.getDelivery_timestamp());
             }
         });
-        mAdapter = new OrdersAdapter(orders, listener);
+        mAdapter = new OrdersAdapter(orders, listener, getContext());
         recyclerView.setAdapter(mAdapter);
         mAdapter.updateList(orders);
     }
@@ -142,9 +117,8 @@ public class OrdersFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SHOW_DETAILS_REQUEST && resultCode == OrderDetailsActivity.STATE_CHANGED) {
-
             ArrayList<Order> updatedOrders = (ArrayList<Order>) data.getSerializableExtra("orders");
-            this.orders=updatedOrders;
+            this.orders = updatedOrders;
         }
     }
 }

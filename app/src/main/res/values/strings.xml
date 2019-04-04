@@ -4,6 +4,11 @@
     <string name="title_dailyoffer">Daily Offer</string>
     <string name="title_orders">Orders</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Alert Dialog for the next state of the order -->
+    <string name="confirm_next_state_title">Do you want to confirm the next state?</string>
+    <string name="confirm_next_state_message">Is the meal ready for the next state? This is not a reversible operation.</string>
+    <string name="positive_button">OK</string>
+    <string name="negative_button">CANCEL</string>
+
 </resources>
