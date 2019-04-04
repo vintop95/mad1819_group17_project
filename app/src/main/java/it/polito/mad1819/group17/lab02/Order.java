@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Order implements Comparable, Serializable {
+public class Order implements Serializable {
 
     public final static String STATE1 = "Accepted";
     public final static String STATE2 = "In preparation";
@@ -20,11 +20,7 @@ public class Order implements Comparable, Serializable {
     private HashMap<String, String> state_stateTime;
     private HashMap<String, Integer> item_itemQuantity;
 
-
-
     private Date delivery_timestamp;
-
-
 
 
     public Order(int number, String customer_name, String customer_phone, String delivery_time, String delivery_date, HashMap<String, String> state_stateTime, HashMap<String, Integer> item_itemQuantity) {
@@ -69,45 +65,6 @@ public class Order implements Comparable, Serializable {
         this.item_itemQuantity = item_itemQuantity;
     }*/
 
-
-    public String getCurrentState() {
-        if (state_stateTime.get(STATE3) != null)
-            return STATE3;
-        else if (state_stateTime.get(STATE2) != null)
-            return STATE2;
-        else
-            return STATE1;
-    }
-
-    public boolean moveToNextState() {
-        if (getCurrentState() == STATE3)
-            return false;
-        else {
-            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-            String currentTime = formatter.format(new Date());
-
-            if (getCurrentState() == STATE1)
-                state_stateTime.put(STATE2, currentTime);
-            else if (getCurrentState() == STATE2)
-                state_stateTime.put(STATE3, currentTime);
-            return true;
-        }
-    }
-
-    public int getTotalItemsQuantity() {
-        int totOrderedItems = 0;
-        for (String orderedItem : item_itemQuantity.keySet())
-            totOrderedItems += item_itemQuantity.get(orderedItem);
-        return totOrderedItems;
-    }
-
-    /*public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }*/
 
     public String getCustomer_name() {
         return customer_name;
@@ -171,16 +128,23 @@ public class Order implements Comparable, Serializable {
         this.customer_phone = customer_phone;
     }
 
-
-    @Override
-    public int compareTo(Object o) {
-        if (this.getCurrentState() == STATE3)
-            return +1;
-        else
-            return delivery_timestamp.compareTo(((Order) o).getDelivery_timestamp());
+    public int getTotalItemsQuantity() {
+        int totOrderedItems = 0;
+        for (String orderedItem : item_itemQuantity.keySet())
+            totOrderedItems += item_itemQuantity.get(orderedItem);
+        return totOrderedItems;
     }
 
-    public String getStateHistoryToString(){
+    public String getCurrentState() {
+        if (state_stateTime.get(STATE3) != null)
+            return STATE3;
+        else if (state_stateTime.get(STATE2) != null)
+            return STATE2;
+        else
+            return STATE1;
+    }
+
+    public String getStateHistoryToString() {
         String state_history = "";
         switch (getCurrentState()) {
             case STATE1:
@@ -200,5 +164,20 @@ public class Order implements Comparable, Serializable {
                 break;
         }
         return state_history;
+    }
+
+    public boolean moveToNextState() {
+        if (getCurrentState() == STATE3)
+            return false;
+        else {
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+            String currentTime = formatter.format(new Date());
+
+            if (getCurrentState() == STATE1)
+                state_stateTime.put(STATE2, currentTime);
+            else if (getCurrentState() == STATE2)
+                state_stateTime.put(STATE3, currentTime);
+            return true;
+        }
     }
 }

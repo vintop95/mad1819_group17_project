@@ -5,29 +5,33 @@ import android.net.Uri;*/
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
-
-import static android.support.constraint.Constraints.TAG;
 
 
 public class OrdersFragment extends Fragment {
 
+    private final static int SHOW_DETAILS_REQUEST = 1;
+
     private RecyclerView recyclerView;
     private OrdersAdapter mAdapter;
     private ArrayList<Order> orders = new ArrayList<Order>();
+
+
+    private OrdersAdapter.RecyclerViewClickListener listener;
+
+
 
     interface OrdersFragmentObserver {
         void notifyClickOnCardView(Object details);
@@ -81,37 +85,66 @@ public class OrdersFragment extends Fragment {
         // Define some data as example
         exampleData();
 
-        OrdersAdapter.RecyclerViewClickListener listener = new OrdersAdapter.RecyclerViewClickListener(
-
-        ) {
+        /*OrdersAdapter.RecyclerViewClickListener */listener = new OrdersAdapter.RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Order selectedOrder = mAdapter.getOrders().get(position);
                 Intent intent = new Intent(getContext(), OrderDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("selected_order", selectedOrder);
-                intent.putExtra("bundle_selected_order", bundle);
+                /*bundle.putSerializable("selected_order", selectedOrder);
+                intent.putExtra("bundle_selected_order", bundle);*/
 
-                startActivityForResult(intent, 1);
-                Toast.makeText(getContext(), "Position " + position, Toast.LENGTH_SHORT).show();
+                bundle.putSerializable("orders", mAdapter.getOrders());
+                bundle.putInt("position", position);
+
+                intent.putExtra("args", bundle);
+
+                startActivityForResult(intent, SHOW_DETAILS_REQUEST);
             }
         };
 
 
         // Define the adapter for our data, then set bind it to the recycle view
+        /*Collections.sort(orders, new Comparator<Order>() {
+            @Override
+            public int compare(Order o1, Order o2) {
+                if (o1.getCurrentState() == Order.STATE3)
+                    return 1;
+                else
+                    return o1.getDelivery_timestamp().compareTo(o2.getDelivery_timestamp());
+            }
+        });
         mAdapter = new OrdersAdapter(orders, listener);
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(mAdapter);*/
 
-
+        Log.d("AAA", "onCreateView");
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Collections.sort(orders, new Comparator<Order>() {
+            @Override
+            public int compare(Order o1, Order o2) {
+                if (o1.getCurrentState() == Order.STATE3)
+                    return 1;
+                else
+                    return o1.getDelivery_timestamp().compareTo(o2.getDelivery_timestamp());
+            }
+        });
+        mAdapter = new OrdersAdapter(orders, listener);
+        recyclerView.setAdapter(mAdapter);
+        mAdapter.updateList(orders);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /*if (requestCode == 1) {
-            int g = data.getExtras().getInt("new_state");
-            Toast.makeText(getContext(), "new state " + g, Toast.LENGTH_SHORT).show();
-        }*/
+        if (requestCode == SHOW_DETAILS_REQUEST && resultCode == OrderDetailsActivity.STATE_CHANGED) {
+
+            ArrayList<Order> updatedOrders = (ArrayList<Order>) data.getSerializableExtra("orders");
+            this.orders=updatedOrders;
+        }
     }
 }

@@ -3,15 +3,21 @@ package it.polito.mad1819.group17.lab02;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 public class OrderDetailsActivity extends AppCompatActivity {
 
-    private final static int STATE_CHANGED = 1;
-    private final static int STATE_NOT_CHANGED = 0;
+    public final static int STATE_CHANGED = 1;
+    public final static int STATE_NOT_CHANGED = 0;
 
     private TextView txt_order_number;
     private TextView txt_delivery_time;
@@ -61,29 +67,56 @@ public class OrderDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        final Order selectedOrder = (Order) getIntent().getExtras().getBundle("bundle_selected_order").getSerializable("selected_order");
+        //final Order selectedOrder = (Order) getIntent().getExtras().getBundle("bundle_selected_order").getSerializable("selected_order");
+
+        final ArrayList<Order> orders = (ArrayList<Order>) getIntent()
+                .getExtras()
+                .getBundle("args")
+                .getSerializable("orders");
+
+        final int position = getIntent().getExtras().getBundle("args").getInt("position");
+
 
         locateViews();
 
         btn_next_state.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectedOrder.moveToNextState())
-                    setResult(STATE_CHANGED, new Intent().putExtra("order_number", selectedOrder.getNumber()));
-                else
+
+                if (orders.get(position).moveToNextState()) {
+                    Intent intent = new Intent();
+
+                    ArrayList<Order> updatedOrders = new ArrayList<Order>();
+                    updatedOrders.addAll(orders);
+
+                    Collections.sort(updatedOrders, new Comparator<Order>() {
+                        @Override
+                        public int compare(Order o1, Order o2) {
+                            if (o1.getCurrentState() == Order.STATE3)
+                                return 1;
+                            else
+                                return -o1.getDelivery_timestamp().compareTo(o2.getDelivery_timestamp());
+                        }
+                    });
+                    Log.d("AAA", "XX " + updatedOrders.get(0).getNumber() + " " + updatedOrders.get(1).getNumber());
+
+                    intent.putExtra("orders", updatedOrders);
+                    intent.putExtra("position", position);
+
+
+                    //Log.d("AAA", "" + orders.get(0).getNumber());
+
+                    setResult(STATE_CHANGED, intent);
+                    txt_state_history.setText(orders.get(position).getStateHistoryToString());
+
+                } else
                     setResult(STATE_NOT_CHANGED);
 
-                txt_state_history.setText(selectedOrder.getStateHistoryToString());
+                //txt_state_history.setText(orders.get(position).getStateHistoryToString());
             }
         });
 
-        feedViews(selectedOrder);
-
-
-
-
-        //setResult(1, new Intent().putExtra("new_state", 5));
-
+        feedViews(orders.get(position));
     }
 
     @Override
