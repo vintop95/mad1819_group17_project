@@ -34,7 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="20dp"
-        android:backgroundTint="@android:color/darker_gray"
         android:src="@drawable/ic_add_white_24dp"
         android:cropToPadding="true">
     </android.support.design.widget.FloatingActionButton>
