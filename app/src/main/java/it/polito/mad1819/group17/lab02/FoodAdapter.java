@@ -86,7 +86,10 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
         public void onClick(View v) {
             switch(v.getId()){
                 case R.id.food_img_modify:
-                    modifyItem(pos, currentFoodItem);
+                    //TODO: test
+                    ModelFood testFood = new ModelFood(R.drawable.food_photo_1,"MODIFIED",
+                            "55e", "carne 500g, provolazza, bacon, insalata");
+                    modifyItem(pos, testFood);
                     break;
                 case R.id.food_img_delete:
                     deleteItem(pos);
@@ -97,13 +100,6 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
         public void setListeners(){
             itemImgModify.setOnClickListener(FoodHolder.this);
             itemImgDelete.setOnClickListener(FoodHolder.this);
-        }
-
-        public void addItem(int pos, ModelFood newFood){
-            Log.d(TAG, "Item in pos " + pos + " added");
-            mFoodList.add(pos, newFood);
-            notifyItemInserted(pos);
-            notifyItemRangeChanged(pos, getItemCount());
         }
 
         public void modifyItem(int pos, ModelFood newFood){

@@ -194,6 +194,7 @@ public class OffersFragment extends Fragment {
     FoodAdapter adapter;
     RecyclerView recyclerView;
     List<ModelFood> foodsList;
+    View btnAddOffer;
 
     // We're also using newInstance, as that's the standard way to create new Fragments.
     // Creating a new Fragment through newInstance.
@@ -233,6 +234,23 @@ public class OffersFragment extends Fragment {
         // Set your adapter
         adapter = new FoodAdapter(getContext(), foodsList);
         recyclerView.setAdapter(adapter);
+
+        btnAddOffer = view.findViewById(R.id.btn_add_offer);
+
+        //TODO: test
+        ModelFood testFood = new ModelFood(R.drawable.food_photo_1,"Crispy Bacon",
+                "55e", "carne 500g, provolazza, bacon, insalata");
+
+        btnAddOffer.setOnClickListener(e ->{
+            addItem(adapter.getItemCount(),testFood);
+        });
+    }
+
+    public void addItem(int pos, ModelFood newFood){
+        Log.d(TAG, "Item in pos " + pos + " added");
+        foodsList.add(pos, newFood);
+        adapter.notifyItemInserted(pos);
+        adapter.notifyItemRangeChanged(pos, adapter.getItemCount());
     }
 
     // Fetching items, passing in the View they will control.
@@ -242,6 +260,10 @@ public class OffersFragment extends Fragment {
 
         allItems.add(new ModelFood(R.drawable.food_photo_1,"hamburger",
                 "20e", "carne 200g, provola, bacon, insalata" ));
+        allItems.add(new ModelFood(R.drawable.food_photo_1,"spaghetti",
+                "10e", "spaghetti, pomodoro" ));
+        allItems.add(new ModelFood(R.drawable.food_photo_1,"spaghetti",
+                "10e", "spaghetti, pomodoro" ));
         allItems.add(new ModelFood(R.drawable.food_photo_1,"spaghetti",
                 "10e", "spaghetti, pomodoro" ));
 
