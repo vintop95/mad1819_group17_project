@@ -26,10 +26,11 @@
         android:id="@+id/btn_add_offer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="16dp"
         android:src="@drawable/ic_add_white_24dp"
         android:cropToPadding="false"
         app:layout_anchor="@id/scroll_view_offers"
-        app:layout_anchorGravity="bottom|end" />
+        app:layout_anchorGravity="bottom|end"
+        app:fabSize="normal"/>
 
 </android.support.design.widget.CoordinatorLayout>

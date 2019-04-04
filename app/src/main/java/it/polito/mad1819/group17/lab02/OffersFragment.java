@@ -167,6 +167,7 @@ package it.polito.mad1819.group17.lab02;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -194,7 +195,7 @@ public class OffersFragment extends Fragment {
     FoodAdapter adapter;
     RecyclerView recyclerView;
     List<ModelFood> foodsList;
-    View btnAddOffer;
+    FloatingActionButton btnAddOffer;
 
     // We're also using newInstance, as that's the standard way to create new Fragments.
     // Creating a new Fragment through newInstance.
@@ -235,6 +236,8 @@ public class OffersFragment extends Fragment {
         adapter = new FoodAdapter(getContext(), foodsList);
         recyclerView.setAdapter(adapter);
 
+
+        // Set add button listener
         btnAddOffer = view.findViewById(R.id.btn_add_offer);
 
         //TODO: test
@@ -243,6 +246,19 @@ public class OffersFragment extends Fragment {
 
         btnAddOffer.setOnClickListener(e ->{
             addItem(adapter.getItemCount(),testFood);
+        });
+
+        // Hide floating button on scrolling
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0 && btnAddOffer.getVisibility() == View.VISIBLE) {
+                    btnAddOffer.hide();
+                } else if (dy < 0 && btnAddOffer.getVisibility() != View.VISIBLE) {
+                    btnAddOffer.show();
+                }
+            }
         });
     }
 
