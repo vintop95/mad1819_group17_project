@@ -46,6 +46,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
 
         ModelFood currentFoodItem = mFoodList.get(pos);
         holder.setData(currentFoodItem, pos);
+        holder.setListeners();
     }
 
     @Override
@@ -54,8 +55,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
         return mFoodList.size();
     }
 
-    class FoodHolder extends RecyclerView.ViewHolder{
-        ImageView itemImage;
+    class FoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ImageView itemImage, itemImgModify, itemImgDelete;
         TextView itemName, itemPlace, itemPrice;
         int pos;
         ModelFood currentFoodItem;
@@ -67,6 +68,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
             itemName = itemView.findViewById(R.id.food_item_name);
             itemPlace = itemView.findViewById(R.id.food_item_place);
             itemPrice = itemView.findViewById(R.id.food_item_price);
+            itemImgModify = itemView.findViewById(R.id.food_img_modify);
+            itemImgDelete = itemView.findViewById(R.id.food_img_delete);
             Log.d(TAG, "Holder " + itemName.getText().toString() + " created");
         }
 
@@ -78,5 +81,46 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
             this.pos = pos;
             this.currentFoodItem = currentFoodItem;
         }
+
+        @Override
+        public void onClick(View v) {
+            switch(v.getId()){
+                case R.id.food_img_modify:
+                    modifyItem(pos, currentFoodItem);
+                    break;
+                case R.id.food_img_delete:
+                    deleteItem(pos);
+                    break;
+            }
+        }
+
+        public void setListeners(){
+            itemImgModify.setOnClickListener(FoodHolder.this);
+            itemImgDelete.setOnClickListener(FoodHolder.this);
+        }
+
+        public void addItem(int pos, ModelFood newFood){
+            Log.d(TAG, "Item in pos " + pos + " added");
+            mFoodList.add(pos, newFood);
+            notifyItemInserted(pos);
+            notifyItemRangeChanged(pos, getItemCount());
+        }
+
+        public void modifyItem(int pos, ModelFood newFood){
+            Log.d(TAG, "Item in pos " + pos + " modified");
+            mFoodList.set(pos, newFood);
+            notifyItemChanged(pos);
+        }
+
+        // You can use notifyDataSetChanged() instead of notifyItemRemoved
+        // and notifyItemRangeChanged but you lose the animation
+        public void deleteItem(int pos){
+            Log.d(TAG, "Item in pos " + pos + " removed");
+            mFoodList.remove(pos);
+            notifyItemRemoved(pos);
+            notifyItemRangeChanged(pos, getItemCount());
+        }
     }
+
+
 }
