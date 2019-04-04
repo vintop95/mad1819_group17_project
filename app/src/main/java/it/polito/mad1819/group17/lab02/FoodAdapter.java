@@ -1,84 +1,81 @@
 package it.polito.mad1819.group17.lab02;
 
-
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.util.List;
 
-public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
+public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
+    private static final String TAG = FoodAdapter.class.getName();
+    // NAME CONVENTION: private fields are named "m<fieldName>"
+    private List<ModelFood> mFoodList;
+    private LayoutInflater mInflater;
 
-    private Context mContext;
-    private ArrayList<ModelFood> mList;
-
-    public void updateList(ArrayList<ModelFood> updatedData) {
-        mList = updatedData;
+    public void updateList(List<ModelFood> updatedData) {
+        mFoodList = updatedData;
         notifyDataSetChanged();
     }
 
-    FoodAdapter(Context context, ArrayList<ModelFood> list){
-        mContext = context;
-        mList = list;
-
+    FoodAdapter(Context context, List<ModelFood> list){
+        Log.d(TAG, "created");
+        mFoodList = list;
+        mInflater = LayoutInflater.from(context);
     }
 
+    // PHASE 1 OF PROTOCOL: build FoodHolder (ViewHolder)
+    // and link rv_food_item layout to FoodAdapter (Adapter)
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        LayoutInflater layoutInflater = LayoutInflater.from((mContext));
-
-        View view = layoutInflater.inflate(R.layout.rv_food_items,viewGroup,false);
-
-        ViewHolder viewHolder = new ViewHolder(view);
-
-
-        return viewHolder;
+    public FoodHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        View foodItemView = mInflater.inflate(
+                R.layout.rv_food_item, viewGroup, false);
+        return new FoodHolder(foodItemView);
     }
 
+    // PHASE 2 OF PROTOCOL: fetch data from model and set data on FoodHolder (ViewHolder)
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int pos) {
+    public void onBindViewHolder(@NonNull FoodHolder holder, int pos) {
+        Log.d(TAG, "onBindViewHolder " + pos);
 
-        ModelFood fooditem = mList.get(pos);
-
-        ImageView image = viewHolder.item_image;
-        TextView name,place,price;
-
-        name = viewHolder.item_name;
-        place=viewHolder.item_place;
-        price=viewHolder.item_price;
-
-        image.setImageResource(fooditem.getImage());
-        name.setText(fooditem.getName());
-        place.setText(fooditem.getPlace());
-        price.setText(fooditem.getPrice());
-
+        ModelFood currentFoodItem = mFoodList.get(pos);
+        holder.setData(currentFoodItem, pos);
     }
 
     @Override
     public int getItemCount() {
-
-        return mList.size();
+        return mFoodList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    class FoodHolder extends RecyclerView.ViewHolder{
+        ImageView itemImage;
+        TextView itemName, itemPlace, itemPrice;
+        int pos;
+        ModelFood currentFoodItem;
 
-        ImageView item_image;
-        TextView item_name, item_place, item_price;
-
-        public ViewHolder(View itemView){
+        public FoodHolder(@NonNull View itemView){
             super(itemView);
+            // Parameters of rv_food_item-layout
+            itemImage = itemView.findViewById(R.id.food_item_image);
+            itemName = itemView.findViewById(R.id.food_item_name);
+            itemPlace = itemView.findViewById(R.id.food_item_place);
+            itemPrice = itemView.findViewById(R.id.food_item_price);
+            Log.d(TAG, "Holder " + itemName.getText().toString() + " created");
+        }
 
-            item_image = itemView.findViewById(R.id.food_item_image);
-            item_name = itemView.findViewById(R.id.food_item_name);
-            item_price = itemView.findViewById(R.id.food_item_price);
-            item_place = itemView.findViewById(R.id.food_item_place);
+        public void setData(ModelFood currentFoodItem, int pos){
+            itemImage.setImageResource(currentFoodItem.getImage());
+            itemName.setText(currentFoodItem.getName());
+            itemPlace.setText(currentFoodItem.getPlace());
+            itemPrice.setText(currentFoodItem.getPrice());
+            this.pos = pos;
+            this.currentFoodItem = currentFoodItem;
         }
     }
 }

@@ -164,8 +164,6 @@ public class OffersFragment extends Fragment {
 
 package it.polito.mad1819.group17.lab02;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -178,72 +176,87 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * IMPLEMENTING RecyclerView
+ * 1. Add RecyclerView dependency to build.gradle if needed
+ * 2. Add RecyclerView to layout (fragment_offers.xml)
+ * 3. Create XML layout for item (rv_food_item.xml)
+ * 4. Extend RecyclerView.Adapter (FoodAdapter)
+ * 5. Extend RecyclerView.ViewHolder (FoodAdapter.FoodHolder)
+ * 6. In Activity onCreate(), create RecyclerView with adapter
+ *    and layout manager (OffersFragment.onViewCreated())
+ */
 
 public class OffersFragment extends Fragment {
-
+    private static final String TAG = OffersFragment.class.getName();
     FoodAdapter adapter;
     RecyclerView recyclerView;
-    ArrayList<ModelFood> foodsList = new ArrayList<ModelFood>();
-    //OnFragmentInteractionListener mListener;
+    List<ModelFood> foodsList;
 
+    // We're also using newInstance, as that's the standard way to create new Fragments.
+    // Creating a new Fragment through newInstance.
+    public static OffersFragment newInstance() {
+        return new OffersFragment();
+    }
 
-    /*public static OffersFragment newInstance(String param1, String param2) {
-        OffersFragment fragment = new OffersFragment();
-    return fragment;
-    }*/
-
-    /*@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        foodsList = new ArrayList<>();
-        foodsList.add(new ModelFood(R.drawable.food_photo_1,"hamurger","20e", "carne 200g, provola, bacon, insalata" ));
-        foodsList.add(new ModelFood(R.drawable.food_photo_1,"spaghetti","10e", "spaghetti, pomodoro" ));
-
-
-    }*/
-
+    // @Nullable: It makes it clear that the method accepts null values,
+    // and that if you override the method, you should also accept null values.
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_offers, container, false);
+        return inflater.inflate(R.layout.fragment_offers, container, false);
+    }
 
-        recyclerView=view.findViewById(R.id.rv);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    // TODO: look
+    // https://stackoverflow.com/questions/45827981/android-recyclerview-not-showing-list-items-in-a-fragment
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.d(TAG, "onViewCreated");
+
+        // Bind your views
+        recyclerView = view.findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
 
-        foodsList.add(new ModelFood(R.drawable.food_photo_1,"hamurger","20e", "carne 200g, provola, bacon, insalata" ));
-        foodsList.add(new ModelFood(R.drawable.food_photo_1,"spaghetti","10e", "spaghetti, pomodoro" ));
+        // Create your layout manager
+        // from Linear/Grid/StaggeredLayoutManager
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        //adapter = new FoodAdapter(getContext(),foodsList);
-        return view;
+        // Fetch your items
+        foodsList = getAllItemList();
 
-    }
-
-/*    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        recyclerView = getActivity().findViewById(R.id.rv);
-
-        foodsList = new ArrayList<>();
-        foodsList.add(new ModelFood(R.drawable.food_photo_1,"hamurger","20e", "carne 200g, provola, bacon, insalata" ));
-        foodsList.add(new ModelFood(R.drawable.food_photo_1,"spaghetti","10e", "spaghetti, pomodoro" ));
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        RecyclerView.LayoutManager rvLiLayoutManager = layoutManager;
-        recyclerView.setLayoutManager(rvLiLayoutManager);
-
-
-        recyclerView.setAdapter(adapter);
-    }*/
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
+        // Set your adapter
         adapter = new FoodAdapter(getContext(), foodsList);
         recyclerView.setAdapter(adapter);
-        adapter.updateList(foodsList);
     }
 
+    // Fetching items, passing in the View they will control.
+    private List<ModelFood> getAllItemList(){
+        // Model: List<ModelFood>
+        List<ModelFood> allItems = new ArrayList<>();
+
+        allItems.add(new ModelFood(R.drawable.food_photo_1,"hamburger",
+                "20e", "carne 200g, provola, bacon, insalata" ));
+        allItems.add(new ModelFood(R.drawable.food_photo_1,"spaghetti",
+                "10e", "spaghetti, pomodoro" ));
+
+        return allItems;
+    }
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        adapter.updateList(foodsList);
+//    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
+    }
 }
