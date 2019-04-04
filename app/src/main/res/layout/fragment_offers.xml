@@ -17,8 +17,9 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="wrap_content"
+            android:paddingBottom="128dp"
+            android:clipToPadding="false"/>
     </ScrollView>
 
 
