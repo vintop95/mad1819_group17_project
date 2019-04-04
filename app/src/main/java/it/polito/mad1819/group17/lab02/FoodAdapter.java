@@ -50,6 +50,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
 
     @Override
     public int getItemCount() {
+        // Log.d(TAG,"itemCount: " + mFoodList.size());
         return mFoodList.size();
     }
 
