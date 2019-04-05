@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.lab02;
+package it.polito.mad1819.group17.lab02.dailyoffer;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+
+import it.polito.mad1819.group17.lab02.R;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
     private static final String TAG = FoodAdapter.class.getName();

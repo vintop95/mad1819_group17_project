@@ -162,8 +162,9 @@ public class OffersFragment extends Fragment {
     }
 }*/
 
-package it.polito.mad1819.group17.lab02;
+package it.polito.mad1819.group17.lab02.dailyoffer;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -178,6 +179,8 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import it.polito.mad1819.group17.lab02.R;
 
 /**
  * IMPLEMENTING RecyclerView
@@ -214,6 +217,11 @@ public class OffersFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_offers, container, false);
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
     // TODO: look
     // https://stackoverflow.com/questions/45827981/android-recyclerview-not-showing-list-items-in-a-fragment
     @Override
@@ -244,6 +252,7 @@ public class OffersFragment extends Fragment {
         ModelFood testFood = new ModelFood(R.drawable.food_photo_1,"Crispy Bacon",
                 "55e", "carne 500g, provolazza, bacon, insalata");
 
+
         btnAddOffer.setOnClickListener(e ->{
             addItem(adapter.getItemCount(),testFood);
         });
@@ -253,9 +262,12 @@ public class OffersFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                // Log.d(TAG, "view scrolled");
                 if (dy > 0 && btnAddOffer.getVisibility() == View.VISIBLE) {
+                    // Log.d(TAG, "btn hidden");
                     btnAddOffer.hide();
-                } else if (dy < 0 && btnAddOffer.getVisibility() != View.VISIBLE) {
+                } else if (dy <= 0 ) {
+                    // Log.d(TAG, "btn shown");
                     btnAddOffer.show();
                 }
             }
@@ -270,31 +282,16 @@ public class OffersFragment extends Fragment {
     }
 
     // Fetching items, passing in the View they will control.
+    // TODO: fetch from sharedpref
     private List<ModelFood> getAllItemList(){
         // Model: List<ModelFood>
         List<ModelFood> allItems = new ArrayList<>();
 
         allItems.add(new ModelFood(R.drawable.food_photo_1,"hamburger",
                 "20e", "carne 200g, provola, bacon, insalata" ));
-        allItems.add(new ModelFood(R.drawable.food_photo_1,"spaghetti",
-                "10e", "spaghetti, pomodoro" ));
-        allItems.add(new ModelFood(R.drawable.food_photo_1,"spaghetti",
-                "10e", "spaghetti, pomodoro" ));
-        allItems.add(new ModelFood(R.drawable.food_photo_1,"spaghetti",
-                "10e", "spaghetti, pomodoro" ));
+//        allItems.add(new ModelFood(R.drawable.food_photo_1,"spaghetti",
+//                "10e", "spaghetti, pomodoro" ));
 
         return allItems;
-    }
-
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        adapter.updateList(foodsList);
-//    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
     }
 }

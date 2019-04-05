@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.lab02;
+package it.polito.mad1819.group17.lab02.orders;
 
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import java.util.ArrayList;
+
+import it.polito.mad1819.group17.lab02.R;
 
 public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder> {
 

@@ -1,89 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="10dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardView"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="@android:color/background_light"
-    app:cardUseCompatPadding="true">
+    android:layout_gravity="center"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="8dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true"
+    app:cardBackgroundColor="@android:color/background_light" >
 
-    <LinearLayout
-        android:weightSum="10"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="10dp">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/food_item_image"
-            android:padding="10dp"
-            android:layout_width="0dp"
-            android:layout_weight="4"
-            android:layout_height="128dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="8dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/food_photo_1"/>
+            android:src="@drawable/food_photo_1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_weight="6"
+        <TextView
+            android:id="@+id/food_item_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:text="Food Nameee"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/food_item_place"
+            app:layout_constraintEnd_toStartOf="@+id/food_img_modify"
+            app:layout_constraintStart_toEndOf="@+id/food_item_image"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/food_item_name"
-                android:textScaleX="1.2"
-                android:text="Food Name"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/food_item_place"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:text="Food Place afsdhjgjgjgjlkjljk;kl;kl;kl"
+            app:layout_constraintBottom_toTopOf="@+id/food_item_price"
+            app:layout_constraintEnd_toStartOf="@+id/food_img_modify"
+            app:layout_constraintStart_toEndOf="@+id/food_item_image"
+            app:layout_constraintTop_toBottomOf="@+id/food_item_name" />
 
-            <TextView
-                android:id="@+id/food_item_place"
-                android:layout_width="wrap_content"
-                android:text="Food Place"
-                android:layout_height="wrap_content"
-                />
+        <TextView
+            android:id="@+id/food_item_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="$ 10"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="32sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/food_img_delete"
+            app:layout_constraintStart_toEndOf="@+id/food_item_image"
+            app:layout_constraintTop_toBottomOf="@+id/food_item_place" />
 
-            <TextView
-                android:id="@+id/food_item_price"
-                android:layout_weight="2"
-                android:textSize="32sp"
-                android:textColor="@color/colorAccent"
-                android:textAlignment="center"
-                android:text="$ 10"
-                android:padding="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="10"
-    android:paddingBottom="10dp"
-    android:paddingRight="10dp">
         <ImageView
             android:id="@+id/food_img_modify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="8dp"
             android:layout_weight="5"
+            android:alpha="0.3"
             android:src="@drawable/ic_mode_edit_black_24dp"
-            android:alpha="0.3"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/food_img_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="5"
+            android:layout_margin="8dp"
+            android:alpha="0.3"
             android:src="@drawable/ic_delete_black_24dp"
-            android:alpha="0.3"/>
-    </LinearLayout>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
 
-    </LinearLayout>
 
+
+    </android.support.constraint.ConstraintLayout>
 
 
 </android.support.v7.widget.CardView>

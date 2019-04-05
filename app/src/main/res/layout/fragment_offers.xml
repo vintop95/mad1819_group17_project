@@ -6,22 +6,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OffersFragment">
+    tools:context=".dailyoffer.OffersFragment">
 
-    <ScrollView
-        android:id="@+id/scroll_view_offers"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="128dp"
-            android:clipToPadding="false"/>
-    </ScrollView>
-
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="16dp"
+        android:clipToPadding="false"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_add_offer"
@@ -30,7 +23,7 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_add_white_24dp"
         android:cropToPadding="false"
-        app:layout_anchor="@id/scroll_view_offers"
+        app:layout_anchor="@id/rv"
         app:layout_anchorGravity="bottom|end"
         app:fabSize="normal"/>
 
