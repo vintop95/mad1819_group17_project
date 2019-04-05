@@ -164,7 +164,8 @@ public class OffersFragment extends Fragment {
 
 package it.polito.mad1819.group17.lab02.dailyoffer;
 
-import android.os.Build;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -181,6 +182,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.polito.mad1819.group17.lab02.R;
+import it.polito.mad1819.group17.lab02.utils.PrefHelper;
 
 /**
  * IMPLEMENTING RecyclerView
@@ -195,16 +197,13 @@ import it.polito.mad1819.group17.lab02.R;
 
 public class OffersFragment extends Fragment {
     private static final String TAG = OffersFragment.class.getName();
+    private static final PrefHelper prefHelper = PrefHelper.getInstance();
+    private static final String PREF_FOOD_LIST_SIZE = "PREF_FOOD_LIST_SIZE";
+
     FoodAdapter adapter;
     RecyclerView recyclerView;
-    List<ModelFood> foodsList;
     FloatingActionButton btnAddOffer;
-
-    // We're also using newInstance, as that's the standard way to create new Fragments.
-    // Creating a new Fragment through newInstance.
-    public static OffersFragment newInstance() {
-        return new OffersFragment();
-    }
+    List<ModelFood> foodList = new ArrayList<>();
 
     // @Nullable: It makes it clear that the method accepts null values,
     // and that if you override the method, you should also accept null values.
@@ -217,12 +216,6 @@ public class OffersFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_offers, container, false);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    // TODO: look
     // https://stackoverflow.com/questions/45827981/android-recyclerview-not-showing-list-items-in-a-fragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -238,23 +231,23 @@ public class OffersFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Fetch your items
-        foodsList = getAllItemList();
+        reloadUpdatedFoodListFromPref();
 
         // Set your adapter
-        adapter = new FoodAdapter(getContext(), foodsList);
+        adapter = new FoodAdapter(getContext(), foodList);
         recyclerView.setAdapter(adapter);
-
 
         // Set add button listener
         btnAddOffer = view.findViewById(R.id.btn_add_offer);
 
-        //TODO: test
-        ModelFood testFood = new ModelFood(R.drawable.food_photo_1,"Crispy Bacon",
-                "55e", "carne 500g, provolazza, bacon, insalata");
-
-
+        // TODO: test add object
+        Bitmap img1bmp = BitmapFactory.decodeResource(getResources(), R.drawable.food_photo_1);
+        String img1 = PrefHelper.bitMapToString(img1bmp);
+        ModelFood testFood = new ModelFood(adapter.getItemCount(), "Crispy bacon",
+                "carne 500g, provolazza, bacon, insalata", img1,
+                55.0, 3);
         btnAddOffer.setOnClickListener(e ->{
-            addItem(adapter.getItemCount(),testFood);
+            addFoodInList(adapter.getItemCount(), testFood);
         });
 
         // Hide floating button on scrolling
@@ -274,24 +267,61 @@ public class OffersFragment extends Fragment {
         });
     }
 
-    public void addItem(int pos, ModelFood newFood){
-        Log.d(TAG, "Item in pos " + pos + " added");
-        foodsList.add(pos, newFood);
-        adapter.notifyItemInserted(pos);
-        adapter.notifyItemRangeChanged(pos, adapter.getItemCount());
+    public void addFoodInList(int newPos, ModelFood newFood){
+        Log.d(TAG, "Item in pos " + newPos + " added");
+        try {
+            foodList.add(newPos, newFood);
+        }catch(IndexOutOfBoundsException e){
+            foodList.add(newFood);
+        }
+
+        newFood.saveToPref();
+        prefHelper.putLong(PREF_FOOD_LIST_SIZE, newPos+1);
+
+        if(adapter != null){
+            adapter.notifyItemInserted(newPos);
+            adapter.notifyItemRangeChanged(0, newPos+1);
+        }
     }
 
     // Fetching items, passing in the View they will control.
     // TODO: fetch from sharedpref
-    private List<ModelFood> getAllItemList(){
-        // Model: List<ModelFood>
-        List<ModelFood> allItems = new ArrayList<>();
+    private List<ModelFood> reloadUpdatedFoodListFromPref(){
+        if(foodList != null){
+            foodList.clear();
+        }else{
+            foodList = new ArrayList<>();
+        }
 
-        allItems.add(new ModelFood(R.drawable.food_photo_1,"hamburger",
-                "20e", "carne 200g, provola, bacon, insalata" ));
-//        allItems.add(new ModelFood(R.drawable.food_photo_1,"spaghetti",
-//                "10e", "spaghetti, pomodoro" ));
+        int foodListSize = loadUpdatedFoodListSizeFromPref();
+        int i = 0;
+        for(; i<foodListSize; i++){
+            ModelFood food = ModelFood.loadFromPref(Long.valueOf(i));
+            if(food == null){
+                prefHelper.putLong(PREF_FOOD_LIST_SIZE, i);
+                break;
+            }
+            addFoodInList(i, food);
+        }
 
-        return allItems;
+        // TODO: test, should increase at each run
+        Bitmap img1bmp = BitmapFactory.decodeResource(getResources(), R.drawable.food_photo_1);
+        String img1 = PrefHelper.bitMapToString(img1bmp);
+
+
+        ModelFood food = new ModelFood(i,"hamburger",
+                "carne 200g, provola, bacon, insalata",
+                img1, 20.50, 6);
+        addFoodInList(i, food);
+        i++;
+
+        return foodList;
     }
+
+    // https://stackoverflow.com/questions/28107647/how-to-save-listobject-to-sharedpreferences/28107791
+    private static int loadUpdatedFoodListSizeFromPref(){
+        // if not found in prefHeper returns 0
+        return (int) prefHelper.getLong(PREF_FOOD_LIST_SIZE);
+    }
+
 }
