@@ -1,6 +1,8 @@
 package it.polito.mad1819.group17.lab02.dailyoffer;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
@@ -108,6 +110,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
             }
         }
 
+
         public void setListeners(){
             itemImgModify.setOnClickListener(FoodHolder.this);
             itemImgDelete.setOnClickListener(FoodHolder.this);
@@ -125,10 +128,37 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
         public void deleteItem(int pos){
             Log.d(TAG, "Item in pos " + pos + " removed");
             mFoodList.remove(pos);
+
+            PrefHelper.getInstance().putLong(
+                    OffersFragment.PREF_FOOD_LIST_SIZE, getItemCount());
+
+            for(int i = pos+1; i<getItemCount();i++){
+                mFoodList.get(i).setId(i-1);
+            }
+
             notifyItemRemoved(pos);
             notifyItemRangeChanged(pos, getItemCount());
         }
     }
 
+    public Activity getActivity(Context context)
+    {
+        if (context == null)
+        {
+            return null;
+        }
+        else if (context instanceof ContextWrapper)
+        {
+            if (context instanceof Activity)
+            {
+                return (Activity) context;
+            }
+            else
+            {
+                return getActivity(((ContextWrapper) context).getBaseContext());
+            }
+        }
 
+        return null;
+    }
 }

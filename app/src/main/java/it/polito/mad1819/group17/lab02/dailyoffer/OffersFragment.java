@@ -198,7 +198,7 @@ import it.polito.mad1819.group17.lab02.utils.PrefHelper;
 public class OffersFragment extends Fragment {
     private static final String TAG = OffersFragment.class.getName();
     private static final PrefHelper prefHelper = PrefHelper.getInstance();
-    private static final String PREF_FOOD_LIST_SIZE = "PREF_FOOD_LIST_SIZE";
+    public static final String PREF_FOOD_LIST_SIZE = "PREF_FOOD_LIST_SIZE";
 
     FoodAdapter adapter;
     RecyclerView recyclerView;
@@ -211,7 +211,7 @@ public class OffersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView");
+        // Log.d(TAG, "onCreateView");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_offers, container, false);
     }
@@ -220,7 +220,7 @@ public class OffersFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "onViewCreated");
+        // Log.d(TAG, "onViewCreated");
 
         // Bind your views
         recyclerView = view.findViewById(R.id.rv);
@@ -285,7 +285,6 @@ public class OffersFragment extends Fragment {
     }
 
     // Fetching items, passing in the View they will control.
-    // TODO: fetch from sharedpref
     private List<ModelFood> reloadUpdatedFoodListFromPref(){
         if(foodList != null){
             foodList.clear();
@@ -294,26 +293,15 @@ public class OffersFragment extends Fragment {
         }
 
         int foodListSize = loadUpdatedFoodListSizeFromPref();
-        int i = 0;
-        for(; i<foodListSize; i++){
+        for(int i = 0; i<foodListSize; i++){
             ModelFood food = ModelFood.loadFromPref(Long.valueOf(i));
+            // if we go involuntarily outside the bounds
             if(food == null){
                 prefHelper.putLong(PREF_FOOD_LIST_SIZE, i);
                 break;
             }
             addFoodInList(i, food);
         }
-
-        // TODO: test, should increase at each run
-        Bitmap img1bmp = BitmapFactory.decodeResource(getResources(), R.drawable.food_photo_1);
-        String img1 = PrefHelper.bitMapToString(img1bmp);
-
-
-        ModelFood food = new ModelFood(i,"hamburger",
-                "carne 200g, provola, bacon, insalata",
-                img1, 20.50, 6);
-        addFoodInList(i, food);
-        i++;
 
         return foodList;
     }
