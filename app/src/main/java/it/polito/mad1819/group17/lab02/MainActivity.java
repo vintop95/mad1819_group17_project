@@ -5,56 +5,100 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
+
+import it.polito.mad1819.group17.lab02.dailyoffer.OffersFragment;
+import it.polito.mad1819.group17.lab02.orders.OrdersFragment;
+import it.polito.mad1819.group17.lab02.profile.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
-    final Fragment offersFragment = new OffersFragment();
-    final Fragment ordersFragment = new OrdersFragment();
-    final Fragment profileFragment = new ProfileFragment();
+    Fragment offersFragment;
+    Fragment ordersFragment;
+    Fragment profileFragment;
     final FragmentManager fm = getSupportFragmentManager();
-    Fragment active = offersFragment;
+    Fragment active;
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        fm.putFragment(outState, OffersFragment.class.getName() , offersFragment);
+        fm.putFragment(outState, OrdersFragment.class.getName() , ordersFragment);
+        fm.putFragment(outState, ProfileFragment.class.getName() , profileFragment);
+        fm.putFragment(outState, "active", active);
+    }
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_profile:
-                    fm.beginTransaction().hide(active).show(profileFragment).commit();
-                    active = profileFragment;
-                    return true;
-                case R.id.navigation_dailyoffer:
-                    fm.beginTransaction().hide(active).show(offersFragment).commit();
-                    active = offersFragment;
-                    return true;
-                case R.id.navigation_orders:
-                    fm.beginTransaction().hide(active).show(ordersFragment).commit();
-                    active = ordersFragment;
-                    return true;
-            }
-            return false;
+    @Override
+    protected void onRestoreInstanceState(Bundle inState) {
+        instantiateFragments(inState);
+    }
+
+    private void instantiateFragments(Bundle inState) {
+        if (inState != null) {
+            offersFragment = fm.getFragment(inState, OffersFragment.class.getName());
+            ordersFragment = fm.getFragment(inState, OrdersFragment.class.getName());
+            profileFragment = fm.getFragment(inState, ProfileFragment.class.getName());
+            active = fm.getFragment(inState, "active");
+        } else {
+            offersFragment = new OffersFragment();
+            fm.beginTransaction().add(R.id.main_container, offersFragment,
+                    OffersFragment.class.getName()).detach(offersFragment).commit();
+            ordersFragment = new OrdersFragment();
+            fm.beginTransaction().add(R.id.main_container, ordersFragment,
+                    OrdersFragment.class.getName()).detach(ordersFragment).commit();
+            profileFragment = new ProfileFragment();
+            fm.beginTransaction().add(R.id.main_container, profileFragment,
+                    ProfileFragment.class.getName()).detach(profileFragment).commit();
+            active = ordersFragment;
         }
-    };
+
+        fm.beginTransaction().attach(active).commit();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fm.beginTransaction().add(R.id.main_container, profileFragment, "profile_fragment").hide(profileFragment).commit();
-        fm.beginTransaction().add(R.id.main_container, ordersFragment, "orders_fragment").hide(ordersFragment).commit();
-        fm.beginTransaction().add(R.id.main_container, offersFragment, "offers_fragment").commit();
-//
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        navigation.setSelectedItemId(R.id.navigation_orders);
-    }
+        instantiateFragments(savedInstanceState);
 
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_dailyoffer:
+                        fm.beginTransaction().detach(active).attach(offersFragment).commit();
+                        active = offersFragment;
+                        return true;
+                    case R.id.navigation_orders:
+                        fm.beginTransaction().detach(active).attach(ordersFragment).commit();
+                        active = ordersFragment;
+                        return true;
+                    case R.id.navigation_profile:
+                        fm.beginTransaction().detach(active).attach(profileFragment).commit();
+                        active = profileFragment;
+                        return true;
+                }
+                return false;
+            }
+        };
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        int navSelected = R.id.navigation_orders;
+        if (active.equals(offersFragment)) {
+            navSelected = R.id.navigation_dailyoffer;
+        } else if (active.equals(ordersFragment)) {
+            navSelected = R.id.navigation_orders;
+        } else if (active.equals(profileFragment)) {
+            navSelected = R.id.navigation_profile;
+        }
+
+        navigation.setSelectedItemId(navSelected);
+    }
 }

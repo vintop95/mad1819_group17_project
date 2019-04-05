@@ -1,11 +1,10 @@
-package it.polito.mad1819.group17.lab02;
+package it.polito.mad1819.group17.lab02.orders;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import it.polito.mad1819.group17.lab02.R;
 
 public class OrderDetailsActivity extends AppCompatActivity {
 

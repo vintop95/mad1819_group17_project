@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.lab02;
+package it.polito.mad1819.group17.lab02.dailyoffer;
 
 class ModelFood {
 
