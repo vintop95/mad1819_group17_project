@@ -37,7 +37,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         txt_customer_name = findViewById(R.id.txt_customer_name);
         txt_customer_phone = findViewById(R.id.txt_customer_phone);
         txt_state_history = findViewById(R.id.txt_state_history);
-        btn_next_state = findViewById(R.id.btn_next_state);
+        btn_next_state = findViewById(R.id.btn_save);
     }
 
     private void feedViews(Order selctedOrder) {

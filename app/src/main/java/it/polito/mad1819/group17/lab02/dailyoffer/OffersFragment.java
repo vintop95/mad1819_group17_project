@@ -37,11 +37,11 @@ public class OffersFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    FoodAdapter adapter;
+    FoodAdapter mAdapter;
 
     RecyclerView recyclerView;
 
-    ArrayList<ModelFood> foodsList;
+    ArrayList<FoodModel> foodsList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -79,8 +79,8 @@ public class OffersFragment extends Fragment {
         }
         Log.d("aaa", "onCreate: ");
         foodsList = new ArrayList<>();
-        foodsList.add(new ModelFood(R.drawable.food_photo_1,"hamurger","20e", "carne 200g, provola, bacon, insalata" ));
-        foodsList.add(new ModelFood(R.drawable.food_photo_1,"spaghetti","10e", "spaghetti, pomodoro" ));
+        foodsList.add(new FoodModel(R.drawable.food_photo_1,"hamurger","20e", "carne 200g, provola, bacon, insalata" ));
+        foodsList.add(new FoodModel(R.drawable.food_photo_1,"spaghetti","10e", "spaghetti, pomodoro" ));
 
 
     }
@@ -91,7 +91,7 @@ public class OffersFragment extends Fragment {
         // Inflate the layout for this fragment
         Log.d("aa", "onCreateView: ");
 
-        adapter = new FoodAdapter(getContext(),foodsList);
+        mAdapter = new FoodAdapter(getContext(),foodsList);
         return inflater.inflate(R.layout.fragment_offers, container, false);
 
     }
@@ -104,8 +104,8 @@ public class OffersFragment extends Fragment {
 */
 /*
         foodsList = new ArrayList<>();
-        foodsList.add(new ModelFood(R.drawable.food_photo_1,"hamurger","20e", "carne 200g, provola, bacon, insalata" ));
-        foodsList.add(new ModelFood(R.drawable.food_photo_1,"spaghetti","10e", "spaghetti, pomodoro" ));
+        foodsList.add(new FoodModel(R.drawable.food_photo_1,"hamurger","20e", "carne 200g, provola, bacon, insalata" ));
+        foodsList.add(new FoodModel(R.drawable.food_photo_1,"spaghetti","10e", "spaghetti, pomodoro" ));
 *//*
 
 
@@ -115,7 +115,7 @@ public class OffersFragment extends Fragment {
         recyclerView.setLayoutManager(rvLiLayoutManager);
 
 
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(mAdapter);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -164,6 +164,7 @@ public class OffersFragment extends Fragment {
 
 package it.polito.mad1819.group17.lab02.dailyoffer;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -191,7 +192,7 @@ import it.polito.mad1819.group17.lab02.utils.PrefHelper;
  * 3. Create XML layout for item (rv_food_item.xml)
  * 4. Extend RecyclerView.Adapter (FoodAdapter)
  * 5. Extend RecyclerView.ViewHolder (FoodAdapter.FoodHolder)
- * 6. In Activity onCreate(), create RecyclerView with adapter
+ * 6. In Activity onCreate(), create RecyclerView with mAdapter
  *    and layout manager (OffersFragment.onViewCreated())
  */
 
@@ -199,11 +200,13 @@ public class OffersFragment extends Fragment {
     private static final String TAG = OffersFragment.class.getName();
     private static final PrefHelper prefHelper = PrefHelper.getInstance();
     public static final String PREF_FOOD_LIST_SIZE = "PREF_FOOD_LIST_SIZE";
+    private final static int ADD_FOOD_REQUEST = 0;
 
-    FoodAdapter adapter;
+    FoodAdapter mAdapter;
     RecyclerView recyclerView;
     FloatingActionButton btnAddOffer;
-    List<ModelFood> foodList = new ArrayList<>();
+    // TODO: make private?
+    public List<FoodModel> foodList = new ArrayList<>();
 
     // @Nullable: It makes it clear that the method accepts null values,
     // and that if you override the method, you should also accept null values.
@@ -233,21 +236,22 @@ public class OffersFragment extends Fragment {
         // Fetch your items
         reloadUpdatedFoodListFromPref();
 
-        // Set your adapter
-        adapter = new FoodAdapter(getContext(), foodList);
-        recyclerView.setAdapter(adapter);
+        // Set your mAdapter
+        mAdapter = new FoodAdapter(getContext(), foodList);
+        recyclerView.setAdapter(mAdapter);
 
         // Set add button listener
         btnAddOffer = view.findViewById(R.id.btn_add_offer);
 
-        // TODO: test add object
+        ////////////// TODO: remove test add object
         Bitmap img1bmp = BitmapFactory.decodeResource(getResources(), R.drawable.food_photo_1);
         String img1 = PrefHelper.bitMapToString(img1bmp);
-        ModelFood testFood = new ModelFood(adapter.getItemCount(), "Crispy bacon",
+        FoodModel testFood = new FoodModel(mAdapter.getItemCount(), "Crispy bacon",
                 "carne 500g, provolazza, bacon, insalata", img1,
                 55.0, 3);
+        ////////////////////////////////////////////////////////////
         btnAddOffer.setOnClickListener(e ->{
-            addFoodInList(adapter.getItemCount(), testFood);
+            openEditFoodActivity();
         });
 
         // Hide floating button on scrolling
@@ -267,7 +271,7 @@ public class OffersFragment extends Fragment {
         });
     }
 
-    public void addFoodInList(int newPos, ModelFood newFood){
+    public void addFoodInList(int newPos, FoodModel newFood){
         Log.d(TAG, "Item in pos " + newPos + " added");
         try {
             foodList.add(newPos, newFood);
@@ -278,14 +282,14 @@ public class OffersFragment extends Fragment {
         newFood.saveToPref();
         prefHelper.putLong(PREF_FOOD_LIST_SIZE, newPos+1);
 
-        if(adapter != null){
-            adapter.notifyItemInserted(newPos);
-            adapter.notifyItemRangeChanged(0, newPos+1);
+        if(mAdapter != null){
+            mAdapter.notifyItemInserted(newPos);
+            mAdapter.notifyItemRangeChanged(0, newPos+1);
         }
     }
 
     // Fetching items, passing in the View they will control.
-    private List<ModelFood> reloadUpdatedFoodListFromPref(){
+    private List<FoodModel> reloadUpdatedFoodListFromPref(){
         if(foodList != null){
             foodList.clear();
         }else{
@@ -294,7 +298,7 @@ public class OffersFragment extends Fragment {
 
         int foodListSize = loadUpdatedFoodListSizeFromPref();
         for(int i = 0; i<foodListSize; i++){
-            ModelFood food = ModelFood.loadFromPref(Long.valueOf(i));
+            FoodModel food = FoodModel.loadFromPref(Long.valueOf(i));
             // if we go involuntarily outside the bounds
             if(food == null){
                 prefHelper.putLong(PREF_FOOD_LIST_SIZE, i);
@@ -302,7 +306,6 @@ public class OffersFragment extends Fragment {
             }
             addFoodInList(i, food);
         }
-
         return foodList;
     }
 
@@ -312,4 +315,32 @@ public class OffersFragment extends Fragment {
         return (int) prefHelper.getLong(PREF_FOOD_LIST_SIZE);
     }
 
+    ////////////////////// OPEN ACTIVITY //////////////////////////////////////////
+    private void openEditFoodActivity(){
+        Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
+        startActivityForResult(intent,0);
+
+        Bundle bundle = new Bundle();
+
+        Bitmap img1bmp = BitmapFactory.decodeResource(getResources(), R.drawable.food_photo_1);
+        String img1 = PrefHelper.bitMapToString(img1bmp);
+        FoodModel testFood = new FoodModel(mAdapter.getItemCount(), "MODIFY",
+                "carne 500g, provolazza, bacon, insalata", img1,
+                55.0, 3);
+        bundle.putSerializable("food",testFood);
+
+        intent.putExtra("args", bundle);
+
+        startActivityForResult(intent, ADD_FOOD_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ADD_FOOD_REQUEST && resultCode == FoodDetailsActivity.STATE_CHANGED) {
+            if (data != null && data.hasExtra("food")){
+                FoodModel addedFood = (FoodModel) data.getSerializableExtra("food");
+                addFoodInList(mAdapter.getItemCount(), addedFood);
+            }
+        }
+    }
 }

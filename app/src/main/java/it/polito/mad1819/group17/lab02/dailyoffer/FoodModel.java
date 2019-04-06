@@ -1,16 +1,13 @@
 package it.polito.mad1819.group17.lab02.dailyoffer;
 
-import android.graphics.Bitmap;
-
 import com.google.gson.Gson;
 
-import java.util.concurrent.atomic.AtomicLong;
+import java.io.Serializable;
 
 import it.polito.mad1819.group17.lab02.utils.CurrencyHelper;
-import it.polito.mad1819.group17.lab02.utils.IdHelper;
 import it.polito.mad1819.group17.lab02.utils.PrefHelper;
 
-public class ModelFood implements java.io.Serializable {
+public class FoodModel implements Serializable {
     /////////////////////// STORAGE MGMT ///////////////////////////
     private static final PrefHelper prefHelper = PrefHelper.getInstance();
 
@@ -24,11 +21,11 @@ public class ModelFood implements java.io.Serializable {
         prefHelper.putString(getPrefKey(id), json);
     }
 
-    public static ModelFood loadFromPref(Long id){
+    public static FoodModel loadFromPref(Long id){
         Gson gson = new Gson();
         String json = prefHelper.getString(getPrefKey(id));
         if(json != null){
-            return gson.fromJson(json, ModelFood.class);
+            return gson.fromJson(json, FoodModel.class);
         }else{
             return null;
         }
@@ -41,9 +38,9 @@ public class ModelFood implements java.io.Serializable {
     private double mPrice;
     private int mAvailableQty;
     /////////////////////////////////////////////////////////////////
-    public ModelFood( int id, String name, String description,
-                      String photo, double price,
-                      int availableQty) {
+    public FoodModel(int id, String name, String description,
+                     String photo, double price,
+                     int availableQty) {
         setId(id);
         setName(name);
         setDescription(description);

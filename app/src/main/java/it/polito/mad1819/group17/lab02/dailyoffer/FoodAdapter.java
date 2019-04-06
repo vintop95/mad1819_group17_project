@@ -23,15 +23,15 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
     private static final String TAG = FoodAdapter.class.getName();
     // NAME CONVENTION: private fields are named "m<fieldName>"
     private Context mContext;
-    private List<ModelFood> mFoodList;
+    private List<FoodModel> mFoodList;
     private LayoutInflater mInflater;
 
-    public void updateList(List<ModelFood> updatedData) {
+    public void updateList(List<FoodModel> updatedData) {
         mFoodList = updatedData;
         notifyDataSetChanged();
     }
 
-    FoodAdapter(Context context, List<ModelFood> list){
+    FoodAdapter(Context context, List<FoodModel> list){
         Log.d(TAG, "created");
         mContext = context;
         mFoodList = list;
@@ -53,7 +53,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
     public void onBindViewHolder(@NonNull FoodHolder holder, int pos) {
         // Log.d(TAG, "onBindViewHolder " + pos);
 
-        ModelFood currentFoodItem = mFoodList.get(pos);
+        FoodModel currentFoodItem = mFoodList.get(pos);
         holder.setData(currentFoodItem, pos);
         holder.setListeners();
     }
@@ -68,7 +68,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
         ImageView itemImage, itemImgModify, itemImgDelete;
         TextView itemName, itemPlace, itemPrice;
         int pos;
-        ModelFood currentFoodItem;
+        FoodModel currentFoodItem;
 
         public FoodHolder(@NonNull View itemView){
             super(itemView);
@@ -82,7 +82,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
             // Log.d(TAG, "Holder " + itemName.getText().toString() + " created");
         }
 
-        public void setData(ModelFood currentFoodItem, int pos){
+        public void setData(FoodModel currentFoodItem, int pos){
             Bitmap bmp = PrefHelper.stringToBitMap(currentFoodItem.getPhoto());
             itemImage.setImageBitmap(bmp);
             itemName.setText(currentFoodItem.getName());
@@ -99,7 +99,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
                     //TODO: test
                     Bitmap img1bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.food_photo_1);
                     String img1 = PrefHelper.bitMapToString(img1bmp);
-                    ModelFood testFood = new ModelFood(pos, "MODIFIED",
+                    FoodModel testFood = new FoodModel(pos, "MODIFIED",
                             "carne 500g, provolazza, bacon, insalata", img1,
                             55.0, 3);
                     modifyItem(pos, testFood);
@@ -116,7 +116,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
             itemImgDelete.setOnClickListener(FoodHolder.this);
         }
 
-        public void modifyItem(int pos, ModelFood newFood){
+        public void modifyItem(int pos, FoodModel newFood){
             Log.d(TAG, "Item in pos " + pos + " modified");
             mFoodList.set(pos, newFood);
             newFood.saveToPref();
@@ -139,26 +139,5 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
             notifyItemRemoved(pos);
             notifyItemRangeChanged(pos, getItemCount());
         }
-    }
-
-    public Activity getActivity(Context context)
-    {
-        if (context == null)
-        {
-            return null;
-        }
-        else if (context instanceof ContextWrapper)
-        {
-            if (context instanceof Activity)
-            {
-                return (Activity) context;
-            }
-            else
-            {
-                return getActivity(((ContextWrapper) context).getBaseContext());
-            }
-        }
-
-        return null;
     }
 }
