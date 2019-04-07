@@ -1,14 +1,36 @@
 <resources>
+
     <string name="app_name">lab02</string>
     <string name="title_profile">Profile</string>
     <string name="title_dailyoffer">Daily Offer</string>
     <string name="title_orders">Orders</string>
-
 
     <!-- Alert Dialog for the next state of the order -->
     <string name="confirm_next_state_title">Do you want to confirm the next state?</string>
     <string name="confirm_next_state_message">Is the meal ready for the next state? This is not a reversible operation.</string>
     <string name="positive_button">OK</string>
     <string name="negative_button">CANCEL</string>
+
+    <!-- Order Card Strings -->
+    <string name="time">--:--</string>
+    <string name="delivery_time">Delivery Time</string>
+    <string name="delivery_date">Delivery Date</string>
+    <string name="order_state">Order State</string>
+    <string name="order_number">Order Number</string>
+    <string name="total_items">Total Items</string>
+
+    <!-- Order Details Strings -->
+    <string name="icon_customer">Icon Customer</string>
+    <string name="icon_content">Icon Content</string>
+    <string name="icon_history">Icon History</string>
+
+    <string name="name">Customer Name</string>
+    <string name="phone">Customer Phone</string>
+    <string name="phone_hint">Your Phone</string>
+    <string name="delivery_address">Delivery Address</string>
+    <string name="order_content">Order Content</string>
+    <string name="order_info">Order Info</string>
+    <string name="order_history">State History</string>
+    <string name="button_history">Next State</string>
 
 </resources>

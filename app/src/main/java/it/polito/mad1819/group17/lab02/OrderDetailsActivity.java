@@ -30,6 +30,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
     private TextView txt_customer_name;
     private TextView txt_customer_phone;
     private TextView txt_state_history;
+    private TextView txt_delivery_address;
+    private TextView txt_order_notes;
     private Button btn_next_state;
 
     private ArrayList<Order> inputOrders;
@@ -49,6 +51,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
         txt_customer_name = findViewById(R.id.txt_customer_name);
         txt_customer_phone = findViewById(R.id.txt_customer_phone);
         txt_state_history = findViewById(R.id.txt_state_history);
+        txt_delivery_address = findViewById(R.id.txt_delivery_address);
+        txt_order_notes = findViewById(R.id.txt_order_notes);
         btn_next_state = findViewById(R.id.btn_next_state);
     }
 
@@ -58,6 +62,9 @@ public class OrderDetailsActivity extends AppCompatActivity {
         txt_delivery_date.setText(selctedOrder.getDelivery_date());
         txt_customer_name.setText(selctedOrder.getCustomer_name());
         txt_customer_phone.setText(Html.fromHtml("<u>" + selctedOrder.getCustomer_phone() + "<u/>"));
+        txt_delivery_address.setText(selctedOrder.getDelivery_address());
+        txt_order_notes.setText(selctedOrder.getNotes());
+
         String order_content = "";
         for (String item : selctedOrder.getItem_itemQuantity().keySet()) {
             if (!order_content.equals(""))

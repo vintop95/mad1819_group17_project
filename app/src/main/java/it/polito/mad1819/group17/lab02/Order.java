@@ -17,20 +17,41 @@ public class Order implements Serializable {
     private String customer_phone;
     private String delivery_date;
     private String delivery_time;
+    private String delivery_address;
+    private String notes;
+
+    public String getDelivery_address() {
+        return delivery_address;
+    }
+
+    public void setDelivery_address(String delivery_address) {
+        this.delivery_address = delivery_address;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
     private HashMap<String, String> state_stateTime;
     private HashMap<String, Integer> item_itemQuantity;
 
     private Date delivery_timestamp;
 
 
-    public Order(int number, String customer_name, String customer_phone, String delivery_time, String delivery_date, HashMap<String, String> state_stateTime, HashMap<String, Integer> item_itemQuantity) {
+    public Order(int number, String customer_name, String customer_phone, String delivery_time, String delivery_date, String delivery_address, HashMap<String, String> state_stateTime, HashMap<String, Integer> item_itemQuantity, String notes) {
         this.number = number;
         this.customer_name = customer_name;
         this.customer_phone = customer_phone;
         this.delivery_time = delivery_time;
         this.delivery_date = delivery_date;
+        this.delivery_address = delivery_address;
         this.state_stateTime = state_stateTime;
         this.item_itemQuantity = item_itemQuantity;
+        this.notes = notes;
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         try {
