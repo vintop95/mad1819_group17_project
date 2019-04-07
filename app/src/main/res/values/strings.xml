@@ -1,13 +1,12 @@
 <resources>
     <string name="app_name">lab02</string>
     <string name="title_profile">Profile</string>
-    <string name="title_dailyoffer">Daily Offer</string>
+    <string name="title_dailyoffer">Daily Offers</string>
     <string name="title_orders">Orders</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_edit_food">EditFoodActivity</string>
-    <string name="large_text">
+    <string name="title_activity_edit_food">Offer details</string>
+    <string name="large_text" translatable="false">
         "Material is the metaphor.\n\n"
 
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."
@@ -97,4 +96,13 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+
+    <string name="label_food_number">Number:</string>
+    <string name="label_food_name">Name:</string>
+    <string name="label_food_description">Description:</string>
+    <string name="label_food_price">Price:</string>
+    <string name="label_food_available_qty">Available quantity:</string>
+    <string name="hint_food_name">Insert food name</string>
+    <string name="hint_food_description">Insert food description</string>
+    <string name="available">Available:</string>
 </resources>

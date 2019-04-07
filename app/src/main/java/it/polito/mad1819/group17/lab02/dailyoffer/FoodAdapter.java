@@ -3,8 +3,10 @@ package it.polito.mad1819.group17.lab02.dailyoffer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import it.polito.mad1819.group17.lab02.MainActivity;
 import it.polito.mad1819.group17.lab02.R;
 import it.polito.mad1819.group17.lab02.utils.PrefHelper;
 
@@ -23,6 +26,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
     private static final String TAG = FoodAdapter.class.getName();
     // NAME CONVENTION: private fields are named "m<fieldName>"
     private Context mContext;
+    private OffersFragment mOffersFragment;
     private List<FoodModel> mFoodList;
     private LayoutInflater mInflater;
 
@@ -31,11 +35,12 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
         notifyDataSetChanged();
     }
 
-    FoodAdapter(Context context, List<FoodModel> list){
+    FoodAdapter(Context context, OffersFragment of, List<FoodModel> list){
         Log.d(TAG, "created");
         mContext = context;
         mFoodList = list;
         mInflater = LayoutInflater.from(context);
+        mOffersFragment = of;
     }
 
     // PHASE 1 OF PROTOCOL: build FoodHolder (ViewHolder)
@@ -66,7 +71,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
 
     class FoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView itemImage, itemImgModify, itemImgDelete;
-        TextView itemName, itemPlace, itemPrice;
+        TextView itemName, itemPlace, itemPrice, itemAvailableQty;
         int pos;
         FoodModel currentFoodItem;
 
@@ -77,17 +82,21 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
             itemName = itemView.findViewById(R.id.txt_food_name);
             itemPlace = itemView.findViewById(R.id.txt_food_description);
             itemPrice = itemView.findViewById(R.id.txt_food_price);
+            itemAvailableQty = itemView.findViewById(R.id.txt_food_available_qty);
             itemImgModify = itemView.findViewById(R.id.img_food_modify);
             itemImgDelete = itemView.findViewById(R.id.img_food_delete);
             // Log.d(TAG, "Holder " + itemName.getText().toString() + " created");
         }
 
         public void setData(FoodModel currentFoodItem, int pos){
-            Bitmap bmp = PrefHelper.stringToBitMap(currentFoodItem.getPhoto());
-            itemImage.setImageBitmap(bmp);
+            if(currentFoodItem.getPhoto() != null){
+                Bitmap bmp = PrefHelper.stringToBitMap(currentFoodItem.getPhoto());
+                itemImage.setImageBitmap(bmp);
+            }
             itemName.setText(currentFoodItem.getName());
             itemPlace.setText(currentFoodItem.getDescription());
             itemPrice.setText(currentFoodItem.getPriceString());
+            itemAvailableQty.setText(currentFoodItem.getAvailableQtyString());
             this.pos = pos;
             this.currentFoodItem = currentFoodItem;
         }
@@ -96,13 +105,14 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
         public void onClick(View v) {
             switch(v.getId()){
                 case R.id.img_food_modify:
-                    //TODO: test
-                    Bitmap img1bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.food_photo_1);
-                    String img1 = PrefHelper.bitMapToString(img1bmp);
-                    FoodModel testFood = new FoodModel(pos, "MODIFIED",
-                            "carne 500g, provolazza, bacon, insalata", img1,
-                            55.0, 3);
-                    modifyItem(pos, testFood);
+//                    Bitmap img1bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.food_photo_1);
+//                    String img1 = PrefHelper.bitMapToString(img1bmp);
+//                    FoodModel testFood = new FoodModel(pos, "MODIFIED",
+//                            "carne 500g, provolazza, bacon, insalata", img1,
+//                            55.0, 3);
+                    v.setEnabled(false);
+                    mOffersFragment.openFoodDetailsActivityModify(currentFoodItem, v);
+
                     break;
                 case R.id.img_food_delete:
                     deleteItem(pos);
@@ -116,13 +126,6 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
             itemImgDelete.setOnClickListener(FoodHolder.this);
         }
 
-        public void modifyItem(int pos, FoodModel newFood){
-            Log.d(TAG, "Item in pos " + pos + " modified");
-            mFoodList.set(pos, newFood);
-            newFood.saveToPref();
-            notifyItemChanged(pos);
-        }
-
         // You can use notifyDataSetChanged() instead of notifyItemRemoved
         // and notifyItemRangeChanged but you lose the animation
         public void deleteItem(int pos){
@@ -132,8 +135,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
             PrefHelper.getInstance().putLong(
                     OffersFragment.PREF_FOOD_LIST_SIZE, getItemCount());
 
-            for(int i = pos+1; i<getItemCount();i++){
-                mFoodList.get(i).setId(i-1);
+            for(int i = pos; i<getItemCount();i++){
+                mFoodList.get(i).setId(i);
             }
 
             notifyItemRemoved(pos);

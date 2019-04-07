@@ -9,7 +9,6 @@ import it.polito.mad1819.group17.lab02.utils.PrefHelper;
 
 public class FoodModel implements Serializable {
     /////////////////////// STORAGE MGMT ///////////////////////////
-    private static final PrefHelper prefHelper = PrefHelper.getInstance();
 
     private static String getPrefKey(Long id){
         return "PREF_FOOD_" + id;
@@ -18,12 +17,12 @@ public class FoodModel implements Serializable {
     public void saveToPref(){
         Gson gson = new Gson();
         String json = gson.toJson(this);
-        prefHelper.putString(getPrefKey(id), json);
+        PrefHelper.getInstance().putString(getPrefKey(id), json);
     }
 
     public static FoodModel loadFromPref(Long id){
         Gson gson = new Gson();
-        String json = prefHelper.getString(getPrefKey(id));
+        String json = PrefHelper.getInstance().getString(getPrefKey(id));
         if(json != null){
             return gson.fromJson(json, FoodModel.class);
         }else{
@@ -32,12 +31,16 @@ public class FoodModel implements Serializable {
     }
 
     //////////////////////////////////////////////////////////////
-    private Long id;
-    private String mName, mDescription;
-    private String mPhoto;
-    private double mPrice;
-    private int mAvailableQty;
+    private Long id = Long.valueOf(-1);
+    private String mName = "", mDescription = "";
+    private String mPhoto = "";
+    private double mPrice = 0.0;
+    private int mAvailableQty = 0;
     /////////////////////////////////////////////////////////////////
+    public FoodModel() {
+
+    }
+
     public FoodModel(int id, String name, String description,
                      String photo, double price,
                      int availableQty) {
@@ -109,10 +112,13 @@ public class FoodModel implements Serializable {
 
     /////////////////////////////////////////////////////////
 
-    public int getAvailableQty() {
+    public int getAvailableQtyInt() {
         return mAvailableQty;
     }
 
+    public String getAvailableQtyString() {
+        return Integer.toString(mAvailableQty);
+    }
 
     public void setAvailableQty(int availableQty) {
         this.mAvailableQty = availableQty;

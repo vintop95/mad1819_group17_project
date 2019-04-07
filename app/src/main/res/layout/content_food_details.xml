@@ -13,16 +13,20 @@
     <ImageButton
         android:id="@+id/img_food_photo"
         android:layout_width="150dp"
-        android:layout_height="0dp"
-        android:visibility="gone"/>
+        android:layout_height="0dp"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/food_form"
-        android:layout_height="match_parent"
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:descendantFocusability="beforeDescendants"
-        >
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/food_form"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            />
+
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

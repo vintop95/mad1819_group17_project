@@ -13,7 +13,7 @@
             android:name=".dailyoffer.FoodDetailsActivity"
             android:label="@string/title_activity_edit_food"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".orders.OrderDetailsActivity" />
         <activity
             android:name=".MainActivity"

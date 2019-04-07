@@ -1,27 +1,19 @@
 package it.polito.mad1819.group17.lab02.dailyoffer;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import it.polito.mad1819.group17.lab02.R;
 import it.polito.mad1819.group17.lab02.utils.FormAdapter;
@@ -33,38 +25,39 @@ public class FoodDetailsActivity extends AppCompatActivity {
     public final static int STATE_CHANGED = 1;
     public final static int STATE_NOT_CHANGED = 0;
 
-    private final static int LABEL_FOOD_NUMBER = R.string.app_name;
-    private final static int LABEL_FOOD_NAME = R.string.app_name;
-    private final static int LABEL_FOOD_DESCRIPTION = R.string.app_name;
-    private final static int LABEL_FOOD_PRICE = R.string.app_name;
-    private final static int LABEL_FOOD_AVAILABLE_QTY = R.string.app_name;
+    public final static int LABEL_FOOD_NUMBER = R.string.label_food_number;
+    public final static int LABEL_FOOD_NAME = R.string.label_food_name;
+    public final static int LABEL_FOOD_DESCRIPTION = R.string.label_food_description;
+    public final static int LABEL_FOOD_PRICE = R.string.label_food_price;
+    public final static int LABEL_FOOD_AVAILABLE_QTY = R.string.label_food_available_qty;
 
-    private RecyclerView foodForm;
-    private ArrayList<ListItem> fields = new ArrayList<>();
-    private FormAdapter formAdapter;
-    private FoodModel foodLoaded;
-    private int foodState = STATE_NOT_CHANGED;
+    private RecyclerView mFoodForm;
+    private ArrayList<ListItem> mFields = new ArrayList<>();
+    private FormAdapter mFormAdapter;
+    private FoodModel mFoodLoaded;
+    private AtomicInteger mFoodState = new AtomicInteger(STATE_NOT_CHANGED);
+    private int pos = -1;
 
     // TODO: change
     private ImageButton img_food_photo;
     private FloatingActionButton btn_save;
 
     private void locateViews() {
-        foodForm = findViewById(R.id.food_form);
-        foodForm.setHasFixedSize(true);
-        foodForm.setLayoutManager(new LinearLayoutManager(this));
+        mFoodForm = findViewById(R.id.food_form);
+        mFoodForm.setHasFixedSize(true);
+        mFoodForm.setLayoutManager(new LinearLayoutManager(this));
 
         img_food_photo = findViewById(R.id.img_food_photo);
         btn_save = findViewById(R.id.btn_save);
     }
 
     private void feedViews(FoodModel selFood) {
-        if(fields.isEmpty()) {
-            fields.add(0, new ListItem(LABEL_FOOD_NUMBER, "" + selFood.getIdLong()));
-            fields.add(1, new ListItem(LABEL_FOOD_NAME, selFood.getName()));
-            fields.add(2, new ListItem(LABEL_FOOD_DESCRIPTION, selFood.getDescription()));
-            fields.add(new ListItem(LABEL_FOOD_PRICE, Double.toString(selFood.getPriceDouble())));
-            fields.add(new ListItem(LABEL_FOOD_AVAILABLE_QTY, Integer.toString(selFood.getAvailableQty())));
+        if(mFields.isEmpty()) {
+            mFields.add(0, new ListItem(LABEL_FOOD_NUMBER, "" + selFood.getIdLong()));
+            mFields.add(1, new ListItem(LABEL_FOOD_NAME, selFood.getName()));
+            mFields.add(2, new ListItem(LABEL_FOOD_DESCRIPTION, selFood.getDescription()));
+            mFields.add(3, new ListItem(LABEL_FOOD_PRICE, Double.toString(selFood.getPriceDouble())));
+            mFields.add(4, new ListItem(LABEL_FOOD_AVAILABLE_QTY, selFood.getAvailableQtyString()));
         }
 
         String photoString = selFood.getPhoto();
@@ -88,16 +81,22 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         if(b != null){
-            foodLoaded = (FoodModel) b.getBundle("args").getSerializable("food");
+            Bundle b2 = b.getBundle("args");
+            if(b2 != null){
+                mFoodLoaded = (FoodModel) b2.getSerializable("food");
+                pos = b2.getInt("pos");
+            }
         }
 
-        if (foodLoaded != null){
-            //if it's a modify operation
-            feedViews(foodLoaded);
+        if (mFoodLoaded == null) {
+            mFoodLoaded = new FoodModel();
         }
 
-        formAdapter = new FormAdapter(this, fields);
-        foodForm.setAdapter(formAdapter);
+        mFoodLoaded.setId(pos);
+        feedViews(mFoodLoaded);
+
+        mFormAdapter = new FormAdapter(this, mFields, mFoodState);
+        mFoodForm.setAdapter(mFormAdapter);
 
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,19 +105,41 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
                 Intent intent = new Intent();
 
-                if(getFoodState() == STATE_CHANGED){
-                    intent.putExtra("food", foodLoaded);
-                }
+                intent.putExtra("food", getUpdatedFood());
 
                 setResult(getFoodState(), intent);
 
-                finish();
+                FoodDetailsActivity.this.finish();
             }
         });
     }
 
+    private FoodModel getUpdatedFood() {
+        FoodModel food = new FoodModel();
+        food.setId(pos);
+
+        for(ListItem field: mFields){
+            switch(field.fieldNameRes){
+                case LABEL_FOOD_NAME:
+                    food.setName(field.fieldValue);
+                    break;
+                case LABEL_FOOD_DESCRIPTION:
+                    food.setDescription(field.fieldValue);
+                    break;
+                case LABEL_FOOD_PRICE:
+                    food.setPrice(Double.valueOf(field.fieldValue));
+                    break;
+                case LABEL_FOOD_AVAILABLE_QTY:
+                    food.setAvailableQty(Integer.valueOf(field.fieldValue));
+                    break;
+            }
+        }
+
+        return food;
+    }
+
     private int getFoodState() {
-        return foodState;
+        return mFoodState.get();
     }
 
     @Override
@@ -139,73 +160,3 @@ public class FoodDetailsActivity extends AppCompatActivity {
         Log.d("DETAILS","onDestroy");
     }
 }
-
-    /*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_details);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        //final Order selectedOrder = (Order) getIntent().getExtras().getBundle("bundle_selected_order").getSerializable("selected_order");
-
-        final ArrayList<Order> orders = (ArrayList<Order>) getIntent()
-                .getExtras()
-                .getBundle("args")
-                .getSerializable("orders");
-
-        final int position = getIntent().getExtras().getBundle("args").getInt("position");
-
-
-        locateViews();
-
-        btn_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (orders.get(position).moveToNextState()) {
-                    Intent intent = new Intent();
-
-                    ArrayList<Order> updatedOrders = new ArrayList<Order>();
-                    updatedOrders.addAll(orders);
-
-                    Collections.sort(updatedOrders, new Comparator<Order>() {
-                        @Override
-                        public int compare(Order o1, Order o2) {
-                            if (o1.getCurrentState() == Order.STATE3)
-                                return 1;
-                            else
-                                return -o1.getDelivery_timestamp().compareTo(o2.getDelivery_timestamp());
-                        }
-                    });
-                    Log.d("AAA", "XX " + updatedOrders.get(0).getNumber() + " " + updatedOrders.get(1).getNumber());
-
-                    intent.putExtra("orders", updatedOrders);
-                    intent.putExtra("position", position);
-
-
-                    //Log.d("AAA", "" + orders.get(0).getNumber());
-
-                    setResult(STATE_CHANGED, intent);
-                    txt_state_history.setText(orders.get(position).getStateHistoryToString());
-
-                } else
-                    setResult(STATE_NOT_CHANGED);
-
-                //txt_state_history.setText(orders.get(position).getStateHistoryToString());
-            }
-        });
-
-        feedViews(orders.get(position));
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
-     */

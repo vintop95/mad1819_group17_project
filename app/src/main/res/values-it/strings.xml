@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">lab02</string>
+    <string name="label_food_number">Numero:</string>
+    <string name="label_food_name">Nome:</string>
+    <string name="label_food_description">Descrizione:</string>
+    <string name="label_food_price">Prezzo:</string>
+    <string name="label_food_available_qty">Quantità disponibile:</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="title_activity_edit_food">Dettagli dell\'offerta</string>
+    <string name="title_profile">Profilo</string>
+    <string name="title_dailyoffer">Offerte del giorno</string>
+    <string name="title_orders">Ordini</string>
+    <string name="hint_food_name">Inserisci il nome del piatto</string>
+    <string name="hint_food_description">Inserisci la descrizione del piatto</string>
+    <string name="available">Disponibili:</string>
+</resources>
