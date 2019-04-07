@@ -24,9 +24,9 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
 
-    final Fragment offersFragment = new OffersFragment();
-    final Fragment ordersFragment = new OrdersFragment();
-    final Fragment profileFragment = new ProfileFragment();
+    Fragment offersFragment = new OffersFragment();
+    Fragment ordersFragment = new OrdersFragment();
+    Fragment profileFragment = new ProfileFragment();
 
     final FragmentManager fm = getSupportFragmentManager();
     Fragment active;
@@ -71,35 +71,6 @@ public class MainActivity extends AppCompatActivity {
         fm.beginTransaction().attach(active).commit();
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_profile:
-                    if (btn_edit != null)
-                        btn_edit.setVisible(true);
-                    fm.beginTransaction().hide(active).show(profileFragment).commit();
-                    active = profileFragment;
-                    return true;
-                case R.id.navigation_dailyoffer:
-                    if (btn_edit != null)
-                        btn_edit.setVisible(false);
-                    fm.beginTransaction().hide(active).show(offersFragment).commit();
-                    active = offersFragment;
-                    return true;
-                case R.id.navigation_orders:
-                    if (btn_edit != null)
-                        btn_edit.setVisible(false);
-                    fm.beginTransaction().hide(active).show(ordersFragment).commit();
-                    active = ordersFragment;
-                    return true;
-            }
-            return false;
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,12 +94,39 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        fm.beginTransaction().add(R.id.main_container, profileFragment, "profile_fragment").hide(profileFragment).commit();
-        fm.beginTransaction().add(R.id.main_container, ordersFragment, "orders_fragment").hide(ordersFragment).commit();
-        fm.beginTransaction().add(R.id.main_container, offersFragment, "offers_fragment").commit();
-//
-        mTextMessage = findViewById(R.id.message);
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        PrefHelper.setMainContext(this);
+
+        instantiateFragments(savedInstanceState);
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        mOnNavigationItemSelectedListener
+                = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_profile:
+                        if (btn_edit != null)
+                            btn_edit.setVisible(true);
+                        fm.beginTransaction().detach(active).attach(profileFragment).commit();
+                        active = profileFragment;
+                        return true;
+                    case R.id.navigation_dailyoffer:
+                        if (btn_edit != null)
+                            btn_edit.setVisible(false);
+                        fm.beginTransaction().detach(active).attach(offersFragment).commit();
+                        active = offersFragment;
+                        return true;
+                    case R.id.navigation_orders:
+                        if (btn_edit != null)
+                            btn_edit.setVisible(false);
+                        fm.beginTransaction().detach(active).attach(ordersFragment).commit();
+                        active = ordersFragment;
+                        return true;
+                }
+                return false;
+            }
+        };
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         int navSelected = R.id.navigation_orders;
