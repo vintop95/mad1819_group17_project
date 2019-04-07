@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.lab02;
+package it.polito.mad1819.group17.lab02.profile;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import it.polito.mad1819.group17.lab02.R;
 
 
 /**

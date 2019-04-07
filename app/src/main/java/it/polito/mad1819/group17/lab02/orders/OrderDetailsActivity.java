@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.lab02;
+package it.polito.mad1819.group17.lab02.orders;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import it.polito.mad1819.group17.lab02.R;
 
 public class OrderDetailsActivity extends AppCompatActivity {
 
@@ -49,7 +50,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         txt_customer_name = findViewById(R.id.txt_customer_name);
         txt_customer_phone = findViewById(R.id.txt_customer_phone);
         txt_state_history = findViewById(R.id.txt_state_history);
-        btn_next_state = findViewById(R.id.btn_next_state);
+        btn_next_state = findViewById(R.id.btn_save);
     }
 
     private void feedViews(Order selctedOrder) {
