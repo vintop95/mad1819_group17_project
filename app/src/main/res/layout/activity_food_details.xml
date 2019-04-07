@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".dailyoffer.FoodDetailsActivity">
+
+    <!-- android:layout_height="@dimen/app_bar_height"_ -->
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar"
+            app:expandedTitleTextAppearance="@style/ToolbarTitle">
+
+            <ImageView
+                android:id="@+id/img_food_photo"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/food_photo_1"
+                app:layout_collapseMode="parallax"
+                app:layout_constraintDimensionRatio="w,1:1"
+                />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_collapseMode="pin"
+                android:title="@string/title_activity_edit_food" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/content_food_details" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end"
+        app:srcCompat="@drawable/ic_done_black_24dp"
+        app:useCompatPadding="true"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_change_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:translationY="-16dp"
+        app:backgroundTint="@color/colorPrimaryDark"
+        app:layout_anchor="@+id/btn_save"
+        app:layout_anchorGravity="top|center"
+        app:srcCompat="@android:drawable/ic_menu_camera"
+        app:useCompatPadding="true"
+        app:fabSize="normal"/>
+
+</android.support.design.widget.CoordinatorLayout>

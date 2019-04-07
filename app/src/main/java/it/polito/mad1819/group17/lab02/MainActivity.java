@@ -1,5 +1,6 @@
 package it.polito.mad1819.group17.lab02;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import it.polito.mad1819.group17.lab02.dailyoffer.OffersFragment;
 import it.polito.mad1819.group17.lab02.orders.OrdersFragment;
 import it.polito.mad1819.group17.lab02.profile.ProfileFragment;
+import it.polito.mad1819.group17.lab02.utils.PrefHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        PrefHelper.setMainContext(this);
 
         instantiateFragments(savedInstanceState);
 
