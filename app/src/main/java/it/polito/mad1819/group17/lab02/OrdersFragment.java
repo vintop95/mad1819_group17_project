@@ -2,9 +2,11 @@ package it.polito.mad1819.group17.lab02;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ public class OrdersFragment extends Fragment {
     private RecyclerView recyclerView;
     private OrdersAdapter mAdapter;
     private ArrayList<Order> orders = new ArrayList<Order>();
+
 
 
     private OrdersAdapter.RecyclerViewClickListener listener;
@@ -63,12 +66,13 @@ public class OrdersFragment extends Fragment {
         orders.add(new Order(11, "qqq", "1112223834", "22:14", "01/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap3, orderContent, ""));
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
+
+
 
         recyclerView = view.findViewById(R.id.rv_orders);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

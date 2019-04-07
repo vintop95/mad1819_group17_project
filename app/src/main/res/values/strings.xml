@@ -4,6 +4,7 @@
     <string name="title_profile">Profile</string>
     <string name="title_dailyoffer">Daily Offer</string>
     <string name="title_orders">Orders</string>
+    <string name="edit_profile">Edit profile</string>
 
     <!-- Alert Dialog for the next state of the order -->
     <string name="confirm_next_state_title">Do you want to confirm the next state?</string>
