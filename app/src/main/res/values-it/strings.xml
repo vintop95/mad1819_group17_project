@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">lab02</string>
+    <string name="app_name">Il tuo ristorante</string>
     <string name="label_food_number">Numero:</string>
     <string name="label_food_name">Nome:</string>
     <string name="label_food_description">Descrizione:</string>
@@ -14,4 +14,75 @@
     <string name="hint_food_name">Inserisci il nome del piatto</string>
     <string name="hint_food_description">Inserisci la descrizione del piatto</string>
     <string name="available">Disponibili:</string>
+
+    <string name="edit_profile">Modifica profilo</string>
+    <string name="gallery_not_found">App galleria non trovata!</string>
+    <string name="camera_not_found">App fotocamera non trovata!</string>
+
+    <string name="info">Info</string>
+    <string name="name">Nome:</string>
+    <string name="phone">Telefono:</string>
+    <string name="mail">Indirizzo Email:</string>
+    <string name="city">Città:</string>
+    <string name="bio">Breve Descrizione:</string>
+    <string name="birthdate">Data di Nascita (gg/mm/aaaa):</string>
+    <string name="address">Indirizzo:</string>
+
+    <string name="favorite">Cibo Preferito:</string>
+    <string name="required">*</string>
+    <string name="required_text">*Obbligatorio</string>
+    <string name="restaurant_type">Tipo Ristorante:</string>
+
+    <string name="name_not_valid">Il nome deve essere alfanumerico e non vuoto</string>
+    <string name="mail_not_valid">Indirizzo email non valido</string>
+    <string name="phone_not_valid">Telefono non valido</string>
+    <string name="birthdate_not_valid">Data di nascita non valida</string>
+
+    <string name="hint_name">Il tuo nome</string>
+    <string name="hint_mail">La tua email</string>
+    <string name="hint_city">La tua città</string>
+    <string name="hint_bio">La tua descrizione</string>
+    <string name="hint_address">Il tuo indirizzo</string>
+    <string name="hint_birthdate">La tua data di nascita</string>
+    <string name="hint_phone">"Il tuo telefono"</string>
+    <string name="hint_restaurant_type">Tipo ristorante</string>
+
+    <string name="image_background">Immagine Sfondo</string>
+    <string name="image_profile_photo">Foto Profilo</string>
+    <string name="image_profile_change">Cambia foto</string>
+
+    <string name="icon_person">Icona Persona</string>
+    <string name="icon_phone">Icona Telefono</string>
+    <string name="icon_mail">Icona Email</string>
+    <string name="icon_delivery">Delivery Icon</string>
+    <string name="icon_address">Icona Indirizzo</string>
+    <string name="icon_birthdate">Icona data di nascita</string>
+    <string name="icon_bio">Icon Descrizione</string>
+    <string name="icon_favorite">Icona Preferiti</string>
+    <string name="icon_restaurant_type">Icona tipo Ristorante</string>
+
+    <string name="insert_name">Inserisci nome</string>
+    <string name="insert_mail">Inserisci mail</string>
+    <string name="insert_bio">Inserisci una breve descrizione</string>
+    <string name="pick_picture_message">Scegli come prendere la foto</string>
+    <string name="gallery">Galleria</string>
+    <string name="camera">Fotocamera</string>
+    <string name="save">SALVA</string>
+    <string name="warning_title">Attenzione</string>
+    <string name="discard_msg">Vuoi annullare le modifiche effettuate?</string>
+    <string name="hint_delivery_address">Il tuo indirizzo di consegna</string>
+    <string name="delivery_address">Indirizzo di Consegna:</string>
+
+    <string-array name="restaurant_types">
+        <item></item>
+        <item>Pizza</item>
+        <item>Hamburger</item>
+        <item>Pollo</item>
+        <item>Vegano</item>
+        <item>Gelato</item>
+        <item>Dolci</item>
+        <item>Salutare</item>
+        <item>Giapponese</item>
+        <item>Messicano</item>
+    </string-array>
 </resources>

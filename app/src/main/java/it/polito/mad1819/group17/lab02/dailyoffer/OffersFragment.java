@@ -81,11 +81,11 @@ public class OffersFragment extends Fragment {
         btnAddOffer = view.findViewById(R.id.btn_add_offer);
 
         ////////////// TODO: remove test add object
-        Bitmap img1bmp = BitmapFactory.decodeResource(getResources(), R.drawable.food_photo_1);
-        String img1 = PrefHelper.bitMapToString(img1bmp);
-        FoodModel testFood = new FoodModel(mAdapter.getItemCount(), "Crispy bacon",
-                "carne 500g, provolazza, bacon, insalata", img1,
-                55.0, 3);
+//        Bitmap img1bmp = BitmapFactory.decodeResource(getResources(), R.drawable.food_photo_1);
+//        String img1 = PrefHelper.bitMapToStringLossJpg(img1bmp);
+//        FoodModel testFood = new FoodModel(mAdapter.getItemCount(), "Crispy bacon",
+//                "carne 500g, provolazza, bacon, insalata", img1,
+//                55.0, 3);
         ////////////////////////////////////////////////////////////
         btnAddOffer.setOnClickListener(e -> {
             // TO PREVENT DOUBLE CLICK -> DOUBLE OPEN ACTIVITY
@@ -169,7 +169,7 @@ public class OffersFragment extends Fragment {
         Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
 
 //        Bitmap img1bmp = BitmapFactory.decodeResource(getResources(), R.drawable.food_photo_1);
-//        String img1 = PrefHelper.bitMapToString(img1bmp);
+//        String img1 = PrefHelper.bitMapToStringLossJpg(img1bmp);
 //        FoodModel testFood = new FoodModel(mAdapter.getItemCount(), "Crispy bacon",
 //                "carne 500g, provolazza, bacon, insalata", img1,
 //                55.0, 3);

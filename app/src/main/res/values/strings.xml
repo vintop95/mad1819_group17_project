@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">lab02</string>
+    <string name="app_name">Your Restaurant</string>
     <string name="title_profile">Profile</string>
     <string name="title_dailyoffer">Daily Offers</string>
     <string name="title_orders">Orders</string>
@@ -105,4 +105,75 @@
     <string name="hint_food_name">Insert food name</string>
     <string name="hint_food_description">Insert food description</string>
     <string name="available">Available:</string>
+
+    <string name="edit_profile">Edit profile</string>
+    <string name="gallery_not_found">Gallery app not found!</string>
+    <string name="camera_not_found">Camera app not found!</string>
+
+    <string name="info">Info</string>
+    <string name="name">Name:</string>
+    <string name="phone">Phone:</string>
+    <string name="mail">Email:</string>
+    <string name="city">City:</string>
+    <string name="delivery_address">Delivery Address:</string>
+    <string name="bio">Short Description:</string>
+    <string name="birthdate">Date of Birth (dd/mm/yyyy):</string>
+    <string name="favorite">Favorite Food:</string>
+    <string name="address">Address:</string>
+    <string name="required">*</string>
+    <string name="required_text">*Required</string>
+    <string name="restaurant_type">Restaurant Type:</string>
+
+    <string name="name_not_valid">Name must be alphanumeric and not empty</string>
+    <string name="mail_not_valid">Email address is not valid</string>
+    <string name="phone_not_valid">Phone number is not valid</string>
+    <string name="birthdate_not_valid">Birth date not valid</string>
+
+    <string name="hint_name">"Your name"</string>
+    <string name="hint_mail">"Your email address"</string>
+    <string name="hint_city">Your city</string>
+    <string name="hint_delivery_address">Your delivery address</string>
+    <string name="hint_bio">"Your description"</string>
+    <string name="hint_address">Your address</string>
+    <string name="hint_birthdate">"Your date of birth"</string>
+    <string name="hint_phone">"Your phone"</string>
+    <string name="hint_restaurant_type">Restaurant type</string>
+
+
+    <string name="image_background">Background Picture</string>
+    <string name="image_profile_photo">Profile photo</string>
+    <string name="image_profile_change">Change photo</string>
+
+    <string name="icon_person">Person Icon</string>
+    <string name="icon_phone">Phone Icon</string>
+    <string name="icon_mail">Email Icon</string>
+    <string name="icon_delivery">Delivery Icon</string>
+    <string name="icon_birthdate">Birthdate Icon</string>
+    <string name="icon_address">Address Icon</string>
+    <string name="icon_bio">Description Icon</string>
+    <string name="icon_favorite">Favorite Icon</string>
+    <string name="icon_restaurant_type">Restaurant type Icon</string>
+
+    <string name="insert_name">Insert name</string>
+    <string name="insert_mail">Insert mail</string>
+    <string name="insert_bio">Insert short description</string>
+    <string name="pick_picture_message">Choose how to set your picture</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
+    <string name="save">SAVE</string>
+    <string name="warning_title">Warning</string>
+    <string name="discard_msg">Do you want to discard changes?</string>
+
+    <string-array name="restaurant_types">
+        <item></item>
+        <item>Pizza</item>
+        <item>Hamburger</item>
+        <item>Chicken</item>
+        <item>Vegan</item>
+        <item>Ice cream</item>
+        <item>Dessert</item>
+        <item>Healthy</item>
+        <item>Japanese</item>
+        <item>Mexican</item>
+    </string-array>
 </resources>

@@ -111,11 +111,17 @@ public class PrefHelper {
         return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
     }
 
-    public static String bitMapToString(Bitmap bitmap) {
+    public static String bitMapToStringLossJpg(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 7, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 25, baos);
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
     }
 
+    public static String bitMapToStringLossless(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        return Base64.encodeToString(b, Base64.DEFAULT);
+    }
 }

@@ -1,12 +1,7 @@
 package it.polito.mad1819.group17.lab02.dailyoffer;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,7 +13,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import it.polito.mad1819.group17.lab02.MainActivity;
 import it.polito.mad1819.group17.lab02.R;
 import it.polito.mad1819.group17.lab02.utils.PrefHelper;
 
@@ -70,7 +64,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
     }
 
     class FoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView itemImage, itemImgModify, itemImgDelete;
+        ImageView itemPhoto, itemImgModify, itemImgDelete;
         TextView itemName, itemPlace, itemPrice, itemAvailableQty;
         int pos;
         FoodModel currentFoodItem;
@@ -78,7 +72,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
         public FoodHolder(@NonNull View itemView){
             super(itemView);
             // Parameters of rv_food_item-layout
-            itemImage = itemView.findViewById(R.id.img_food_photo);
+            itemPhoto = itemView.findViewById(R.id.img_food_photo);
             itemName = itemView.findViewById(R.id.txt_food_name);
             itemPlace = itemView.findViewById(R.id.txt_food_description);
             itemPrice = itemView.findViewById(R.id.txt_food_price);
@@ -91,7 +85,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
         public void setData(FoodModel currentFoodItem, int pos){
             if(currentFoodItem.getPhoto() != null){
                 Bitmap bmp = PrefHelper.stringToBitMap(currentFoodItem.getPhoto());
-                itemImage.setImageBitmap(bmp);
+                itemPhoto.setImageBitmap(bmp);
             }
             itemName.setText(currentFoodItem.getName());
             itemPlace.setText(currentFoodItem.getDescription());
@@ -106,7 +100,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
             switch(v.getId()){
                 case R.id.img_food_modify:
 //                    Bitmap img1bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.food_photo_1);
-//                    String img1 = PrefHelper.bitMapToString(img1bmp);
+//                    String img1 = PrefHelper.bitMapToStringLossJpg(img1bmp);
 //                    FoodModel testFood = new FoodModel(pos, "MODIFIED",
 //                            "carne 500g, provolazza, bacon, insalata", img1,
 //                            55.0, 3);
