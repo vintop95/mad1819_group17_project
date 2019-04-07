@@ -1,14 +1,331 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".profile.ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="PROFILEEE" />
+        android:fillViewport="true">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline_16dp_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline_64dp_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="64dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline_16dp_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintGuide_end="16dp"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                style="@style/circleUserPhotoStyle"
+                android:id="@+id/image_user_photo"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/textOnBackgroundStyle"
+                android:id="@+id/text_info"
+                android:text="@string/info"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/image_user_photo" />
+
+            <View
+                android:id="@+id/view_divider_info"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="32dp"
+                android:background="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_info" />
+
+            <!-- Name -->
+            <ImageView
+                style="@style/smallIconStyle"
+                android:id="@+id/image_name"
+                android:contentDescription="@string/icon_restaurateur"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_name"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toTopOf="@+id/label_name"
+                app:srcCompat="@drawable/ic_person_black_24dp" />
+
+            <TextView
+                style="@style/smallLabelStyle"
+                android:id="@+id/label_name"
+                android:layout_marginTop="32dp"
+                android:text="@string/name"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/view_divider_info" />
+
+            <TextView
+                style="@style/standardTextStyle"
+                android:id="@+id/txt_name"
+                android:text="@string/hint_name"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/label_name" />
+
+            <View
+                style="@style/innerDividerStyle"
+                android:id="@+id/view_divider_name"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/txt_name" />
+
+
+            <!-- Phone -->
+            <ImageView
+                style="@style/smallIconStyle"
+                android:id="@+id/image_phone"
+                android:contentDescription="@string/icon_phone"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_phone"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toTopOf="@+id/label_phone"
+                app:srcCompat="@drawable/ic_baseline_phone_24px" />
+
+            <TextView
+                style="@style/smallLabelStyle"
+                android:id="@+id/label_phone"
+                android:text="@string/phone"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/view_divider_name" />
+
+            <TextView
+                style="@style/standardTextStyle"
+                android:id="@+id/txt_phone"
+                android:text="@string/hint_phone"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/label_phone" />
+
+            <View
+                style="@style/innerDividerStyle"
+                android:id="@+id/view_divider_phone"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/txt_phone" />
+
+
+            <!-- Email -->
+            <ImageView
+                style="@style/smallIconStyle"
+                android:id="@+id/image_mail"
+                android:contentDescription="@string/icon_mail"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_mail"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toTopOf="@+id/label_mail"
+                app:srcCompat="@drawable/ic_email_black_24dp" />
+
+            <TextView
+                style="@style/smallLabelStyle"
+                android:id="@+id/label_mail"
+                android:text="@string/mail"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/view_divider_phone" />
+
+            <TextView
+                style="@style/standardTextStyle"
+                android:id="@+id/txt_mail"
+                android:text="@string/hint_mail"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/label_mail" />
+
+            <View
+                style="@style/innerDividerStyle"
+                android:id="@+id/view_divider_mail"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/txt_mail" />
+
+
+            <!-- Address -->
+            <TextView
+                style="@style/smallLabelStyle"
+                android:id="@+id/label_address"
+                android:text="@string/address"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/view_divider_mail" />
+
+            <ImageView
+                style="@style/smallIconStyle"
+                android:id="@+id/image_address"
+                android:contentDescription="@string/icon_address"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_address"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toTopOf="@+id/label_address"
+                app:srcCompat="@drawable/ic_person_pin_circle_black_24dp" />
+
+            <TextView
+                android:id="@+id/txt_address"
+                style="@style/standardTextStyle.longText"
+                android:text="@string/hint_address"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/label_address" />
+
+            <View
+                android:id="@+id/view_divider_address"
+                style="@style/innerDividerStyle"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/txt_address" />
+
+            <!-- Type -->
+
+            <ImageView
+                style="@style/smallIconStyle"
+                android:id="@+id/image_restaurant_type"
+                android:contentDescription="@string/icon_restaurant_type"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_restaurant_type"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toTopOf="@+id/label_restaurant_type"
+                app:srcCompat="@drawable/ic_baseline_fastfood_24px" />
+
+            <TextView
+                style="@style/smallLabelStyle"
+                android:id="@+id/label_restaurant_type"
+                android:text="@string/restaurant_type"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/view_divider_address" />
+
+            <TextView
+                android:id="@+id/txt_restaurant_type"
+                style="@style/standardTextStyle"
+                android:text="@string/hint_restaurant_type"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@id/label_restaurant_type" />
+
+            <View
+                android:id="@+id/view_divider_restaurant_type"
+                style="@style/innerDividerStyle"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/txt_restaurant_type" />
+
+
+            <!-- Free day -->
+            <ImageView
+                style="@style/smallIconStyle"
+                android:id="@+id/image_free_day"
+                android:contentDescription="@string/icon_free_day"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_free_day"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toTopOf="@+id/label_free_day"
+                app:srcCompat="@drawable/ic_baseline_beach_access_24px" />
+
+            <TextView
+                style="@style/smallLabelStyle"
+                android:id="@+id/label_free_day"
+                android:text="@string/free_day"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/view_divider_restaurant_type" />
+
+            <TextView
+                android:id="@+id/txt_free_day"
+                style="@style/standardTextStyle"
+                android:text="@string/hint_free_day"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@id/label_free_day" />
+
+            <View
+                android:id="@+id/view_divider_free_day"
+                style="@style/innerDividerStyle"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/txt_free_day" />
+
+
+            <!-- Working time -->
+            <ImageView
+                style="@style/smallIconStyle"
+                android:id="@+id/image_working_time"
+                android:contentDescription="@string/icon_working_time"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_working_time"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toTopOf="@+id/label_working_time"
+                app:srcCompat="@drawable/ic_baseline_access_time_24px" />
+
+            <TextView
+                style="@style/smallLabelStyle"
+                android:id="@+id/label_working_time"
+                android:text="@string/working_time"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/view_divider_free_day" />
+
+            <TextView
+                android:id="@+id/txt_working_time"
+                style="@style/standardTextStyle"
+                android:text="@string/hint_working_time"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@id/label_working_time" />
+
+            <View
+                android:id="@+id/view_divider_working_time"
+                style="@style/innerDividerStyle"
+                android:layout_marginBottom="16dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/txt_working_time" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 </FrameLayout>

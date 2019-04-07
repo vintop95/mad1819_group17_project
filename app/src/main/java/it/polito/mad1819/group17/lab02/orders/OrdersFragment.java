@@ -2,9 +2,11 @@ package it.polito.mad1819.group17.lab02.orders;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,7 @@ public class OrdersFragment extends Fragment {
     private RecyclerView recyclerView;
     private OrdersAdapter mAdapter;
     private ArrayList<Order> orders = new ArrayList<Order>();
+
 
 
     private OrdersAdapter.RecyclerViewClickListener listener;
@@ -55,25 +58,26 @@ public class OrdersFragment extends Fragment {
         orderContent.put("coca cola", new Integer(1));
 
 
-        orders.add(new Order(1, "aaa", "1112223334", "20:14", "01/05/2019", stateMap2, orderContent));
-        orders.add(new Order(2, "bb", "1112223666", "20:00", "02/05/2019", stateMap1, orderContent));
-        orders.add(new Order(3, "ccc", "1112223777", "00:14", "03/05/2019", stateMap1, orderContent));
-        orders.add(new Order(4, "aaa", "1112223000", "10:14", "02/05/2019", stateMap1, orderContent));
-        orders.add(new Order(5, "aaddda", "1112223101", "11:45", "02/05/2019", stateMap2, orderContent));
-        orders.add(new Order(6, "jj", "1112223354", "23:25", "02/05/2019", stateMap2, orderContent));
-        orders.add(new Order(7, "kk", "1112223351", "21:14", "02/05/2019", stateMap2, orderContent));
-        orders.add(new Order(8, "uu", "1112223102", "20:11", "01/05/2019", stateMap3, orderContent));
-        orders.add(new Order(9, "auuuaa", "1112223999", "20:18", "01/05/2019", stateMap1, orderContent));
-        orders.add(new Order(10, "rht", "1112223367", "20:26", "01/05/2019", stateMap3, orderContent));
-        orders.add(new Order(11, "qqq", "1112223834", "22:14", "01/05/2019", stateMap3, orderContent));
+        orders.add(new Order(1, "aaa", "1112223334", "20:14", "01/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap2, orderContent, "pizza tagliata"));
+        orders.add(new Order(2, "bb", "1112223666", "20:00", "02/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap1, orderContent, "tovaglioli"));
+        orders.add(new Order(3, "ccc", "1112223777", "00:14", "03/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap1, orderContent, ""));
+        orders.add(new Order(4, "aaa", "1112223000", "10:14", "02/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap1, orderContent, ""));
+        orders.add(new Order(5, "aaddda", "1112223101", "11:45", "02/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap2, orderContent, ""));
+        orders.add(new Order(6, "jj", "1112223354", "23:25", "02/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap2, orderContent, "ahahbaauaaiubajbibauboanonoaunonoau"));
+        orders.add(new Order(7, "kk", "1112223351", "21:14", "02/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap2, orderContent, ""));
+        orders.add(new Order(8, "uu", "1112223102", "20:11", "01/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap3, orderContent, ""));
+        orders.add(new Order(9, "auuuaa", "1112223999", "20:18", "01/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap1, orderContent, "aivnaorivnairvnaoig   rvnanraòrnvajnvan"));
+        orders.add(new Order(10, "rht", "1112223367", "20:26", "01/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap3, orderContent, ""));
+        orders.add(new Order(11, "qqq", "1112223834", "22:14", "01/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap3, orderContent, ""));
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
+
+
 
         recyclerView = view.findViewById(R.id.rv_orders);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

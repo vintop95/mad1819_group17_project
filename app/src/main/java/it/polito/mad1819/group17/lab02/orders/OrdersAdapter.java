@@ -29,7 +29,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        CardView card_order;
+        View state_background;
         TextView txt_delivery_time;
         TextView txt_delivery_date;
         TextView txt_order_number;
@@ -43,7 +43,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
 
         public ViewHolder(View itemView, RecyclerViewClickListener listener, Context context) {
             super(itemView);
-            card_order = itemView.findViewById(R.id.card_order);
+            state_background = itemView.findViewById(R.id.view_state_background);
             txt_delivery_time = itemView.findViewById(R.id.txt_delivery_time);
             txt_delivery_date = itemView.findViewById(R.id.txt_delivery_date);
             txt_order_number = itemView.findViewById(R.id.txt_order_number);
@@ -66,13 +66,13 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             this.txt_order_state.setText(order.getCurrentState());
             switch (order.getCurrentState()) {
                 case Order.STATE1:
-                    this.card_order.setCardBackgroundColor(context.getColor(R.color.colorState1));
+                    this.state_background.setBackgroundColor(context.getColor(R.color.colorState1));
                     break;
                 case Order.STATE2:
-                    this.card_order.setCardBackgroundColor(context.getColor(R.color.colorState2));
+                    this.state_background.setBackgroundColor(context.getColor(R.color.colorState2));
                     break;
                 case Order.STATE3:
-                    this.card_order.setCardBackgroundColor(context.getColor(R.color.colorState3));
+                    this.state_background.setBackgroundColor(context.getColor(R.color.colorState3));
                     break;
             }
         }
