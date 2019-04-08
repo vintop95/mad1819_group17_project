@@ -1,5 +1,6 @@
 package it.polito.mad1819.group17.lab02.orders;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -7,14 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 
 import it.polito.mad1819.group17.lab02.R;
 
 public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder> {
 
+    private Context context;
     private ArrayList<Order> orders;
     private RecyclerViewClickListener mListener;
+
 
     public ArrayList<Order> getOrders() {
         return orders;
@@ -25,7 +29,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        CardView card_order;
+        View state_background;
         TextView txt_delivery_time;
         TextView txt_delivery_date;
         TextView txt_order_number;
@@ -33,11 +37,13 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         TextView txt_order_state;
 
         private RecyclerViewClickListener mListener;
+        private Context context;
 
 
-        public ViewHolder(View itemView, RecyclerViewClickListener listener) {
+
+        public ViewHolder(View itemView, RecyclerViewClickListener listener, Context context) {
             super(itemView);
-            card_order = itemView.findViewById(R.id.card_order);
+            state_background = itemView.findViewById(R.id.view_state_background);
             txt_delivery_time = itemView.findViewById(R.id.txt_delivery_time);
             txt_delivery_date = itemView.findViewById(R.id.txt_delivery_date);
             txt_order_number = itemView.findViewById(R.id.txt_order_number);
@@ -46,6 +52,8 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
 
             mListener = listener;
             itemView.setOnClickListener(this);
+
+            this.context = context;
 
         }
 
@@ -58,13 +66,13 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             this.txt_order_state.setText(order.getCurrentState());
             switch (order.getCurrentState()) {
                 case Order.STATE1:
-                    this.card_order.setCardBackgroundColor(Color.rgb(255, 204, 153));
+                    this.state_background.setBackgroundColor(context.getColor(R.color.colorState1));
                     break;
                 case Order.STATE2:
-                    this.card_order.setCardBackgroundColor(Color.rgb(255, 255, 204));
+                    this.state_background.setBackgroundColor(context.getColor(R.color.colorState2));
                     break;
                 case Order.STATE3:
-                    this.card_order.setCardBackgroundColor(Color.rgb(204, 255, 204));
+                    this.state_background.setBackgroundColor(context.getColor(R.color.colorState3));
                     break;
             }
         }
@@ -76,7 +84,8 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
     }
 
 
-    public OrdersAdapter(ArrayList<Order> orders, RecyclerViewClickListener mListener) {
+    public OrdersAdapter(ArrayList<Order> orders, RecyclerViewClickListener mListener, Context context) {
+        this.context = context;
         this.orders = orders;
         this.mListener = mListener;
     }
@@ -86,7 +95,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         CardView cardView = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_order, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(cardView, mListener);
+        ViewHolder viewHolder = new ViewHolder(cardView, mListener, context);
         return viewHolder;
     }
 

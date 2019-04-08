@@ -1,14 +1,12 @@
 package it.polito.mad1819.group17.lab02.orders;
 
-/*import android.content.Context;
-import android.net.Uri;*/
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +31,8 @@ public class OrdersFragment extends Fragment {
     private ArrayList<Order> orders = new ArrayList<Order>();
 
 
-    private OrdersAdapter.RecyclerViewClickListener listener;
 
+    private OrdersAdapter.RecyclerViewClickListener listener;
 
 
     interface OrdersFragmentObserver {
@@ -60,19 +58,18 @@ public class OrdersFragment extends Fragment {
         orderContent.put("coca cola", new Integer(1));
 
 
-        orders.add(new Order(1, "aaa", "1112223334", "20:14", "01/05/2019", stateMap2, orderContent));
-        orders.add(new Order(2, "bb", "1112223666", "20:00", "02/05/2019", stateMap1, orderContent));
-        orders.add(new Order(3, "ccc", "1112223777", "00:14", "03/05/2019", stateMap1, orderContent));
-        orders.add(new Order(4, "aaa", "1112223000", "10:14", "02/05/2019", stateMap1, orderContent));
-        orders.add(new Order(5, "aaddda", "1112223101", "11:45", "02/05/2019", stateMap2, orderContent));
-        orders.add(new Order(6, "jj", "1112223354", "23:25", "02/05/2019", stateMap2, orderContent));
-        orders.add(new Order(7, "kk", "1112223351", "21:14", "02/05/2019", stateMap2, orderContent));
-        orders.add(new Order(8, "uu", "1112223102", "20:11", "01/05/2019", stateMap3, orderContent));
-        orders.add(new Order(9, "auuuaa", "1112223999", "20:18", "01/05/2019", stateMap1, orderContent));
-        orders.add(new Order(10, "rht", "1112223367", "20:26", "01/05/2019", stateMap3, orderContent));
-        orders.add(new Order(11, "qqq", "1112223834", "22:14", "01/05/2019", stateMap3, orderContent));
+        orders.add(new Order(1, "aaa", "1112223334", "20:14", "01/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap2, orderContent, "pizza tagliata"));
+        orders.add(new Order(2, "bb", "1112223666", "20:00", "02/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap1, orderContent, "tovaglioli"));
+        orders.add(new Order(3, "ccc", "1112223777", "00:14", "03/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap1, orderContent, ""));
+        orders.add(new Order(4, "aaa", "1112223000", "10:14", "02/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap1, orderContent, ""));
+        orders.add(new Order(5, "aaddda", "1112223101", "11:45", "02/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap2, orderContent, ""));
+        orders.add(new Order(6, "jj", "1112223354", "23:25", "02/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap2, orderContent, "ahahbaauaaiubajbibauboanonoaunonoau"));
+        orders.add(new Order(7, "kk", "1112223351", "21:14", "02/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap2, orderContent, ""));
+        orders.add(new Order(8, "uu", "1112223102", "20:11", "01/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap3, orderContent, ""));
+        orders.add(new Order(9, "auuuaa", "1112223999", "20:18", "01/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap1, orderContent, "aivnaorivnairvnaoig   rvnanraòrnvajnvan"));
+        orders.add(new Order(10, "rht", "1112223367", "20:26", "01/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap3, orderContent, ""));
+        orders.add(new Order(11, "qqq", "1112223834", "22:14", "01/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap3, orderContent, ""));
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,23 +77,21 @@ public class OrdersFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
 
+
+
         recyclerView = view.findViewById(R.id.rv_orders);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        // If you know that the size of each element in the recycler view will not change, then you specify this and performance will improve
         recyclerView.setHasFixedSize(true);
 
         // Define some data as example
         exampleData();
 
-        /*OrdersAdapter.RecyclerViewClickListener */listener = new OrdersAdapter.RecyclerViewClickListener() {
+        listener = new OrdersAdapter.RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Order selectedOrder = mAdapter.getOrders().get(position);
                 Intent intent = new Intent(getContext(), OrderDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                /*bundle.putSerializable("selected_order", selectedOrder);
-                intent.putExtra("bundle_selected_order", bundle);*/
 
                 bundle.putSerializable("orders", mAdapter.getOrders());
                 bundle.putInt("position", position);
@@ -107,21 +102,6 @@ public class OrdersFragment extends Fragment {
             }
         };
 
-
-        // Define the adapter for our data, then set bind it to the recycle view
-        /*Collections.sort(orders, new Comparator<Order>() {
-            @Override
-            public int compare(Order o1, Order o2) {
-                if (o1.getCurrentState() == Order.STATE3)
-                    return 1;
-                else
-                    return o1.getDelivery_timestamp().compareTo(o2.getDelivery_timestamp());
-            }
-        });
-        mAdapter = new OrdersAdapter(orders, listener);
-        recyclerView.setAdapter(mAdapter);*/
-
-        Log.d("AAA", "onCreateView");
         return view;
     }
 
@@ -138,7 +118,7 @@ public class OrdersFragment extends Fragment {
                     return o1.getDelivery_timestamp().compareTo(o2.getDelivery_timestamp());
             }
         });
-        mAdapter = new OrdersAdapter(orders, listener);
+        mAdapter = new OrdersAdapter(orders, listener, getContext());
         recyclerView.setAdapter(mAdapter);
         mAdapter.updateList(orders);
     }
@@ -146,9 +126,8 @@ public class OrdersFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SHOW_DETAILS_REQUEST && resultCode == OrderDetailsActivity.STATE_CHANGED) {
-
             ArrayList<Order> updatedOrders = (ArrayList<Order>) data.getSerializableExtra("orders");
-            this.orders=updatedOrders;
+            this.orders = updatedOrders;
         }
     }
 }

@@ -8,7 +8,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import it.polito.mad1819.group17.lab02.dailyoffer.OffersFragment;
 import it.polito.mad1819.group17.lab02.orders.OrdersFragment;
@@ -17,9 +22,12 @@ import it.polito.mad1819.group17.lab02.utils.PrefHelper;
 
 public class MainActivity extends AppCompatActivity {
 
-    Fragment offersFragment;
-    Fragment ordersFragment;
-    Fragment profileFragment;
+    private TextView mTextMessage;
+
+    Fragment offersFragment = new OffersFragment();
+    Fragment ordersFragment = new OrdersFragment();
+    Fragment profileFragment = new ProfileFragment();
+
     final FragmentManager fm = getSupportFragmentManager();
     Fragment active;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
@@ -39,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         instantiateFragments(inState);
     }
 
+    private Toolbar toolbar;
+    private MenuItem btn_edit;
+
     private void instantiateFragments(Bundle inState) {
         if (inState != null) {
             offersFragment = fm.getFragment(inState, OffersFragment.class.getName());
@@ -57,36 +68,60 @@ public class MainActivity extends AppCompatActivity {
                     ProfileFragment.class.getName()).detach(profileFragment).commit();
             active = ordersFragment;
         }
-
         fm.beginTransaction().attach(active).commit();
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.fragment_profile);
+
+        btn_edit = toolbar.getMenu().findItem(R.id.btn_edit);
+        btn_edit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == btn_edit.getItemId()) {
+                    /*
+                    start EDIT ACTIVITY here
+                     */
+                    Log.d("AA", "bb");
+                    return true;
+                }
+                return false;
+            }
+        });
+
         PrefHelper.setMainContext(this);
 
         instantiateFragments(savedInstanceState);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        mOnNavigationItemSelectedListener
+                = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
+                    case R.id.navigation_profile:
+                        if (btn_edit != null)
+                            btn_edit.setVisible(true);
+                        fm.beginTransaction().detach(active).attach(profileFragment).commit();
+                        active = profileFragment;
+                        return true;
                     case R.id.navigation_dailyoffer:
+                        if (btn_edit != null)
+                            btn_edit.setVisible(false);
                         fm.beginTransaction().detach(active).attach(offersFragment).commit();
                         active = offersFragment;
                         return true;
                     case R.id.navigation_orders:
+                        if (btn_edit != null)
+                            btn_edit.setVisible(false);
                         fm.beginTransaction().detach(active).attach(ordersFragment).commit();
                         active = ordersFragment;
-                        return true;
-                    case R.id.navigation_profile:
-                        fm.beginTransaction().detach(active).attach(profileFragment).commit();
-                        active = profileFragment;
                         return true;
                 }
                 return false;

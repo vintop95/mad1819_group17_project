@@ -14,6 +14,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <View
+            android:id="@+id/view_state_background"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            card_view:layout_constraintBottom_toTopOf="@+id/view_divider_order"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/txt_delivery_time"
             android:layout_width="0dp"
@@ -21,7 +30,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:padding="8dp"
-            android:text="--:--"
+            android:text="@string/time"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Display2"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
@@ -34,96 +43,18 @@
             android:layout_margin="4dp"
             android:layout_marginBottom="16dp"
             android:padding="4dp"
-            android:text="Delivery Time"
+            android:text="@string/delivery_time"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            card_view:layout_constraintBottom_toTopOf="@+id/view3"
+            card_view:layout_constraintBottom_toTopOf="@+id/view_divider_order"
             card_view:layout_constraintEnd_toEndOf="@+id/txt_delivery_time"
             card_view:layout_constraintStart_toStartOf="@+id/txt_delivery_time"
             card_view:layout_constraintTop_toBottomOf="@+id/txt_delivery_time" />
 
         <TextView
-            android:id="@+id/label_order_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:text="Order Number"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            card_view:layout_constraintEnd_toStartOf="@+id/label_total_items"
-            card_view:layout_constraintHorizontal_chainStyle="spread"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/view3"
-            card_view:layout_constraintVertical_chainStyle="packed" />
-
-        <TextView
-            android:id="@+id/txt_order_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="TextView"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintStart_toStartOf="@+id/label_order_number"
-            card_view:layout_constraintTop_toBottomOf="@+id/label_order_number" />
-
-        <View
-            android:id="@+id/view3"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="122dp"
-            android:background="@android:color/holo_green_light"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/label_total_items"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:text="Total Items"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toEndOf="@+id/label_order_number"
-            card_view:layout_constraintTop_toBottomOf="@+id/view3" />
-
-        <TextView
-            android:id="@+id/txt_total_items"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="TextView"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintStart_toStartOf="@+id/label_total_items"
-            card_view:layout_constraintTop_toBottomOf="@+id/label_total_items" />
-
-        <TextView
-            android:id="@+id/label_order_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Order State"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            card_view:layout_constraintStart_toStartOf="@+id/txt_order_state"
-            card_view:layout_constraintTop_toTopOf="@+id/label_delivery_date" />
-
-        <TextView
-            android:id="@+id/txt_order_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="TextView"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toEndOf="@+id/txt_delivery_date"
-            card_view:layout_constraintTop_toBottomOf="@+id/label_order_state" />
-
-        <TextView
             android:id="@+id/label_delivery_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delivery Date"
+            android:text="@string/delivery_date"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             card_view:layout_constraintBottom_toTopOf="@+id/txt_delivery_date"
             card_view:layout_constraintStart_toStartOf="@+id/txt_delivery_date"
@@ -136,13 +67,91 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
-            android:text="TextView"
+            android:text="@string/delivery_time"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             card_view:layout_constraintBottom_toBottomOf="@+id/label_delivery_time"
             card_view:layout_constraintEnd_toStartOf="@+id/txt_order_state"
             card_view:layout_constraintHorizontal_chainStyle="spread"
             card_view:layout_constraintStart_toEndOf="@+id/txt_delivery_time"
             card_view:layout_constraintTop_toBottomOf="@+id/label_delivery_date" />
+
+        <TextView
+            android:id="@+id/label_order_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/order_state"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            card_view:layout_constraintStart_toStartOf="@+id/txt_order_state"
+            card_view:layout_constraintTop_toTopOf="@+id/label_delivery_date" />
+
+        <TextView
+            android:id="@+id/txt_order_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/order_state"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toEndOf="@+id/txt_delivery_date"
+            card_view:layout_constraintTop_toBottomOf="@+id/label_order_state" />
+
+        <View
+            android:id="@+id/view_divider_order"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="122dp"
+            android:background="@android:color/holo_orange_dark"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/label_order_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/order_number"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            card_view:layout_constraintEnd_toStartOf="@+id/label_total_items"
+            card_view:layout_constraintHorizontal_chainStyle="spread"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/view_divider_order"
+            card_view:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/txt_order_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/order_number"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toStartOf="@+id/label_order_number"
+            card_view:layout_constraintTop_toBottomOf="@+id/label_order_number" />
+
+        <TextView
+            android:id="@+id/label_total_items"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/total_items"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toEndOf="@+id/label_order_number"
+            card_view:layout_constraintTop_toBottomOf="@+id/view_divider_order" />
+
+        <TextView
+            android:id="@+id/txt_total_items"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/total_items"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toStartOf="@+id/label_total_items"
+            card_view:layout_constraintTop_toBottomOf="@+id/label_total_items" />
 
 
     </android.support.constraint.ConstraintLayout>

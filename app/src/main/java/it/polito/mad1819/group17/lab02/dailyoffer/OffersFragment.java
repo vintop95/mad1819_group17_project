@@ -34,7 +34,6 @@ import it.polito.mad1819.group17.lab02.utils.PrefHelper;
 
 public class OffersFragment extends Fragment {
     private static final String TAG = OffersFragment.class.getName();
-    private static final PrefHelper prefHelper = PrefHelper.getInstance();
     public static final String PREF_FOOD_LIST_SIZE = "PREF_FOOD_LIST_SIZE";
     public final static int ADD_FOOD_REQUEST = 0;
     public final static int MODIFY_FOOD_REQUEST = 1;
@@ -119,7 +118,7 @@ public class OffersFragment extends Fragment {
         }
 
         newFood.saveToPref();
-        prefHelper.putLong(PREF_FOOD_LIST_SIZE, newPos+1);
+        PrefHelper.getInstance().putLong(PREF_FOOD_LIST_SIZE, newPos+1);
 
         if(mAdapter != null){
             mAdapter.notifyItemInserted(newPos);
@@ -150,7 +149,7 @@ public class OffersFragment extends Fragment {
             FoodModel food = FoodModel.loadFromPref(Long.valueOf(i));
             // if we go involuntarily outside the bounds
             if(food == null){
-                prefHelper.putLong(PREF_FOOD_LIST_SIZE, i);
+                PrefHelper.getInstance().putLong(PREF_FOOD_LIST_SIZE, i);
                 break;
             }
             addFoodInList(i, food);
@@ -159,9 +158,9 @@ public class OffersFragment extends Fragment {
     }
 
     // https://stackoverflow.com/questions/28107647/how-to-save-listobject-to-sharedpreferences/28107791
-    private static int loadUpdatedFoodListSizeFromPref(){
+    private int loadUpdatedFoodListSizeFromPref(){
         // if not found in prefHeper returns 0
-        return (int) prefHelper.getLong(PREF_FOOD_LIST_SIZE);
+        return (int) PrefHelper.getInstance().getLong(PREF_FOOD_LIST_SIZE);
     }
 
     ////////////////////// OPEN ACTIVITY //////////////////////////////////////////
