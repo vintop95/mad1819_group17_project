@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    style="@style/frameLayoutBackgroundStyle"
+    android:id="@+id/frame_layout_background"
+
+    app:layout_constraintBottom_toTopOf="@+id/view_divider_info"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        style="@style/backgroundImageStyle"
+        android:id="@+id/image_background"
+        app:layout_constraintTop_toTopOf="@+id/toolbar"/>
+
+    <View
+        android:id="@+id/view_background_scrim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/scrim" />
+
+</FrameLayout>

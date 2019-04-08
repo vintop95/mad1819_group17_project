@@ -14,19 +14,27 @@
     <string name="hint_food_name">Inserisci il nome del piatto</string>
     <string name="hint_food_description">Inserisci la descrizione del piatto</string>
     <string name="available">Disponibili:</string>
+    <string name="fill_required_fields">ATTENZIONE: Riempire tutti i campi richiesti!</string>
+    <string name="settings_changed">Impostazioni cambiate correttamente!</string>
+    <string name="wrong_times">ATTENZIONE: orario apertura deve precedere orario chiusura</string>
+
+    <string name="title_activity_edit_profile">Modifica Profilo</string>
 
     <string name="edit_profile">Modifica profilo</string>
     <string name="gallery_not_found">App galleria non trovata!</string>
     <string name="camera_not_found">App fotocamera non trovata!</string>
 
     <string name="info">Info</string>
-    <string name="name">Nome:</string>
-    <string name="phone">Telefono:</string>
+    <string name="name">Nome Ristorante:</string>
+    <string name="phone">Telefono Ristorante:</string>
     <string name="mail">Indirizzo Email:</string>
     <string name="city">Città:</string>
     <string name="bio">Breve Descrizione:</string>
     <string name="birthdate">Data di Nascita (gg/mm/aaaa):</string>
     <string name="address">Indirizzo:</string>
+    <string name="working_time_opening">Orario Apertura</string>
+    <string name="working_time_closing">Orario Chiusura</string>
+
 
     <string name="favorite">Cibo Preferito:</string>
     <string name="required">*</string>
@@ -43,7 +51,6 @@
     <string name="hint_city">La tua città</string>
     <string name="hint_bio">La tua descrizione</string>
     <string name="hint_address">Il tuo indirizzo</string>
-    <string name="hint_birthdate">La tua data di nascita</string>
     <string name="hint_phone">"Il tuo telefono"</string>
     <string name="hint_restaurant_type">Tipo ristorante</string>
 
@@ -102,5 +109,5 @@
     <string name="free_day">Giorno libero</string>
     <string name="working_time">Ora di apertura</string>
     <string name="hint_free_day">Giorno libero</string>
-    <string name="hint_working_time">Ora di apertura</string>
+    <string name="hint_working_time">--:--</string>
 </resources>

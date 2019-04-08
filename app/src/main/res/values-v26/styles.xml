@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="standardInputStyle.name.autofill" parent="standardInputStyle.name">
+        <item name="android:autofillHints">name</item>
+    </style>
+
+    <style name="standardInputStyle.mail.autofill" parent="standardInputStyle.mail">
+        <item name="android:autofillHints">email</item>
+    </style>
+
+    <style name="standardInputStyle.city.autofill" parent="standardInputStyle.city">
+        <item name="android:autofillHints">address</item>
+    </style>
+
+    <style name="standardInputStyle.address.autofill" parent="standardInputStyle.address">
+        <item name="android:autofillHints">address</item>
+    </style>
+
+    <style name="standardInputStyle.bio.autofill" parent="standardInputStyle.bio">
+        <item name="android:importantForAutofill">no</item>
+    </style>
+
+</resources>

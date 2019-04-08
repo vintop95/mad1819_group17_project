@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".profile.EditProfileActivity"></activity>
         <activity
             android:name=".dailyoffer.FoodDetailsActivity"
             android:label="@string/title_activity_edit_food"

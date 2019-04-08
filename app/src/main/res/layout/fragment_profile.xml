@@ -179,8 +179,9 @@
                 app:layout_constraintTop_toBottomOf="@+id/view_divider_mail" />
 
             <ImageView
-                style="@style/smallIconStyle"
                 android:id="@+id/image_address"
+                style="@style/smallIconStyle"
+                android:layout_marginBottom="8dp"
                 android:contentDescription="@string/icon_address"
                 app:layout_constraintBottom_toBottomOf="@+id/txt_address"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
@@ -302,11 +303,46 @@
                 android:id="@+id/view_divider_working_time"
                 style="@style/innerDividerStyle"
                 android:layout_marginBottom="16dp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/txt_working_time" />
+
+
+            <!-- Bio -->
+            <ImageView
+                android:id="@+id/image_bio"
+                style="@style/smallIconStyle"
+                android:contentDescription="@string/icon_working_time"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toTopOf="@+id/label_bio"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_bio"
+                app:srcCompat="@drawable/ic_baseline_description_24px" />
+
+            <TextView
+                style="@style/smallLabelStyle"
+                android:id="@+id/label_bio"
+                android:text="@string/bio"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/view_divider_working_time" />
+
+            <TextView
+                android:id="@+id/txt_bio"
+                style="@style/standardTextStyle"
+                android:text="@string/hint_bio"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@id/label_bio" />
+
+            <View
+                android:id="@+id/view_divider_bio"
+                style="@style/innerDividerStyle"
+                android:layout_marginBottom="16dp"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/txt_working_time" />
+                app:layout_constraintTop_toBottomOf="@+id/txt_bio" />
 
 
 
