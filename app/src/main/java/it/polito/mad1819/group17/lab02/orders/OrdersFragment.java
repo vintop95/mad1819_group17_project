@@ -2,6 +2,7 @@ package it.polito.mad1819.group17.lab02.orders;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,7 +29,7 @@ public class OrdersFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private OrdersAdapter mAdapter;
-    private ArrayList<Order> orders = new ArrayList<Order>();
+    private ArrayList<Order> orders /*= new ArrayList<Order>()*/;
 
 
 
@@ -57,7 +58,7 @@ public class OrdersFragment extends Fragment {
         orderContent.put("acqua natuale", new Integer(1));
         orderContent.put("coca cola", new Integer(1));
 
-
+        orders = new ArrayList<Order>();
         orders.add(new Order(1, "aaa", "1112223334", "20:14", "01/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap2, orderContent, "pizza tagliata"));
         orders.add(new Order(2, "bb", "1112223666", "20:00", "02/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap1, orderContent, "tovaglioli"));
         orders.add(new Order(3, "ccc", "1112223777", "00:14", "03/05/2019", "Via Federico Pesce, 6, 10138 Torino, TO", stateMap1, orderContent, ""));
@@ -104,6 +105,22 @@ public class OrdersFragment extends Fragment {
 
         return view;
     }
+
+    /*@Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Collections.sort(orders, new Comparator<Order>() {
+            @Override
+            public int compare(Order o1, Order o2) {
+                if (o1.getCurrentState() == Order.STATE3)
+                    return 1;
+                else
+                    return o1.getDelivery_timestamp().compareTo(o2.getDelivery_timestamp());
+            }
+        });
+        mAdapter = new OrdersAdapter(orders, listener, getContext());
+        recyclerView.setAdapter(mAdapter);
+    }*/
 
     @Override
     public void onStart() {

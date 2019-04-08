@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        style="@style/constraintLayoutStyle"
+        tools:context=".EditUserProfileActivity">
+
+        <!-- Appbar -->
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBarLayout_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Toolbar -->
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_edit"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                app:title="@string/title_activity_edit_profile" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_16dp_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_64dp_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="64dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_16dp_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_end="16dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <!--<include layout="@layout/frame_layout_background" />-->
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_user_photo"
+            style="@style/circleUserPhotoStyle"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout_edit" />
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_user_change"
+            style="@style/circleChangePhotoStyle"
+            app:layout_constraintBottom_toBottomOf="@+id/image_user_photo"
+            app:layout_constraintEnd_toEndOf="@+id/image_user_photo"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/image_user_photo"
+            app:layout_constraintTop_toTopOf="@+id/image_user_photo"
+            app:layout_constraintVertical_bias="1.0" />
+
+
+        <TextView
+            android:id="@+id/text_info"
+            style="@style/textOnBackgroundStyle"
+            android:text="@string/info"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/image_user_photo" />
+
+        <View
+            android:id="@+id/view_divider_info"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="32dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_info" />
+
+        <!-- Name -->
+        <ImageView
+            android:id="@+id/image_name"
+            style="@style/smallIconStyle"
+            android:contentDescription="@string/icon_person"
+            app:layout_constraintBottom_toBottomOf="@+id/input_name"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toTopOf="@+id/label_name"
+            app:srcCompat="@drawable/ic_person_black_24dp" />
+
+        <TextView
+            android:id="@+id/text_name_req"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/required"
+            android:textColor="@android:color/holo_red_dark"
+            app:layout_constraintRight_toLeftOf="@+id/label_name"
+            app:layout_constraintTop_toTopOf="@+id/label_name" />
+
+        <TextView
+            android:id="@+id/label_name"
+            style="@style/smallLabelStyle"
+            android:layout_marginTop="32dp"
+            android:text="@string/name"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toTopOf="@+id/view_divider_info" />
+
+        <EditText
+            android:id="@+id/input_name"
+            style="@style/standardInputStyle.name.autofill"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/label_name" />
+
+        <View
+            android:id="@+id/view_divider_name"
+            style="@style/innerDividerStyle"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/input_name" />
+
+        <!-- Phone -->
+        <ImageView
+            android:id="@+id/image_phone"
+            style="@style/smallIconStyle"
+            android:contentDescription="@string/icon_phone"
+            app:layout_constraintBottom_toBottomOf="@+id/input_phone"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toTopOf="@+id/label_phone"
+            app:srcCompat="@drawable/ic_baseline_phone_24px" />
+
+        <TextView
+            android:id="@+id/text_phone_req"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/required"
+            android:textColor="@android:color/holo_red_dark"
+            app:layout_constraintRight_toLeftOf="@+id/label_phone"
+            app:layout_constraintTop_toTopOf="@+id/label_phone" />
+
+        <TextView
+            android:id="@+id/label_phone"
+            style="@style/smallLabelStyle"
+            android:text="@string/phone"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/view_divider_name" />
+
+        <EditText
+            android:id="@+id/input_phone"
+            style="@style/standardInputStyle.phone"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/label_phone" />
+
+        <View
+            android:id="@+id/view_divider_phone"
+            style="@style/innerDividerStyle"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/input_phone" />
+
+        <!-- Email -->
+        <ImageView
+            android:id="@+id/image_mail"
+            style="@style/smallIconStyle"
+            android:contentDescription="@string/icon_mail"
+            app:layout_constraintBottom_toBottomOf="@+id/input_mail"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toTopOf="@+id/label_mail"
+            app:srcCompat="@drawable/ic_email_black_24dp" />
+
+        <TextView
+            android:id="@+id/text_mail_req"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/required"
+            android:textColor="@android:color/holo_red_dark"
+            app:layout_constraintRight_toLeftOf="@+id/label_mail"
+            app:layout_constraintTop_toTopOf="@+id/label_mail" />
+
+        <TextView
+            android:id="@+id/label_mail"
+            style="@style/smallLabelStyle"
+            android:text="@string/mail"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/view_divider_phone" />
+
+        <EditText
+            android:id="@+id/input_mail"
+            style="@style/standardInputStyle.mail.autofill"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/label_mail" />
+
+        <View
+            android:id="@+id/view_divider_mail"
+            style="@style/innerDividerStyle"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/input_mail" />
+
+
+        <!-- Address -->
+        <TextView
+            android:id="@+id/label_address"
+            style="@style/smallLabelStyle"
+            android:text="@string/address"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/view_divider_mail" />
+
+        <TextView
+            android:id="@+id/text_address_req"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/required"
+            android:textColor="@android:color/holo_red_dark"
+            app:layout_constraintRight_toLeftOf="@+id/label_address"
+            app:layout_constraintTop_toTopOf="@+id/label_address" />
+
+        <ImageView
+            android:id="@+id/image_address"
+            style="@style/smallIconStyle"
+            android:contentDescription="@string/icon_address"
+            app:layout_constraintBottom_toBottomOf="@+id/input_address"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toTopOf="@+id/label_address"
+            app:srcCompat="@drawable/ic_person_pin_circle_black_24dp" />
+
+        <EditText
+            android:id="@+id/input_address"
+            style="@style/standardTextStyle.longText"
+            android:text="@string/hint_address"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/label_address" />
+
+        <View
+            android:id="@+id/view_divider_address"
+            style="@style/innerDividerStyle"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/input_address" />
+
+
+        <!-- Type -->
+        <ImageView
+            android:id="@+id/image_restaurant_type"
+            style="@style/smallIconStyle"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/icon_restaurant_type"
+            app:layout_constraintBottom_toBottomOf="@+id/input_restaurant_type"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toTopOf="@+id/label_restaurant_type"
+            app:srcCompat="@drawable/ic_baseline_fastfood_24px" />
+
+        <TextView
+            android:id="@+id/text_restaurant_type_req"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/required"
+            android:textColor="@android:color/holo_red_dark"
+            app:layout_constraintRight_toLeftOf="@+id/label_restaurant_type"
+            app:layout_constraintTop_toTopOf="@+id/label_restaurant_type" />
+
+        <TextView
+            android:id="@+id/label_restaurant_type"
+            style="@style/smallLabelStyle"
+            android:text="@string/restaurant_type"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/view_divider_address" />
+
+        <Spinner
+            android:id="@+id/input_restaurant_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:entries="@array/restaurant_types"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@id/label_restaurant_type" />
+
+        <View
+            android:id="@+id/view_divider_restaurant_type"
+            style="@style/innerDividerStyle"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/input_restaurant_type" />
+
+
+        <!-- Free day -->
+        <ImageView
+            android:id="@+id/image_free_day"
+            style="@style/smallIconStyle"
+            android:contentDescription="@string/icon_free_day"
+            app:layout_constraintBottom_toBottomOf="@+id/input_free_day"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toTopOf="@+id/label_free_day"
+            app:srcCompat="@drawable/ic_baseline_beach_access_24px" />
+
+
+        <TextView
+            android:id="@+id/text_free_day_req"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/required"
+            android:textColor="@android:color/holo_red_dark"
+            app:layout_constraintRight_toLeftOf="@+id/label_free_day"
+            app:layout_constraintTop_toTopOf="@+id/label_free_day" />
+
+
+        <TextView
+            android:id="@+id/label_free_day"
+            style="@style/smallLabelStyle"
+            android:text="@string/free_day"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/view_divider_restaurant_type" />
+
+
+        <Spinner
+            android:id="@+id/input_free_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:entries="@array/days_of_week"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@id/label_free_day" />
+
+        <View
+            android:id="@+id/view_divider_free_day"
+            style="@style/innerDividerStyle"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/input_free_day" />
+
+
+        <!-- Working Time -->
+        <ImageView
+            android:id="@+id/image_working_time"
+            style="@style/smallIconStyle"
+            android:contentDescription="@string/icon_working_time"
+            app:layout_constraintBottom_toBottomOf="@+id/input_working_time_opening"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toTopOf="@+id/label_working_time_opening"
+            app:srcCompat="@drawable/ic_baseline_access_time_24px" />
+
+        <TextView
+            android:id="@+id/text_working_time_opening_req"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/required"
+            android:textColor="@android:color/holo_red_dark"
+            app:layout_constraintRight_toLeftOf="@+id/label_working_time_opening"
+            app:layout_constraintTop_toTopOf="@+id/label_working_time_opening" />
+
+        <TextView
+            android:id="@+id/label_working_time_opening"
+            style="@style/smallLabelStyle"
+            android:text="@string/working_time_opening"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/view_divider_free_day" />
+
+        <TextView
+            android:id="@+id/text_working_time_closing_req"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/required"
+            android:textColor="@android:color/holo_red_dark"
+            app:layout_constraintRight_toLeftOf="@+id/label_working_time_closing"
+            app:layout_constraintTop_toTopOf="@+id/label_working_time_closing" />
+
+        <TextView
+            android:id="@+id/label_working_time_closing"
+            style="@style/smallLabelStyle"
+            android:layout_marginStart="32dp"
+            android:text="@string/working_time_closing"
+            app:layout_constraintLeft_toRightOf="@+id/label_working_time_opening"
+            app:layout_constraintTop_toBottomOf="@+id/view_divider_free_day" />
+
+        <TextView
+            android:id="@+id/input_working_time_opening"
+            style="@style/standardTextStyle.longText"
+            android:layout_width="wrap_content"
+            android:text="@string/hint_working_time"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/label_working_time_opening" />
+
+        <TextView
+            android:id="@+id/input_working_time_closing"
+            style="@style/standardTextStyle.longText"
+            android:layout_width="wrap_content"
+            android:text="@string/hint_working_time"
+            app:layout_constraintLeft_toLeftOf="@id/label_working_time_closing"
+            app:layout_constraintTop_toBottomOf="@+id/label_working_time_closing" />
+
+        <View
+            android:id="@+id/view_divider_working_time"
+            style="@style/innerDividerStyle"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/input_working_time_opening" />
+
+
+        <!-- Bio -->
+        <ImageView
+            android:id="@+id/image_bio"
+            style="@style/smallIconStyle"
+            android:contentDescription="@string/icon_bio"
+            app:layout_constraintBottom_toBottomOf="@+id/input_bio"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toTopOf="@+id/label_bio"
+            app:srcCompat="@drawable/ic_baseline_description_24px" />
+
+        <TextView
+            android:id="@+id/label_bio"
+            style="@style/smallLabelStyle"
+            android:text="@string/bio"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/view_divider_working_time" />
+
+        <EditText
+            android:id="@+id/input_bio"
+            style="@style/standardInputStyle.bio.autofill"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/label_bio" />
+
+        <View
+            android:id="@+id/view_divider_bio"
+            style="@style/innerDividerStyle"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/input_bio" />
+
+
+        <TextView
+            android:id="@+id/text_req"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="32dp"
+            android:text="@string/required_text"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toBottomOf="@id/view_divider_bio" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v4.widget.NestedScrollView>

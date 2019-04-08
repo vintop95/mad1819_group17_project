@@ -1,5 +1,6 @@
 package it.polito.mad1819.group17.lab02;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import it.polito.mad1819.group17.lab02.dailyoffer.OffersFragment;
 import it.polito.mad1819.group17.lab02.orders.OrdersFragment;
+import it.polito.mad1819.group17.lab02.profile.EditProfileActivity;
 import it.polito.mad1819.group17.lab02.profile.ProfileFragment;
 import it.polito.mad1819.group17.lab02.utils.PrefHelper;
 
@@ -36,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        fm.putFragment(outState, OffersFragment.class.getName() , offersFragment);
-        fm.putFragment(outState, OrdersFragment.class.getName() , ordersFragment);
-        fm.putFragment(outState, ProfileFragment.class.getName() , profileFragment);
+        fm.putFragment(outState, OffersFragment.class.getName(), offersFragment);
+        fm.putFragment(outState, OrdersFragment.class.getName(), ordersFragment);
+        fm.putFragment(outState, ProfileFragment.class.getName(), profileFragment);
         fm.putFragment(outState, "active", active);
     }
 
@@ -80,18 +82,12 @@ public class MainActivity extends AppCompatActivity {
         toolbar.inflateMenu(R.menu.fragment_profile);
 
         btn_edit = toolbar.getMenu().findItem(R.id.btn_edit);
-        btn_edit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == btn_edit.getItemId()) {
-                    /*
-                    start EDIT ACTIVITY here
-                     */
-                    Log.d("AA", "bb");
-                    return true;
-                }
-                return false;
+        btn_edit.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == btn_edit.getItemId()) {
+                startActivity(new Intent(getApplicationContext(), EditProfileActivity.class));
+                return true;
             }
+            return false;
         });
 
         PrefHelper.setMainContext(this);

@@ -182,13 +182,13 @@
                 style="@style/smallIconStyle"
                 android:id="@+id/image_address"
                 android:contentDescription="@string/icon_address"
-                app:layout_constraintBottom_toBottomOf="@+id/txt_address"
+                app:layout_constraintBottom_toBottomOf="@+id/input_address"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_address"
                 app:srcCompat="@drawable/ic_person_pin_circle_black_24dp" />
 
             <TextView
-                android:id="@+id/txt_address"
+                android:id="@+id/input_address"
                 style="@style/standardTextStyle.longText"
                 android:text="@string/hint_address"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
@@ -201,7 +201,7 @@
                 style="@style/innerDividerStyle"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/txt_address" />
+                app:layout_constraintTop_toBottomOf="@+id/input_address" />
 
             <!-- Type -->
 
@@ -243,7 +243,7 @@
                 style="@style/smallIconStyle"
                 android:id="@+id/image_free_day"
                 android:contentDescription="@string/icon_free_day"
-                app:layout_constraintBottom_toBottomOf="@+id/txt_free_day"
+                app:layout_constraintBottom_toBottomOf="@+id/input_free_day"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_free_day"
                 app:srcCompat="@drawable/ic_baseline_beach_access_24px" />
@@ -256,7 +256,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/view_divider_restaurant_type" />
 
             <TextView
-                android:id="@+id/txt_free_day"
+                android:id="@+id/input_free_day"
                 style="@style/standardTextStyle"
                 android:text="@string/hint_free_day"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
@@ -269,7 +269,7 @@
                 style="@style/innerDividerStyle"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/txt_free_day" />
+                app:layout_constraintTop_toBottomOf="@+id/input_free_day" />
 
 
             <!-- Working time -->
