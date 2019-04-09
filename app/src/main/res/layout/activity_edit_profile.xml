@@ -258,7 +258,6 @@
         <EditText
             android:id="@+id/input_address"
             style="@style/standardInputStyle.address.autofill"
-            android:text="@string/hint_address"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"

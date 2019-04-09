@@ -92,6 +92,18 @@
         <item>Giapponese</item>
         <item>Messicano</item>
     </string-array>
+
+    <string-array name="days_of_week">
+        <item></item>
+        <item>Lunedì</item>
+        <item>Martedì</item>
+        <item>Mercoledì</item>
+        <item>Giovedì</item>
+        <item>Venerdì</item>
+        <item>Sabato</item>
+        <item>Domenica</item>
+    </string-array>
+
     <string name="confirm_next_state_title">Vuoi confermare il prossimo stato?</string>
     <string name="confirm_next_state_message">Il piatto è pronto per il prossimo stato? Questa operazione non è reversibile.</string>
     <string name="positive_button">OK</string>

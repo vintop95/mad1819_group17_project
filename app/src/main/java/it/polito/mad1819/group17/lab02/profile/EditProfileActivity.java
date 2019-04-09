@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -224,6 +225,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 PrefHelper.getInstance().putString(ProfileFragment.TIME_OPENING, time_opening);
                 PrefHelper.getInstance().putString(ProfileFragment.TIME_CLOSING, time_closing);
                 PrefHelper.getInstance().putString(ProfileFragment.BIO, bio);
+                Log.d("XX", "XXXXXXX");
                 return 1;
             }
 
