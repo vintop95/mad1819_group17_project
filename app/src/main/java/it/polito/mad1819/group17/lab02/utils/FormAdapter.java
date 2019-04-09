@@ -109,6 +109,9 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FieldHolder> {
         }
 
         public void setInputFieldValue() {
+            this.inputFieldValue.setText(currentItem.fieldValue);
+            inputFieldValue.addTextChangedListener(textWatcher);
+
             switch(currentItem.fieldNameRes){
                 case FoodDetailsActivity.LABEL_FOOD_NUMBER:
                     inputFieldValue.setEnabled(false);
@@ -135,12 +138,21 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FieldHolder> {
             }
         }
 
+        public void setLabelFieldName(){
+            String fieldName = mContext.getString(currentItem.fieldNameRes);
+            switch(currentItem.fieldNameRes){
+                case FoodDetailsActivity.LABEL_FOOD_PRICE:
+                    fieldName = fieldName.replace(":","") +
+                            " (" + CurrencyHelper.getCurrencySymbol() + "):";
+                    break;
+            }
+            this.labelFieldName.setText(fieldName);
+        }
+
         public void setData(ListItem currentItem, int pos) {
-            this.labelFieldName.setText(mContext.getString(currentItem.fieldNameRes));
-            this.inputFieldValue.setText(currentItem.fieldValue);
-            inputFieldValue.addTextChangedListener(textWatcher);
             this.pos = pos;
             this.currentItem = currentItem;
+            setLabelFieldName();
             setInputFieldValue();
         }
 

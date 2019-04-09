@@ -11,10 +11,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import it.polito.mad1819.group17.lab02.dailyoffer.OffersFragment;
 import it.polito.mad1819.group17.lab02.orders.OrdersFragment;
 import it.polito.mad1819.group17.lab02.profile.EditProfileActivity;
 import it.polito.mad1819.group17.lab02.profile.ProfileFragment;
+import it.polito.mad1819.group17.lab02.utils.CurrencyHelper;
 import it.polito.mad1819.group17.lab02.utils.PrefHelper;
 
 public class MainActivity extends AppCompatActivity {
@@ -86,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         PrefHelper.setMainContext(this);
+
+        // TODO: LET THE USER CHANGE THE CURRENCY FROM SETTINGS?
+        String language = Locale.ITALY.getLanguage();
+        String country = Locale.ITALY.getCountry();
+        CurrencyHelper.setLocaleCurrency(new Locale(language, country));
 
         instantiateFragments(savedInstanceState);
 
