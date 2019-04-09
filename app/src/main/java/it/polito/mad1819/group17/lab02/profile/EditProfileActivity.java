@@ -46,7 +46,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private Spinner input_free_day;
     private TextView input_working_time_opening;
     private TextView input_working_time_closing;
-    private TextView input_bio;
+    private EditText input_bio;
 
 
     private void showBackArrowOnToolbar() {
@@ -246,6 +246,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
         image_user_photo.setOnClickListener(v -> startPickPictureDialog());
 
+        addOnFocusChangeListener(input_name);
+        addOnFocusChangeListener(input_phone);
+        addOnFocusChangeListener(input_mail);
+        addOnFocusChangeListener(input_address);
+        addOnFocusChangeListener(input_bio);
+
         addTimePickerOnClick(input_working_time_opening);
         addTimePickerOnClick(input_working_time_closing);
     }
@@ -384,5 +390,12 @@ public class EditProfileActivity extends AppCompatActivity {
             image_user_photo.setImageBitmap(bitmapUserPhoto);
             image_user_photo.setPadding(8, 8, 8, 8);
         }
+    }
+
+    private void addOnFocusChangeListener(EditText editText) {
+        editText.setOnFocusChangeListener((v, focus) -> {
+            if (focus)
+                ((EditText) v).setSelection(((EditText) v).getText().length(), 0);
+        });
     }
 }

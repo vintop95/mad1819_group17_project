@@ -30,7 +30,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FieldHolder> {
         public int fieldNameRes;
         public String fieldValue;
 
-        public ListItem (int fieldNameRes, String fieldValue){
+        public ListItem(int fieldNameRes, String fieldValue) {
             this.fieldNameRes = fieldNameRes;
             this.fieldValue = fieldValue;
         }
@@ -102,17 +102,31 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FieldHolder> {
                     mFormState.set(STATE_CHANGED);
                     currentItem.fieldValue = inputFieldValue.getText().toString();
                     modifyItem(pos, currentItem);
-                }};
+                }
+            };
 
             labelFieldName = itemView.findViewById(R.id.label_field_name);
             inputFieldValue = itemView.findViewById(R.id.input_field_value);
         }
 
+        // VALERIO start
+        private void addOnFocusChangeListener(EditText editText) {
+            editText.setOnFocusChangeListener((v, focus) -> {
+                if (focus)
+                    ((EditText) v).setSelection(((EditText) v).getText().length(), 0);
+            });
+        }
+        // VALERIO end
+
         public void setInputFieldValue() {
             this.inputFieldValue.setText(currentItem.fieldValue);
             inputFieldValue.addTextChangedListener(textWatcher);
 
-            switch(currentItem.fieldNameRes){
+            // VALERIO start
+            addOnFocusChangeListener(inputFieldValue);
+            // VALERIO end
+
+            switch (currentItem.fieldNameRes) {
                 case FoodDetailsActivity.LABEL_FOOD_NUMBER:
                     inputFieldValue.setEnabled(false);
                     break;
@@ -120,13 +134,13 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FieldHolder> {
                     int maxLength1 = 30;
                     inputFieldValue.setHint(mContext.getString(R.string.hint_food_name));
                     inputFieldValue.setFilters(
-                            new InputFilter[] { new InputFilter.LengthFilter(maxLength1) } );
+                            new InputFilter[]{new InputFilter.LengthFilter(maxLength1)});
                     break;
                 case FoodDetailsActivity.LABEL_FOOD_DESCRIPTION:
                     int maxLength2 = 100;
                     inputFieldValue.setHint(mContext.getString(R.string.hint_food_description));
                     inputFieldValue.setFilters(
-                            new InputFilter[] { new InputFilter.LengthFilter(maxLength2) } );
+                            new InputFilter[]{new InputFilter.LengthFilter(maxLength2)});
                     break;
                 case FoodDetailsActivity.LABEL_FOOD_PRICE:
                     inputFieldValue.setInputType(InputType.TYPE_CLASS_NUMBER |
@@ -138,11 +152,11 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FieldHolder> {
             }
         }
 
-        public void setLabelFieldName(){
+        public void setLabelFieldName() {
             String fieldName = mContext.getString(currentItem.fieldNameRes);
-            switch(currentItem.fieldNameRes){
+            switch (currentItem.fieldNameRes) {
                 case FoodDetailsActivity.LABEL_FOOD_PRICE:
-                    fieldName = fieldName.replace(":","") +
+                    fieldName = fieldName.replace(":", "") +
                             " (" + CurrencyHelper.getCurrencySymbol() + "):";
                     break;
             }
