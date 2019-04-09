@@ -3,11 +3,13 @@ package it.polito.mad1819.group17.lab02.dailyoffer;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -94,6 +96,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
             this.pos = pos;
             this.currentFoodItem = currentFoodItem;
         }
+
 
         @Override
         public void onClick(View v) {
