@@ -14,9 +14,11 @@
     <string name="hint_food_name">Inserisci il nome del piatto</string>
     <string name="hint_food_description">Inserisci la descrizione del piatto</string>
     <string name="available">Disponibili:</string>
-    <string name="fill_required_fields">ATTENZIONE: Riempire tutti i campi richiesti!</string>
+    <string name="fill_required_fields">ATTENZIONE: Riempire CORRETTAMENTE tutti i campi richiesti!</string>
     <string name="settings_changed">Impostazioni cambiate correttamente!</string>
     <string name="wrong_times">ATTENZIONE: orario apertura deve precedere orario chiusura</string>
+    <string name="from">Dalle</string>
+    <string name="to">Alle</string>
 
     <string name="title_activity_edit_profile">Modifica Profilo</string>
 

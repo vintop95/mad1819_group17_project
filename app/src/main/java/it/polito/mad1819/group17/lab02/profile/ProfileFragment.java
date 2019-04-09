@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.concurrent.TimeoutException;
 
 import it.polito.mad1819.group17.lab02.R;
 import it.polito.mad1819.group17.lab02.utils.PrefHelper;
@@ -84,13 +83,12 @@ public class ProfileFragment extends Fragment {
         String time_opening = PrefHelper.getInstance().getString(ProfileFragment.TIME_OPENING, null);
         String time_closing = PrefHelper.getInstance().getString(ProfileFragment.TIME_CLOSING, null);
         if (time_opening != null && time_closing != null)
-            txt_working_time.setText("From " + time_opening + " To " + time_closing);
+            txt_working_time.setText(getString(R.string.from) + " " + time_opening + " " + getString(R.string.to) + " " + time_closing);
 
         String bio = PrefHelper.getInstance().getString(ProfileFragment.BIO, null);
         if (bio != null)
             txt_bio.setText(bio);
     }
-
 
 
     @Override

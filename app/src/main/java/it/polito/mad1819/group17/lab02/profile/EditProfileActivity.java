@@ -225,7 +225,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 PrefHelper.getInstance().putString(ProfileFragment.TIME_OPENING, time_opening);
                 PrefHelper.getInstance().putString(ProfileFragment.TIME_CLOSING, time_closing);
                 PrefHelper.getInstance().putString(ProfileFragment.BIO, bio);
-                Log.d("XX", "XXXXXXX");
                 return 1;
             }
 
@@ -381,7 +380,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
         if (bitmapUserPhoto != null) {
-            PrefHelper.getInstance().putString(ProfileFragment.PHOTO, PrefHelper.getInstance().bitMapToStringLossJpg(bitmapUserPhoto));
+            PrefHelper.getInstance().putString(ProfileFragment.PHOTO, PrefHelper.getInstance().bitMapToStringLossless(bitmapUserPhoto));
             image_user_photo.setImageBitmap(bitmapUserPhoto);
             image_user_photo.setPadding(8, 8, 8, 8);
         }
