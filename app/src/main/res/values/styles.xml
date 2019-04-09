@@ -24,7 +24,7 @@
         <item name="android:focusableInTouchMode">true</item>
     </style>
 
-    <!--
+
     <style name="backgroundImageStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -32,7 +32,7 @@
         <item name="android:scaleType">centerCrop</item>
         <item name="srcCompat">@drawable/background_profile</item>
     </style>
-    -->
+
 
     <style name="frameLayoutBackgroundStyle">
         <item name="android:layout_width">0dp</item>
@@ -42,7 +42,7 @@
         <item name="layout_constraintTop_toTopOf">parent</item>
     </style>
 
-    <!--
+
     <style name="circleUserPhotoStyle">
         <item name="android:layout_width">150dp</item>
         <item name="android:layout_height">150dp</item>
@@ -53,24 +53,10 @@
         <item name="android:contentDescription">@string/image_profile_photo</item>
         <item name="android:elevation">2dp</item>
         <item name="layout_constraintDimensionRatio">w,1:1</item>
-        <item name="srcCompat">@mipmap/ic_launcher_round</item>
-    </style>
-    -->
-
-    <style name="circleUserPhotoStyle">
-        <item name="android:layout_width">150dp</item>
-        <item name="android:layout_height">150dp</item>
-        <item name="android:layout_marginStart">8dp</item>
-        <item name="android:layout_marginTop">32dp</item>
-        <item name="android:layout_marginEnd">8dp</item>
-        <item name="android:background">@drawable/background_avatat</item>
-        <item name="android:contentDescription">@string/image_profile_photo</item>
-        <item name="android:elevation">2dp</item>
-        <item name="layout_constraintDimensionRatio">w,1:1</item>
         <item name="srcCompat">@drawable/ic_person_black_24dp</item>
     </style>
 
-    <!--
+
     <style name="circleChangePhotoStyle">
         <item name="android:layout_width">34dp</item>
         <item name="android:layout_height">35dp</item>
@@ -80,7 +66,6 @@
         <item name="layout_constraintDimensionRatio">w,1:1</item>
         <item name="srcCompat">@mipmap/ic_launcher_round</item>
     </style>
-    -->
 
     <style name="textOnBackgroundStyle">
         <item name="android:layout_width">0dp</item>
@@ -143,62 +128,62 @@
         <item name="android:layout_marginBottom">32dp</item>
     </style>
 
-    <!--
+
     <style name="standardInputStyle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/textSecondary</item>
         <item name="android:textSize">18sp</item>
     </style>
-    -->
 
-    <!--
+
+
     <style name="standardInputStyle.name" parent="standardInputStyle">
         <item name="android:hint">@string/hint_name</item>
         <item name="android:inputType">textPersonName</item>
         <item name="android:maxLength">@integer/max_length_name</item>
     </style>
-    -->
 
-    <!--
+
+
     <style name="standardInputStyle.phone" parent="standardInputStyle">
         <item name="android:hint">@string/hint_phone</item>
         <item name="android:inputType">phone</item>
         <item name="android:maxLength">@integer/max_length_name</item>
     </style>
-    -->
 
-    <!--
+
+
     <style name="standardInputStyle.mail" parent="standardInputStyle">
         <item name="android:hint">@string/hint_mail</item>
         <item name="android:inputType">textEmailAddress</item>
         <item name="android:maxLength">@integer/max_length_mail</item>
     </style>
-    -->
 
-    <!--
+
+
     <style name="standardInputStyle.city" parent="standardInputStyle">
         <item name="android:hint">@string/hint_city</item>
         <item name="android:inputType">text</item>
         <item name="android:maxLength">@integer/max_length_address</item>
     </style>
-    -->
 
-    <!--
+
+
     <style name="standardInputStyle.address" parent="standardInputStyle">
-        <item name="android:hint">@string/hint_delivery_address</item>
+        <item name="android:hint">@string/hint_address</item>
         <item name="android:inputType">textPostalAddress</item>
         <item name="android:maxLength">@integer/max_length_address</item>
     </style>
-    -->
 
-    <!--
+
+
     <style name="standardInputStyle.bio" parent="standardInputStyle">
         <item name="android:hint">@string/hint_bio</item>
         <item name="android:inputType">text</item>
         <item name="android:maxLength">@integer/max_length_bio</item>
     </style>
-    -->
+
 
     <!--
     <style name="standardInputStyle.birthdate" parent="standardInputStyle">
@@ -208,11 +193,12 @@
     </style>
     -->
 
-    <!--
+
+
     <style name="standardInputStyle.restaurant_type" parent="standardInputStyle">
         <item name="android:hint">@string/hint_restaurant_type</item>
     </style>
-    -->
+
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
