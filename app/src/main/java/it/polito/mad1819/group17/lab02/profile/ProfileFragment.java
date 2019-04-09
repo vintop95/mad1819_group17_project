@@ -92,6 +92,7 @@ public class ProfileFragment extends Fragment {
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -99,9 +100,12 @@ public class ProfileFragment extends Fragment {
 
         locateViews(view);
 
-        feedViews();
-
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        feedViews();
+    }
 }
