@@ -22,6 +22,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_margin="8dp"
+            android:contentDescription="@string/image_food_dummy"
             android:scaleType="centerCrop"
             android:src="@drawable/food_photo_1"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -35,7 +36,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:gravity="center"
-            android:text="Food Nameee"
+            android:text="@string/label_food_dummy"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/txt_food_description"
             app:layout_constraintEnd_toStartOf="@+id/img_food_modify"
@@ -49,7 +50,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:gravity="center"
-            android:text="Food description afslllgjlkjljk;kl;kl;kl"
+            android:text="@string/hint_food_description"
             app:layout_constraintBottom_toTopOf="@+id/txt_food_price"
             app:layout_constraintEnd_toStartOf="@+id/img_food_modify"
             app:layout_constraintStart_toEndOf="@+id/img_food_photo"
@@ -57,42 +58,43 @@
 
         <TextView
             android:id="@+id/txt_food_price"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
-            android:text="50,00 €"
-            android:textAlignment="textStart"
-            android:textColor="@color/colorAccent"
 
+            android:layout_marginEnd="32dp"
+            android:text="@string/label_price_dummy"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorAccent"
             app:layout_constraintBottom_toBottomOf="@+id/txt_food_available_qty"
+            app:layout_constraintEnd_toStartOf="@+id/label_food_available_qty"
+            app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toEndOf="@+id/img_food_photo"
-            app:layout_constraintTop_toTopOf="@+id/label_food_available_qty"
-            app:layout_constraintEnd_toStartOf="@id/txt_food_available_qty"/>
+            app:layout_constraintTop_toTopOf="@+id/label_food_available_qty" />
 
         <TextView
             android:id="@+id/label_food_available_qty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:text="@string/available"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             app:layout_constraintBottom_toTopOf="@id/txt_food_available_qty"
             app:layout_constraintEnd_toStartOf="@+id/img_food_delete"
-            app:layout_constraintLeft_toRightOf="@id/txt_food_price"
-            app:layout_constraintTop_toBottomOf="@id/txt_food_description"/>
+            app:layout_constraintStart_toEndOf="@+id/txt_food_price"
+            app:layout_constraintTop_toBottomOf="@id/txt_food_description" />
 
         <TextView
             android:id="@+id/txt_food_available_qty"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="v"
-            android:textStyle="bold"
+            android:text="@string/label_quantity_dummy"
             android:textAlignment="center"
             android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/label_food_available_qty"
             app:layout_constraintStart_toStartOf="@+id/label_food_available_qty" />
@@ -104,6 +106,7 @@
             android:layout_margin="8dp"
             android:layout_weight="5"
             android:alpha="0.3"
+            android:contentDescription="@string/icon_modify"
             android:src="@drawable/ic_mode_edit_black_24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -114,6 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:alpha="0.3"
+            android:contentDescription="@string/icon_delete"
             android:src="@drawable/ic_delete_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

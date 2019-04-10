@@ -158,9 +158,10 @@ public class OrderDetailsActivity extends AppCompatActivity {
                     showConfirmationDialog();
                 }
             });
-        else
+        else {
             btn_next_state.setTextColor(getColor(R.color.button_disabled_text));
-
+            btn_next_state.setEnabled(false);
+        }
 
         feedViews(inputOrders.get(inputPosition));
     }

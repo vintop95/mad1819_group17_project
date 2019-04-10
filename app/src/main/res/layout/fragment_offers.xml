@@ -22,10 +22,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_add_white_24dp"
         android:cropToPadding="false"
+        android:src="@drawable/ic_add_white_24dp"
+        app:elevation="6dp"
+        app:fabSize="normal"
         app:layout_anchor="@id/rv"
-        app:layout_anchorGravity="bottom|start"
-        app:fabSize="normal"/>
+        app:layout_anchorGravity="bottom|start" />
 
 </android.support.design.widget.CoordinatorLayout>
