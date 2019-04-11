@@ -125,6 +125,11 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
         } else
             setResult(STATE_NOT_CHANGED);
+
+        if (inputOrders.get(inputPosition).getCurrentState() == Order.STATE3) {
+            btn_next_state.setTextColor(getColor(R.color.button_disabled_text));
+            btn_next_state.setEnabled(false);
+        }
     }
 
     private void negativeButtonAction() {
