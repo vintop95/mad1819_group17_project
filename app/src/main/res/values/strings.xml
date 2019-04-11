@@ -1,38 +1,76 @@
 <resources>
+
+    <!-- Main Activity Strings -->
     <string name="app_name">Your Restaurant</string>
     <string name="title_profile">Profile</string>
     <string name="title_dailyoffer">Daily Offers</string>
     <string name="title_orders">Orders</string>
-    <string name="title_activity_edit_food">Offer details</string>
-    <string name="title_activity_edit_profile">Edit Profile</string>
-    <string name="action_settings">Settings</string>
-    <string name="fill_required_fields">ATTENTION: Fill in CORRECTLY all required fields!</string>
-    <string name="settings_changed">Settings successfully changed!</string>
-    <string name="wrong_times">ATTENTION: opening time must precede closing time</string>
-    <string name="from">From</string>
-    <string name="to">To</string>
 
+
+    <!-- ////////////// -->
+    <!-- Orders Strings -->
+    <!-- ////////////// -->
+
+    <!-- Order Card Strings -->
+    <string name="time" translatable="false">--:--</string>
+    <string name="delivery_time">Delivery Time</string>
+    <string name="delivery_date">Delivery Date</string>
+    <string name="order_state">Order State</string>
+    <string name="order_number">Order Number</string>
+    <string name="total_items">Total Items</string>
+
+
+    <!-- Order Details Strings -->
+    <!-- Icons -->
+    <string name="icon_restaurateur" translatable="false">Icon Restaurateur</string>
+    <string name="icon_content" translatable="false">Icon Content</string>
+    <string name="icon_history" translatable="false">Icon History</string>
+    <!-- Labels -->
+    <string name="name">Customer Name</string>
+    <string name="phone">Customer Phone</string>
+    <string name="phone_hint">Your Phone</string>
+    <string name="delivery_address">Delivery Address</string>
+    <string name="order_content">Order Content</string>
+    <string name="order_info">Order Info</string>
+    <string name="order_history">State History</string>
+    <string name="button_history">Next State</string>
+    <!-- Alert Dialogs -->
+    <string name="confirm_next_state_title">Do you want to confirm the next state?</string>
+    <string name="confirm_next_state_message">Is the meal ready for the next state? This is not a reversible operation.</string>
+    <string name="positive_button">OK</string>
+    <string name="negative_button">CANCEL</string>
+
+
+    <!-- ////////////// -->
+    <!-- Offers Strings -->
+    <!-- ////////////// -->
+
+    <!-- Offer Card Strings -->
+    <string name="available">Available:</string>
+    <!-- icons -->
+    <string name="icon_modify" translatable="false">Icon Modify</string>
+    <string name="icon_delete" translatable="false">Icon Delete</string>
+    <!-- Labels -->
+    <string name="label_food_dummy" translatable="false">Food Name</string>
+    <string name="label_quantity_dummy" translatable="false">15</string>
+    <string name="label_price_dummy" translatable="false">50€</string>
+    <!-- Images -->
+    <string name="image_food_dummy">Food Picture</string>
+
+
+    <!-- Offer Details Strings -->
+    <string name="title_activity_edit_food">Offer details</string>
+    <string name="action_settings">Settings</string>
+    <!-- Labels -->
     <string name="label_food_number">Number:</string>
     <string name="label_food_name">Name:</string>
     <string name="label_food_description">Description:</string>
     <string name="label_food_price">Price:</string>
     <string name="label_food_available_qty">Available quantity:</string>
+    <!-- Hints -->
     <string name="hint_food_name">Insert food name</string>
     <string name="hint_food_description">Insert food description</string>
-    <string name="available">Available:</string>
-
-    <string name="edit_profile">Edit profile</string>
-    <string name="gallery_not_found">Gallery app not found!</string>
-    <string name="camera_not_found">Camera app not found!</string>
-
-    <string name="name_not_valid">Name must be alphanumeric and not empty</string>
-    <string name="mail_not_valid">Email address is not valid</string>
-    <string name="phone_not_valid">Phone number is not valid</string>
-    <string name="birthdate_not_valid">Birth date not valid</string>
-
-    <string name="insert_name">Insert name</string>
-    <string name="insert_mail">Insert mail</string>
-    <string name="insert_bio">Insert short description</string>
+    <!-- Alert Dialogs -->
     <string name="pick_picture_message">Choose how to set your picture</string>
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>
@@ -40,6 +78,56 @@
     <string name="warning_title">Warning</string>
     <string name="discard_msg">Do you want to discard changes?</string>
 
+
+    <!-- ////////////// -->
+    <!-- Profile Strings -->
+    <!-- ////////////// -->
+
+    <!-- Show Profile Strings -->
+    <!-- Icons -->
+    <string name="icon_person" translatable="false">Icon Person</string>
+    <string name="icon_phone" translatable="false">Phone Icon</string>
+    <string name="icon_mail" translatable="false">Email Icon</string>
+    <string name="icon_delivery" translatable="false">Delivery Icon</string>
+    <string name="icon_address" translatable="false">Address Icon</string>
+    <string name="icon_restaurant_type" translatable="false">Restaurant Type Icon</string>
+    <string name="icon_free_day" translatable="false">Free Day Icon</string>
+    <string name="icon_working_time" translatable="false">Working Time Icon</string>
+    <string name="icon_bio" translatable="false">Description Icon</string>
+    <!-- Labels -->
+    <string name="info">Info</string>
+    <string name="name_restaurant">Restaurant Name</string>
+    <string name="phone_restaurant">Restaurant Phone</string>
+    <string name="mail">Email:</string>
+    <string name="city">City:</string>
+    <string name="bio">Short Description:</string>
+    <string name="address">Address:</string>
+    <string name="required" translatable="false">*</string>
+    <string name="restaurant_type">Restaurant Type</string>
+    <string name="free_day">Free Day</string>
+    <string name="working_time">Working Time</string>
+    <string name="working_time_opening">Opening Time</string>
+    <string name="working_time_closing">Closing Time</string>
+    <!-- Hints -->
+    <string name="hint_name">"Your name"</string>
+    <string name="hint_mail">"Your email address"</string>
+    <string name="hint_city">Your city</string>
+    <string name="hint_bio">"Your description"</string>
+    <string name="hint_address">Your address</string>
+    <string name="hint_phone">"Your phone"</string>
+    <string name="hint_restaurant_type">Restaurant type</string>
+    <string name="hint_free_day">Free Day</string>
+    <string name="hint_working_time" translatable="false">--:--</string>
+    <!-- Images -->
+    <string name="image_background">Background Picture</string>
+    <string name="image_profile_photo">Profile photo</string>
+
+
+    <!-- Edit Profile Strings -->
+    <string name="title_activity_edit_profile">Edit Profile</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="required_text">*Required</string>
+    <!-- Hints -->
     <string-array name="restaurant_types">
         <item></item>
         <item>Pizza</item>
@@ -52,9 +140,8 @@
         <item>Japanese</item>
         <item>Mexican</item>
     </string-array>
-
     <string-array name="days_of_week">
-        <item></item>
+        <item>None</item>
         <item>Monday</item>
         <item>Tuesday</item>
         <item>Wednesday</item>
@@ -63,74 +150,17 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
-
-
-    <!-- Alert Dialog for the next state of the order -->
-    <string name="confirm_next_state_title">Do you want to confirm the next state?</string>
-    <string name="confirm_next_state_message">Is the meal ready for the next state? This is not a reversible operation.</string>
-    <string name="positive_button">OK</string>
-    <string name="negative_button">CANCEL</string>
-
-    <!-- Order Card Strings -->
-    <string name="time" translatable="false">--:--</string>
-    <string name="delivery_time">Delivery Time</string>
-    <string name="delivery_date">Delivery Date</string>
-    <string name="order_state">Order State</string>
-    <string name="order_number">Order Number</string>
-    <string name="total_items">Total Items</string>
-
-    <!-- Order Details Strings -->
-    <string name="icon_restaurateur" translatable="false">Icon Restaurateur</string>
-    <string name="icon_content" translatable="false">Icon Content</string>
-    <string name="icon_history" translatable="false">Icon History</string>
-    <string name="icon_person">Icon Person</string>
-    <string name="icon_phone">Phone Icon</string>
-    <string name="icon_mail">Email Icon</string>
-    <string name="icon_delivery">Delivery Icon</string>
-    <string name="icon_birthdate">Birthdate Icon</string>
-    <string name="icon_address">Address Icon</string>
-    <string name="icon_bio">Description Icon</string>
-    <string name="icon_favorite">Favorite Icon</string>
-    <string name="icon_restaurant_type">Restaurant Type Icon</string>
-    <string name="icon_free_day" translatable="false">Free Day Icon</string>
-    <string name="icon_working_time" translatable="false">Working Time Icon</string>
-
-    <string name="name">Restaurant Name</string>
-    <string name="phone">Restaurant Phone</string>
-    <string name="phone_hint">Your Phone</string>
-    <string name="delivery_address">Delivery Address</string>
-    <string name="order_content">Order Content</string>
-    <string name="order_info">Order Info</string>
-    <string name="order_history">State History</string>
-    <string name="button_history">Next State</string>
-    <string name="info">Info</string>
-    <string name="mail">Email:</string>
-    <string name="city">City:</string>
-    <string name="bio">Short Description:</string>
-    <string name="birthdate">Date of Birth (dd/mm/yyyy)</string>
-    <string name="favorite">Favorite Food</string>
-    <string name="address">Address:</string>
-    <string name="required">*</string>
-    <string name="required_text">*Required</string>
-    <string name="restaurant_type">Restaurant Type</string>
-    <string name="free_day">Free Day</string>
-    <string name="working_time">Working Time</string>
-    <string name="working_time_opening">Opening Time</string>
-    <string name="working_time_closing">Closing Time</string>
-
-    <string name="hint_name">"Your name"</string>
-    <string name="hint_mail">"Your email address"</string>
-    <string name="hint_city">Your city</string>
-    <string name="hint_delivery_address">Your delivery address</string>
-    <string name="hint_bio">"Your description"</string>
-    <string name="hint_address">Your address</string>
-    <string name="hint_phone">"Your phone"</string>
-    <string name="hint_restaurant_type">Restaurant type</string>
-    <string name="hint_free_day">Free Day</string>
-    <string name="hint_working_time">--:--</string>
-
-    <string name="image_background">Background Picture</string>
-    <string name="image_profile_photo">Profile photo</string>
+    <!-- Alert Dialogs -->
+    <string name="gallery_not_found">Gallery app not found!</string>
+    <string name="camera_not_found">Camera app not found!</string>
+    <string name="name_not_valid">Name must be alphanumeric and not empty</string>
+    <string name="mail_not_valid">Email address is not valid</string>
+    <string name="phone_not_valid">Phone number is not valid</string>
+    <string name="fill_required_fields">ATTENTION: Fill in CORRECTLY all required fields!</string>
+    <string name="settings_changed">Settings successfully changed!</string>
+    <string name="wrong_times">ATTENTION: opening time must precede closing time</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
     <string name="image_profile_change">Change photo</string>
 
 </resources>

@@ -32,6 +32,7 @@
             android:padding="8dp"
             android:text="@string/time"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Display2"
+            android:textColor="@color/textPrimary"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
             card_view:layout_constraintVertical_chainStyle="packed" />
@@ -56,6 +57,7 @@
             android:layout_height="wrap_content"
             android:text="@string/delivery_date"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textStyle="bold"
             card_view:layout_constraintBottom_toTopOf="@+id/txt_delivery_date"
             card_view:layout_constraintStart_toStartOf="@+id/txt_delivery_date"
             card_view:layout_constraintTop_toTopOf="@+id/txt_delivery_time"
@@ -81,6 +83,7 @@
             android:layout_height="wrap_content"
             android:text="@string/order_state"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textStyle="bold"
             card_view:layout_constraintStart_toStartOf="@+id/txt_order_state"
             card_view:layout_constraintTop_toTopOf="@+id/label_delivery_date" />
 
@@ -100,7 +103,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="122dp"
-            android:background="@android:color/holo_orange_dark"
+            android:background="@color/colorPrimary"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent" />
@@ -113,6 +116,7 @@
             android:layout_marginEnd="8dp"
             android:text="@string/order_number"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textStyle="bold"
             card_view:layout_constraintEnd_toStartOf="@+id/label_total_items"
             card_view:layout_constraintHorizontal_chainStyle="spread"
             card_view:layout_constraintStart_toStartOf="parent"
@@ -126,6 +130,7 @@
             android:layout_marginBottom="16dp"
             android:text="@string/order_number"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@color/textPrimary"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintStart_toStartOf="@+id/label_order_number"
             card_view:layout_constraintTop_toBottomOf="@+id/label_order_number" />
@@ -138,6 +143,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/total_items"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textStyle="bold"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toEndOf="@+id/label_order_number"
             card_view:layout_constraintTop_toBottomOf="@+id/view_divider_order" />
@@ -149,6 +155,7 @@
             android:layout_marginBottom="16dp"
             android:text="@string/total_items"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@color/textPrimary"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintStart_toStartOf="@+id/label_total_items"
             card_view:layout_constraintTop_toBottomOf="@+id/label_total_items" />

@@ -7,9 +7,9 @@
     <color name="colorDivider">#BDBDBD</color>
     <color name="colorContrast">#0ab6ff</color>
 
-    <color name="colorState1">#FF9933</color>
-    <color name="colorState2">#E4F0A2</color>
-    <color name="colorState3">#33CC33</color>
+    <color name="colorState1">#ff4d4d</color>
+    <color name="colorState2">#ffaf40</color>
+    <color name="colorState3">#3ae374</color>
 
     <color name="button_disabled_text">#808080</color>
 

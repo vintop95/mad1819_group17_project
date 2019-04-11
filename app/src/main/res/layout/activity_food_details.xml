@@ -55,10 +55,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
+        app:elevation="8dp"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@drawable/ic_done_black_24dp"
-        app:useCompatPadding="true"/>
+        app:useCompatPadding="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_change_img"
@@ -66,10 +67,11 @@
         android:layout_height="wrap_content"
         android:translationY="-16dp"
         app:backgroundTint="@color/colorPrimaryDark"
+        app:elevation="8dp"
+        app:fabSize="normal"
         app:layout_anchor="@+id/btn_save"
         app:layout_anchorGravity="top|center"
         app:srcCompat="@android:drawable/ic_menu_camera"
-        app:useCompatPadding="true"
-        app:fabSize="normal"/>
+        app:useCompatPadding="true" />
 
 </android.support.design.widget.CoordinatorLayout>
