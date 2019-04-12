@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "989478963324",
+    "firebase_url": "https://dbmad2019group17.firebaseio.com",
+    "project_id": "dbmad2019group17",
+    "storage_bucket": "dbmad2019group17.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:989478963324:android:0a87145fb95e1226",
+        "android_client_info": {
+          "package_name": "it.polito.mad1819.group17.lab02"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "989478963324-gid59dcr709sjplj6eicra7f7q1gsqma.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAe822Ts8A8WYc33GL4NPQNyDyS2RkoCpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "989478963324-gid59dcr709sjplj6eicra7f7q1gsqma.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
