@@ -6,7 +6,7 @@ android {
 
 
     defaultConfig {
-        applicationId "com.example.customer"
+        applicationId "it.polito.mad1819.group17.deliveryapp.customer"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1

@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.deliveryapp.customer.R;
+import it.polito.mad1819.group17.deliveryapp.customer.R;
 
 public class MainActivity extends AppCompatActivity {
 

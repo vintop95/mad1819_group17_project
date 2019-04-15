@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="it.polito.mad1819.group17.deliveryapp.restaurateur.profile.EditProfileActivity"></activity>
-        <activity
+    <activity
             android:name="it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer.FoodDetailsActivity"
             android:label="@string/title_activity_edit_food"
             android:theme="@style/AppTheme.NoActionBar"

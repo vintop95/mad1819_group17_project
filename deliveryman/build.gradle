@@ -6,7 +6,7 @@ android {
 
 
     defaultConfig {
-        applicationId "com.example.deliveryman"
+        applicationId "it.polito.mad1819.group17.deliveryapp.deliveryman"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
