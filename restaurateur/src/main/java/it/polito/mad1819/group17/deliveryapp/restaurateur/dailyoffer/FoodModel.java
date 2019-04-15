@@ -1,11 +1,11 @@
-package it.polito.mad1819.group17.restaurateur.dailyoffer;
+package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer;
 
 import com.google.gson.Gson;
 
 import java.io.Serializable;
 
-import it.polito.mad1819.group17.restaurateur.utils.CurrencyHelper;
-import it.polito.mad1819.group17.restaurateur.utils.PrefHelper;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.CurrencyHelper;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
 public class FoodModel implements Serializable {
     /////////////////////// STORAGE MGMT ///////////////////////////

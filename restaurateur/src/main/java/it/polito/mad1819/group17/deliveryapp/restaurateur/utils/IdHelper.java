@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.restaurateur.utils;
+package it.polito.mad1819.group17.deliveryapp.restaurateur.utils;
 
 import java.util.concurrent.atomic.AtomicLong;
 

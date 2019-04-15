@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.restaurateur.dailyoffer;
+package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import it.polito.mad1819.group17.restaurateur.R;
-import it.polito.mad1819.group17.restaurateur.utils.FormAdapter;
-import it.polito.mad1819.group17.restaurateur.utils.FormAdapter.ListItem;
-import it.polito.mad1819.group17.restaurateur.utils.PrefHelper;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.FormAdapter;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.FormAdapter.ListItem;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
 public class FoodDetailsActivity extends AppCompatActivity {
 

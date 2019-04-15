@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="it.polito.mad1819.group17.deliveryapp.restaurateur.MainActivity">
 
     <!-- Appbar -->
     <android.support.design.widget.AppBarLayout

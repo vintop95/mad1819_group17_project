@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.restaurateur;
+package it.polito.mad1819.group17.deliveryapp.restaurateur;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,12 +13,13 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-import it.polito.mad1819.group17.restaurateur.dailyoffer.OffersFragment;
-import it.polito.mad1819.group17.restaurateur.orders.OrdersFragment;
-import it.polito.mad1819.group17.restaurateur.profile.EditProfileActivity;
-import it.polito.mad1819.group17.restaurateur.profile.ProfileFragment;
-import it.polito.mad1819.group17.restaurateur.utils.CurrencyHelper;
-import it.polito.mad1819.group17.restaurateur.utils.PrefHelper;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer.OffersFragment;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.orders.OrdersFragment;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.profile.EditProfileActivity;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.profile.ProfileFragment;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.CurrencyHelper;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
+import it.polito.mad1819.group17.restaurateur.R;
 
 public class MainActivity extends AppCompatActivity {
 

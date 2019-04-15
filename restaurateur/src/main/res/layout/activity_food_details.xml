@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".dailyoffer.FoodDetailsActivity">
+    tools:context="it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer.FoodDetailsActivity">
 
     <!-- android:layout_height="@dimen/app_bar_height"_ -->
     <android.support.design.widget.AppBarLayout

@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.restaurateur.orders;
+package it.polito.mad1819.group17.deliveryapp.restaurateur.orders;
 
 import android.content.DialogInterface;
 import android.content.Intent;

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".orders.OrdersFragment">
+    tools:context="it.polito.mad1819.group17.deliveryapp.restaurateur.orders.OrdersFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

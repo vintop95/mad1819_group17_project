@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.restaurateur.dailyoffer;
+package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,7 +14,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import it.polito.mad1819.group17.restaurateur.R;
-import it.polito.mad1819.group17.restaurateur.utils.PrefHelper;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
     private static final String TAG = FoodAdapter.class.getName();

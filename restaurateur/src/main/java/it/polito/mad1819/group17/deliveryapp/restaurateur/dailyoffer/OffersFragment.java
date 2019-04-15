@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.restaurateur.dailyoffer;
+package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.polito.mad1819.group17.restaurateur.R;
-import it.polito.mad1819.group17.restaurateur.utils.PrefHelper;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
 /**
  * IMPLEMENTING RecyclerView

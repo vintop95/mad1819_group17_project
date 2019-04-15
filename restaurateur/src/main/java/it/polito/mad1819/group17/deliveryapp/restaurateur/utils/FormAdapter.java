@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.restaurateur.utils;
+package it.polito.mad1819.group17.deliveryapp.restaurateur.utils;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import it.polito.mad1819.group17.restaurateur.R;
-import it.polito.mad1819.group17.restaurateur.dailyoffer.FoodDetailsActivity;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer.FoodDetailsActivity;
 
 public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FieldHolder> {
 

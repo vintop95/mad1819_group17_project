@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.restaurateur.profile;
+package it.polito.mad1819.group17.deliveryapp.restaurateur.profile;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 
 import it.polito.mad1819.group17.restaurateur.R;
-import it.polito.mad1819.group17.restaurateur.utils.PrefHelper;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
 
 public class ProfileFragment extends Fragment {

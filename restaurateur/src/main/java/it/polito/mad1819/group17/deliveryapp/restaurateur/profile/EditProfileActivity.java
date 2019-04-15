@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.restaurateur.profile;
+package it.polito.mad1819.group17.deliveryapp.restaurateur.profile;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import it.polito.mad1819.group17.restaurateur.R;
-import it.polito.mad1819.group17.restaurateur.utils.PrefHelper;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
 public class EditProfileActivity extends AppCompatActivity {
 
