@@ -160,6 +160,12 @@
         <item name="android:maxLength">@integer/max_length_mail</item>
     </style>
 
+    <style name="standardInputStyle.password" parent="standardInputStyle">
+        <item name="android:hint">@string/hint_password</item>
+        <item name="android:inputType">textPassword</item>
+        <item name="android:maxLength">@integer/max_length_password</item>
+    </style>
+
 
 
     <style name="standardInputStyle.city" parent="standardInputStyle">

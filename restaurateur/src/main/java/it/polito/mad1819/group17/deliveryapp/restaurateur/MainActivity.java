@@ -8,8 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -22,6 +24,7 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 import it.polito.mad1819.group17.restaurateur.R;
 
 public class MainActivity extends AppCompatActivity {
+    private Restaurateur currentRestaurateur;
 
     private TextView mTextMessage;
 
@@ -72,10 +75,20 @@ public class MainActivity extends AppCompatActivity {
         fm.beginTransaction().attach(active).commit();
     }
 
+    /*public final static Restaurateur getCurrentRestaurateur() {
+        return currentRestaurateur;
+    }
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Restaurateur restaurateur = (Restaurateur) getIntent().getSerializableExtra("restaurateur");
+        if (restaurateur != null && currentRestaurateur == null) {
+            currentRestaurateur = restaurateur;
+            getIntent().putExtra("restaurateur", currentRestaurateur);
+        }
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.fragment_profile);
@@ -104,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+
                 switch (item.getItemId()) {
                     case R.id.navigation_profile:
                         if (btn_edit != null)

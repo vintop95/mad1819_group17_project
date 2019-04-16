@@ -79,6 +79,7 @@
     <string name="name_restaurant">Nome Ristorante</string>
     <string name="phone_restaurant">Telefono Ristorante</string>
     <string name="mail">Email:</string>
+    <string name="password">Password:</string>
     <string name="city">Città:</string>
     <string name="bio">Breve Descrizione:</string>
     <string name="address">Indirizzo:</string>
@@ -90,6 +91,7 @@
     <!-- Hints -->
     <string name="hint_name">"Il tuo nome"</string>
     <string name="hint_mail">"Il tuo indirizzo email"</string>
+    <string name="hint_password">"La tua password"</string>
     <string name="hint_city">La tua città</string>
     <string name="hint_bio">"La tua descrizione"</string>
     <string name="hint_address">Il tuo indirizzo</string>
@@ -140,5 +142,10 @@
     <string name="from">Dalle</string>
     <string name="to">Alle</string>
     <string name="image_profile_change">Cambia Immagine</string>
+
+
+    <string name="sign_in">
+        Altrimenti <u>Registrati</u>.
+    </string>
 
 </resources>

@@ -66,7 +66,7 @@
             </FrameLayout>
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/image_user_photo"
+                android:id="@+id/image_user_photo_sign_in"
                 style="@style/circleUserPhotoStyle"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
@@ -79,7 +79,7 @@
                 android:textColor="@android:color/white"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/image_user_photo" />
+                app:layout_constraintTop_toBottomOf="@+id/image_user_photo_sign_in" />
 
             <View
                 android:id="@+id/view_divider_info"
@@ -265,7 +265,7 @@
                 style="@style/smallIconStyle"
                 android:id="@+id/image_free_day"
                 android:contentDescription="@string/icon_free_day"
-                app:layout_constraintBottom_toBottomOf="@+id/txt_free_day"
+                app:layout_constraintBottom_toBottomOf="@+id/input_free_day_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_free_day"
                 app:srcCompat="@drawable/ic_baseline_beach_access_24px" />
@@ -278,7 +278,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/view_divider_restaurant_type" />
 
             <TextView
-                android:id="@+id/txt_free_day"
+                android:id="@+id/input_free_day_sign_in"
                 style="@style/standardTextStyle"
                 android:text="@string/hint_free_day"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
@@ -291,7 +291,7 @@
                 style="@style/innerDividerStyle"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/txt_free_day" />
+                app:layout_constraintTop_toBottomOf="@+id/input_free_day_sign_in" />
 
 
             <!-- Working time -->
