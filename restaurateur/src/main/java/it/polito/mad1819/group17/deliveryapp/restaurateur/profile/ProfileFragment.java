@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import it.polito.mad1819.group17.deliveryapp.restaurateur.MainActivity;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.Restaurateur;
 import it.polito.mad1819.group17.restaurateur.R;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
@@ -37,18 +39,18 @@ public class ProfileFragment extends Fragment {
     private TextView txt_bio;
 
     private void locateViews(View view) {
-        image_user_photo = view.findViewById(R.id.image_user_photo);
+        image_user_photo = view.findViewById(R.id.image_user_photo_sign_in);
         txt_name = view.findViewById(R.id.txt_name);
         txt_phone = view.findViewById(R.id.txt_phone);
         txt_mail = view.findViewById(R.id.txt_mail);
         txt_address = view.findViewById(R.id.txt_address);
         txt_restaurant_type = view.findViewById(R.id.txt_restaurant_type);
-        txt_free_day = view.findViewById(R.id.txt_free_day);
+        txt_free_day = view.findViewById(R.id.input_free_day_sign_in);
         txt_working_time = view.findViewById(R.id.txt_working_time);
         txt_bio = view.findViewById(R.id.txt_bio);
     }
 
-    private void feedViews() {
+    /*private void feedViews() {
         String stringUserPhoto = PrefHelper.getInstance().getString(PHOTO, null);
         if (stringUserPhoto != null) {
             image_user_photo.setImageBitmap(PrefHelper.stringToBitMap(stringUserPhoto));
@@ -87,6 +89,25 @@ public class ProfileFragment extends Fragment {
         String bio = PrefHelper.getInstance().getString(ProfileFragment.BIO, null);
         if (bio != null)
             txt_bio.setText(bio);
+    }*/
+
+    private void feedViews() {
+
+        Restaurateur restaurateur = (Restaurateur)getActivity().getIntent().getSerializableExtra("restaurateur");
+
+        if (restaurateur.getPhoto() != "") {
+            image_user_photo.setImageBitmap(PrefHelper.stringToBitMap(restaurateur.getPhoto()));
+            image_user_photo.setPadding(8, 8, 8, 8);
+        }
+        txt_name.setText(restaurateur.getName());
+        txt_phone.setText(restaurateur.getPhone());
+        txt_mail.setText(restaurateur.getMail());
+        txt_address.setText(restaurateur.getAddress());
+        txt_restaurant_type.setText(restaurateur.getRestaurant_type());
+        txt_free_day.setText(restaurateur.getFree_day());
+        txt_working_time.setText(getString(R.string.from) + " " + restaurateur.getWorking_time_opening() + " " + getString(R.string.to) + " " + restaurateur.getWorking_time_closing());
+        if (restaurateur.getBio() != "")
+            txt_bio.setText(restaurateur.getBio());
     }
 
 

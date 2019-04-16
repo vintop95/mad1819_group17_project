@@ -88,6 +88,7 @@
     <string name="icon_person" translatable="false">Icon Person</string>
     <string name="icon_phone" translatable="false">Phone Icon</string>
     <string name="icon_mail" translatable="false">Email Icon</string>
+    <string name="icon_password" translatable="false">Password Icon</string>
     <string name="icon_delivery" translatable="false">Delivery Icon</string>
     <string name="icon_address" translatable="false">Address Icon</string>
     <string name="icon_restaurant_type" translatable="false">Restaurant Type Icon</string>
@@ -99,6 +100,7 @@
     <string name="name_restaurant">Restaurant Name</string>
     <string name="phone_restaurant">Restaurant Phone</string>
     <string name="mail">Email:</string>
+    <string name="password">Password:</string>
     <string name="city">City:</string>
     <string name="bio">Short Description:</string>
     <string name="address">Address:</string>
@@ -111,6 +113,7 @@
     <!-- Hints -->
     <string name="hint_name">"Your name"</string>
     <string name="hint_mail">"Your email address"</string>
+    <string name="hint_password">"Your password"</string>
     <string name="hint_city">Your city</string>
     <string name="hint_bio">"Your description"</string>
     <string name="hint_address">Your address</string>
@@ -162,5 +165,10 @@
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="image_profile_change">Change photo</string>
+
+
+    <string name="sign_in">
+        Otherwise <u>Sign Up</u>.
+    </string>
 
 </resources>

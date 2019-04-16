@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/constraintLayout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="it.polito.mad1819.group17.deliveryapp.restaurateur.profile.EditProfileActivity">
+
+    <!-- Appbar -->
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout_edit"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="it.polito.mad1819.group17.deliveryapp.restaurateur.profile.EditProfileActivity">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Appbar -->
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appBarLayout_edit"
+        <!-- Toolbar -->
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_edit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:title="Sign In" />
 
-            <!-- Toolbar -->
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_edit"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
-                app:title="@string/title_activity_edit_profile" />
-
-        </android.support.design.widget.AppBarLayout>
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -33,7 +33,9 @@
         android:layout_marginBottom="8dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout_edit">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout_edit"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -69,53 +71,23 @@
                 app:layout_constraintGuide_end="16dp"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
-            <!--<include layout="@layout/frame_layout_background" />-->
-
-
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:visibility="visible"
-                app:layout_constraintBottom_toTopOf="@+id/view_divider_info"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/image_background"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/image_background"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/background_profile" />
-
-                <View
-                    android:id="@+id/view_background_scrim"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/scrim" />
-            </FrameLayout>
-
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/image_user_photo_sign_in"
+                android:id="@+id/image_user_photo_sign_up"
                 style="@style/circleUserPhotoStyle"
                 android:layout_marginTop="32dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_user_change"
                 style="@style/circleChangePhotoStyle"
-                app:layout_constraintBottom_toBottomOf="@+id/image_user_photo_sign_in"
-                app:layout_constraintEnd_toEndOf="@+id/image_user_photo_sign_in"
+                app:layout_constraintBottom_toBottomOf="@+id/image_user_photo_sign_up"
+                app:layout_constraintEnd_toEndOf="@+id/image_user_photo_sign_up"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/image_user_photo_sign_in"
-                app:layout_constraintTop_toTopOf="@+id/image_user_photo_sign_in"
+                app:layout_constraintStart_toStartOf="@+id/image_user_photo_sign_up"
+                app:layout_constraintTop_toTopOf="@+id/image_user_photo_sign_up"
                 app:layout_constraintVertical_bias="1.0" />
-
 
             <TextView
                 android:id="@+id/text_info"
@@ -124,7 +96,7 @@
                 android:textColor="@android:color/white"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/image_user_photo_sign_in" />
+                app:layout_constraintTop_toBottomOf="@+id/image_user_photo_sign_up" />
 
             <View
                 android:id="@+id/view_divider_info"
@@ -141,7 +113,7 @@
                 android:id="@+id/image_name"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_person"
-                app:layout_constraintBottom_toBottomOf="@+id/input_name_sign_in"
+                app:layout_constraintBottom_toBottomOf="@+id/input_name_sign_up"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_name"
                 app:srcCompat="@drawable/ic_person_black_24dp" />
@@ -165,7 +137,7 @@
                 app:layout_constraintTop_toTopOf="@+id/view_divider_info" />
 
             <EditText
-                android:id="@+id/input_name_sign_in"
+                android:id="@+id/input_name_sign_up"
                 style="@style/standardInputStyle.name.autofill"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
@@ -177,14 +149,14 @@
                 android:visibility="invisible"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/input_name_sign_in" />
+                app:layout_constraintTop_toBottomOf="@+id/input_name_sign_up" />
 
             <!-- Phone -->
             <ImageView
                 android:id="@+id/image_phone"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_phone"
-                app:layout_constraintBottom_toBottomOf="@+id/input_phone_sign_in"
+                app:layout_constraintBottom_toBottomOf="@+id/input_phone_sign_up"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_phone"
                 app:srcCompat="@drawable/ic_baseline_phone_24px" />
@@ -207,9 +179,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/view_divider_name" />
 
             <EditText
-                android:id="@+id/input_phone_sign_in"
+                android:id="@+id/input_phone_sign_up"
                 style="@style/standardInputStyle.phone"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
                 app:layout_constraintTop_toBottomOf="@+id/label_phone" />
 
@@ -219,14 +192,14 @@
                 android:visibility="invisible"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/input_phone_sign_in" />
+                app:layout_constraintTop_toBottomOf="@+id/input_phone_sign_up" />
 
             <!-- Email -->
             <ImageView
                 android:id="@+id/image_mail"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_mail"
-                app:layout_constraintBottom_toBottomOf="@+id/input_mail_sign_in"
+                app:layout_constraintBottom_toBottomOf="@+id/input_mail_sign_up"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_mail"
                 app:srcCompat="@drawable/ic_email_black_24dp" />
@@ -249,7 +222,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/view_divider_phone" />
 
             <EditText
-                android:id="@+id/input_mail_sign_in"
+                android:id="@+id/input_mail_sign_up"
                 style="@style/standardInputStyle.mail.autofill"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
@@ -261,8 +234,50 @@
                 android:visibility="invisible"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/input_mail_sign_in" />
+                app:layout_constraintTop_toBottomOf="@+id/input_mail_sign_up" />
 
+
+            <!-- Password -->
+            <ImageView
+                android:id="@+id/image_password"
+                style="@style/smallIconStyle"
+                android:contentDescription="@string/icon_password"
+                app:layout_constraintBottom_toBottomOf="@+id/input_password_sign_up"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toTopOf="@+id/label_password"
+                app:srcCompat="@drawable/ic_baseline_security_24px" />
+
+            <TextView
+                android:id="@+id/text_password_req"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/required"
+                android:textColor="@android:color/holo_red_dark"
+                app:layout_constraintRight_toLeftOf="@+id/label_password"
+                app:layout_constraintTop_toTopOf="@+id/label_password" />
+
+            <TextView
+                android:id="@+id/label_password"
+                style="@style/smallLabelStyle"
+                android:text="@string/password"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/view_divider_mail" />
+
+            <EditText
+                android:id="@+id/input_password_sign_up"
+                style="@style/standardInputStyle.password.autofill"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/label_password" />
+
+            <View
+                android:id="@+id/view_divider_password"
+                style="@style/innerDividerStyle"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/input_password_sign_up" />
 
             <!-- Address -->
             <TextView
@@ -270,7 +285,7 @@
                 style="@style/smallLabelStyle"
                 android:text="@string/address"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/view_divider_mail" />
+                app:layout_constraintTop_toBottomOf="@+id/view_divider_password" />
 
             <TextView
                 android:id="@+id/text_address_req"
@@ -286,13 +301,13 @@
                 android:id="@+id/image_address"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_address"
-                app:layout_constraintBottom_toBottomOf="@+id/input_address_sign_in"
+                app:layout_constraintBottom_toBottomOf="@+id/input_address_sign_up"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_address"
                 app:srcCompat="@drawable/ic_person_pin_circle_black_24dp" />
 
             <EditText
-                android:id="@+id/input_address_sign_in"
+                android:id="@+id/input_address_sign_up"
                 style="@style/standardInputStyle.address.autofill"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -305,7 +320,7 @@
                 android:visibility="invisible"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/input_address_sign_in" />
+                app:layout_constraintTop_toBottomOf="@+id/input_address_sign_up" />
 
 
             <!-- Type -->
@@ -314,7 +329,7 @@
                 style="@style/smallIconStyle"
                 android:layout_marginBottom="8dp"
                 android:contentDescription="@string/icon_restaurant_type"
-                app:layout_constraintBottom_toBottomOf="@+id/input_restaurant_type_sign_in"
+                app:layout_constraintBottom_toBottomOf="@+id/input_restaurant_type_sign_up"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_restaurant_type"
                 app:srcCompat="@drawable/ic_baseline_fastfood_24px" />
@@ -337,7 +352,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/view_divider_address" />
 
             <Spinner
-                android:id="@+id/input_restaurant_type_sign_in"
+                android:id="@+id/input_restaurant_type_sign_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -353,7 +368,7 @@
                 android:visibility="invisible"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/input_restaurant_type_sign_in" />
+                app:layout_constraintTop_toBottomOf="@+id/input_restaurant_type_sign_up" />
 
 
             <!-- Free day -->
@@ -361,7 +376,7 @@
                 android:id="@+id/image_free_day"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_free_day"
-                app:layout_constraintBottom_toBottomOf="@+id/input_free_day_sign_in"
+                app:layout_constraintBottom_toBottomOf="@+id/input_free_day_sign_up"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_free_day"
                 app:srcCompat="@drawable/ic_baseline_beach_access_24px" />
@@ -387,7 +402,7 @@
 
 
             <Spinner
-                android:id="@+id/input_free_day_sign_in"
+                android:id="@+id/input_free_day_sign_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -403,7 +418,7 @@
                 android:visibility="invisible"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/input_free_day_sign_in" />
+                app:layout_constraintTop_toBottomOf="@+id/input_free_day_sign_up" />
 
 
             <!-- Working Time -->
@@ -411,7 +426,7 @@
                 android:id="@+id/image_working_time"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_working_time"
-                app:layout_constraintBottom_toBottomOf="@+id/input_working_time_opening_sign_in"
+                app:layout_constraintBottom_toBottomOf="@+id/input_working_time_opening_sign_up"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_working_time_opening"
                 app:srcCompat="@drawable/ic_baseline_access_time_24px" />
@@ -452,7 +467,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/view_divider_free_day" />
 
             <TextView
-                android:id="@+id/input_working_time_opening_sign_in"
+                android:id="@+id/input_working_time_opening_sign_up"
                 style="@style/standardTextStyle.longText"
                 android:layout_width="wrap_content"
                 android:text="@string/hint_working_time"
@@ -460,7 +475,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/label_working_time_opening" />
 
             <TextView
-                android:id="@+id/input_working_time_closing_sign_in"
+                android:id="@+id/input_working_time_closing_sign_up"
                 style="@style/standardTextStyle.longText"
                 android:layout_width="wrap_content"
                 android:text="@string/hint_working_time"
@@ -473,7 +488,7 @@
                 android:visibility="invisible"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/input_working_time_opening_sign_in" />
+                app:layout_constraintTop_toBottomOf="@+id/input_working_time_opening_sign_up" />
 
 
             <!-- Bio -->
@@ -481,7 +496,7 @@
                 android:id="@+id/image_bio"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_bio"
-                app:layout_constraintBottom_toBottomOf="@+id/input_bio_sign_in"
+                app:layout_constraintBottom_toBottomOf="@+id/input_bio_sign_up"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_bio"
                 app:srcCompat="@drawable/ic_baseline_description_24px" />
@@ -494,7 +509,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/view_divider_working_time" />
 
             <EditText
-                android:id="@+id/input_bio_sign_in"
+                android:id="@+id/input_bio_sign_up"
                 style="@style/standardInputStyle.bio.autofill"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
@@ -506,7 +521,7 @@
                 android:visibility="invisible"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/input_bio_sign_in" />
+                app:layout_constraintTop_toBottomOf="@+id/input_bio_sign_up" />
 
 
             <TextView
@@ -516,16 +531,30 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="32dp"
                 android:text="@string/required_text"
                 android:textColor="@android:color/holo_red_dark"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toBottomOf="@id/view_divider_bio" />
 
+            <Button
+                android:id="@+id/btn_sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="32dp"
+                android:text="SIGN UP"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/text_req"
+                app:layout_constraintVertical_bias="0.0" />
+
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v4.widget.NestedScrollView>
-    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

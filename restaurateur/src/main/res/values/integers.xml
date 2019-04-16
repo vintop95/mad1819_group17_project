@@ -3,6 +3,7 @@
 
     <item type="integer" name="max_length_name">100</item>
     <item type="integer" name="max_length_mail">254</item>
+    <item type="integer" name="max_length_password">16</item>
     <item type="integer" name="max_length_address">100</item>
     <item type="integer" name="max_length_bio">254</item>
 

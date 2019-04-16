@@ -8,6 +8,10 @@
         <item name="android:autofillHints">email</item>
     </style>
 
+    <style name="standardInputStyle.password.autofill" parent="standardInputStyle.password">
+        <item name="android:autofillHints">password</item>
+    </style>
+
     <style name="standardInputStyle.city.autofill" parent="standardInputStyle.city">
         <item name="android:autofillHints">address</item>
     </style>

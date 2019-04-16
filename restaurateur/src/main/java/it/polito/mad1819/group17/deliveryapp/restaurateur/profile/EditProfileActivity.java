@@ -31,8 +31,8 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    protected static final int CAMERA_REQUEST = 0;
-    protected static final int GALLERY_REQUEST = 1;
+    public static final int CAMERA_REQUEST = 0;
+    public static final int GALLERY_REQUEST = 1;
 
 
     private Toolbar toolbar;
@@ -57,16 +57,16 @@ public class EditProfileActivity extends AppCompatActivity {
     private void locateViews() {
         toolbar = findViewById(R.id.toolbar_edit);
 
-        image_user_photo = findViewById(R.id.image_user_photo);
-        input_name = findViewById(R.id.input_name);
-        input_phone = findViewById(R.id.input_phone);
-        input_mail = findViewById(R.id.input_mail);
-        input_address = findViewById(R.id.input_address);
-        input_restaurant_type = findViewById(R.id.input_restaurant_type);
-        input_free_day = findViewById(R.id.txt_free_day);
-        input_working_time_opening = findViewById(R.id.input_working_time_opening);
-        input_working_time_closing = findViewById(R.id.input_working_time_closing);
-        input_bio = findViewById(R.id.input_bio);
+        image_user_photo = findViewById(R.id.image_user_photo_sign_in);
+        input_name = findViewById(R.id.input_name_sign_in);
+        input_phone = findViewById(R.id.input_phone_sign_in);
+        input_mail = findViewById(R.id.input_mail_sign_in);
+        input_address = findViewById(R.id.input_address_sign_in);
+        input_restaurant_type = findViewById(R.id.input_restaurant_type_sign_in);
+        input_free_day = findViewById(R.id.input_free_day_sign_in);
+        input_working_time_opening = findViewById(R.id.input_working_time_opening_sign_in);
+        input_working_time_closing = findViewById(R.id.input_working_time_closing_sign_in);
+        input_bio = findViewById(R.id.input_bio_sign_in);
     }
 
     private void feedViews() {
