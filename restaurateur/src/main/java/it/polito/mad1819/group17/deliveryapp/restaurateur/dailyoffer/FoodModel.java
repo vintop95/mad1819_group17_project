@@ -1,8 +1,15 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer;
 
+import android.util.Log;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.gson.Gson;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
@@ -13,21 +20,44 @@ public class FoodModel implements Serializable {
     private static String getPrefKey(Long id){
         return "PREF_FOOD_" + id;
     }
+    DatabaseReference databaseReference;
+
 
     public void saveToPref(){
-        Gson gson = new Gson();
+
+
+ /*       Gson gson = new Gson();
         String json = gson.toJson(this);
         PrefHelper.getInstance().putString(getPrefKey(id), json);
+*/
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("dailyOffers").push();
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("id", databaseReference.getKey());//retrieve a key for our entry
+        map.put("position", this.getIdLong());//retrieve a key for our entry
+        map.put("name", this.getName());
+        map.put("description", this.getDescription());
+        map.put("availableQuantity", this.getAvailableQtyInt());
+        map.put("price", this.getPriceDouble());
+        map.put("photo", this.getPhoto());
+
+        databaseReference.setValue(map);
+
     }
 
     public static FoodModel loadFromPref(Long id){
-        Gson gson = new Gson();
+    /*    Gson gson = new Gson();
         String json = PrefHelper.getInstance().getString(getPrefKey(id));
         if(json != null){
             return gson.fromJson(json, FoodModel.class);
         }else{
             return null;
         }
+*/
+        //Query query = FirebaseDatabase.getInstance().getReference().child("dailyOffers");
+    return null;
+
     }
 
     //////////////////////////////////////////////////////////////

@@ -1,6 +1,8 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.ColorSpace;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +14,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +45,9 @@ public class OffersFragment extends Fragment {
     public static final String PREF_FOOD_LIST_SIZE = "PREF_FOOD_LIST_SIZE";
     public final static int ADD_FOOD_REQUEST = 0;
     public final static int MODIFY_FOOD_REQUEST = 1;
+
+
+    private FirebaseRecyclerAdapter adapter;
 
     FoodAdapter mAdapter;
     RecyclerView recyclerView;
@@ -136,7 +149,49 @@ public class OffersFragment extends Fragment {
 
     // Fetching items, passing in the View they will control.
     private List<FoodModel> reloadUpdatedFoodListFromPref(){
-        if(foodList != null){
+
+        Query query = FirebaseDatabase.getInstance().getReference().child("dailyOffer");
+
+        FirebaseRecyclerOptions<ColorSpace.Model> options =
+                new FirebaseRecyclerOptions.Builder<FoodModel>()
+                        .setQuery(query, new SnapshotParser<FoodModel>() {
+                            @NonNull
+                            @Override
+                            public FoodModel parseSnapshot(@NonNull DataSnapshot snapshot) {
+                                return new FoodModel(snapshot.child("position").getValue().toInteger(),
+                                        snapshot.child("title").getValue().toString(),
+                                        snapshot.child("desc").getValue().toString());
+                            }
+                        })
+                        .build();
+
+        adapter = new FirebaseRecyclerAdapter<FoodModel, FoodAdapter.FoodHolder>(options) {
+            @Override
+            public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.list_item, parent, false);
+
+                return new ViewHolder(view);
+            }
+
+
+            @Override
+            protected void onBindViewHolder(ViewHolder holder, final int position, Model model) {
+                holder.setTxtTitle(model.getmTitle());
+                holder.setTxtDesc(model.getmDesc());
+
+                holder.root.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(MainActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+        };
+        recyclerView.setAdapter(adapter);
+
+/*        if(foodList != null){
             foodList.clear();
         }else{
             foodList = new ArrayList<>();
@@ -152,7 +207,7 @@ public class OffersFragment extends Fragment {
             }
             addFoodInList(i, food);
         }
-        return foodList;
+        return foodList;*/
     }
 
     // https://stackoverflow.com/questions/28107647/how-to-save-listobject-to-sharedpreferences/28107791
@@ -211,4 +266,98 @@ public class OffersFragment extends Fragment {
             btnEditItem.setEnabled(true);
         }
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+class FoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    ImageView itemPhoto, itemImgModify, itemImgDelete;
+    TextView itemName, itemPlace, itemPrice, itemAvailableQty;
+    int pos;
+    FoodModel currentFoodItem;
+
+    public FoodHolder(@NonNull View itemView){
+        super(itemView);
+        // Parameters of rv_food_item-layout
+        itemPhoto = itemView.findViewById(R.id.img_food_photo);
+        itemName = itemView.findViewById(R.id.txt_food_name);
+        itemPlace = itemView.findViewById(R.id.txt_food_description);
+        itemPrice = itemView.findViewById(R.id.txt_food_price);
+        itemAvailableQty = itemView.findViewById(R.id.txt_food_available_qty);
+        itemImgModify = itemView.findViewById(R.id.img_food_modify);
+        itemImgDelete = itemView.findViewById(R.id.img_food_delete);
+        // Log.d(TAG, "Holder " + itemName.getText().toString() + " created");
+    }
+
+    public void setData(FoodModel currentFoodItem, int pos){
+        if(currentFoodItem.getPhoto() != null){
+            Bitmap bmp = PrefHelper.stringToBitMap(currentFoodItem.getPhoto());
+            itemPhoto.setImageBitmap(bmp);
+        }
+        itemName.setText(currentFoodItem.getName());
+        itemPlace.setText(currentFoodItem.getDescription());
+        itemPrice.setText(currentFoodItem.getPriceString());
+        itemAvailableQty.setText(currentFoodItem.getAvailableQtyString());
+        this.pos = pos;
+        this.currentFoodItem = currentFoodItem;
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.img_food_modify:
+//                    Bitmap img1bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.food_photo_1);
+//                    String img1 = PrefHelper.bitMapToStringLossJpg(img1bmp);
+//                    FoodModel testFood = new FoodModel(pos, "MODIFIED",
+//                            "carne 500g, provolazza, bacon, insalata", img1,
+//                            55.0, 3);
+                v.setEnabled(false);
+                //////
+                //UNCOMMENT LINE BELOW AND FIND A WAY TO REFERS TO IT
+                //////
+               // mOffersFragment.openFoodDetailsActivityModify(currentFoodItem, v);
+
+                break;
+            case R.id.img_food_delete:
+                deleteItem(pos);
+                break;
+        }
+    }
+
+
+    public void setListeners(){
+        itemImgModify.setOnClickListener(FoodHolder.this);
+        itemImgDelete.setOnClickListener(FoodHolder.this);
+    }
+
+    // You can use notifyDataSetChanged() instead of notifyItemRemoved
+    // and notifyItemRangeChanged but you lose the animation
+
+    //////
+    //UNCOMMENT LINE BELOW AND FIND A WAY TO REFERS TO IT
+    //////
+   /* public void deleteItem(int pos){
+        Log.d(TAG, "Item in pos " + pos + " removed");
+        mFoodList.remove(pos);
+
+        PrefHelper.getInstance().putLong(
+                OffersFragment.PREF_FOOD_LIST_SIZE, getItemCount());
+
+        for(int i = pos; i<getItemCount();i++){
+            mFoodList.get(i).setId(i);
+        }
+
+        notifyItemRemoved(pos);
+        notifyItemRangeChanged(pos, getItemCount());
+    }*/
 }
