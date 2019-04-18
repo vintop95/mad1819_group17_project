@@ -16,9 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.Query;
@@ -26,6 +28,7 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.polito.mad1819.group17.deliveryapp.restaurateur.MainActivity;
 import it.polito.mad1819.group17.restaurateur.R;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
@@ -152,40 +155,45 @@ public class OffersFragment extends Fragment {
 
         Query query = FirebaseDatabase.getInstance().getReference().child("dailyOffer");
 
-        FirebaseRecyclerOptions<ColorSpace.Model> options =
+        FirebaseRecyclerOptions<FoodModel> options =
                 new FirebaseRecyclerOptions.Builder<FoodModel>()
                         .setQuery(query, new SnapshotParser<FoodModel>() {
                             @NonNull
                             @Override
                             public FoodModel parseSnapshot(@NonNull DataSnapshot snapshot) {
-                                return new FoodModel(snapshot.child("position").getValue().toInteger(),
-                                        snapshot.child("title").getValue().toString(),
-                                        snapshot.child("desc").getValue().toString());
+                                return new FoodModel((int)snapshot.child("position").getValue(),
+                                        snapshot.child("name").getValue().toString(),
+                                        snapshot.child("description").getValue().toString(),
+                                        snapshot.child("photo").getValue().toString(),
+                                        (double)snapshot.child("price").getValue(),
+                                        (int)snapshot.child("availableQuantity").getValue()
+                                );
                             }
                         })
                         .build();
 
         adapter = new FirebaseRecyclerAdapter<FoodModel, FoodAdapter.FoodHolder>(options) {
             @Override
-            public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            public FoodAdapter.FoodHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.list_item, parent, false);
+                        .inflate(R.layout.rv_food_item , parent, false);
 
-                return new ViewHolder(view);
+                return new FoodAdapter.FoodHolder(view);
             }
 
 
             @Override
-            protected void onBindViewHolder(ViewHolder holder, final int position, Model model) {
-                holder.setTxtTitle(model.getmTitle());
-                holder.setTxtDesc(model.getmDesc());
+            protected void onBindViewHolder(FoodAdapter.FoodHolder holder, final int position, FoodModel model) {
 
-                holder.root.setOnClickListener(new View.OnClickListener() {
+                holder.setData(model,position);
+                holder.setListeners();
+
+                /*holder.root.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(MainActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OffersFragment.this.getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
             }
 
         };
@@ -266,98 +274,4 @@ public class OffersFragment extends Fragment {
             btnEditItem.setEnabled(true);
         }
     }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-class FoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    ImageView itemPhoto, itemImgModify, itemImgDelete;
-    TextView itemName, itemPlace, itemPrice, itemAvailableQty;
-    int pos;
-    FoodModel currentFoodItem;
-
-    public FoodHolder(@NonNull View itemView){
-        super(itemView);
-        // Parameters of rv_food_item-layout
-        itemPhoto = itemView.findViewById(R.id.img_food_photo);
-        itemName = itemView.findViewById(R.id.txt_food_name);
-        itemPlace = itemView.findViewById(R.id.txt_food_description);
-        itemPrice = itemView.findViewById(R.id.txt_food_price);
-        itemAvailableQty = itemView.findViewById(R.id.txt_food_available_qty);
-        itemImgModify = itemView.findViewById(R.id.img_food_modify);
-        itemImgDelete = itemView.findViewById(R.id.img_food_delete);
-        // Log.d(TAG, "Holder " + itemName.getText().toString() + " created");
-    }
-
-    public void setData(FoodModel currentFoodItem, int pos){
-        if(currentFoodItem.getPhoto() != null){
-            Bitmap bmp = PrefHelper.stringToBitMap(currentFoodItem.getPhoto());
-            itemPhoto.setImageBitmap(bmp);
-        }
-        itemName.setText(currentFoodItem.getName());
-        itemPlace.setText(currentFoodItem.getDescription());
-        itemPrice.setText(currentFoodItem.getPriceString());
-        itemAvailableQty.setText(currentFoodItem.getAvailableQtyString());
-        this.pos = pos;
-        this.currentFoodItem = currentFoodItem;
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.img_food_modify:
-//                    Bitmap img1bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.food_photo_1);
-//                    String img1 = PrefHelper.bitMapToStringLossJpg(img1bmp);
-//                    FoodModel testFood = new FoodModel(pos, "MODIFIED",
-//                            "carne 500g, provolazza, bacon, insalata", img1,
-//                            55.0, 3);
-                v.setEnabled(false);
-                //////
-                //UNCOMMENT LINE BELOW AND FIND A WAY TO REFERS TO IT
-                //////
-               // mOffersFragment.openFoodDetailsActivityModify(currentFoodItem, v);
-
-                break;
-            case R.id.img_food_delete:
-                deleteItem(pos);
-                break;
-        }
-    }
-
-
-    public void setListeners(){
-        itemImgModify.setOnClickListener(FoodHolder.this);
-        itemImgDelete.setOnClickListener(FoodHolder.this);
-    }
-
-    // You can use notifyDataSetChanged() instead of notifyItemRemoved
-    // and notifyItemRangeChanged but you lose the animation
-
-    //////
-    //UNCOMMENT LINE BELOW AND FIND A WAY TO REFERS TO IT
-    //////
-   /* public void deleteItem(int pos){
-        Log.d(TAG, "Item in pos " + pos + " removed");
-        mFoodList.remove(pos);
-
-        PrefHelper.getInstance().putLong(
-                OffersFragment.PREF_FOOD_LIST_SIZE, getItemCount());
-
-        for(int i = pos; i<getItemCount();i++){
-            mFoodList.get(i).setId(i);
-        }
-
-        notifyItemRemoved(pos);
-        notifyItemRangeChanged(pos, getItemCount());
-    }*/
 }
