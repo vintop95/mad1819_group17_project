@@ -5,6 +5,7 @@
     <string name="title_profile">Profile</string>
     <string name="title_dailyoffer">Daily Offers</string>
     <string name="title_orders">Orders</string>
+    <string name="sign_out_menu">Sign Out</string>
 
 
     <!-- ////////////// -->
@@ -21,6 +22,7 @@
 
 
     <!-- Order Details Strings -->
+    <string name="title_activity_order_details">Order Details</string>
     <!-- Icons -->
     <string name="icon_restaurateur" translatable="false">Icon Restaurateur</string>
     <string name="icon_content" translatable="false">Icon Content</string>

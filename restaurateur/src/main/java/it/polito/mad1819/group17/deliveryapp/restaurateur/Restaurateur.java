@@ -1,6 +1,10 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Restaurateur implements Serializable {
     private String photo;
@@ -29,6 +33,23 @@ public class Restaurateur implements Serializable {
         this.working_time_opening = working_time_opening;
         this.working_time_closing = working_time_closing;
         this.bio = bio;
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("photo", photo);
+        result.put("name", name);
+        result.put("phone", phone);
+        result.put("mail", mail);
+        result.put("address", address);
+        result.put("restaurant_type", restaurant_type);
+        result.put("free_day", free_day);
+        result.put("working_time_opening", working_time_opening);
+        result.put("working_time_closing", working_time_closing);
+        result.put("bio", bio);
+
+        return result;
     }
 
     public String getPhoto() {
