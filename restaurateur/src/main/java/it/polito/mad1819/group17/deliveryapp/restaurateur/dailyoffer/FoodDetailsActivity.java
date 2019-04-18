@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -91,14 +92,14 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     private void feedViews(FoodModel selFood) {
         if(mFields.isEmpty()) {
-            mFields.add(0, new ListItem(LABEL_FOOD_NUMBER, "" + selFood.getIdLong()));
-            mFields.add(1, new ListItem(LABEL_FOOD_NAME, selFood.getName()));
-            mFields.add(2, new ListItem(LABEL_FOOD_DESCRIPTION, selFood.getDescription()));
-            mFields.add(3, new ListItem(LABEL_FOOD_PRICE, Double.toString(selFood.getPriceDouble())));
-            mFields.add(4, new ListItem(LABEL_FOOD_AVAILABLE_QTY, selFood.getAvailableQtyString()));
+            mFields.add(0, new ListItem(LABEL_FOOD_NUMBER, "" + selFood.pos));
+            mFields.add(1, new ListItem(LABEL_FOOD_NAME, selFood.name));
+            mFields.add(2, new ListItem(LABEL_FOOD_DESCRIPTION, selFood.description));
+            mFields.add(3, new ListItem(LABEL_FOOD_PRICE, Double.toString(selFood.price)));
+            mFields.add(4, new ListItem(LABEL_FOOD_AVAILABLE_QTY, Integer.toString(selFood.availableQty)));
         }
 
-        String photoString = selFood.getPhoto();
+        String photoString = selFood.photo;
         Bitmap photoBmp = PrefHelper.stringToBitMap(photoString);
         img_food_photo.setImageBitmap(photoBmp);
     }
@@ -127,7 +128,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
             mFoodLoaded = new FoodModel();
         }
 
-        mFoodLoaded.setId(pos);
+        mFoodLoaded.pos = pos;
         feedViews(mFoodLoaded);
 
         mFormAdapter = new FormAdapter(this, mFields, mFoodState);
@@ -136,28 +137,28 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     private FoodModel getUpdatedFood() {
         FoodModel food = new FoodModel();
-        food.setId(pos);
+        food.pos = pos;
 
         // GET PHOTO FROM IMAGEVIEW
         Bitmap bmp = ((BitmapDrawable)img_food_photo.getDrawable()).getBitmap();
         if(bmp != null){
             String imgStr = PrefHelper.bitMapToStringLossless(bmp);
-            food.setPhoto(imgStr);
+            food.photo = imgStr;
         }
 
         for(ListItem field: mFields){
             switch(field.fieldNameRes){
                 case LABEL_FOOD_NAME:
-                    food.setName(field.fieldValue);
+                    food.name = field.fieldValue;
                     break;
                 case LABEL_FOOD_DESCRIPTION:
-                    food.setDescription(field.fieldValue);
+                    food.description = field.fieldValue;
                     break;
                 case LABEL_FOOD_PRICE:
-                    food.setPrice(Double.valueOf(field.fieldValue));
+                    food.price = Double.valueOf(field.fieldValue);
                     break;
                 case LABEL_FOOD_AVAILABLE_QTY:
-                    food.setAvailableQty(Integer.valueOf(field.fieldValue));
+                    food.availableQty = Integer.valueOf(field.fieldValue);
                     break;
             }
         }

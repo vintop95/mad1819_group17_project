@@ -1,8 +1,6 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.ColorSpace;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,21 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.SnapshotParser;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.Query;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
-import it.polito.mad1819.group17.deliveryapp.restaurateur.MainActivity;
 import it.polito.mad1819.group17.restaurateur.R;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
@@ -49,14 +39,21 @@ public class OffersFragment extends Fragment {
     public final static int ADD_FOOD_REQUEST = 0;
     public final static int MODIFY_FOOD_REQUEST = 1;
 
+    private FoodAdapter mAdapter;
+    private RecyclerView recyclerView;
+    private FloatingActionButton btnAddOffer;
 
-    private FirebaseRecyclerAdapter adapter;
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAdapter.startListening();
+    }
 
-    FoodAdapter mAdapter;
-    RecyclerView recyclerView;
-    FloatingActionButton btnAddOffer;
-    // TODO: make private?
-    public List<FoodModel> foodList = new ArrayList<>();
+    @Override
+    public void onStop() {
+        super.onStop();
+        mAdapter.stopListening();
+    }
 
     // @Nullable: It makes it clear that the method accepts null values,
     // and that if you override the method, you should also accept null values.
@@ -77,18 +74,14 @@ public class OffersFragment extends Fragment {
 
         // Bind your views
         recyclerView = view.findViewById(R.id.rv);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
 
         // Create your layout manager
         // from Linear/Grid/StaggeredLayoutManager
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Fetch your items
-        reloadUpdatedFoodListFromPref();
-
-        // Set your mAdapter
-        mAdapter = new FoodAdapter(getActivity(), this, foodList);
-        recyclerView.setAdapter(mAdapter);
+        // Set the firebase adapter (automatically updates)
+        setFirebaseRecycler();
 
         // Set add button listener
         btnAddOffer = view.findViewById(R.id.btn_add_offer);
@@ -125,97 +118,28 @@ public class OffersFragment extends Fragment {
 
     public void addFoodInList(int newPos, FoodModel newFood){
         Log.d(TAG, "Item in pos " + newPos + " added");
-        try {
-            foodList.add(newPos, newFood);
-        }catch(IndexOutOfBoundsException e){
-            foodList.add(newFood);
-        }
 
-        newFood.saveToPref();
+        FoodModelUtil.pushToFirebase(newFood);
         PrefHelper.getInstance().putLong(PREF_FOOD_LIST_SIZE, newPos+1);
-
-        if(mAdapter != null){
-            mAdapter.notifyItemInserted(newPos);
-            mAdapter.notifyItemRangeChanged(0, newPos+1);
-        }
     }
 
     public void modifyItem(int pos, FoodModel newFood){
         Log.d(TAG, "Item in pos " + pos + " modified");
-        foodList.set(pos, newFood);
-        newFood.saveToPref();
 
-        if(mAdapter != null){
-            mAdapter.notifyItemChanged(pos);
-        }
+        // TODO: IMPLEMENT MODIFY IN FIREBASE
+        // newFood.pushToFirebase();
     }
 
-    // Fetching items, passing in the View they will control.
-    private List<FoodModel> reloadUpdatedFoodListFromPref(){
-
+    private void setFirebaseRecycler(){
         Query query = FirebaseDatabase.getInstance().getReference().child("dailyOffer");
 
         FirebaseRecyclerOptions<FoodModel> options =
                 new FirebaseRecyclerOptions.Builder<FoodModel>()
-                        .setQuery(query, new SnapshotParser<FoodModel>() {
-                            @NonNull
-                            @Override
-                            public FoodModel parseSnapshot(@NonNull DataSnapshot snapshot) {
-                                return new FoodModel((int)snapshot.child("position").getValue(),
-                                        snapshot.child("name").getValue().toString(),
-                                        snapshot.child("description").getValue().toString(),
-                                        snapshot.child("photo").getValue().toString(),
-                                        (double)snapshot.child("price").getValue(),
-                                        (int)snapshot.child("availableQuantity").getValue()
-                                );
-                            }
-                        })
+                        .setQuery(query, FoodModel.class)
                         .build();
 
-        adapter = new FirebaseRecyclerAdapter<FoodModel, FoodAdapter.FoodHolder>(options) {
-            @Override
-            public FoodAdapter.FoodHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.rv_food_item , parent, false);
-
-                return new FoodAdapter.FoodHolder(view);
-            }
-
-
-            @Override
-            protected void onBindViewHolder(FoodAdapter.FoodHolder holder, final int position, FoodModel model) {
-
-                holder.setData(model,position);
-                holder.setListeners();
-
-                /*holder.root.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(OffersFragment.this.getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
-                    }
-                });*/
-            }
-
-        };
-        recyclerView.setAdapter(adapter);
-
-/*        if(foodList != null){
-            foodList.clear();
-        }else{
-            foodList = new ArrayList<>();
-        }
-
-        int foodListSize = loadUpdatedFoodListSizeFromPref();
-        for(int i = 0; i<foodListSize; i++){
-            FoodModel food = FoodModel.loadFromPref(Long.valueOf(i));
-            // if we go involuntarily outside the bounds
-            if(food == null){
-                PrefHelper.getInstance().putLong(PREF_FOOD_LIST_SIZE, i);
-                break;
-            }
-            addFoodInList(i, food);
-        }
-        return foodList;*/
+        mAdapter = new FoodAdapter(this, options);
+        recyclerView.setAdapter(mAdapter);
     }
 
     // https://stackoverflow.com/questions/28107647/how-to-save-listobject-to-sharedpreferences/28107791
@@ -248,7 +172,7 @@ public class OffersFragment extends Fragment {
         Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
 
         Bundle bundle = new Bundle();
-        bundle.putInt("pos", (int) foodToModify.getIdLong());
+        bundle.putInt("pos", foodToModify.pos);
         bundle.putSerializable("food", foodToModify);
         intent.putExtra("args", bundle);
 
@@ -260,15 +184,14 @@ public class OffersFragment extends Fragment {
         if (requestCode == ADD_FOOD_REQUEST) {
             if (data != null){
                 FoodModel addedFood = (FoodModel) data.getSerializableExtra("food");
-                int newPos = (int) addedFood.getIdLong();
-                if(addedFood != null) addFoodInList(newPos, addedFood);
+                if(addedFood != null) addFoodInList(addedFood.pos, addedFood);
             }
             btnAddOffer.setEnabled(true);
         }else if (requestCode == MODIFY_FOOD_REQUEST) {
             if (data != null){
                 FoodModel modifiedFood = (FoodModel) data.getSerializableExtra("food");
                 if(modifiedFood != null){
-                    modifyItem((int) modifiedFood.getIdLong(), modifiedFood);
+                    modifyItem(modifiedFood.pos, modifiedFood);
                 }
             }
             btnEditItem.setEnabled(true);

@@ -1,6 +1,5 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,29 +10,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 import it.polito.mad1819.group17.restaurateur.R;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
-public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
+// https://github.com/firebase/FirebaseUI-Android/tree/master/database#using-firebaseui-to-populate-a-recyclerview
+public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.FoodHolder> {
     private static final String TAG = FoodAdapter.class.getName();
-    // NAME CONVENTION: private fields are named "m<fieldName>"
-    private Context mContext;
+
     private OffersFragment mOffersFragment;
-    private List<FoodModel> mFoodList;
-    private LayoutInflater mInflater;
 
-    public void updateList(List<FoodModel> updatedData) {
-        mFoodList = updatedData;
-        notifyDataSetChanged();
-    }
-
-    FoodAdapter(Context context, OffersFragment of, List<FoodModel> list){
+    public FoodAdapter(OffersFragment of, FirebaseRecyclerOptions options){
+        super(options);
         Log.d(TAG, "created");
-        mContext = context;
-        mFoodList = list;
-        mInflater = LayoutInflater.from(context);
         mOffersFragment = of;
     }
 
@@ -42,28 +33,31 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
     @NonNull
     @Override
     public FoodHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View foodItemView = mInflater.inflate(
+        View foodItemView = LayoutInflater.from(viewGroup.getContext()).inflate(
                 R.layout.rv_food_item, viewGroup, false);
         return new FoodHolder(foodItemView);
     }
 
     // PHASE 2 OF PROTOCOL: fetch data from model and set data on FoodHolder (ViewHolder)
     @Override
-    public void onBindViewHolder(@NonNull FoodHolder holder, int pos) {
+    protected void onBindViewHolder(@NonNull FoodHolder holder, int pos, @NonNull FoodModel model) {
         // Log.d(TAG, "onBindViewHolder " + pos);
 
-        FoodModel currentFoodItem = mFoodList.get(pos);
-        holder.setData(currentFoodItem, pos);
+        /* // old way
+            FoodModel currentFoodItem = mFoodList.get(pos);
+        */
+        holder.setData(model, pos);
         holder.setListeners();
     }
 
-    @Override
-    public int getItemCount() {
-        // Log.d(TAG,"itemCount: " + mFoodList.size());
-        return mFoodList.size();
-    }
+    // NOT COMPATIBLE WITH FIREBASE RECYCLER ADAPTER
+//    @Override
+//    public int getItemCount() {
+//        // Log.d(TAG,"itemCount: " + mFoodList.size());
+//        return mFoodList.size();
+//    }
 
-    class FoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class FoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView itemPhoto, itemImgModify, itemImgDelete;
         TextView itemName, itemPlace, itemPrice, itemAvailableQty;
         int pos;
@@ -83,14 +77,14 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
         }
 
         public void setData(FoodModel currentFoodItem, int pos){
-            if(currentFoodItem.getPhoto() != null){
-                Bitmap bmp = PrefHelper.stringToBitMap(currentFoodItem.getPhoto());
+            if(currentFoodItem.photo != null){
+                Bitmap bmp = PrefHelper.stringToBitMap(currentFoodItem.photo);
                 itemPhoto.setImageBitmap(bmp);
             }
-            itemName.setText(currentFoodItem.getName());
-            itemPlace.setText(currentFoodItem.getDescription());
-            itemPrice.setText(currentFoodItem.getPriceString());
-            itemAvailableQty.setText(currentFoodItem.getAvailableQtyString());
+            itemName.setText(currentFoodItem.name);
+            itemPlace.setText(currentFoodItem.description);
+            itemPrice.setText(FoodModelUtil.getPriceFormatted(currentFoodItem.price));
+            itemAvailableQty.setText(currentFoodItem.availableQty);
             this.pos = pos;
             this.currentFoodItem = currentFoodItem;
         }
@@ -125,17 +119,21 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
         // and notifyItemRangeChanged but you lose the animation
         public void deleteItem(int pos){
             Log.d(TAG, "Item in pos " + pos + " removed");
-            mFoodList.remove(pos);
 
-            PrefHelper.getInstance().putLong(
-                    OffersFragment.PREF_FOOD_LIST_SIZE, getItemCount());
+            //TODO: modify for firebase
+            /*
+                mFoodList.remove(pos);
 
-            for(int i = pos; i<getItemCount();i++){
-                mFoodList.get(i).setId(i);
-            }
+                PrefHelper.getInstance().putLong(
+                        OffersFragment.PREF_FOOD_LIST_SIZE, getItemCount());
 
-            notifyItemRemoved(pos);
-            notifyItemRangeChanged(pos, getItemCount());
+                for(int i = pos; i<getItemCount();i++){
+                    mFoodList.get(i).setPosLong(i);
+                }
+
+                notifyItemRemoved(pos);
+                notifyItemRangeChanged(pos, getItemCount());
+            */
         }
     }
 }
