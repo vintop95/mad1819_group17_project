@@ -41,6 +41,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        if(MainActivity.DEVELOP_MODE){
+            Restaurateur r = new Restaurateur();
+            completeLogin(r);
+        }
+
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -67,13 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         Restaurateur restaurateur = (Restaurateur) dataSnapshot.getValue(Restaurateur.class);
 
-                                        // go to MainActivity of the just logged restauratuer
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        intent.putExtra("restaurateur", restaurateur);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
-
-                                        finish();
+                                        completeLogin(restaurateur);
                                     }
 
                                     @Override
@@ -99,5 +98,16 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         });
 
+    }
+
+    private void completeLogin(Restaurateur restaurateur){
+
+        // go to MainActivity of the just logged restauratuer
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("restaurateur", restaurateur);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
+        finish();
     }
 }

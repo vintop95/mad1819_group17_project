@@ -15,13 +15,16 @@ class FoodModelUtil {
     private static String getPrefKey(Long id){
         return "PREF_FOOD_" + id;
     }
+    public final static String FIREBASE_DAILYOFFERS = "dailyOffers";
 
     public static void pushToFirebase(FoodModel food){
  /*       Gson gson = new Gson();
         String json = gson.toJson(this);
         PrefHelper.getInstance().putString(getPrefKey(pos), json);
 */
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("dailyOffers").push();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                .getReference().child(FIREBASE_DAILYOFFERS).push();
+
         databaseReference.setValue(food);
     }
 

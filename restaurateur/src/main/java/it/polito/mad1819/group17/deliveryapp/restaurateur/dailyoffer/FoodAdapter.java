@@ -84,7 +84,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
             itemName.setText(currentFoodItem.name);
             itemPlace.setText(currentFoodItem.description);
             itemPrice.setText(FoodModelUtil.getPriceFormatted(currentFoodItem.price));
-            itemAvailableQty.setText(currentFoodItem.availableQty);
+            itemAvailableQty.setText(Double.toString(currentFoodItem.availableQty));
             this.pos = pos;
             this.currentFoodItem = currentFoodItem;
         }

@@ -24,9 +24,10 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 import it.polito.mad1819.group17.restaurateur.R;
 
 public class MainActivity extends AppCompatActivity {
+    public static boolean DEVELOP_MODE = false;
+
     private Restaurateur currentRestaurateur;
 
-    private TextView mTextMessage;
 
     Fragment offersFragment = new OffersFragment();
     Fragment ordersFragment = new OrdersFragment();

@@ -35,7 +35,6 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
 public class OffersFragment extends Fragment {
     private static final String TAG = OffersFragment.class.getName();
-    public static final String PREF_FOOD_LIST_SIZE = "PREF_FOOD_LIST_SIZE";
     public final static int ADD_FOOD_REQUEST = 0;
     public final static int MODIFY_FOOD_REQUEST = 1;
 
@@ -120,7 +119,6 @@ public class OffersFragment extends Fragment {
         Log.d(TAG, "Item in pos " + newPos + " added");
 
         FoodModelUtil.pushToFirebase(newFood);
-        PrefHelper.getInstance().putLong(PREF_FOOD_LIST_SIZE, newPos+1);
     }
 
     public void modifyItem(int pos, FoodModel newFood){
@@ -131,7 +129,8 @@ public class OffersFragment extends Fragment {
     }
 
     private void setFirebaseRecycler(){
-        Query query = FirebaseDatabase.getInstance().getReference().child("dailyOffer");
+        Query query = FirebaseDatabase.getInstance().getReference()
+                .child(FoodModelUtil.FIREBASE_DAILYOFFERS);
 
         FirebaseRecyclerOptions<FoodModel> options =
                 new FirebaseRecyclerOptions.Builder<FoodModel>()
@@ -140,12 +139,7 @@ public class OffersFragment extends Fragment {
 
         mAdapter = new FoodAdapter(this, options);
         recyclerView.setAdapter(mAdapter);
-    }
-
-    // https://stackoverflow.com/questions/28107647/how-to-save-listobject-to-sharedpreferences/28107791
-    private int loadUpdatedFoodListSizeFromPref(){
-        // if not found in prefHeper returns 0
-        return (int) PrefHelper.getInstance().getLong(PREF_FOOD_LIST_SIZE);
+        mAdapter.startListening();
     }
 
     ////////////////////// OPEN ACTIVITY //////////////////////////////////////////
