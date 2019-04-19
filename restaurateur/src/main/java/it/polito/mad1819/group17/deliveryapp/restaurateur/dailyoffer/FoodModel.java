@@ -53,7 +53,7 @@ class FoodModelUtil {
  */
 @IgnoreExtraProperties
 public class FoodModel implements Serializable{
-    public String id;
+    public String id = "";
     public int pos = -1;
     public String name = "", description = "";
     public String photo = "";
