@@ -83,7 +83,6 @@ public class RestaurantsFragment extends Fragment {
                 b.putString("category", categories[i]); //Your category selected
                 intent.putExtras(b); //Put your category in the next Intent
                 startActivity(intent);
-                getActivity().finish();
 
             }
         });
