@@ -1,8 +1,10 @@
 package it.polito.mad1819.group17.deliveryapp.customer.restaurants;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ColorSpace;
+import android.icu.util.ULocale;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
@@ -29,9 +32,12 @@ import it.polito.mad1819.group17.deliveryapp.customer.R;
 
 public class RestaurantsActivity extends AppCompatActivity {
 
+    private String category_selected;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private FirebaseRecyclerAdapter adapter;
+
+    private Intent intent;
 
 
     private void showBackArrowOnToolbar() {
@@ -61,6 +67,9 @@ public class RestaurantsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        intent = getIntent();
+        category_selected = intent.getStringExtra("category");
+        Log.d("aaa",category_selected);
         setContentView(R.layout.activity_restaurant);
 
         showBackArrowOnToolbar();
@@ -124,9 +133,9 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
 
     private void fetch() {
-        Query query = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("restaurateurs");
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference();
+        Query query = ref.child("restaurateurs").orderByChild("restaurant_type").equalTo(category_selected);
 
         FirebaseRecyclerOptions<RestaurantModel> options =
                 new FirebaseRecyclerOptions.Builder<RestaurantModel>()
