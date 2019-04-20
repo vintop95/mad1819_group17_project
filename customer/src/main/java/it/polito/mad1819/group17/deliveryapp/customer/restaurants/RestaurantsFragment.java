@@ -1,6 +1,7 @@
 package it.polito.mad1819.group17.deliveryapp.customer.restaurants;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -76,6 +77,14 @@ public class RestaurantsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(getContext(),""+categories[i], Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(getContext(), RestaurantsActivity.class);
+                Bundle b = new Bundle();
+                b.putString("category", categories[i]); //Your category selected
+                intent.putExtras(b); //Put your category in the next Intent
+                startActivity(intent);
+                getActivity().finish();
+
             }
         });
         Log.d("aia", "onCreateView: "+categories.length+"///"+imgid.length);

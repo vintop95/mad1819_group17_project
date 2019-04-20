@@ -59,6 +59,7 @@ public class FoodModel implements Serializable{
     public String photo = "";
     public double price = 0.0;
     public int availableQty = 0;
+
     /////////////////////////////////////////////////////////////////
     public FoodModel() {}
 
