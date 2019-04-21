@@ -139,3 +139,4 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodHolder> {
         }
     }
 }
+
