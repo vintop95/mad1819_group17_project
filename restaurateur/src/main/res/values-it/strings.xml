@@ -6,6 +6,8 @@
     <string name="title_profile">Profilo</string>
     <string name="title_dailyoffer">Offerte Giornaliere</string>
     <string name="title_orders">Ordini</string>
+    <string name="sign_out_menu">Disconnetti</string>
+
 
 
     <!-- ////////////// -->
@@ -21,6 +23,7 @@
 
 
     <!-- Order Details Strings -->
+    <string name="title_activity_order_details">Dettagli Ordine</string>
     <!-- Labels -->
     <string name="name">Nome Cliente</string>
     <string name="phone">Telefono Cliente</string>

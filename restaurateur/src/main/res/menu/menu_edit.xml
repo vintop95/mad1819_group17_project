@@ -6,6 +6,5 @@
         android:id="@+id/btn_edit"
         android:icon="@drawable/ic_baseline_edit_24px"
         android:title="@string/edit_profile"
-        android:visible="false"
         app:showAsAction="ifRoom"/>
 </menu>

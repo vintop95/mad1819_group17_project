@@ -2,23 +2,38 @@ package it.polito.mad1819.group17.deliveryapp.restaurateur.profile;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import it.polito.mad1819.group17.deliveryapp.restaurateur.MainActivity;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.Restaurateur;
-import it.polito.mad1819.group17.restaurateur.R;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
+import it.polito.mad1819.group17.restaurateur.R;
 
 
 public class ProfileFragment extends Fragment {
 
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mRestaurateurDatabaseReference;
+    private ValueEventListener mProfileEventListener;
+    private FirebaseAuth mFirebaseAuth;
+
+    // TODO: implement Firebase Storage to remove shared preference for photo
     public static final String PHOTO = "restaurant_photo";
-    public static final String NAME = "restaurant_name";
+    /*public static final String NAME = "restaurant_name";
     public static final String PHONE = "restaurant_phone";
     public static final String MAIL = "restaurant_mail";
     public static final String ADDRESS = "restaurant_address";
@@ -26,7 +41,7 @@ public class ProfileFragment extends Fragment {
     public static final String FREE_DAY = "restaurant_free_day";
     public static final String TIME_OPENING = "restaurant_time_opening";
     public static final String TIME_CLOSING = "restaurant_time_closing";
-    public static final String BIO = "restaurant_bio";
+    public static final String BIO = "restaurant_bio";*/
 
     private ImageView image_user_photo;
     private TextView txt_name;
@@ -50,80 +65,87 @@ public class ProfileFragment extends Fragment {
         txt_bio = view.findViewById(R.id.txt_bio);
     }
 
-    /*private void feedViews() {
-        String stringUserPhoto = PrefHelper.getInstance().getString(PHOTO, null);
-        if (stringUserPhoto != null) {
-            image_user_photo.setImageBitmap(PrefHelper.stringToBitMap(stringUserPhoto));
-            image_user_photo.setPadding(8, 8, 8, 8);
+    private void feedViews(Restaurateur restaurateur) {
+        if (restaurateur != null) {
+            if (restaurateur.getPhoto() != "") {
+                image_user_photo.setImageBitmap(PrefHelper.stringToBitMap(restaurateur.getPhoto()));
+                image_user_photo.setPadding(8, 8, 8, 8);
+            }
+            txt_name.setText(restaurateur.getName());
+            txt_phone.setText(restaurateur.getPhone());
+            txt_mail.setText(restaurateur.getMail());
+            txt_address.setText(restaurateur.getAddress());
+            txt_restaurant_type.setText(restaurateur.getRestaurant_type());
+            txt_free_day.setText(restaurateur.getFree_day());
+            txt_working_time.setText(getString(R.string.from) + " " + restaurateur.getWorking_time_opening() + " " + getString(R.string.to) + " " + restaurateur.getWorking_time_closing());
+            if (restaurateur.getBio() != "")
+                txt_bio.setText(restaurateur.getBio());
         }
-
-        String name = PrefHelper.getInstance().getString(ProfileFragment.NAME, null);
-        if (name != null)
-            txt_name.setText(name);
-
-        String phone = PrefHelper.getInstance().getString(ProfileFragment.PHONE, null);
-        if (phone != null)
-            txt_phone.setText(phone);
-
-        String mail = PrefHelper.getInstance().getString(ProfileFragment.MAIL, null);
-        if (mail != null)
-            txt_mail.setText(mail);
-
-        String address = PrefHelper.getInstance().getString(ProfileFragment.ADDRESS, null);
-        if (address != null)
-            txt_address.setText(address);
-
-        String restaurant_type = PrefHelper.getInstance().getString(ProfileFragment.RESTAURANT_TYPE, null);
-        if (restaurant_type != null)
-            txt_restaurant_type.setText(restaurant_type);
-
-        String free_day = PrefHelper.getInstance().getString(ProfileFragment.FREE_DAY, null);
-        if (free_day != null)
-            txt_free_day.setText(free_day);
-
-        String time_opening = PrefHelper.getInstance().getString(ProfileFragment.TIME_OPENING, null);
-        String time_closing = PrefHelper.getInstance().getString(ProfileFragment.TIME_CLOSING, null);
-        if (time_opening != null && time_closing != null)
-            txt_working_time.setText(getString(R.string.from) + " " + time_opening + " " + getString(R.string.to) + " " + time_closing);
-
-        String bio = PrefHelper.getInstance().getString(ProfileFragment.BIO, null);
-        if (bio != null)
-            txt_bio.setText(bio);
-    }*/
-
-    private void feedViews() {
-
-        Restaurateur restaurateur = (Restaurateur)getActivity().getIntent().getSerializableExtra("restaurateur");
-
-        if (restaurateur.getPhoto() != "") {
-            image_user_photo.setImageBitmap(PrefHelper.stringToBitMap(restaurateur.getPhoto()));
-            image_user_photo.setPadding(8, 8, 8, 8);
-        }
-        txt_name.setText(restaurateur.getName());
-        txt_phone.setText(restaurateur.getPhone());
-        txt_mail.setText(restaurateur.getMail());
-        txt_address.setText(restaurateur.getAddress());
-        txt_restaurant_type.setText(restaurateur.getRestaurant_type());
-        txt_free_day.setText(restaurateur.getFree_day());
-        txt_working_time.setText(getString(R.string.from) + " " + restaurateur.getWorking_time_opening() + " " + getString(R.string.to) + " " + restaurateur.getWorking_time_closing());
-        if (restaurateur.getBio() != "")
-            txt_bio.setText(restaurateur.getBio());
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
+        setHasOptionsMenu(true);
         locateViews(view);
-
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        feedViews();
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        detachValueEventListener(mFirebaseAuth.getUid());
+        Log.v("FIREBASE_LOG", "EventListener removed onPause - ProfileFragment");
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        attachValueEventListener(mFirebaseAuth.getUid());
+        Log.v("FIREBASE_LOG", "EventListener added onResume - ProfileFragment");
+
+    }
+
+    private void attachValueEventListener(String userId) {
+        if (mProfileEventListener == null) {
+            mProfileEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Restaurateur restaurateur = dataSnapshot.getValue(Restaurateur.class);
+                    feedViews(restaurateur);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Unable to retrieve restaurateur's information", Toast.LENGTH_LONG).show();
+                }
+            };
+            mRestaurateurDatabaseReference.child(userId).addListenerForSingleValueEvent(mProfileEventListener);
+        }
+    }
+
+    private void detachValueEventListener(String userId) {
+        if (mProfileEventListener != null) {
+            mRestaurateurDatabaseReference.child(userId).removeEventListener(mProfileEventListener);
+            mProfileEventListener = null;
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.menu_edit, menu);
+        super.onCreateOptionsMenu(menu, menuInflater);
     }
 }

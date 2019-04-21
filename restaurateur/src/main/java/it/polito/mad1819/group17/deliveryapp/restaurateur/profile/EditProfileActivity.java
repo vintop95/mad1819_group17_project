@@ -5,12 +5,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,15 +22,30 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-import it.polito.mad1819.group17.restaurateur.R;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.Restaurateur;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
+import it.polito.mad1819.group17.restaurateur.R;
 
 public class EditProfileActivity extends AppCompatActivity {
+
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mRestaurateurDatabaseReference;
+    private ValueEventListener mEditEventListener;
+    private FirebaseAuth mFirebaseAuth;
 
     public static final int CAMERA_REQUEST = 0;
     public static final int GALLERY_REQUEST = 1;
@@ -69,55 +85,41 @@ public class EditProfileActivity extends AppCompatActivity {
         input_bio = findViewById(R.id.input_bio_sign_in);
     }
 
-    private void feedViews() {
-        String stringUserPhoto = PrefHelper.getInstance().getString(ProfileFragment.PHOTO, null);
-        if (stringUserPhoto != null) {
-            image_user_photo.setImageBitmap(PrefHelper.stringToBitMap(stringUserPhoto));
-            image_user_photo.setPadding(8, 8, 8, 8);
+    private void feedViews(Restaurateur restaurateur) {
+        if (restaurateur != null) {
+            if (restaurateur.getPhoto() != "") {
+                image_user_photo.setImageBitmap(PrefHelper.stringToBitMap(restaurateur.getPhoto()));
+                image_user_photo.setPadding(8, 8, 8, 8);
+            }
+            input_name.setText(restaurateur.getName());
+            input_phone.setText(restaurateur.getPhone());
+            input_mail.setText(restaurateur.getMail());
+            input_address.setText(restaurateur.getAddress());
+            String restaurant_type = restaurateur.getRestaurant_type();
+            if (restaurant_type != null)
+                for (int i = 0; i < getResources().getStringArray(R.array.restaurant_types).length; i++)
+                    if (getResources().getStringArray(R.array.restaurant_types)[i].equals(restaurant_type)) {
+                        input_restaurant_type.setSelection(i);
+                        break;
+                    }
+            String free_day = restaurateur.getFree_day();
+            if (free_day != null)
+                for (int i = 0; i < getResources().getStringArray(R.array.days_of_week).length; i++)
+                    if (getResources().getStringArray(R.array.days_of_week)[i].equals(free_day)) {
+                        input_free_day.setSelection(i);
+                        break;
+                    }
+
+            String time_opening = restaurateur.getWorking_time_opening();
+            if (time_opening != null)
+                input_working_time_opening.setText(time_opening);
+
+            String time_closing = restaurateur.getWorking_time_closing();
+            if (time_closing != null)
+                input_working_time_closing.setText(time_closing);
+            if (restaurateur.getBio() != "")
+                input_bio.setText(restaurateur.getBio());
         }
-
-        String name = PrefHelper.getInstance().getString(ProfileFragment.NAME, null);
-        if (name != null)
-            input_name.setText(name);
-
-        String phone = PrefHelper.getInstance().getString(ProfileFragment.PHONE, null);
-        if (phone != null)
-            input_phone.setText(phone);
-
-        String mail = PrefHelper.getInstance().getString(ProfileFragment.MAIL, null);
-        if (mail != null)
-            input_mail.setText(mail);
-
-        String address = PrefHelper.getInstance().getString(ProfileFragment.ADDRESS, null);
-        if (address != null)
-            input_address.setText(address);
-
-        String restaurant_type = PrefHelper.getInstance().getString(ProfileFragment.RESTAURANT_TYPE, null);
-        if (restaurant_type != null)
-            for (int i = 0; i < getResources().getStringArray(R.array.restaurant_types).length; i++)
-                if (getResources().getStringArray(R.array.restaurant_types)[i].equals(restaurant_type)) {
-                    input_restaurant_type.setSelection(i);
-                    break;
-                }
-        String free_day = PrefHelper.getInstance().getString(ProfileFragment.FREE_DAY, null);
-        if (free_day != null)
-            for (int i = 0; i < getResources().getStringArray(R.array.days_of_week).length; i++)
-                if (getResources().getStringArray(R.array.days_of_week)[i].equals(free_day)) {
-                    input_free_day.setSelection(i);
-                    break;
-                }
-
-        String time_opening = PrefHelper.getInstance().getString(ProfileFragment.TIME_OPENING, null);
-        if (time_opening != null)
-            input_working_time_opening.setText(time_opening);
-
-        String time_closing = PrefHelper.getInstance().getString(ProfileFragment.TIME_CLOSING, null);
-        if (time_closing != null)
-            input_working_time_closing.setText(time_closing);
-
-        String bio = PrefHelper.getInstance().getString(ProfileFragment.BIO, null);
-        if (bio != null)
-            input_bio.setText(bio);
     }
 
     private void addTimePickerOnClick(View view) {
@@ -180,7 +182,8 @@ public class EditProfileActivity extends AppCompatActivity {
         myAlertDialog.show();
     }
 
-    private int saveViewsInPreferences() {
+    private int saveProfile() {
+        String stringUserPhoto = PrefHelper.getInstance().getString(ProfileFragment.PHOTO, null);
         String name = input_name.getText().toString();
         String phone = input_phone.getText().toString();
         String mail = input_mail.getText().toString();
@@ -192,7 +195,6 @@ public class EditProfileActivity extends AppCompatActivity {
         Date date_timeOpening = null;
         Date date_timeClosing = null;
         String bio = input_bio.getText().toString();
-
 
         if (name.isEmpty() ||
                 phone.isEmpty() || !Patterns.PHONE.matcher(phone).matches() ||
@@ -215,18 +217,25 @@ public class EditProfileActivity extends AppCompatActivity {
             if (date_timeOpening.compareTo(date_timeClosing) >= 0)
                 return 0;
             else {
-                PrefHelper.getInstance().putString(ProfileFragment.NAME, name);
-                PrefHelper.getInstance().putString(ProfileFragment.PHONE, phone);
-                PrefHelper.getInstance().putString(ProfileFragment.MAIL, mail);
-                PrefHelper.getInstance().putString(ProfileFragment.ADDRESS, address);
-                PrefHelper.getInstance().putString(ProfileFragment.RESTAURANT_TYPE, restaurant_type);
-                PrefHelper.getInstance().putString(ProfileFragment.FREE_DAY, free_day);
-                PrefHelper.getInstance().putString(ProfileFragment.TIME_OPENING, time_opening);
-                PrefHelper.getInstance().putString(ProfileFragment.TIME_CLOSING, time_closing);
-                PrefHelper.getInstance().putString(ProfileFragment.BIO, bio);
+                Restaurateur restaurateur = new Restaurateur(
+                        stringUserPhoto,
+                        name,
+                        phone,
+                        mail,
+                        address,
+                        restaurant_type,
+                        free_day,
+                        time_opening,
+                        time_closing,
+                        bio);
+                Map<String, Object> restaurateurValues = restaurateur.toMap();
+
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put(mFirebaseAuth.getUid(), restaurateurValues);
+
+                mRestaurateurDatabaseReference.updateChildren(childUpdates);
                 return 1;
             }
-
         } else
             return -1;
     }
@@ -242,7 +251,6 @@ public class EditProfileActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar_edit);
         showBackArrowOnToolbar();
 
-
         image_user_photo.setOnClickListener(v -> startPickPictureDialog());
 
         addOnFocusChangeListener(input_name);
@@ -253,12 +261,52 @@ public class EditProfileActivity extends AppCompatActivity {
 
         addTimePickerOnClick(input_working_time_opening);
         addTimePickerOnClick(input_working_time_closing);
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
+
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        feedViews();
+    public void onPause() {
+        super.onPause();
+        detachValueEventListener(mFirebaseAuth.getUid());
+        Log.v("FIREBASE_LOG", "EventListener removed onPause - EditProfileActivity");
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        attachValueEventListener(mFirebaseAuth.getUid());
+        Log.v("FIREBASE_LOG", "EventListener added onResume - EditProfileActivity");
+
+    }
+
+    private void attachValueEventListener(String userId) {
+        if (mEditEventListener == null) {
+            mEditEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Restaurateur restaurateur = dataSnapshot.getValue(Restaurateur.class);
+                    feedViews(restaurateur);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(getApplicationContext(), "Unable to retrieve restaurateur's information", Toast.LENGTH_LONG).show();
+                }
+            };
+            mRestaurateurDatabaseReference.child(userId).addListenerForSingleValueEvent(mEditEventListener);
+        }
+    }
+
+    private void detachValueEventListener(String userId) {
+        if (mEditEventListener != null) {
+            mRestaurateurDatabaseReference.child(userId).removeEventListener(mEditEventListener);
+            mEditEventListener = null;
+        }
     }
 
     @Override
@@ -270,7 +318,7 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.btn_save) {
-            int result = saveViewsInPreferences();
+            int result = saveProfile();
             if (result == 1) {
                 Toast.makeText(getApplicationContext(), getString(R.string.settings_changed), Toast.LENGTH_LONG).show();
                 finish();
@@ -288,8 +336,9 @@ public class EditProfileActivity extends AppCompatActivity {
         confirmOnBackPressed();
     }
 
+    // TODO: update dataChange using data from Firebase
     private boolean dataChanged() {
-        String name = PrefHelper.getInstance().getString(ProfileFragment.NAME, null);
+        /*String name = PrefHelper.getInstance().getString(ProfileFragment.NAME, null);
         if ((name == null && input_name.getText().toString() != null) ||
                 (name != null && !name.equals(input_name.getText().toString())))
             return true;
@@ -331,7 +380,7 @@ public class EditProfileActivity extends AppCompatActivity {
         String bio = PrefHelper.getInstance().getString(ProfileFragment.BIO, null);
         if ((bio == null && input_bio.getText().toString() != null) ||
                 (bio != null && !bio.equals(input_bio.getText().toString())))
-            return true;
+            return true;*/
 
         return false;
     }
