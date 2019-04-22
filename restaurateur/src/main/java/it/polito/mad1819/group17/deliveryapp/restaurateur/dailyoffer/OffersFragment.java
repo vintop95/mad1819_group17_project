@@ -1,8 +1,6 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.ColorSpace;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,18 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.SnapshotParser;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.Query;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
 import it.polito.mad1819.group17.restaurateur.R;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
@@ -43,18 +35,24 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
 public class OffersFragment extends Fragment {
     private static final String TAG = OffersFragment.class.getName();
-    public static final String PREF_FOOD_LIST_SIZE = "PREF_FOOD_LIST_SIZE";
     public final static int ADD_FOOD_REQUEST = 0;
     public final static int MODIFY_FOOD_REQUEST = 1;
 
+    private FoodAdapter mAdapter;
+    private RecyclerView recyclerView;
+    private FloatingActionButton btnAddOffer;
 
-    private FirebaseRecyclerAdapter adapter;
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAdapter.startListening();
+    }
 
-    FoodAdapter mAdapter;
-    RecyclerView recyclerView;
-    FloatingActionButton btnAddOffer;
-    // TODO: make private?
-    public List<FoodModel> foodList = new ArrayList<>();
+    @Override
+    public void onStop() {
+        super.onStop();
+        mAdapter.stopListening();
+    }
 
     // @Nullable: It makes it clear that the method accepts null values,
     // and that if you override the method, you should also accept null values.
@@ -75,18 +73,14 @@ public class OffersFragment extends Fragment {
 
         // Bind your views
         recyclerView = view.findViewById(R.id.rv);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
 
         // Create your layout manager
         // from Linear/Grid/StaggeredLayoutManager
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Fetch your items
-        reloadUpdatedFoodListFromPref();
-
-        // Set your mAdapter
-        mAdapter = new FoodAdapter(getActivity(), this, foodList);
-        recyclerView.setAdapter(mAdapter);
+        // Set the firebase adapter (automatically updates)
+        setFirebaseRecycler();
 
         // Set add button listener
         btnAddOffer = view.findViewById(R.id.btn_add_offer);
@@ -123,62 +117,29 @@ public class OffersFragment extends Fragment {
 
     public void addFoodInList(int newPos, FoodModel newFood){
         Log.d(TAG, "Item in pos " + newPos + " added");
-        try {
-            foodList.add(newPos, newFood);
-        }catch(IndexOutOfBoundsException e){
-            foodList.add(newFood);
-        }
 
-        newFood.saveToPref();
-        PrefHelper.getInstance().putLong(PREF_FOOD_LIST_SIZE, newPos+1);
-
-        if(mAdapter != null){
-            mAdapter.notifyItemInserted(newPos);
-            mAdapter.notifyItemRangeChanged(0, newPos+1);
-        }
+        FoodModelUtil.pushToFirebase(newFood);
     }
 
     public void modifyItem(int pos, FoodModel newFood){
         Log.d(TAG, "Item in pos " + pos + " modified");
-        foodList.set(pos, newFood);
-        newFood.saveToPref();
 
-        if(mAdapter != null){
-            mAdapter.notifyItemChanged(pos);
-        }
+        // TODO: IMPLEMENT MODIFY IN FIREBASE
+        // newFood.pushToFirebase();
     }
 
-    // Fetching items, passing in the View they will control.
-    private void reloadUpdatedFoodListFromPref(){
+    private void setFirebaseRecycler(){
+        Query query = FirebaseDatabase.getInstance().getReference()
+                .child(FoodModelUtil.FIREBASE_DAILYOFFERS);
 
-        Query query = FirebaseDatabase.getInstance().getReference().child("dailyOffer");
+        FirebaseRecyclerOptions<FoodModel> options =
+                new FirebaseRecyclerOptions.Builder<FoodModel>()
+                        .setQuery(query, FoodModel.class)
+                        .build();
 
-
-        recyclerView.setAdapter(adapter);
-
-/*        if(foodList != null){
-            foodList.clear();
-        }else{
-            foodList = new ArrayList<>();
-        }
-
-        int foodListSize = loadUpdatedFoodListSizeFromPref();
-        for(int i = 0; i<foodListSize; i++){
-            FoodModel food = FoodModel.loadFromPref(Long.valueOf(i));
-            // if we go involuntarily outside the bounds
-            if(food == null){
-                PrefHelper.getInstance().putLong(PREF_FOOD_LIST_SIZE, i);
-                break;
-            }
-            addFoodInList(i, food);
-        }
-        return foodList;*/
-    }
-
-    // https://stackoverflow.com/questions/28107647/how-to-save-listobject-to-sharedpreferences/28107791
-    private int loadUpdatedFoodListSizeFromPref(){
-        // if not found in prefHeper returns 0
-        return (int) PrefHelper.getInstance().getLong(PREF_FOOD_LIST_SIZE);
+        mAdapter = new FoodAdapter(this, options);
+        recyclerView.setAdapter(mAdapter);
+        mAdapter.startListening();
     }
 
     ////////////////////// OPEN ACTIVITY //////////////////////////////////////////
@@ -205,7 +166,7 @@ public class OffersFragment extends Fragment {
         Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
 
         Bundle bundle = new Bundle();
-        bundle.putInt("pos", (int) foodToModify.getIdLong());
+        bundle.putInt("pos", foodToModify.pos);
         bundle.putSerializable("food", foodToModify);
         intent.putExtra("args", bundle);
 
@@ -217,111 +178,17 @@ public class OffersFragment extends Fragment {
         if (requestCode == ADD_FOOD_REQUEST) {
             if (data != null){
                 FoodModel addedFood = (FoodModel) data.getSerializableExtra("food");
-                int newPos = (int) addedFood.getIdLong();
-                if(addedFood != null) addFoodInList(newPos, addedFood);
+                if(addedFood != null) addFoodInList(addedFood.pos, addedFood);
             }
             btnAddOffer.setEnabled(true);
         }else if (requestCode == MODIFY_FOOD_REQUEST) {
             if (data != null){
                 FoodModel modifiedFood = (FoodModel) data.getSerializableExtra("food");
                 if(modifiedFood != null){
-                    modifyItem((int) modifiedFood.getIdLong(), modifiedFood);
+                    modifyItem(modifiedFood.pos, modifiedFood);
                 }
             }
             btnEditItem.setEnabled(true);
         }
     }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-class FoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    ImageView itemPhoto, itemImgModify, itemImgDelete;
-    TextView itemName, itemPlace, itemPrice, itemAvailableQty;
-    int pos;
-    FoodModel currentFoodItem;
-
-    public FoodHolder(@NonNull View itemView){
-        super(itemView);
-        // Parameters of rv_food_item-layout
-        itemPhoto = itemView.findViewById(R.id.img_food_photo);
-        itemName = itemView.findViewById(R.id.txt_food_name);
-        itemPlace = itemView.findViewById(R.id.txt_food_description);
-        itemPrice = itemView.findViewById(R.id.txt_food_price);
-        itemAvailableQty = itemView.findViewById(R.id.txt_food_available_qty);
-        itemImgModify = itemView.findViewById(R.id.img_food_modify);
-        itemImgDelete = itemView.findViewById(R.id.img_food_delete);
-        // Log.d(TAG, "Holder " + itemName.getText().toString() + " created");
-    }
-
-    public void setData(FoodModel currentFoodItem, int pos){
-        if(currentFoodItem.getPhoto() != null){
-            Bitmap bmp = PrefHelper.stringToBitMap(currentFoodItem.getPhoto());
-            itemPhoto.setImageBitmap(bmp);
-        }
-        itemName.setText(currentFoodItem.getName());
-        itemPlace.setText(currentFoodItem.getDescription());
-        itemPrice.setText(currentFoodItem.getPriceString());
-        itemAvailableQty.setText(currentFoodItem.getAvailableQtyString());
-        this.pos = pos;
-        this.currentFoodItem = currentFoodItem;
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.img_food_modify:
-//                    Bitmap img1bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.food_photo_1);
-//                    String img1 = PrefHelper.bitMapToStringLossJpg(img1bmp);
-//                    FoodModel testFood = new FoodModel(pos, "MODIFIED",
-//                            "carne 500g, provolazza, bacon, insalata", img1,
-//                            55.0, 3);
-                v.setEnabled(false);
-                //////
-                //UNCOMMENT LINE BELOW AND FIND A WAY TO REFERS TO IT
-                //////
-               // mOffersFragment.openFoodDetailsActivityModify(currentFoodItem, v);
-
-                break;
-            case R.id.img_food_delete:
-                break;
-        }
-    }
-
-
-    public void setListeners(){
-        itemImgModify.setOnClickListener(FoodHolder.this);
-        itemImgDelete.setOnClickListener(FoodHolder.this);
-    }
-
-    // You can use notifyDataSetChanged() instead of notifyItemRemoved
-    // and notifyItemRangeChanged but you lose the animation
-
-    //////
-    //UNCOMMENT LINE BELOW AND FIND A WAY TO REFERS TO IT
-    //////
-   /* public void deleteItem(int pos){
-        Log.d(TAG, "Item in pos " + pos + " removed");
-        mFoodList.remove(pos);
-
-        PrefHelper.getInstance().putLong(
-                OffersFragment.PREF_FOOD_LIST_SIZE, getItemCount());
-
-        for(int i = pos; i<getItemCount();i++){
-            mFoodList.get(i).setId(i);
-        }
-
-        notifyItemRemoved(pos);
-        notifyItemRangeChanged(pos, getItemCount());
-    }*/
 }

@@ -7,16 +7,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Restaurateur implements Serializable {
-    private String photo;
-    private String name;
-    private String phone;
-    private String mail;
-    private String address;
-    private String restaurant_type;
-    private String free_day;
-    private String working_time_opening;
-    private String working_time_closing;
-    private String bio;
+    private String photo = "";
+    private String name = "";
+    private String phone = "";
+    private String mail = "";
+    private String address = "";
+    private String restaurant_type = "";
+    private String free_day = "";
+    private String working_time_opening = "";
+    private String working_time_closing = "";
+    private String bio = "";
 
     public Restaurateur() {
 

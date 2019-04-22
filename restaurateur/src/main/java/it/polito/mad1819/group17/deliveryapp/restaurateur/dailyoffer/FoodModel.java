@@ -1,54 +1,36 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer;
 
-import android.util.Log;
+import android.support.annotation.Keep;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.gson.Gson;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.CurrencyHelper;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
-public class FoodModel implements Serializable {
+class FoodModelUtil {
     /////////////////////// STORAGE MGMT ///////////////////////////
-
     private static String getPrefKey(Long id){
         return "PREF_FOOD_" + id;
     }
-    DatabaseReference databaseReference;
+    public final static String FIREBASE_DAILYOFFERS = "dailyOffers";
 
-
-    public void saveToPref(){
-
-
+    public static void pushToFirebase(FoodModel food){
  /*       Gson gson = new Gson();
         String json = gson.toJson(this);
-        PrefHelper.getInstance().putString(getPrefKey(id), json);
+        PrefHelper.getInstance().putString(getPrefKey(pos), json);
 */
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                .getReference().child(FIREBASE_DAILYOFFERS).push();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("dailyOffers").push();
-        Map<String, Object> map = new HashMap<>();
-
-        map.put("id", databaseReference.getKey());//retrieve a key for our entry
-        map.put("position", this.getIdLong());//retrieve a key for our entry
-        map.put("name", this.getName());
-        map.put("description", this.getDescription());
-        map.put("availableQuantity", this.getAvailableQtyInt());
-        map.put("price", this.getPriceDouble());
-        map.put("photo", this.getPhoto());
-
-        databaseReference.setValue(map);
-
+        databaseReference.setValue(food);
     }
 
     public static FoodModel loadFromPref(Long id){
     /*    Gson gson = new Gson();
-        String json = PrefHelper.getInstance().getString(getPrefKey(id));
+        String json = PrefHelper.getInstance().getString(getPrefKey(pos));
         if(json != null){
             return gson.fromJson(json, FoodModel.class);
         }else{
@@ -56,102 +38,40 @@ public class FoodModel implements Serializable {
         }
 */
         //Query query = FirebaseDatabase.getInstance().getReference().child("dailyOffers");
-    return null;
-
+        return null;
     }
 
-    //////////////////////////////////////////////////////////////
-    private Long id = Long.valueOf(-1);
-    private String mName = "", mDescription = "";
-    private String mPhoto = "";
-    private double mPrice = 0.0;
-    private int mAvailableQty = 0;
+    public static String getPriceFormatted(double price) {
+        return CurrencyHelper.getCurrency(price);
+    }
+}
+
+/**
+ * it must follow the javabean convention
+ * https://firebase.google.com/docs/database/android/read-and-write
+ * https://www.learnhowtoprogram.com/android/data-persistence/firebase-writing-pojos
+ */
+@IgnoreExtraProperties
+public class FoodModel implements Serializable{
+    public String id = "";
+    public int pos = -1;
+    public String name = "", description = "";
+    public String photo = "";
+    public double price = 0.0;
+    public int availableQty = 0;
+
     /////////////////////////////////////////////////////////////////
-    public FoodModel() {
+    public FoodModel() {}
 
-    }
-
-    public FoodModel(int id, String name, String description,
+    public FoodModel(int pos, String name, String description,
                      String photo, double price,
                      int availableQty) {
-        setId(id);
-        setName(name);
-        setDescription(description);
-        setPhoto(photo);
-        setPrice(price);
-        setAvailableQty(availableQty);
-    }
-    /////////////////////////////////////////////////////////
-
-    public long getIdLong(){
-        return id;
-    }
-
-    public String getIdString(){
-        return id.toString();
-    }
-
-    public void setId(long id){
-        this.id = id;
-    }
-
-    ////////////////////////////////////////////////////////////
-
-    public String getName() {
-        return mName;
-    }
-
-    public void setName(String name) {
-        this.mName = name;
-    }
-
-    /////////////////////////////////////////////////////////
-
-    public String getDescription() {
-        return mDescription;
-    }
-
-    public void setDescription(String description) {
-        this.mDescription = description;
-    }
-
-    /////////////////////////////////////////////////////////
-
-    public String getPhoto() {
-        return mPhoto;
-    }
-
-    public void setPhoto(String photo) {
-        this.mPhoto = photo;
-    }
-
-    /////////////////////////////////////////////////////////
-
-    public String getPriceString() {
-        return CurrencyHelper.getCurrency(getPriceDouble());
-    }
-
-    public double getPriceDouble() {
-        return mPrice;
-    }
-
-    public void setPrice(double price) {
-        this.mPrice = price;
-    }
-
-
-    /////////////////////////////////////////////////////////
-
-    public int getAvailableQtyInt() {
-        return mAvailableQty;
-    }
-
-    public String getAvailableQtyString() {
-        return Integer.toString(mAvailableQty);
-    }
-
-    public void setAvailableQty(int availableQty) {
-        this.mAvailableQty = availableQty;
+        this.pos = pos;
+        this.name = name;
+        this.description = description;
+        this.photo = photo;
+        this.price = price;
+        this.availableQty = availableQty;
     }
 
     /////////////////////////////////////////////////////////
