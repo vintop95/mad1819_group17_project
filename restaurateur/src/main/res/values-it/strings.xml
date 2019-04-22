@@ -24,6 +24,8 @@
 
     <!-- Order Details Strings -->
     <string name="title_activity_order_details">Dettagli Ordine</string>
+    <string name="rider_name">Nome Rider</string>
+    <string name="rider_phone">Telefono Rider</string>
     <!-- Labels -->
     <string name="name">Nome Cliente</string>
     <string name="phone">Telefono Cliente</string>
@@ -147,8 +149,7 @@
     <string name="image_profile_change">Cambia Immagine</string>
 
 
-    <string name="sign_in">
-        Altrimenti <u>Registrati</u>.
-    </string>
+    <string name="sign_in">Altrimenti <u>Registrati</u>.</string>
+    <string name="new_order">NUOVO ORDINE</string>
 
 </resources>
