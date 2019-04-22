@@ -119,6 +119,8 @@ public class ProfileFragment extends Fragment {
     }
 
     private void attachValueEventListener(String userId) {
+        if(userId == null) throw new AssertionError();
+
         if (mProfileEventListener == null) {
             mProfileEventListener = new ValueEventListener() {
                 @Override
@@ -137,7 +139,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void detachValueEventListener(String userId) {
-        if (mProfileEventListener != null) {
+        if (mProfileEventListener != null && userId != null) {
             mRestaurateurDatabaseReference.child(userId).removeEventListener(mProfileEventListener);
             mProfileEventListener = null;
         }

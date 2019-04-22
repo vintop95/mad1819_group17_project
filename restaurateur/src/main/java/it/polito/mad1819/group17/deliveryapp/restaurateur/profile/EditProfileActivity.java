@@ -285,6 +285,8 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void attachValueEventListener(String userId) {
+        if(userId == null) throw new AssertionError();
+
         if (mEditEventListener == null) {
             mEditEventListener = new ValueEventListener() {
                 @Override
@@ -303,7 +305,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void detachValueEventListener(String userId) {
-        if (mEditEventListener != null) {
+        if (mEditEventListener != null && userId != null) {
             mRestaurateurDatabaseReference.child(userId).removeEventListener(mEditEventListener);
             mEditEventListener = null;
         }
