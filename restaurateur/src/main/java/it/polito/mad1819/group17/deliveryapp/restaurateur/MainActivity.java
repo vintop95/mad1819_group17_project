@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         mAuthStateListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if (user != null) {
-                Toast.makeText(MainActivity.this, "Signed In!", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(MainActivity.this, "Signed In!", Toast.LENGTH_SHORT).show();
             } else {
                 startActivityForResult(
                         AuthUI.getInstance()
