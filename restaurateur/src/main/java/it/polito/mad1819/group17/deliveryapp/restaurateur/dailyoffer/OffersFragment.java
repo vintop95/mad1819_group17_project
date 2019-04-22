@@ -149,47 +149,11 @@ public class OffersFragment extends Fragment {
     }
 
     // Fetching items, passing in the View they will control.
-    private List<FoodModel> reloadUpdatedFoodListFromPref(){
+    private void reloadUpdatedFoodListFromPref(){
 
         Query query = FirebaseDatabase.getInstance().getReference().child("dailyOffer");
 
-        FirebaseRecyclerOptions<ColorSpace.Model> options =
-                new FirebaseRecyclerOptions.Builder<FoodModel>()
-                        .setQuery(query, new SnapshotParser<FoodModel>() {
-                            @NonNull
-                            @Override
-                            public FoodModel parseSnapshot(@NonNull DataSnapshot snapshot) {
-                                return new FoodModel(snapshot.child("position").getValue().toInteger(),
-                                        snapshot.child("title").getValue().toString(),
-                                        snapshot.child("desc").getValue().toString());
-                            }
-                        })
-                        .build();
 
-        adapter = new FirebaseRecyclerAdapter<FoodModel, FoodAdapter.FoodHolder>(options) {
-            @Override
-            public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.list_item, parent, false);
-
-                return new ViewHolder(view);
-            }
-
-
-            @Override
-            protected void onBindViewHolder(ViewHolder holder, final int position, Model model) {
-                holder.setTxtTitle(model.getmTitle());
-                holder.setTxtDesc(model.getmDesc());
-
-                holder.root.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(MainActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-        };
         recyclerView.setAdapter(adapter);
 
 /*        if(foodList != null){
@@ -330,7 +294,6 @@ class FoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener
 
                 break;
             case R.id.img_food_delete:
-                deleteItem(pos);
                 break;
         }
     }
