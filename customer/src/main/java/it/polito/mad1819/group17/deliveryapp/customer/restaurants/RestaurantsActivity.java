@@ -1,5 +1,6 @@
 package it.polito.mad1819.group17.deliveryapp.customer.restaurants;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +9,7 @@ import android.icu.util.ULocale;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -79,6 +82,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
+
         fetch();
     }
 
@@ -103,7 +107,22 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         photo = itemView.findViewById(R.id.restaurant_image);
         address = itemView.findViewById(R.id.restaurant_address);
         avgPrice = itemView.findViewById(R.id.restaurant_avgprice);
+        itemView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                int position = getAdapterPosition();
+
+                Context context = v.getContext();
+                Intent intent = new Intent(context, DailyMenuActivity.class);
+                intent.putExtra("name",name.getText());
+                Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
+                startActivity(intent);
+            }
+
+        });
+
     }
+
 
     public void setName(String name) {
         this.name.setText(name);
@@ -155,6 +174,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                         .build();
 
         adapter = new FirebaseRecyclerAdapter<RestaurantModel, ViewHolder>(options) {
+
             @Override
             public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext())
@@ -176,6 +196,25 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
         };
         recyclerView.setAdapter(adapter);
+
+        /*recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        // do whatever
+                        Intent intent = new Intent(view.getContext(), DailyMenuActivity.class);
+                        Bundle b = new Bundle();
+                        b.putString("category",); //Your category selected
+                        intent.putExtras(b); //Put your category in the next Intent
+                        startActivity(intent);
+
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
+*/
     }
 
 }
