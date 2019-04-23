@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private ChildEventListener onChildAddedListener;
+    private int notificationRequestCode = 0;
 
     private Order notification_order;
     private PendingIntent pendingIntent;
@@ -120,8 +121,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, OrderDetailsActivity.class)
                 .putExtra("id", order_id)
                 .setAction(Long.toString(System.currentTimeMillis()));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "new_order_channel_id");
         builder.setSmallIcon(R.drawable.ic_notifications_black_24dp)
@@ -132,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 .setAutoCancel(true);
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-        notificationManagerCompat.notify(001, builder.build());
+        notificationManagerCompat.notify(notificationRequestCode++, builder.build());
 
     }
 
@@ -156,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("WWW", "WWW");
                             FirebaseDatabase.getInstance()
                                     .getReference("/restaurateurs/" + mFirebaseAuth.getUid() + "/orders/" + newOrder.getId() + "/notified")
-                                    .setValue("true");
+                                    .setValue("yes");
                         }
                     }
 

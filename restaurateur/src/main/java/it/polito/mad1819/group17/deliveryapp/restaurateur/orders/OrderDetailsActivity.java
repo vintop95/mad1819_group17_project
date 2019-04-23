@@ -198,9 +198,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
         if (!TextUtils.isEmpty(getIntent().getStringExtra("id"))) {
             // we came here due to a tap on the notification so let us read the (updated) order from firebase
-            FirebaseDatabase.getInstance().getReference()
-                    .child("orders")
-                    .child(getIntent().getStringExtra("id"))
+            FirebaseDatabase.getInstance().getReference("/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders/" + getIntent().getStringExtra("id"))
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
