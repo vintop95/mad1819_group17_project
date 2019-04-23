@@ -1,5 +1,6 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer;
 
+import android.content.Context;
 import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -40,46 +41,47 @@ class FoodModelUtil {
                 .child(FIREBASE_DAILYOFFERS);
     }
 
-    public static void pushToFirebase(FoodModel food){
-        DatabaseReference newFoodRef = getDailyOffersRef().push();
-        food.id = newFoodRef.getKey();
-        newFoodRef.setValue(food);
+    private static void handleCompletionListener
+            (Context context, @Nullable DatabaseError err,
+             @NonNull DatabaseReference ref, String msg){
+        if(err != null){
+            Log.e("FIREBASE_LOG",err.getMessage());
+            Toast.makeText(context, err.getMessage(), Toast.LENGTH_LONG).show();
+        }else{
+            Log.d("FIREBASE_LOG", msg + " " + ref.toString());
+        }
     }
 
-    public static void modifyInFirebase(FoodModel food){
+    public static void pushToFirebase(Context context, FoodModel food){
+        DatabaseReference newFoodRef = getDailyOffersRef().push();
+        food.id = newFoodRef.getKey();
+        newFoodRef.setValue(food,
+                (@Nullable DatabaseError err, @NonNull DatabaseReference ref)
+                        -> handleCompletionListener(context, err, ref, "Added")
+        );
+    }
+
+    public static void modifyInFirebase(Context context, FoodModel food){
         if(food.id.isEmpty())
             throw new IllegalArgumentException("food.id SHOULDN'T BE NULL");
 
         Map<String, Object> updatedFood = new HashMap<>();
         updatedFood.put(food.id, food);
         getDailyOffersRef().updateChildren(updatedFood,
-                (@Nullable DatabaseError databaseError,
-                @NonNull DatabaseReference databaseReference) -> {
-                        if(databaseError != null){
-                            // TODO: inform the user that there was an error
-                            Log.e("FIREBASE_LOG",databaseError.getMessage());
-                        }else{
-                            Log.d("FIREBASE_LOG", "Updated " + databaseReference.toString());
-                        }
-                });
+                (@Nullable DatabaseError err, @NonNull DatabaseReference ref)
+                        -> handleCompletionListener(context, err, ref, "Modified")
+        );
     }
 
-    public static void removeFromFirebase(FoodModel food){
+    public static void removeFromFirebase(Context context, FoodModel food){
         if(food.id.isEmpty())
             throw new IllegalArgumentException("food.id SHOULDN'T BE NULL");
 
         DatabaseReference foodRef = getDailyOffersRef().child(food.id);
-        foodRef.removeValue((@Nullable DatabaseError databaseError,
-                             @NonNull DatabaseReference databaseReference) -> {
-            if(databaseError != null){
-                // TODO: inform the user that there was an error
-                Log.e("FIREBASE_LOG",databaseError.getMessage());
-            }else{
-                Log.d("FIREBASE_LOG", "Removed " + databaseReference.toString());
-            }
-
-        });
-
+        foodRef.removeValue(
+                (@Nullable DatabaseError err, @NonNull DatabaseReference ref)
+                -> handleCompletionListener(context, err, ref, "Removed")
+        );
     }
 
     public static String getPriceFormatted(double price) {

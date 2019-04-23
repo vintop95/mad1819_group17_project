@@ -127,12 +127,12 @@ public class OffersFragment extends Fragment {
     /////// FIREBASE MGMT ////////
     public void addFoodInList(FoodModel newFood){
         Log.d(TAG, "Item " + newFood.id + " added");
-        FoodModelUtil.pushToFirebase(newFood);
+        FoodModelUtil.pushToFirebase(getContext(), newFood);
     }
 
     public void modifyItem(FoodModel newFood){
         Log.d(TAG, "Item " + newFood.id + " modified");
-        FoodModelUtil.modifyInFirebase(newFood);
+        FoodModelUtil.modifyInFirebase(getContext(), newFood);
     }
 
     private void setFirebaseRecycler(){

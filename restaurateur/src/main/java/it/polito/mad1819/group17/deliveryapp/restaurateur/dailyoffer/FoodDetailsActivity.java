@@ -174,19 +174,19 @@ public class FoodDetailsActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("DETAILS","onPause");
+//        Log.d("DETAILS","onPause");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d("DETAILS","onStop");
+//        Log.d("DETAILS","onStop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("DETAILS","onDestroy");
+//        Log.d("DETAILS","onDestroy");
     }
 
     @Override

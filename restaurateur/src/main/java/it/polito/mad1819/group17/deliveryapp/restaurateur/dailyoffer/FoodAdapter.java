@@ -29,7 +29,6 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
 
     public FoodAdapter(OffersFragment of, FirebaseRecyclerOptions options){
         super(options);
-        Log.d(TAG, "created");
         mOffersFragment = of;
     }
 
@@ -131,7 +130,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
         }
 
         public void deleteItem(FoodModel food){
-            FoodModelUtil.removeFromFirebase(food);
+            FoodModelUtil.removeFromFirebase(mOffersFragment.getContext(), food);
             Log.d(TAG, "Item " + food.id + " removed");
         }
     }
