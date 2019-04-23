@@ -5,8 +5,6 @@
     android:layout_height="match_parent"
     tools:context="it.polito.mad1819.group17.deliveryapp.restaurateur.orders.OrdersFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_orders"
         android:layout_width="match_parent"

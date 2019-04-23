@@ -91,7 +91,7 @@ public class OffersFragment extends Fragment {
         // Set add button listener
         btnAddOffer = view.findViewById(R.id.btn_add_offer);
 
-        ////////////// TODO: remove test add object
+        ////////////// test object
 //        Bitmap img1bmp = BitmapFactory.decodeResource(getResources(), R.drawable.food_photo_1);
 //        String img1 = PrefHelper.bitMapToStringLossJpg(img1bmp);
 //        FoodModel testFood = new FoodModel(mAdapter.getItemCount(), "Crispy bacon",

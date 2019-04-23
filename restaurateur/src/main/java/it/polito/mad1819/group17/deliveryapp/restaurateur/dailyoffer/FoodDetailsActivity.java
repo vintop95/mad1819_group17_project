@@ -228,8 +228,6 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     //----------------------UI IMAGE MANAGEMENT--------------------------------------------
     private void startPickPictureDialog() {
-        // TODO: use image chooser?
-        // http://codetheory.in/android-pick-select-image-from-gallery-with-intents/
         AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this);
 
         myAlertDialog.setMessage(R.string.pick_picture_message);

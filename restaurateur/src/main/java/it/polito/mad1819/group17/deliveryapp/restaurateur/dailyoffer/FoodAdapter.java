@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -51,9 +52,6 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
         holder.setListeners();
     }
 
-
-
-    // TODO: not working
     @Override
     public void onDataChanged() {
         // Called each time there is a new data snapshot. You may want to use this method
@@ -69,7 +67,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
         // your UI to display an error message to the user.
         // ...
         Toast.makeText(mOffersFragment.getContext(),
-                e.getMessage(),Toast.LENGTH_LONG).show();
+                e.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     // NOT COMPATIBLE WITH FIREBASE RECYCLER ADAPTER
