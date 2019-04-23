@@ -54,8 +54,7 @@ public class OrdersFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("XXXX", "/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders");
-        Toast.makeText(getContext(), "/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders", Toast.LENGTH_LONG).show();
+
         Query query = FirebaseDatabase.getInstance()
                 .getReference("/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders")
                 .orderByChild("sorting_field")
