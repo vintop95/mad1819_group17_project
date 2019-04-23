@@ -7,16 +7,36 @@
     android:layout_height="match_parent"
     tools:context="it.polito.mad1819.group17.deliveryapp.deliveryman.MainActivity">
 
-    <TextView
-        android:id="@+id/message"
-        android:layout_width="wrap_content"
+    <!-- Appbar -->
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="@string/title_home"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Toolbar -->
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            app:title="@string/app_name"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary" />
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <!-- Fragments Container -->
+    <include
+        layout="@layout/content_main"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

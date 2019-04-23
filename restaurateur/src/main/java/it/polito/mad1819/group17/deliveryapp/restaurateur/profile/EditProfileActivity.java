@@ -88,6 +88,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private void feedViews(Restaurateur restaurateur) {
         if (restaurateur != null) {
             if (restaurateur.getPhoto() != "") {
+                Log.d("XXXXXXX", "XXXXXXXX");
                 image_user_photo.setImageBitmap(PrefHelper.stringToBitMap(restaurateur.getPhoto()));
                 image_user_photo.setPadding(8, 8, 8, 8);
             }
@@ -436,8 +437,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
         if (bitmapUserPhoto != null) {
-            PrefHelper.getInstance().putString(ProfileFragment.PHOTO,
-                    PrefHelper.getInstance().bitMapToStringLossless(bitmapUserPhoto));
+            PrefHelper.getInstance().putString(ProfileFragment.PHOTO, PrefHelper.getInstance().bitMapToStringLossless(bitmapUserPhoto));
             image_user_photo.setImageBitmap(bitmapUserPhoto);
             image_user_photo.setPadding(8, 8, 8, 8);
         }
