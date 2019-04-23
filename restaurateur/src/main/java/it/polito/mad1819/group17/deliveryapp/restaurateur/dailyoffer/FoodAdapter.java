@@ -12,6 +12,10 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
+
+import java.util.Locale;
 
 import it.polito.mad1819.group17.restaurateur.R;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
@@ -43,11 +47,29 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
     protected void onBindViewHolder(@NonNull FoodHolder holder, int pos, @NonNull FoodModel model) {
         // Log.d(TAG, "onBindViewHolder " + pos);
 
-        /* // old way
-            FoodModel currentFoodItem = mFoodList.get(pos);
-        */
         holder.setData(model, pos);
         holder.setListeners();
+    }
+
+
+
+    // TODO: not working
+    @Override
+    public void onDataChanged() {
+        // Called each time there is a new data snapshot. You may want to use this method
+        // to hide a loading spinner or check for the "no documents" state and update your UI.
+        // ...
+        super.onDataChanged();
+        mOffersFragment.progressBarHandler.hide();
+    }
+
+    @Override
+    public void onError(DatabaseError e) {
+        // Called when there is an error getting data. You may want to update
+        // your UI to display an error message to the user.
+        // ...
+        Toast.makeText(mOffersFragment.getContext(),
+                e.getMessage(),Toast.LENGTH_LONG).show();
     }
 
     // NOT COMPATIBLE WITH FIREBASE RECYCLER ADAPTER
@@ -60,7 +82,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
     public class FoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView itemPhoto, itemImgModify, itemImgDelete;
         TextView itemName, itemPlace, itemPrice, itemAvailableQty;
-        int pos;
+//        int pos;
         FoodModel currentFoodItem;
 
         public FoodHolder(@NonNull View itemView){
@@ -84,8 +106,9 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
             itemName.setText(currentFoodItem.name);
             itemPlace.setText(currentFoodItem.description);
             itemPrice.setText(FoodModelUtil.getPriceFormatted(currentFoodItem.price));
-            itemAvailableQty.setText(Double.toString(currentFoodItem.availableQty));
-            this.pos = pos;
+            itemAvailableQty.setText(
+                    String.format(Locale.getDefault(), "%d", currentFoodItem.availableQty));
+//            this.pos = pos;
             this.currentFoodItem = currentFoodItem;
         }
 
@@ -94,17 +117,11 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
         public void onClick(View v) {
             switch(v.getId()){
                 case R.id.img_food_modify:
-//                    Bitmap img1bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.food_photo_1);
-//                    String img1 = PrefHelper.bitMapToStringLossJpg(img1bmp);
-//                    FoodModel testFood = new FoodModel(pos, "MODIFIED",
-//                            "carne 500g, provolazza, bacon, insalata", img1,
-//                            55.0, 3);
                     v.setEnabled(false);
                     mOffersFragment.openFoodDetailsActivityModify(currentFoodItem, v);
-
                     break;
                 case R.id.img_food_delete:
-                    deleteItem(pos);
+                    deleteItem(currentFoodItem);
                     break;
             }
         }
@@ -115,25 +132,9 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
             itemImgDelete.setOnClickListener(FoodHolder.this);
         }
 
-        // You can use notifyDataSetChanged() instead of notifyItemRemoved
-        // and notifyItemRangeChanged but you lose the animation
-        public void deleteItem(int pos){
-            Log.d(TAG, "Item in pos " + pos + " removed");
-
-            //TODO: modify for firebase
-            /*
-                mFoodList.remove(pos);
-
-                PrefHelper.getInstance().putLong(
-                        OffersFragment.PREF_FOOD_LIST_SIZE, getItemCount());
-
-                for(int i = pos; i<getItemCount();i++){
-                    mFoodList.get(i).setPosLong(i);
-                }
-
-                notifyItemRemoved(pos);
-                notifyItemRangeChanged(pos, getItemCount());
-            */
+        public void deleteItem(FoodModel food){
+            FoodModelUtil.removeFromFirebase(food);
+            Log.d(TAG, "Item " + food.id + " removed");
         }
     }
 }

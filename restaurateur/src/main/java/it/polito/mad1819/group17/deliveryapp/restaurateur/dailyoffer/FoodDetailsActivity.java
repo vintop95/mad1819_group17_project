@@ -47,7 +47,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
     private FormAdapter mFormAdapter;
     private FoodModel mFoodLoaded;
     private AtomicInteger mFoodState = new AtomicInteger(STATE_NOT_CHANGED);
-    private int pos = -1;
+//    private int pos = -1;
 
     private ImageView img_food_photo;
     private FloatingActionButton btn_change_img;
@@ -92,11 +92,11 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     private void feedViews(FoodModel selFood) {
         if(mFields.isEmpty()) {
-            mFields.add(0, new ListItem(LABEL_FOOD_NUMBER, "" + selFood.pos));
-            mFields.add(1, new ListItem(LABEL_FOOD_NAME, selFood.name));
-            mFields.add(2, new ListItem(LABEL_FOOD_DESCRIPTION, selFood.description));
-            mFields.add(3, new ListItem(LABEL_FOOD_PRICE, Double.toString(selFood.price)));
-            mFields.add(4, new ListItem(LABEL_FOOD_AVAILABLE_QTY, Integer.toString(selFood.availableQty)));
+//            mFields.add(0, new ListItem(LABEL_FOOD_NUMBER, "" + selFood.pos));
+            mFields.add(new ListItem(LABEL_FOOD_NAME, selFood.name));
+            mFields.add(new ListItem(LABEL_FOOD_DESCRIPTION, selFood.description));
+            mFields.add(new ListItem(LABEL_FOOD_PRICE, Double.toString(selFood.price)));
+            mFields.add(new ListItem(LABEL_FOOD_AVAILABLE_QTY, Integer.toString(selFood.availableQty)));
         }
 
         String photoString = selFood.photo;
@@ -120,7 +120,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
             Bundle b2 = b.getBundle("args");
             if(b2 != null){
                 mFoodLoaded = (FoodModel) b2.getSerializable("food");
-                pos = b2.getInt("pos");
+//                pos = b2.getInt("pos");
             }
         }
 
@@ -128,7 +128,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
             mFoodLoaded = new FoodModel();
         }
 
-        mFoodLoaded.pos = pos;
+//        mFoodLoaded.pos = pos;
         feedViews(mFoodLoaded);
 
         mFormAdapter = new FormAdapter(this, mFields, mFoodState);
@@ -137,7 +137,8 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     private FoodModel getUpdatedFood() {
         FoodModel food = new FoodModel();
-        food.pos = pos;
+//        food.pos = pos;
+        food.id = mFoodLoaded.id;
 
         // GET PHOTO FROM IMAGEVIEW
         Bitmap bmp = ((BitmapDrawable)img_food_photo.getDrawable()).getBitmap();

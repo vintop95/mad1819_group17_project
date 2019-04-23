@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -19,6 +20,8 @@ import com.google.firebase.database.Query;
 
 import java.io.Serializable;
 
+import it.polito.mad1819.group17.deliveryapp.restaurateur.MainActivity;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.restaurateur.R;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
@@ -41,17 +44,20 @@ public class OffersFragment extends Fragment {
     private FoodAdapter mAdapter;
     private RecyclerView recyclerView;
     private FloatingActionButton btnAddOffer;
+    public ProgressBarHandler progressBarHandler;
 
     @Override
     public void onStart() {
         super.onStart();
         mAdapter.startListening();
+        progressBarHandler.show();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         mAdapter.stopListening();
+        progressBarHandler.hide();
     }
 
     // @Nullable: It makes it clear that the method accepts null values,
@@ -113,24 +119,24 @@ public class OffersFragment extends Fragment {
                 }
             }
         });
+
+        progressBarHandler = new ProgressBarHandler(getContext());
+        progressBarHandler.show();
     }
 
-    public void addFoodInList(int newPos, FoodModel newFood){
-        Log.d(TAG, "Item in pos " + newPos + " added");
-
+    /////// FIREBASE MGMT ////////
+    public void addFoodInList(FoodModel newFood){
+        Log.d(TAG, "Item " + newFood.id + " added");
         FoodModelUtil.pushToFirebase(newFood);
     }
 
-    public void modifyItem(int pos, FoodModel newFood){
-        Log.d(TAG, "Item in pos " + pos + " modified");
-
-        // TODO: IMPLEMENT MODIFY IN FIREBASE
-        // newFood.pushToFirebase();
+    public void modifyItem(FoodModel newFood){
+        Log.d(TAG, "Item " + newFood.id + " modified");
+        FoodModelUtil.modifyInFirebase(newFood);
     }
 
     private void setFirebaseRecycler(){
-        Query query = FirebaseDatabase.getInstance().getReference()
-                .child(FoodModelUtil.FIREBASE_DAILYOFFERS);
+        Query query = FoodModelUtil.getDailyOffersRef();
 
         FirebaseRecyclerOptions<FoodModel> options =
                 new FirebaseRecyclerOptions.Builder<FoodModel>()
@@ -141,6 +147,7 @@ public class OffersFragment extends Fragment {
         recyclerView.setAdapter(mAdapter);
         mAdapter.startListening();
     }
+    ////////////////////////////
 
     ////////////////////// OPEN ACTIVITY //////////////////////////////////////////
     private void openFoodDetailsActivityAdd(){
@@ -166,7 +173,7 @@ public class OffersFragment extends Fragment {
         Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
 
         Bundle bundle = new Bundle();
-        bundle.putInt("pos", foodToModify.pos);
+//        bundle.putInt("pos", foodToModify.pos);
         bundle.putSerializable("food", foodToModify);
         intent.putExtra("args", bundle);
 
@@ -178,14 +185,14 @@ public class OffersFragment extends Fragment {
         if (requestCode == ADD_FOOD_REQUEST) {
             if (data != null){
                 FoodModel addedFood = (FoodModel) data.getSerializableExtra("food");
-                if(addedFood != null) addFoodInList(addedFood.pos, addedFood);
+                if(addedFood != null) addFoodInList(addedFood);
             }
             btnAddOffer.setEnabled(true);
         }else if (requestCode == MODIFY_FOOD_REQUEST) {
             if (data != null){
                 FoodModel modifiedFood = (FoodModel) data.getSerializableExtra("food");
                 if(modifiedFood != null){
-                    modifyItem(modifiedFood.pos, modifiedFood);
+                    modifyItem(modifiedFood);
                 }
             }
             btnEditItem.setEnabled(true);
