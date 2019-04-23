@@ -1,11 +1,18 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -17,11 +24,17 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
 import java.util.Locale;
 
 import it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer.OffersFragment;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.orders.Order;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.orders.OrderDetailsActivity;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.orders.OrdersFragment;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.profile.EditProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.profile.ProfileFragment;
@@ -35,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private ChildEventListener onChildAddedListener;
+    private int notificationRequestCode = 0;
+
+    private Order notification_order;
+    private PendingIntent pendingIntent;
 
     Fragment offersFragment = new OffersFragment();
     Fragment ordersFragment = new OrdersFragment();
@@ -82,12 +100,83 @@ public class MainActivity extends AppCompatActivity {
         fm.beginTransaction().attach(active).commit();
     }
 
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "new_order_channel";
+            String description = "new_order_channel_description";
+
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("new_order_channel_id", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    public void sendNotification(String order_id, String delivery_timestamp) {
+        Intent intent = new Intent(this, OrderDetailsActivity.class)
+                .putExtra("id", order_id)
+                .setAction(Long.toString(System.currentTimeMillis()));
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "new_order_channel_id");
+        builder.setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                .setContentTitle(getResources().getString(R.string.new_order))
+                .setContentText(delivery_timestamp)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        notificationManagerCompat.notify(notificationRequestCode++, builder.build());
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        createNotificationChannel();
+
         mFirebaseAuth = FirebaseAuth.getInstance();
+
+        onChildAddedListener = FirebaseDatabase.getInstance().getReference("/restaurateurs/" + mFirebaseAuth.getUid() + "/orders")
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Order newOrder = dataSnapshot.getValue(Order.class);
+                        if (newOrder.getNotified().equals("no")) {
+                            sendNotification(newOrder.getId(), newOrder.getDelivery_timestamp());
+                            Log.d("WWW", "WWW");
+                            FirebaseDatabase.getInstance()
+                                    .getReference("/restaurateurs/" + mFirebaseAuth.getUid() + "/orders/" + newOrder.getId() + "/notified")
+                                    .setValue("yes");
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -203,5 +292,11 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        FirebaseDatabase.getInstance().getReference("/restaurateurs/" + mFirebaseAuth.getUid() + "/orders").removeEventListener(onChildAddedListener);
     }
 }

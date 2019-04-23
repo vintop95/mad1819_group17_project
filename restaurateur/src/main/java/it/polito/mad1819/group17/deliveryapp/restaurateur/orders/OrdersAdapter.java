@@ -1,33 +1,34 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.orders;
 
-import android.content.Context;
-import android.support.v7.widget.CardView;
+import android.content.Intent;
+import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import it.polito.mad1819.group17.restaurateur.R;
 
-public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder> {
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 
-    private Context context;
-    private ArrayList<Order> orders;
-    private RecyclerViewClickListener mListener;
+import java.io.Serializable;
 
 
-    public ArrayList<Order> getOrders() {
-        return orders;
+public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.OrderHolder> {
+
+    private Fragment fragment;
+
+    public OrdersAdapter(FirebaseRecyclerOptions<Order> options, Fragment fragment) {
+        super(options);
+        this.fragment = fragment;
     }
 
-    public interface RecyclerViewClickListener {
-        void onClick(View view, int position);
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    /* ------------------------------------------------------------------------------------- */
+    public class OrderHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         View state_background;
         TextView txt_delivery_time;
         TextView txt_delivery_date;
@@ -35,81 +36,59 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         TextView txt_total_items;
         TextView txt_order_state;
 
-        private RecyclerViewClickListener mListener;
-        private Context context;
 
-
-
-        public ViewHolder(View itemView, RecyclerViewClickListener listener, Context context) {
+        public OrderHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             state_background = itemView.findViewById(R.id.view_state_background);
             txt_delivery_time = itemView.findViewById(R.id.txt_delivery_time);
             txt_delivery_date = itemView.findViewById(R.id.txt_delivery_date);
             txt_order_number = itemView.findViewById(R.id.txt_order_number);
             txt_total_items = itemView.findViewById(R.id.txt_total_items);
             txt_order_state = itemView.findViewById(R.id.txt_order_state);
-
-            mListener = listener;
-            itemView.setOnClickListener(this);
-
-            this.context = context;
-
-        }
-
-
-        public void setData(Order order) {
-            this.txt_delivery_time.setText(order.getDelivery_time());
-            this.txt_delivery_date.setText(order.getDelivery_date());
-            this.txt_order_number.setText("" + order.getNumber());
-            this.txt_total_items.setText("" + order.getTotalItemsQuantity());
-            this.txt_order_state.setText(order.getCurrentState());
-            switch (order.getCurrentState()) {
-                case Order.STATE1:
-                    this.state_background.setBackgroundColor(context.getColor(R.color.colorState1));
-                    break;
-                case Order.STATE2:
-                    this.state_background.setBackgroundColor(context.getColor(R.color.colorState2));
-                    break;
-                case Order.STATE3:
-                    this.state_background.setBackgroundColor(context.getColor(R.color.colorState3));
-                    break;
-            }
         }
 
         @Override
         public void onClick(View v) {
-            mListener.onClick(v, getAdapterPosition());
+            Order clickedOrder = getItem(getAdapterPosition());
+            fragment.startActivityForResult(
+                    new Intent(fragment.getActivity().getApplicationContext(), OrderDetailsActivity.class).putExtra("order", (Serializable)clickedOrder),
+                    OrdersFragment.SHOW_DETAILS_REQUEST);
+        }
+    }
+    /* ------------------------------------------------------------------------------------- */
+
+
+    @Override
+    protected void onBindViewHolder(OrderHolder holder, int position, Order model) {
+        holder.txt_delivery_time.setText(model.getDelivery_time());
+        holder.txt_delivery_date.setText(model.getDelivery_date());
+        holder.txt_order_number.setText("" + model.getId());
+        holder.txt_total_items.setText("" + model.getTotalItemsQuantity());
+        holder.txt_order_state.setText(model.getCurrentState());
+        switch (model.getCurrentState()) {
+            case Order.STATE1:
+                holder.state_background.setBackgroundColor(Color.RED);
+                break;
+            case Order.STATE2:
+                holder.state_background.setBackgroundColor(Color.YELLOW);
+                break;
+            case Order.STATE3:
+                holder.state_background.setBackgroundColor(Color.GREEN);
+                break;
         }
     }
 
 
-    public OrdersAdapter(ArrayList<Order> orders, RecyclerViewClickListener mListener, Context context) {
-        this.context = context;
-        this.orders = orders;
-        this.mListener = mListener;
-    }
-
+    @NonNull
     @Override
-    public OrdersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        CardView cardView = (CardView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_order, parent, false);
-
-        ViewHolder viewHolder = new ViewHolder(cardView, mListener, context);
-        return viewHolder;
+    public OrderHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_order, viewGroup, false);
+        return new OrderHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        viewHolder.setData(orders.get(position));
-    }
+    public static Order getOrderById(String id){
 
-    @Override
-    public int getItemCount() {
-        return orders.size();
-    }
-
-    public void updateList(ArrayList<Order> updatedData) {
-        orders = updatedData;
-        notifyDataSetChanged();
+        return null;
     }
 }

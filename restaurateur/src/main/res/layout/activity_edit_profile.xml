@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/constraintLayout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="it.polito.mad1819.group17.deliveryapp.restaurateur.profile.EditProfileActivity">
+
+    <!-- Appbar -->
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout_edit"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="it.polito.mad1819.group17.deliveryapp.restaurateur.profile.EditProfileActivity">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Appbar -->
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appBarLayout_edit"
+        <!-- Toolbar -->
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_edit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:title="@string/title_activity_edit_profile" />
 
-            <!-- Toolbar -->
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_edit"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
-                app:title="@string/title_activity_edit_profile" />
-
-        </android.support.design.widget.AppBarLayout>
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -44,6 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
                 android:orientation="vertical"
                 app:layout_constraintGuide_begin="16dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -54,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="64dp"
+                android:layout_marginLeft="64dp"
                 android:orientation="vertical"
                 app:layout_constraintGuide_begin="64dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -64,6 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintGuide_end="16dp"
@@ -144,13 +147,14 @@
                 app:layout_constraintBottom_toBottomOf="@+id/input_name_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_name"
-                app:srcCompat="@drawable/ic_person_black_24dp" />
+                android:src="@drawable/ic_person_black_24dp" />
 
             <TextView
                 android:id="@+id/text_name_req"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:text="@string/required"
                 android:textColor="@android:color/holo_red_dark"
                 app:layout_constraintRight_toLeftOf="@+id/label_name"
@@ -187,13 +191,14 @@
                 app:layout_constraintBottom_toBottomOf="@+id/input_phone_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_phone"
-                app:srcCompat="@drawable/ic_baseline_phone_24px" />
+                android:src="@drawable/ic_baseline_phone_24px" />
 
             <TextView
                 android:id="@+id/text_phone_req"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:text="@string/required"
                 android:textColor="@android:color/holo_red_dark"
                 app:layout_constraintRight_toLeftOf="@+id/label_phone"
@@ -229,13 +234,14 @@
                 app:layout_constraintBottom_toBottomOf="@+id/input_mail_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_mail"
-                app:srcCompat="@drawable/ic_email_black_24dp" />
+                android:src="@drawable/ic_email_black_24dp" />
 
             <TextView
                 android:id="@+id/text_mail_req"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:text="@string/required"
                 android:textColor="@android:color/holo_red_dark"
                 app:layout_constraintRight_toLeftOf="@+id/label_mail"
@@ -251,6 +257,7 @@
             <EditText
                 android:id="@+id/input_mail_sign_in"
                 style="@style/standardInputStyle.mail.autofill"
+                android:enabled="false"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
                 app:layout_constraintTop_toBottomOf="@+id/label_mail" />
@@ -277,6 +284,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:text="@string/required"
                 android:textColor="@android:color/holo_red_dark"
                 app:layout_constraintRight_toLeftOf="@+id/label_address"
@@ -289,7 +297,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/input_address_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_address"
-                app:srcCompat="@drawable/ic_person_pin_circle_black_24dp" />
+                android:src="@drawable/ic_person_pin_circle_black_24dp" />
 
             <EditText
                 android:id="@+id/input_address_sign_in"
@@ -317,13 +325,14 @@
                 app:layout_constraintBottom_toBottomOf="@+id/input_restaurant_type_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_restaurant_type"
-                app:srcCompat="@drawable/ic_baseline_fastfood_24px" />
+                android:src="@drawable/ic_baseline_fastfood_24px" />
 
             <TextView
                 android:id="@+id/text_restaurant_type_req"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:text="@string/required"
                 android:textColor="@android:color/holo_red_dark"
                 app:layout_constraintRight_toLeftOf="@+id/label_restaurant_type"
@@ -364,7 +373,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/input_free_day_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_free_day"
-                app:srcCompat="@drawable/ic_baseline_beach_access_24px" />
+                android:src="@drawable/ic_baseline_beach_access_24px" />
 
 
             <TextView
@@ -372,6 +381,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:text="@string/required"
                 android:textColor="@android:color/holo_red_dark"
                 app:layout_constraintRight_toLeftOf="@+id/label_free_day"
@@ -414,7 +424,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/input_working_time_opening_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_working_time_opening"
-                app:srcCompat="@drawable/ic_baseline_access_time_24px" />
+                android:src="@drawable/ic_baseline_access_time_24px" />
 
             <TextView
                 android:id="@+id/text_working_time_opening_req"
@@ -438,6 +448,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:text="@string/required"
                 android:textColor="@android:color/holo_red_dark"
                 app:layout_constraintRight_toLeftOf="@+id/label_working_time_closing"
@@ -447,6 +458,7 @@
                 android:id="@+id/label_working_time_closing"
                 style="@style/smallLabelStyle"
                 android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
                 android:text="@string/working_time_closing"
                 app:layout_constraintLeft_toRightOf="@+id/label_working_time_opening"
                 app:layout_constraintTop_toBottomOf="@+id/view_divider_free_day" />
@@ -484,7 +496,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/input_bio_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_bio"
-                app:srcCompat="@drawable/ic_baseline_description_24px" />
+                android:src="@drawable/ic_baseline_description_24px" />
 
             <TextView
                 android:id="@+id/label_bio"
@@ -528,4 +540,4 @@
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v4.widget.NestedScrollView>
-    </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>

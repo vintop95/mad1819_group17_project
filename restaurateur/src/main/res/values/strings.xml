@@ -23,10 +23,13 @@
 
     <!-- Order Details Strings -->
     <string name="title_activity_order_details">Order Details</string>
+    <string name="rider_name">Rider Name</string>
+    <string name="rider_phone">Rider Phone</string>
     <!-- Icons -->
     <string name="icon_restaurateur" translatable="false">Icon Restaurateur</string>
     <string name="icon_content" translatable="false">Icon Content</string>
     <string name="icon_history" translatable="false">Icon History</string>
+    <string name="icon_rider" translatable="false">Icon Rider</string>
     <!-- Labels -->
     <string name="name">Customer Name</string>
     <string name="phone">Customer Phone</string>
@@ -169,8 +172,7 @@
     <string name="image_profile_change">Change photo</string>
 
 
-    <string name="sign_in">
-        Otherwise <u>Sign Up</u>.
-    </string>
+    <string name="sign_in"> Otherwise <u>Sign Up</u>. </string>
+    <string name="new_order">NEW ORDER</string>
 
 </resources>
