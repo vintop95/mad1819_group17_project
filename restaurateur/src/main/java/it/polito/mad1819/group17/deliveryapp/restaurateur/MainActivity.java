@@ -24,9 +24,11 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
@@ -46,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     public final static int RC_SIGN_IN = 1;
 
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mRestaurateurDatabaseReference;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private ChildEventListener onChildAddedListener;
@@ -146,6 +150,8 @@ public class MainActivity extends AppCompatActivity {
         createNotificationChannel();
 
         mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
 
         onChildAddedListener = FirebaseDatabase.getInstance().getReference("/restaurateurs/" + mFirebaseAuth.getUid() + "/orders")
                 .addChildEventListener(new ChildEventListener() {
@@ -244,6 +250,13 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
+
+                if (isNewSignUp()) {
+                    Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
+                    editNewProfile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(editNewProfile);
+                    finish();
+                }
                 Toast.makeText(this, "Signed In!", Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Sign in canceled!", Toast.LENGTH_SHORT).show();
@@ -298,5 +311,10 @@ public class MainActivity extends AppCompatActivity {
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         FirebaseDatabase.getInstance().getReference("/restaurateurs/" + mFirebaseAuth.getUid() + "/orders").removeEventListener(onChildAddedListener);
+    }
+
+    public boolean isNewSignUp() {
+        FirebaseUserMetadata metadata = mFirebaseAuth.getCurrentUser().getMetadata();
+        return metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp();
     }
 }

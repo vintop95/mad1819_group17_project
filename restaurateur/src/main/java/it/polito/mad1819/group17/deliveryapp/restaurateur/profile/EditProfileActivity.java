@@ -4,9 +4,11 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,13 +24,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,8 +46,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import it.polito.mad1819.group17.deliveryapp.restaurateur.MainActivity;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.Restaurateur;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 import it.polito.mad1819.group17.restaurateur.R;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -46,12 +56,16 @@ public class EditProfileActivity extends AppCompatActivity {
     private DatabaseReference mRestaurateurDatabaseReference;
     private ValueEventListener mEditEventListener;
     private FirebaseAuth mFirebaseAuth;
+    private FirebaseStorage mFirebaseStorage;
+    private StorageReference mFirebaseStorageReference;
+
 
     public static final int CAMERA_REQUEST = 0;
     public static final int GALLERY_REQUEST = 1;
 
 
     private Toolbar toolbar;
+    private Boolean image_changed = false;
     private ImageView image_user_photo;
     private EditText input_name;
     private EditText input_phone;
@@ -64,16 +78,13 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText input_bio;
 
 
-    private void showBackArrowOnToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-    }
-
     private void locateViews() {
         toolbar = findViewById(R.id.toolbar_edit);
 
         image_user_photo = findViewById(R.id.image_user_photo_sign_in);
+        image_user_photo.setDrawingCacheEnabled(true);
+        image_user_photo.buildDrawingCache();
+
         input_name = findViewById(R.id.input_name_sign_in);
         input_phone = findViewById(R.id.input_phone_sign_in);
         input_mail = findViewById(R.id.input_mail_sign_in);
@@ -87,10 +98,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void feedViews(Restaurateur restaurateur) {
         if (restaurateur != null) {
-            if (restaurateur.getPhoto() != "") {
-                Log.d("XXXXXXX", "XXXXXXXX");
-                image_user_photo.setImageBitmap(PrefHelper.stringToBitMap(restaurateur.getPhoto()));
-                image_user_photo.setPadding(8, 8, 8, 8);
+            if (!image_changed && restaurateur.getImage_path() != "") {
+                Glide.with(image_user_photo.getContext()).load(restaurateur.getImage_path()).into(image_user_photo);
             }
             input_name.setText(restaurateur.getName());
             input_phone.setText(restaurateur.getPhone());
@@ -120,7 +129,230 @@ public class EditProfileActivity extends AppCompatActivity {
                 input_working_time_closing.setText(time_closing);
             if (restaurateur.getBio() != "")
                 input_bio.setText(restaurateur.getBio());
+        } else {
+            input_name.setText(mFirebaseAuth.getCurrentUser().getDisplayName());
+            input_mail.setText(mFirebaseAuth.getCurrentUser().getEmail());
         }
+    }
+
+    private int saveProfile() {
+
+        String name = input_name.getText().toString();
+        String phone = input_phone.getText().toString();
+        String mail = input_mail.getText().toString();
+        String address = input_address.getText().toString();
+        String restaurant_type = input_restaurant_type.getSelectedItem().toString();
+        String free_day = input_free_day.getSelectedItem().toString();
+        String time_opening = input_working_time_opening.getText().toString();
+        String time_closing = input_working_time_closing.getText().toString();
+        Date date_timeOpening = null;
+        Date date_timeClosing = null;
+        String bio = input_bio.getText().toString();
+
+        if (name.isEmpty() ||
+                phone.isEmpty() || !Patterns.PHONE.matcher(phone).matches() ||
+                mail.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(mail).matches() ||
+                address.isEmpty() ||
+                restaurant_type.isEmpty() ||
+                free_day.isEmpty() ||
+                time_opening.equals("--:--") || time_closing.equals("--:--"))
+            return -1;
+
+        else if (!time_opening.equals("--:--") && !time_closing.equals("--:--")) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+            try {
+                date_timeOpening = simpleDateFormat.parse(time_opening);
+                date_timeClosing = simpleDateFormat.parse(time_closing);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if (date_timeOpening.compareTo(date_timeClosing) >= 0)
+                return 0;
+            else {
+                if (image_changed) {
+                    Bitmap bitmap = ((BitmapDrawable) image_user_photo.getDrawable()).getBitmap();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data = baos.toByteArray();
+
+                    UploadTask uploadTask = mFirebaseStorageReference.child("profile_picture.jpg").putBytes(data);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Log.v("FIREBASE_LOG", "Picture Upload Fail - EditProfileActivity");
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            mFirebaseStorageReference.child("profile_picture.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Uri downUri = uri;
+                                    Log.v("FIREBASE_LOG", "Picture Upload Success - EditProfileActivity");
+                                    mRestaurateurDatabaseReference.child(mFirebaseAuth.getUid()).child("image_path").setValue(downUri.toString());
+                                }
+                            });
+                        }
+                    });
+                }
+
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put("name", name);
+                childUpdates.put("phone", phone);
+                childUpdates.put("mail", mail);
+                childUpdates.put("address", address);
+                childUpdates.put("restaurant_type", restaurant_type);
+                childUpdates.put("free_day", free_day);
+                childUpdates.put("working_time_opening", time_opening);
+                childUpdates.put("working_time_closing", time_closing);
+                childUpdates.put("bio", bio);
+
+                mRestaurateurDatabaseReference.child(mFirebaseAuth.getUid()).updateChildren(childUpdates);
+
+                if (mFirebaseAuth.getCurrentUser().getDisplayName() != name || mFirebaseAuth.getCurrentUser().getEmail() != mail) {
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(name)
+                            .build();
+                    mFirebaseAuth.getCurrentUser().updateProfile(profileUpdates);
+                    mFirebaseAuth.getCurrentUser().updateEmail(mail);
+                }
+
+                return 1;
+            }
+        } else
+            return -1;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Bitmap bitmapUserPhoto = null;
+
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            Bundle b = data.getExtras();
+            if (b != null) bitmapUserPhoto = (Bitmap) b.get("data");
+        } else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+            try {
+                Uri targetUri = data.getData();
+                if (targetUri != null)
+                    bitmapUserPhoto = BitmapFactory.decodeStream(
+                            getContentResolver().openInputStream(targetUri));
+
+            } catch (FileNotFoundException e) {
+                bitmapUserPhoto = null;
+                Toast.makeText(getApplicationContext(), "FileNotFoundException: Error in setting image!", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if (bitmapUserPhoto != null) {
+            image_changed = true;
+            image_user_photo.setImageBitmap(bitmapUserPhoto);
+            image_user_photo.setPadding(8, 8, 8, 8);
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_profile);
+
+        locateViews();
+
+        toolbar = findViewById(R.id.toolbar_edit);
+        showBackArrowOnToolbar();
+
+        image_user_photo.setOnClickListener(v -> startPickPictureDialog());
+
+        addOnFocusChangeListener(input_name);
+        addOnFocusChangeListener(input_phone);
+        addOnFocusChangeListener(input_mail);
+        addOnFocusChangeListener(input_address);
+        addOnFocusChangeListener(input_bio);
+
+        addTimePickerOnClick(input_working_time_opening);
+        addTimePickerOnClick(input_working_time_closing);
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
+
+        mFirebaseStorage = FirebaseStorage.getInstance();
+        mFirebaseStorageReference = mFirebaseStorage.getReference().child(mFirebaseAuth.getUid() + "/images/");
+
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        detachValueEventListener(mFirebaseAuth.getUid());
+        Log.v("FIREBASE_LOG", "EventListener removed onPause - EditProfileActivity");
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        attachValueEventListener(mFirebaseAuth.getUid());
+        Log.v("FIREBASE_LOG", "EventListener added onResume - EditProfileActivity");
+
+    }
+
+    private void attachValueEventListener(String userId) {
+        if (userId == null) throw new AssertionError();
+
+        if (mEditEventListener == null) {
+            mEditEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Restaurateur restaurateur = dataSnapshot.getValue(Restaurateur.class);
+                    feedViews(restaurateur);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(getApplicationContext(), "Unable to retrieve restaurateur's information", Toast.LENGTH_LONG).show();
+                }
+            };
+            mRestaurateurDatabaseReference.child(userId).addListenerForSingleValueEvent(mEditEventListener);
+        }
+    }
+
+    private void detachValueEventListener(String userId) {
+        if (mEditEventListener != null && userId != null) {
+            mRestaurateurDatabaseReference.child(userId).removeEventListener(mEditEventListener);
+            mEditEventListener = null;
+        }
+    }
+
+
+    private void showBackArrowOnToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_edit_profile, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.btn_save) {
+            int result = saveProfile();
+            if (result == 1) {
+                Toast.makeText(getApplicationContext(), getString(R.string.settings_changed), Toast.LENGTH_LONG).show();
+                startActivity(new Intent(EditProfileActivity.this, MainActivity.class));
+                finish();
+            } else if (result == -1)
+                Toast.makeText(getApplicationContext(), getString(R.string.fill_required_fields), Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(getApplicationContext(), getString(R.string.wrong_times), Toast.LENGTH_LONG).show();
+            return true;
+        }
+        return false;
     }
 
     private void addTimePickerOnClick(View view) {
@@ -181,157 +413,6 @@ public class EditProfileActivity extends AppCompatActivity {
         );
 
         myAlertDialog.show();
-    }
-
-    private int saveProfile() {
-        String stringUserPhoto = PrefHelper.getInstance().getString(ProfileFragment.PHOTO, null);
-        String name = input_name.getText().toString();
-        String phone = input_phone.getText().toString();
-        String mail = input_mail.getText().toString();
-        String address = input_address.getText().toString();
-        String restaurant_type = input_restaurant_type.getSelectedItem().toString();
-        String free_day = input_free_day.getSelectedItem().toString();
-        String time_opening = input_working_time_opening.getText().toString();
-        String time_closing = input_working_time_closing.getText().toString();
-        Date date_timeOpening = null;
-        Date date_timeClosing = null;
-        String bio = input_bio.getText().toString();
-
-        if (name.isEmpty() ||
-                phone.isEmpty() || !Patterns.PHONE.matcher(phone).matches() ||
-                mail.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(mail).matches() ||
-                address.isEmpty() ||
-                restaurant_type.isEmpty() ||
-                free_day.isEmpty() ||
-                time_opening.equals("--:--") || time_closing.equals("--:--"))
-            return -1;
-
-        else if (!time_opening.equals("--:--") && !time_closing.equals("--:--")) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-            try {
-                date_timeOpening = simpleDateFormat.parse(time_opening);
-                date_timeClosing = simpleDateFormat.parse(time_closing);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            if (date_timeOpening.compareTo(date_timeClosing) >= 0)
-                return 0;
-            else {
-                Restaurateur restaurateur = new Restaurateur(
-                        stringUserPhoto,
-                        name,
-                        phone,
-                        mail,
-                        address,
-                        restaurant_type,
-                        free_day,
-                        time_opening,
-                        time_closing,
-                        bio);
-                Map<String, Object> restaurateurValues = restaurateur.toMap();
-
-                Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put(mFirebaseAuth.getUid(), restaurateurValues);
-
-                mRestaurateurDatabaseReference.updateChildren(childUpdates);
-                return 1;
-            }
-        } else
-            return -1;
-    }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
-
-        locateViews();
-
-        toolbar = findViewById(R.id.toolbar_edit);
-        showBackArrowOnToolbar();
-
-        image_user_photo.setOnClickListener(v -> startPickPictureDialog());
-
-        addOnFocusChangeListener(input_name);
-        addOnFocusChangeListener(input_phone);
-        addOnFocusChangeListener(input_mail);
-        addOnFocusChangeListener(input_address);
-        addOnFocusChangeListener(input_bio);
-
-        addTimePickerOnClick(input_working_time_opening);
-        addTimePickerOnClick(input_working_time_closing);
-
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        detachValueEventListener(mFirebaseAuth.getUid());
-        Log.v("FIREBASE_LOG", "EventListener removed onPause - EditProfileActivity");
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        attachValueEventListener(mFirebaseAuth.getUid());
-        Log.v("FIREBASE_LOG", "EventListener added onResume - EditProfileActivity");
-
-    }
-
-    private void attachValueEventListener(String userId) {
-        if(userId == null) throw new AssertionError();
-
-        if (mEditEventListener == null) {
-            mEditEventListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Restaurateur restaurateur = dataSnapshot.getValue(Restaurateur.class);
-                    feedViews(restaurateur);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(getApplicationContext(), "Unable to retrieve restaurateur's information", Toast.LENGTH_LONG).show();
-                }
-            };
-            mRestaurateurDatabaseReference.child(userId).addListenerForSingleValueEvent(mEditEventListener);
-        }
-    }
-
-    private void detachValueEventListener(String userId) {
-        if (mEditEventListener != null && userId != null) {
-            mRestaurateurDatabaseReference.child(userId).removeEventListener(mEditEventListener);
-            mEditEventListener = null;
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_edit_profile, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.btn_save) {
-            int result = saveProfile();
-            if (result == 1) {
-                Toast.makeText(getApplicationContext(), getString(R.string.settings_changed), Toast.LENGTH_LONG).show();
-                finish();
-            } else if (result == -1)
-                Toast.makeText(getApplicationContext(), getString(R.string.fill_required_fields), Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(getApplicationContext(), getString(R.string.wrong_times), Toast.LENGTH_LONG).show();
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -413,34 +494,6 @@ public class EditProfileActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Bitmap bitmapUserPhoto = null;
-
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            Bundle b = data.getExtras();
-            if (b != null) bitmapUserPhoto = (Bitmap) b.get("data");
-        } else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
-            try {
-                Uri targetUri = data.getData();
-                if (targetUri != null)
-                    bitmapUserPhoto = BitmapFactory.decodeStream(
-                            getContentResolver().openInputStream(targetUri));
-
-            } catch (FileNotFoundException e) {
-                bitmapUserPhoto = null;
-                Toast.makeText(getApplicationContext(), "FileNotFoundException: Error in setting image!", Toast.LENGTH_LONG).show();
-            }
-        }
-
-        if (bitmapUserPhoto != null) {
-            PrefHelper.getInstance().putString(ProfileFragment.PHOTO, PrefHelper.getInstance().bitMapToStringLossJpg(bitmapUserPhoto));
-            image_user_photo.setImageBitmap(bitmapUserPhoto);
-            image_user_photo.setPadding(8, 8, 8, 8);
-        }
     }
 
     private void addOnFocusChangeListener(EditText editText) {

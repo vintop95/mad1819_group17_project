@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import it.polito.mad1819.group17.deliveryapp.restaurateur.Restaurateur;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 import it.polito.mad1819.group17.restaurateur.R;
 
 
@@ -30,18 +30,6 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference mRestaurateurDatabaseReference;
     private ValueEventListener mProfileEventListener;
     private FirebaseAuth mFirebaseAuth;
-
-    // TODO: implement Firebase Storage to remove shared preference for photo
-    public static final String PHOTO = "restaurant_photo";
-    /*public static final String NAME = "restaurant_name";
-    public static final String PHONE = "restaurant_phone";
-    public static final String MAIL = "restaurant_mail";
-    public static final String ADDRESS = "restaurant_address";
-    public static final String RESTAURANT_TYPE = "restaurant_type";
-    public static final String FREE_DAY = "restaurant_free_day";
-    public static final String TIME_OPENING = "restaurant_time_opening";
-    public static final String TIME_CLOSING = "restaurant_time_closing";
-    public static final String BIO = "restaurant_bio";*/
 
     private ImageView image_user_photo;
     private TextView txt_name;
@@ -67,9 +55,8 @@ public class ProfileFragment extends Fragment {
 
     private void feedViews(Restaurateur restaurateur) {
         if (restaurateur != null) {
-            if (restaurateur.getPhoto() != "") {
-                image_user_photo.setImageBitmap(PrefHelper.stringToBitMap(restaurateur.getPhoto()));
-                image_user_photo.setPadding(8, 8, 8, 8);
+            if (restaurateur.getImage_path() != "") {
+                Glide.with(image_user_photo.getContext()).load(restaurateur.getImage_path()).into(image_user_photo);
             }
             txt_name.setText(restaurateur.getName());
             txt_phone.setText(restaurateur.getPhone());
@@ -119,7 +106,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void attachValueEventListener(String userId) {
-        if(userId == null) throw new AssertionError();
+        if (userId == null) throw new AssertionError();
 
         if (mProfileEventListener == null) {
             mProfileEventListener = new ValueEventListener() {
@@ -134,7 +121,7 @@ public class ProfileFragment extends Fragment {
                     Toast.makeText(getActivity().getApplicationContext(), "Unable to retrieve restaurateur's information", Toast.LENGTH_LONG).show();
                 }
             };
-            mRestaurateurDatabaseReference.child(userId).addListenerForSingleValueEvent(mProfileEventListener);
+            mRestaurateurDatabaseReference.child(userId).addValueEventListener(mProfileEventListener);
         }
     }
 
