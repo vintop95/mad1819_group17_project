@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Order implements Serializable/*, Parcelable*/ {
+public class Order implements Serializable {
 
     public final static String STATE1 = "Accepted";
     public final static String STATE2 = "In preparation";

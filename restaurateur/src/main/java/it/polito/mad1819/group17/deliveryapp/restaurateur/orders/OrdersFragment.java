@@ -1,35 +1,23 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.orders;
 
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
 import com.google.firebase.database.Query;
-import com.google.firebase.database.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-
-import it.polito.mad1819.group17.deliveryapp.restaurateur.MainActivity;
 import it.polito.mad1819.group17.restaurateur.R;
 
 
@@ -44,6 +32,30 @@ public class OrdersFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
 
+        /*Query query = FirebaseDatabase.getInstance()
+                .getReference("/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders")
+                .orderByChild("sorting_field")
+                .startAt(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .endAt(FirebaseAuth.getInstance().getCurrentUser().getUid()+"\uf8ff");
+
+        FirebaseRecyclerOptions<Order> options = new FirebaseRecyclerOptions.Builder<Order>()
+                .setQuery(query, Order.class)
+                .build();
+
+        mAdapter = new OrdersAdapter(options, getFragmentManager().findFragmentByTag(OrdersFragment.class.getName()));
+        RecyclerView recyclerView = view.findViewById(R.id.rv_orders);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(mAdapter);*/
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.d("XXXX", "/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders");
+        Toast.makeText(getContext(), "/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders", Toast.LENGTH_LONG).show();
         Query query = FirebaseDatabase.getInstance()
                 .getReference("/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders")
                 .orderByChild("sorting_field")
@@ -56,13 +68,11 @@ public class OrdersFragment extends Fragment {
 
         mAdapter = new OrdersAdapter(options, getFragmentManager().findFragmentByTag(OrdersFragment.class.getName())/*getActivity(), listener*/);
         RecyclerView recyclerView = view.findViewById(R.id.rv_orders);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(mAdapter);
-
-        return view;
+        mAdapter.startListening();
     }
-
 
     @Override
     public void onStart() {
