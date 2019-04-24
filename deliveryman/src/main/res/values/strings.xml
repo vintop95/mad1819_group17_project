@@ -20,6 +20,8 @@
     <string name="request_history">Request History</string>
     <string name="button_history" translatable="false">NEXT STATE</string>
 
+    <string name="new_delivery_request">NEW DELIVERY REQUEST</string>
+
 
     <!-- Alert Dialogs -->
     <string name="confirm_next_state_title">Do you want to confirm the next state?</string>

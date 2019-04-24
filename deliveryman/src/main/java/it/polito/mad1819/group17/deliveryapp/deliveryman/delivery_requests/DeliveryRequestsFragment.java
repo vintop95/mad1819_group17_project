@@ -60,7 +60,6 @@ public class DeliveryRequestsFragment extends Fragment {
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(mAdapter);
-        //mAdapter.startListening();
     }
 
     @Override

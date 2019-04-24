@@ -1,12 +1,18 @@
 package it.polito.mad1819.group17.deliveryapp.deliveryman;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,18 +22,29 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
 import java.util.Locale;
 
+import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.DeliveryRequest;
+import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.DeliveryRequestDetailsActivity;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.DeliveryRequestsFragment;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.profile.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
 
     public final static int RC_SIGN_IN = 1;
+    public final static String CHANNEL_ID = "new_delivery_request_channel_id";
+
+    private int notificationRequestCode = 0;
+    private ChildEventListener onChildAddedListener;
+
+    private Toolbar toolbar;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -70,33 +87,56 @@ public class MainActivity extends AppCompatActivity {
         fm.beginTransaction().attach(active).commit();
     }
 
-    /*private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "new_order_channel";
+            String description = "new_order_channel_description";
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_delivery_requests:
-
-                    return true;
-                case R.id.navigation_profile:
-
-                    return true;
-            }
-            return false;
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("new_order_channel_id", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
-    };*/
+    }
+
+    public void sendNotification(String delivery_request_id, String delivery_timestamp) {
+        Intent intent = new Intent(this, DeliveryRequestDetailsActivity.class)
+                .putExtra("id", delivery_request_id)
+                .setAction(Long.toString(System.currentTimeMillis()));
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+        builder.setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                .setContentTitle(getResources().getString(R.string.new_delivery_request))
+                .setContentText(delivery_timestamp)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        notificationManagerCompat.notify(notificationRequestCode++, builder.build());
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        createNotificationChannel();
+
         mFirebaseAuth = FirebaseAuth.getInstance();
+
         mAuthStateListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if (user != null) {
-                // Toast.makeText(MainActivity.this, "Signed In!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Signed In!", Toast.LENGTH_SHORT).show();
             } else {
                 startActivityForResult(
                         AuthUI.getInstance()
@@ -109,6 +149,43 @@ public class MainActivity extends AppCompatActivity {
                         RC_SIGN_IN);
             }
         };
+
+        onChildAddedListener = FirebaseDatabase.getInstance().getReference()
+                .child("deliverymen").child(mFirebaseAuth.getUid()).child("delivery_requests")
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        DeliveryRequest newDeliveryRequest = dataSnapshot.getValue(DeliveryRequest.class);
+                        newDeliveryRequest.setId(dataSnapshot.getKey());
+                        if (newDeliveryRequest.getNotified().equals("no")) {
+                            sendNotification(newDeliveryRequest.getId(), newDeliveryRequest.getTimestamp());
+                            FirebaseDatabase.getInstance()
+                                    .getReference()
+                                    .child("deliverymen")
+                                    .child(mFirebaseAuth.getUid())
+                                    .child("delivery_requests")
+                                    .child(newDeliveryRequest.getId())
+                                    .child("notified")
+                                    .setValue("yes");
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

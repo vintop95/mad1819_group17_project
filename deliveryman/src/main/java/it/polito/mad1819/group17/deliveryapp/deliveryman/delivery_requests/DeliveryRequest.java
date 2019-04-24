@@ -19,9 +19,18 @@ public class DeliveryRequest implements Serializable {
     private String sorting_field;
     private String timestamp;
     private HashMap<String, String> state_stateTime;
+    private String notified;
 
     public DeliveryRequest() {
 
+    }
+
+    public String getNotified() {
+        return notified;
+    }
+
+    public void setNotified(String notified) {
+        this.notified = notified;
     }
 
     public String getId() {

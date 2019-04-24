@@ -12,6 +12,7 @@
     <string name="delivery_address">Indirizzo Consegna</string>
     <string name="request_history">Storia Richiesta</string>
 
+    <string name="new_delivery_request">NUOVA RICHIESTA CONSEGNA</string>
 
     <!-- Alert Dialogs -->
     <string name="confirm_next_state_title">Vuoi passare allo stato successivo?</string>
