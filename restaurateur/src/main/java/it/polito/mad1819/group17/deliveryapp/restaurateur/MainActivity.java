@@ -183,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
                         Order newOrder = dataSnapshot.getValue(Order.class);
                         if (newOrder.getNotified().equals("no")) {
                             sendNotification(newOrder.getId(), newOrder.getDelivery_timestamp());
-                            Log.d("WWW", "WWW");
                             mOrdersRef.child(newOrder.getId()).child("notified").setValue("yes");
                         }
                     }
