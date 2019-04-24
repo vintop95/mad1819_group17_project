@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
+import it.polito.mad1819.group17.deliveryapp.deliveryman.DeliveryRequestDetailsActivity;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.R;
 
 public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryRequest, DeliveryRequestsAdapter.DeliveryRequestHolder> {
@@ -48,11 +49,14 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
 
         @Override
         public void onClick(View v) {
-            DeliveryRequest clickedDeliveryRequest = getItem(getAdapterPosition());
+            /*DeliveryRequest clickedDeliveryRequest = getItem(getAdapterPosition());
             fragment.startActivityForResult(
                     new Intent(fragment.getActivity().getApplicationContext(), DeliveryRequestDetailsActivity.class)
                             .putExtra("delivery_request", clickedDeliveryRequest),
                     DeliveryRequestsFragment.SHOW_DETAILS_REQUEST);
+        }*/
+            fragment.startActivity(
+                    new Intent(fragment.getActivity().getApplicationContext(), DeliveryRequestDetailsActivity.class));
         }
     }
     /* ------------------------------------------------------------------------------------------- */

@@ -7,4 +7,7 @@
     <string name="customer_phone">Telefono Cliente</string>
     <string name="delivery_time">Ora Consegna</string>
     <string name="delivery_date">Data Consegna</string>
+    <string name="delivery_request_id">ID Richiesta</string>
+    <string name="delivery_address">Indirizzo Consegna</string>
+    <string name="request_history">Storia Richiesta</string>
 </resources>

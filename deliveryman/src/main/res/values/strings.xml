@@ -4,10 +4,18 @@
     <string name="title_delivery_requests">Delivery requests</string>
     <string name="title_profile">Profile</string>
 
+    <string name="icon_customer" translatable="false">Icon Customer</string>
+    <string name="icon_delivery_request" translatable="false">Icon Delivery Request</string>
+    <string name="icon_history" translatable="false">Icon History</string>
+
 
     <string name="time" translatable="false">--:--</string>
     <string name="customer_name">Customer Name</string>
     <string name="customer_phone">Customer Phone</string>
     <string name="delivery_time">Delivery Time</string>
     <string name="delivery_date">Delivery Date</string>
+    <string name="delivery_request_id">Request ID</string>
+    <string name="delivery_address">Delivery Address</string>
+    <string name="request_history">Request History</string>
+    <string name="button_history" translatable="false">NEXT STATE</string>
 </resources>
