@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -21,7 +22,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.time.LocalDate;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import it.polito.mad1819.group17.restaurateur.R;
 
@@ -40,9 +45,9 @@ public class OrderDetailsActivity extends AppCompatActivity {
     private TextView txt_delivery_address;
     private TextView txt_order_notes;
     private Button btn_next_state;
-    private CardView card_rider;
-    private TextView txt_rider_name;
-    private TextView txt_rider_phone;
+    private CardView card_deliveryman;
+    private TextView txt_deliveryman_name;
+    private TextView txt_deliveryman_phone;
 
     private Order inputOrder;
 
@@ -63,9 +68,9 @@ public class OrderDetailsActivity extends AppCompatActivity {
         txt_delivery_address = findViewById(R.id.txt_delivery_address);
         txt_order_notes = findViewById(R.id.txt_order_notes);
         btn_next_state = findViewById(R.id.btn_next_state);
-        card_rider = findViewById(R.id.card_rider);
-        txt_rider_name = findViewById(R.id.txt_rider_name);
-        txt_rider_phone = findViewById(R.id.txt_rider_phone);
+        card_deliveryman = findViewById(R.id.card_deliveryman);
+        txt_deliveryman_name = findViewById(R.id.txt_deliveryman_name);
+        txt_deliveryman_phone = findViewById(R.id.txt_deliveryman_phone);
     }
 
     private void feedViews(Order selectedOrder) {
@@ -86,10 +91,10 @@ public class OrderDetailsActivity extends AppCompatActivity {
         txt_order_content.setText(order_content);
 
 
-        if (!TextUtils.isEmpty(selectedOrder.getRider_id())) {
-            txt_rider_name.setText(selectedOrder.getRider_name());
-            txt_rider_phone.setText(Html.fromHtml("<u>" + selectedOrder.getRider_phone() + "<u/>"));
-            txt_rider_phone.setOnClickListener(v -> {
+        if (!TextUtils.isEmpty(selectedOrder.getDeliveryman_id())) {
+            txt_deliveryman_name.setText(selectedOrder.getDeliveryman_name());
+            txt_deliveryman_phone.setText(Html.fromHtml("<u>" + selectedOrder.getDeliveryman_phone() + "<u/>"));
+            txt_deliveryman_phone.setOnClickListener(v -> {
                 String phoneNumber = ((TextView) v).getText().toString();
                 startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
             });
@@ -127,12 +132,12 @@ public class OrderDetailsActivity extends AppCompatActivity {
             if (inputOrder.getCurrentState() == Order.STATE3) {
                 btn_next_state.setTextColor(getResources().getColor(R.color.button_disabled_text));
                 btn_next_state.setEnabled(false);
-                selectRider();
-                card_rider.setVisibility(View.VISIBLE);
-            }
-            FirebaseDatabase.getInstance()
-                    .getReference("/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders/" + inputOrder.getId())
-                    .setValue(inputOrder);
+                selectDeliveryman();
+                card_deliveryman.setVisibility(View.VISIBLE);
+            } else
+                FirebaseDatabase.getInstance()
+                        .getReference("/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders/" + inputOrder.getId())
+                        .setValue(inputOrder);
         }
 
     }
@@ -141,26 +146,77 @@ public class OrderDetailsActivity extends AppCompatActivity {
         setResult(STATE_NOT_CHANGED);
     }
 
-    private void selectRider() {
+    private void selectDeliveryman() {
 
         //choose rider from firebase
-        String rider_id = "trial_rider_id";
-        String rider_name = "trial_rider_name";
-        String rider_phone = "3319898789";
+        FirebaseDatabase.getInstance().getReference()
+                .child("deliverymen").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // select the deliveryman
+                int randomValue = new Random().nextInt((int) dataSnapshot.getChildrenCount());
+                int i = 0;
+                Deliveryman selectedDeliveryman = null;
+                for (DataSnapshot dataSnapshotDeliveryman : dataSnapshot.getChildren()) {
+                    if (i == randomValue) {
+                        selectedDeliveryman = (Deliveryman) dataSnapshotDeliveryman.getValue(Deliveryman.class);
+                        selectedDeliveryman.setId(dataSnapshotDeliveryman.getKey());
+                        break;
+                    }
+                    i++;
+                }
 
-        //update the order
-        inputOrder.setRider_id(rider_id);
-        inputOrder.setRider_name(rider_name);
-        inputOrder.setRider_phone(rider_phone);
-        FirebaseDatabase.getInstance().getReference().child("orders").child(inputOrder.getId()).setValue(inputOrder);
+                // create the new delivery request
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                String currentTimestamp = formatter.format(new Date());
+                HashMap<String, String> state_stateTime = new HashMap<String, String>();
+                state_stateTime.put("state1", currentTimestamp);
+                DeliveryRequest newDeliveryRequest = new DeliveryRequest(
+                        inputOrder.getDelivery_address(),
+                        inputOrder.getCustomer_name(),
+                        inputOrder.getCustomer_phone(),
+                        "note...",
+                        "state0_" + inputOrder.getDelivery_timestamp(),
+                        inputOrder.getDelivery_timestamp(),
+                        state_stateTime
+                );
 
-        //notify rider
+                // send delivery request to the rider
+                String newDeliveryRequestKey = FirebaseDatabase.getInstance().getReference()
+                        .child("deliverymen").child(selectedDeliveryman.getId())
+                        .child("delivery_requests").push().getKey();
+                FirebaseDatabase.getInstance().getReference().child("deliverymen")
+                        .child(selectedDeliveryman.getId()).child("delivery_requests")
+                        .child(newDeliveryRequestKey).setValue(newDeliveryRequest);
 
-        txt_rider_name.setText(inputOrder.getRider_name());
-        txt_rider_phone.setText(Html.fromHtml("<u>" + inputOrder.getRider_phone() + "<u/>"));
-        txt_rider_phone.setOnClickListener(v -> {
-            String phoneNumber = ((TextView) v).getText().toString();
-            startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
+                // update the order with deliveryman's information
+                inputOrder.setDeliveryman_id(selectedDeliveryman.getId());
+                inputOrder.setDeliveryman_name(selectedDeliveryman.getName());
+                inputOrder.setDeliveryman_phone(selectedDeliveryman.getPhone());
+                FirebaseDatabase.getInstance()
+                        .getReference("/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders/" + inputOrder.getId())
+                        .setValue(inputOrder);
+                /*Map<String, Object> updates = new HashMap<>();
+                updates.put("deliveyman_id", inputOrder.getDeliveryman_id());
+                updates.put("deliveyman_name", inputOrder.getDeliveryman_name());
+                updates.put("deliveyman_phone", inputOrder.getDeliveryman_phone());
+                FirebaseDatabase.getInstance().getReference().child("deliverymen")
+                        .child(selectedDeliveryman.getId()).child("delivery_requests")
+                        .child(newDeliveryRequestKey).updateChildren(updates);*/
+
+                // update UI
+                txt_deliveryman_name.setText(inputOrder.getDeliveryman_name());
+                txt_deliveryman_phone.setText(Html.fromHtml("<u>" + inputOrder.getDeliveryman_phone() + "<u/>"));
+                txt_deliveryman_phone.setOnClickListener(v -> {
+                    String phoneNumber = ((TextView) v).getText().toString();
+                    startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
         });
     }
 
@@ -172,9 +228,9 @@ public class OrderDetailsActivity extends AppCompatActivity {
                     showConfirmationDialog();
                 }
             });
-            card_rider.setVisibility(View.GONE);
+            card_deliveryman.setVisibility(View.GONE);
         } else {
-            card_rider.setVisibility(View.VISIBLE);
+            card_deliveryman.setVisibility(View.VISIBLE);
             btn_next_state.setTextColor(getResources().getColor(R.color.button_disabled_text));
             btn_next_state.setEnabled(false);
         }

@@ -327,7 +327,7 @@
 
 
             <android.support.v7.widget.CardView
-                android:id="@+id/card_rider"
+                android:id="@+id/card_deliveryman"
                 android:layout_width="match_parent"
                 android:layout_height="86dp"
                 android:layout_marginStart="8dp"
@@ -346,7 +346,7 @@
                     android:layout_height="match_parent">
 
                     <android.support.constraint.Guideline
-                        android:id="@+id/guideline_rider"
+                        android:id="@+id/guideline_deliveryman"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -354,7 +354,7 @@
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <ImageView
-                        android:id="@+id/image_rider"
+                        android:id="@+id/image_deliveryman"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -366,47 +366,47 @@
                         android:src="@drawable/ic_baseline_motorcycle_24px" />
 
                     <TextView
-                        android:id="@+id/label_rider_name"
+                        android:id="@+id/label_deliveryman_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="@string/rider_name"
+                        android:text="@string/deliveryman_name"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        app:layout_constraintStart_toStartOf="@+id/txt_rider_name"
+                        app:layout_constraintStart_toStartOf="@+id/txt_deliveryman_name"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/txt_rider_name"
+                        android:id="@+id/txt_deliveryman_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
-                        android:text="@string/rider_name"
+                        android:text="@string/deliveryman_name"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                         app:layout_constraintHorizontal_chainStyle="spread_inside"
-                        app:layout_constraintStart_toStartOf="@+id/guideline_rider"
-                        app:layout_constraintTop_toBottomOf="@+id/label_rider_name" />
+                        app:layout_constraintStart_toStartOf="@+id/guideline_deliveryman"
+                        app:layout_constraintTop_toBottomOf="@+id/label_deliveryman_name" />
 
 
                     <TextView
-                        android:id="@+id/label_rider_phone"
+                        android:id="@+id/label_deliveryman_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="104dp"
                         android:layout_marginLeft="104dp"
-                        android:text="@string/rider_phone"
+                        android:text="@string/deliveryman_phone"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        app:layout_constraintStart_toEndOf="@+id/label_rider_name"
-                        app:layout_constraintTop_toTopOf="@+id/label_rider_name" />
+                        app:layout_constraintStart_toEndOf="@+id/label_deliveryman_name"
+                        app:layout_constraintTop_toTopOf="@+id/label_deliveryman_name" />
 
                     <TextView
-                        android:id="@+id/txt_rider_phone"
+                        android:id="@+id/txt_deliveryman_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/rider_phone"
+                        android:text="@string/deliveryman_phone"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                        app:layout_constraintStart_toStartOf="@+id/label_rider_phone"
-                        app:layout_constraintTop_toBottomOf="@+id/label_rider_phone" />
+                        app:layout_constraintStart_toStartOf="@+id/label_deliveryman_phone"
+                        app:layout_constraintTop_toBottomOf="@+id/label_deliveryman_phone" />
 
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>
@@ -424,7 +424,7 @@
                 app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/card_rider">
+                app:layout_constraintTop_toBottomOf="@+id/card_deliveryman">
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"

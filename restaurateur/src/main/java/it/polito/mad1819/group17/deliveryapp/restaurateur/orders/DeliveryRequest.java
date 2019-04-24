@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests;
+package it.polito.mad1819.group17.deliveryapp.restaurateur.orders;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -19,10 +19,20 @@ public class DeliveryRequest implements Serializable {
     private String sorting_field;
     private String timestamp;
     private HashMap<String, String> state_stateTime;
-    private String notified="no";
+    private String notified = "no";
 
     public DeliveryRequest() {
 
+    }
+
+    public DeliveryRequest(String address, String customer_name, String customer_phone, String notes, String sorting_field, String timestamp, HashMap<String, String> state_stateTime) {
+        this.address = address;
+        this.customer_name = customer_name;
+        this.customer_phone = customer_phone;
+        this.notes = notes;
+        this.sorting_field = sorting_field;
+        this.timestamp = timestamp;
+        this.state_stateTime = state_stateTime;
     }
 
     public String getNotified() {
@@ -97,11 +107,11 @@ public class DeliveryRequest implements Serializable {
         this.state_stateTime = state_stateTime;
     }
 
-    public String getDelivery_time(){
+    public String getDelivery_time() {
         return timestamp.split(" ")[1];
     }
 
-    public String getDelivery_date(){
+    public String getDelivery_date() {
         return timestamp.split(" ")[0];
     }
 
