@@ -25,6 +25,7 @@ public class OrdersFragment extends Fragment {
 
     public final static int SHOW_DETAILS_REQUEST = 1;
     private OrdersAdapter mAdapter;
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,77 +33,38 @@ public class OrdersFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
 
-        /*Query query = FirebaseDatabase.getInstance()
-                .getReference("/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders")
-                .orderByChild("sorting_field")
-                .startAt(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .endAt(FirebaseAuth.getInstance().getCurrentUser().getUid()+"\uf8ff");
-
-        FirebaseRecyclerOptions<Order> options = new FirebaseRecyclerOptions.Builder<Order>()
-                .setQuery(query, Order.class)
-                .build();
-
-        mAdapter = new OrdersAdapter(options, getFragmentManager().findFragmentByTag(OrdersFragment.class.getName()));
-        RecyclerView recyclerView = view.findViewById(R.id.rv_orders);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(mAdapter);*/
-
+        recyclerView = view.findViewById(R.id.rv_orders);
         return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        Query query = FirebaseDatabase.getInstance()
-                .getReference("/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders")
-                .orderByChild("sorting_field")
-                /*.startAt(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .endAt(FirebaseAuth.getInstance().getCurrentUser().getUid()+"\uf8ff")*/;
-
-        FirebaseRecyclerOptions<Order> options = new FirebaseRecyclerOptions.Builder<Order>()
-                .setQuery(query, Order.class)
-                .build();
-
-        mAdapter = new OrdersAdapter(options, getFragmentManager().findFragmentByTag(OrdersFragment.class.getName())/*getActivity(), listener*/);
-        RecyclerView recyclerView = view.findViewById(R.id.rv_orders);
-        recyclerView.setHasFixedSize(false);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(mAdapter);
-        mAdapter.startListening();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mAdapter.startListening();
-        /*Collections.sort(orders, new Comparator<Order>() {
-            @Override
-            public int compare(Order o1, Order o2) {
-                if (o1.getCurrentState() == Order.STATE3)
-                    return 1;
-                else
-                    return o1.getDelivery_timestamp().compareTo(o2.getDelivery_timestamp());
-            }
-        });
-        mAdapter = new OrdersAdapter(orders, listener, getContext());
-        recyclerView.setAdapter(mAdapter);
-        mAdapter.updateList(orders);*/
+        if (FirebaseAuth.getInstance().getUid() != null) {
+            Query query = FirebaseDatabase.getInstance()
+                    .getReference()
+                    .child("restaurateurs")
+                    .child(FirebaseAuth.getInstance().getUid())
+                    .child("orders")
+                    .orderByChild("sorting_field");
+
+            FirebaseRecyclerOptions<Order> options = new FirebaseRecyclerOptions.Builder<Order>()
+                    .setQuery(query, Order.class)
+                    .build();
+
+            mAdapter = new OrdersAdapter(options, getFragmentManager().findFragmentByTag(OrdersFragment.class.getName()));
+            recyclerView.setHasFixedSize(false);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(mAdapter);
+            mAdapter.startListening();
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mAdapter.stopListening();
+        if (FirebaseAuth.getInstance().getUid() != null)
+            mAdapter.stopListening();
     }
 
-    /*@Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SHOW_DETAILS_REQUEST && resultCode == OrderDetailsActivity.STATE_CHANGED) {
-            ArrayList<Order> updatedOrders = (ArrayList<Order>) data.getSerializableExtra("orders");
-            this.orders = updatedOrders;
-        }
-        Log.d("XX", "ORDERS FRAGMENT onActivityResult");
-    }*/
 }

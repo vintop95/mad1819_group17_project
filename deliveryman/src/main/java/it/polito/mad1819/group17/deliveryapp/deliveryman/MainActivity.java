@@ -15,6 +15,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -22,9 +23,11 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
@@ -33,7 +36,11 @@ import java.util.Locale;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.DeliveryRequestDetailsActivity;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.DeliveryRequestsFragment;
+import it.polito.mad1819.group17.deliveryapp.deliveryman.profile.EditProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.profile.ProfileFragment;
+import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.CurrencyHelper;
+import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.PrefHelper;
+import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.ProgressBarHandler;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,19 +48,23 @@ public class MainActivity extends AppCompatActivity {
     public final static int RC_SIGN_IN = 1;
     public final static String CHANNEL_ID = "new_delivery_request_channel_id";
 
-    private int notificationRequestCode = 0;
-    private ChildEventListener onChildAddedListener;
 
-    private Toolbar toolbar;
-
+    private FirebaseDatabase mFirebaseDatabase = null;
+    private DatabaseReference mRestaurateurDatabaseReference = null;
+    private DatabaseReference mDeliveryRequestsRef = null;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private ChildEventListener onChildAddedListener;
+    private int notificationRequestCode = 0;
+
+    private Toolbar toolbar;
 
     final FragmentManager fm = getSupportFragmentManager();
     Fragment active;
     Fragment profileFragment = new ProfileFragment();
     Fragment deliveryRequestsFragment = new DeliveryRequestsFragment();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
+    private ProgressBarHandler progressBarHandler;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -85,6 +96,71 @@ public class MainActivity extends AppCompatActivity {
             active = deliveryRequestsFragment;
         }
         fm.beginTransaction().attach(active).commit();
+    }
+
+    private void initFirebaseAuth() {
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mAuthStateListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                // Toast.makeText(MainActivity.this, "Signed In!", Toast.LENGTH_SHORT).show();
+                initFirebaseDb(mFirebaseAuth.getCurrentUser().getUid());
+            } else {
+                startActivityForResult(
+                        AuthUI.getInstance()
+                                .createSignInIntentBuilder()
+                                .setIsSmartLockEnabled(false)
+                                .setAvailableProviders(Arrays.asList(
+                                        new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                        new AuthUI.IdpConfig.EmailBuilder().build()))
+                                .build(),
+                        RC_SIGN_IN);
+            }
+        };
+    }
+
+    private void initFirebaseDb(String userId) {
+        if (TextUtils.isEmpty(userId)) {
+            throw new IllegalStateException("Log in with FirebaseAuth first");
+        }
+
+        if (mDeliveryRequestsRef != null)
+            return;
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("deliverymen");
+        mDeliveryRequestsRef = mRestaurateurDatabaseReference.child(userId).child("delivery_requests");
+
+        onChildAddedListener = mDeliveryRequestsRef
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+                        DeliveryRequest newDeliveryRequest = dataSnapshot.getValue(DeliveryRequest.class);
+                        newDeliveryRequest.setId(dataSnapshot.getKey());
+                        if (newDeliveryRequest.getNotified().equals("no")) {
+                            sendNotification(newDeliveryRequest.getId(), newDeliveryRequest.getTimestamp());
+                            mDeliveryRequestsRef.child(newDeliveryRequest.getId()).child("notified").setValue("yes");
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+
+        progressBarHandler.hide();
     }
 
     private void createNotificationChannel() {
@@ -124,80 +200,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        createNotificationChannel();
-
-        mFirebaseAuth = FirebaseAuth.getInstance();
-
-        mAuthStateListener = firebaseAuth -> {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user != null) {
-                Toast.makeText(MainActivity.this, "Signed In!", Toast.LENGTH_SHORT).show();
-            } else {
-                startActivityForResult(
-                        AuthUI.getInstance()
-                                .createSignInIntentBuilder()
-                                .setIsSmartLockEnabled(false)
-                                .setAvailableProviders(Arrays.asList(
-                                        new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                        new AuthUI.IdpConfig.EmailBuilder().build()))
-                                .build(),
-                        RC_SIGN_IN);
-            }
-        };
-
-        onChildAddedListener = FirebaseDatabase.getInstance().getReference()
-                .child("deliverymen").child(mFirebaseAuth.getUid()).child("delivery_requests")
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        DeliveryRequest newDeliveryRequest = dataSnapshot.getValue(DeliveryRequest.class);
-                        newDeliveryRequest.setId(dataSnapshot.getKey());
-                        if (newDeliveryRequest.getNotified().equals("no")) {
-                            sendNotification(newDeliveryRequest.getId(), newDeliveryRequest.getTimestamp());
-                            FirebaseDatabase.getInstance()
-                                    .getReference()
-                                    .child("deliverymen")
-                                    .child(mFirebaseAuth.getUid())
-                                    .child("delivery_requests")
-                                    .child(newDeliveryRequest.getId())
-                                    .child("notified")
-                                    .setValue("yes");
-                        }
-                    }
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
-
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        /*PrefHelper.setMainContext(this);
+    private void initUtils(){
+        PrefHelper.setMainContext(this);
 
         // TODO: LET THE USER CHANGE THE CURRENCY FROM SETTINGS?
         String language = Locale.ITALY.getLanguage();
         String country = Locale.ITALY.getCountry();
-        CurrencyHelper.setLocaleCurrency(new Locale(language, country));*/
+        CurrencyHelper.setLocaleCurrency(new Locale(language, country));
+    }
 
-        instantiateFragments(savedInstanceState);
+    private void initBottomNavigation(){
+        if(active == null) throw new IllegalStateException("'active' must be initalized");
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         mOnNavigationItemSelectedListener
@@ -225,24 +238,27 @@ public class MainActivity extends AppCompatActivity {
         else if (active.equals(profileFragment))
             navSelected = R.id.navigation_profile;
         navigation.setSelectedItemId(navSelected);
-        //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
 
-        mAuthStateListener = firebaseAuth -> {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user != null) {
-                // Toast.makeText(MainActivity.this, "Signed In!", Toast.LENGTH_SHORT).show();
-            } else {
-                startActivityForResult(
-                        AuthUI.getInstance()
-                                .createSignInIntentBuilder()
-                                .setIsSmartLockEnabled(false)
-                                .setAvailableProviders(Arrays.asList(
-                                        new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                        new AuthUI.IdpConfig.EmailBuilder().build()))
-                                .build(),
-                        RC_SIGN_IN);
-            }
-        };
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        progressBarHandler = new ProgressBarHandler(this);
+        progressBarHandler.show();
+
+        initFirebaseAuth();
+
+        createNotificationChannel();
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        initUtils();
+
+        instantiateFragments(savedInstanceState);
+
+        initBottomNavigation();
     }
 
     @Override
@@ -250,12 +266,24 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
+                initFirebaseDb(mFirebaseAuth.getCurrentUser().getUid());
+                if (isNewSignUp()) {
+                    Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
+                    editNewProfile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(editNewProfile);
+                    finish();
+                }
                 Toast.makeText(this, "Signed In!", Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Sign in canceled!", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
+    }
+
+    public boolean isNewSignUp() {
+        FirebaseUserMetadata metadata = mFirebaseAuth.getCurrentUser().getMetadata();
+        return metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp();
     }
 
     @Override
@@ -270,9 +298,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-        Log.v("FIREBASE_LOG", "AuthListener added onResume - MainActivity");
-
+        setAuthStateListener();
     }
 
+    private void setAuthStateListener() {
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+        Log.v("FIREBASE_LOG", "AuthListener added - MainActivity");
+    }
 }
