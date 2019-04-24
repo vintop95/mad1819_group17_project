@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mRestaurateurDatabaseReference;
+    private DatabaseReference ordersRef;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private ChildEventListener onChildAddedListener;
@@ -153,7 +154,9 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
 
-        onChildAddedListener = FirebaseDatabase.getInstance().getReference("/restaurateurs/" + mFirebaseAuth.getUid() + "/orders")
+        ordersRef = mRestaurateurDatabaseReference.child(mFirebaseAuth.getUid()).child("orders");
+
+        onChildAddedListener = ordersRef
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -161,9 +164,7 @@ public class MainActivity extends AppCompatActivity {
                         if (newOrder.getNotified().equals("no")) {
                             sendNotification(newOrder.getId(), newOrder.getDelivery_timestamp());
                             Log.d("WWW", "WWW");
-                            FirebaseDatabase.getInstance()
-                                    .getReference("/restaurateurs/" + mFirebaseAuth.getUid() + "/orders/" + newOrder.getId() + "/notified")
-                                    .setValue("yes");
+                            ordersRef.child(newOrder.getId()).child("notified").setValue("yes");
                         }
                     }
 
@@ -196,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
         instantiateFragments(savedInstanceState);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         mOnNavigationItemSelectedListener
                 = item -> {
             switch (item.getItemId()) {
@@ -250,7 +251,6 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
-
                 if (isNewSignUp()) {
                     Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
                     editNewProfile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -310,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        FirebaseDatabase.getInstance().getReference("/restaurateurs/" + mFirebaseAuth.getUid() + "/orders").removeEventListener(onChildAddedListener);
+        ordersRef.removeEventListener(onChildAddedListener);
     }
 
     public boolean isNewSignUp() {

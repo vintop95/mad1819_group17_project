@@ -55,8 +55,10 @@ public class ProfileFragment extends Fragment {
 
     private void feedViews(Restaurateur restaurateur) {
         if (restaurateur != null) {
-            if (restaurateur.getImage_path() != "") {
-                Glide.with(image_user_photo.getContext()).load(restaurateur.getImage_path()).into(image_user_photo);
+            if (!restaurateur.getImage_path().isEmpty()) {
+                Glide.with(image_user_photo.getContext())
+                        .load(restaurateur.getImage_path())
+                        .into(image_user_photo);
             }
             txt_name.setText(restaurateur.getName());
             txt_phone.setText(restaurateur.getPhone());
@@ -64,8 +66,10 @@ public class ProfileFragment extends Fragment {
             txt_address.setText(restaurateur.getAddress());
             txt_restaurant_type.setText(restaurateur.getRestaurant_type());
             txt_free_day.setText(restaurateur.getFree_day());
-            txt_working_time.setText(getString(R.string.from) + " " + restaurateur.getWorking_time_opening() + " " + getString(R.string.to) + " " + restaurateur.getWorking_time_closing());
-            if (restaurateur.getBio() != "")
+            txt_working_time.setText(getString(R.string.from) + " " +
+                    restaurateur.getWorking_time_opening() + " " +
+                    getString(R.string.to) + " " + restaurateur.getWorking_time_closing());
+            if (!restaurateur.getBio().isEmpty())
                 txt_bio.setText(restaurateur.getBio());
         }
     }
@@ -106,7 +110,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void attachValueEventListener(String userId) {
-        if (userId == null) throw new AssertionError();
+        if (userId == null) throw new IllegalArgumentException();
 
         if (mProfileEventListener == null) {
             mProfileEventListener = new ValueEventListener() {
@@ -118,7 +122,9 @@ public class ProfileFragment extends Fragment {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Unable to retrieve restaurateur's information", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            "Unable to retrieve restaurateur's information",
+                            Toast.LENGTH_LONG).show();
                 }
             };
             mRestaurateurDatabaseReference.child(userId).addValueEventListener(mProfileEventListener);

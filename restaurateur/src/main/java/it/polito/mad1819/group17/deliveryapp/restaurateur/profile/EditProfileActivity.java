@@ -59,10 +59,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mFirebaseStorageReference;
 
-
     public static final int CAMERA_REQUEST = 0;
     public static final int GALLERY_REQUEST = 1;
-
 
     private Toolbar toolbar;
     private Boolean image_changed = false;
@@ -99,7 +97,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private void feedViews(Restaurateur restaurateur) {
         if (restaurateur != null) {
             if (!image_changed && restaurateur.getImage_path() != "") {
-                Glide.with(image_user_photo.getContext()).load(restaurateur.getImage_path()).into(image_user_photo);
+                Glide.with(image_user_photo.getContext()).load(restaurateur.getImage_path())
+                        .into(image_user_photo);
             }
             input_name.setText(restaurateur.getName());
             input_phone.setText(restaurateur.getPhone());
@@ -135,8 +134,34 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-    private int saveProfile() {
+    private void uploadImage(){
+        Bitmap bitmap = ((BitmapDrawable) image_user_photo.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
 
+        UploadTask uploadTask = mFirebaseStorageReference
+                .child("profile_picture.jpg")
+                .putBytes(data);
+
+        uploadTask.addOnFailureListener((@NonNull Exception exception) -> {
+            Log.e("FIREBASE_LOG", "Picture Upload Fail - EditProfileActivity");
+            Toast.makeText(getApplicationContext(),
+                "Picture Upload Fail - EditProfileActivity",
+                Toast.LENGTH_LONG).show();
+        }).addOnSuccessListener((UploadTask.TaskSnapshot taskSnapshot) -> {
+            mFirebaseStorageReference.child("profile_picture.jpg")
+                .getDownloadUrl()
+                .addOnSuccessListener((Uri uri) -> {
+                    Uri downUri = uri;
+                    Log.v("FIREBASE_LOG", "Picture Upload Success - EditProfileActivity");
+                    mRestaurateurDatabaseReference.child(mFirebaseAuth.getUid())
+                            .child("image_path").setValue(downUri.toString());
+                });
+        });
+    }
+
+    private int saveProfile() {
         String name = input_name.getText().toString();
         String phone = input_phone.getText().toString();
         String mail = input_mail.getText().toString();
@@ -170,32 +195,7 @@ public class EditProfileActivity extends AppCompatActivity {
             if (date_timeOpening.compareTo(date_timeClosing) >= 0)
                 return 0;
             else {
-                if (image_changed) {
-                    Bitmap bitmap = ((BitmapDrawable) image_user_photo.getDrawable()).getBitmap();
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] data = baos.toByteArray();
-
-                    UploadTask uploadTask = mFirebaseStorageReference.child("profile_picture.jpg").putBytes(data);
-                    uploadTask.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            Log.v("FIREBASE_LOG", "Picture Upload Fail - EditProfileActivity");
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            mFirebaseStorageReference.child("profile_picture.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    Uri downUri = uri;
-                                    Log.v("FIREBASE_LOG", "Picture Upload Success - EditProfileActivity");
-                                    mRestaurateurDatabaseReference.child(mFirebaseAuth.getUid()).child("image_path").setValue(downUri.toString());
-                                }
-                            });
-                        }
-                    });
-                }
+                if (image_changed) uploadImage();
 
                 Map<String, Object> childUpdates = new HashMap<>();
                 childUpdates.put("name", name);
@@ -208,9 +208,11 @@ public class EditProfileActivity extends AppCompatActivity {
                 childUpdates.put("working_time_closing", time_closing);
                 childUpdates.put("bio", bio);
 
-                mRestaurateurDatabaseReference.child(mFirebaseAuth.getUid()).updateChildren(childUpdates);
+                mRestaurateurDatabaseReference.child(mFirebaseAuth.getUid())
+                        .updateChildren(childUpdates);
 
-                if (mFirebaseAuth.getCurrentUser().getDisplayName() != name || mFirebaseAuth.getCurrentUser().getEmail() != mail) {
+                if (mFirebaseAuth.getCurrentUser().getDisplayName() != name ||
+                        mFirebaseAuth.getCurrentUser().getEmail() != mail) {
                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                             .setDisplayName(name)
                             .build();
@@ -240,7 +242,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
             } catch (FileNotFoundException e) {
                 bitmapUserPhoto = null;
-                Toast.makeText(getApplicationContext(), "FileNotFoundException: Error in setting image!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),
+                        "FileNotFoundException: Error in setting image!",
+                        Toast.LENGTH_LONG).show();
             }
         }
 
@@ -277,7 +281,8 @@ public class EditProfileActivity extends AppCompatActivity {
         mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
 
         mFirebaseStorage = FirebaseStorage.getInstance();
-        mFirebaseStorageReference = mFirebaseStorage.getReference().child(mFirebaseAuth.getUid() + "/images/");
+        mFirebaseStorageReference = mFirebaseStorage.getReference().child(mFirebaseAuth.getUid())
+                .child("images");
 
 
     }
@@ -299,7 +304,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void attachValueEventListener(String userId) {
-        if (userId == null) throw new AssertionError();
+        if (userId == null) throw new IllegalArgumentException();
 
         if (mEditEventListener == null) {
             mEditEventListener = new ValueEventListener() {
@@ -311,10 +316,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(getApplicationContext(), "Unable to retrieve restaurateur's information", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),
+                            "Unable to retrieve restaurateur's information", Toast.LENGTH_LONG).show();
                 }
             };
-            mRestaurateurDatabaseReference.child(userId).addListenerForSingleValueEvent(mEditEventListener);
+            mRestaurateurDatabaseReference.child(userId)
+                    .addListenerForSingleValueEvent(mEditEventListener);
         }
     }
 
@@ -343,13 +350,16 @@ public class EditProfileActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.btn_save) {
             int result = saveProfile();
             if (result == 1) {
-                Toast.makeText(getApplicationContext(), getString(R.string.settings_changed), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),
+                        getString(R.string.settings_changed), Toast.LENGTH_LONG).show();
                 startActivity(new Intent(EditProfileActivity.this, MainActivity.class));
                 finish();
             } else if (result == -1)
-                Toast.makeText(getApplicationContext(), getString(R.string.fill_required_fields), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),
+                        getString(R.string.fill_required_fields), Toast.LENGTH_LONG).show();
             else
-                Toast.makeText(getApplicationContext(), getString(R.string.wrong_times), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),
+                        getString(R.string.wrong_times), Toast.LENGTH_LONG).show();
             return true;
         }
         return false;
