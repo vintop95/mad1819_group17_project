@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import com.google.firebase.database.Query;
 
+import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.restaurateur.R;
 
 
@@ -25,6 +26,7 @@ public class OrdersFragment extends Fragment {
 
     public final static int SHOW_DETAILS_REQUEST = 1;
     private OrdersAdapter mAdapter;
+    public ProgressBarHandler progressBarHandler;
     private RecyclerView recyclerView;
 
     @Override
@@ -32,6 +34,7 @@ public class OrdersFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
+        progressBarHandler = new ProgressBarHandler(getContext());
 
         recyclerView = view.findViewById(R.id.rv_orders);
         return view;
@@ -41,6 +44,8 @@ public class OrdersFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if (FirebaseAuth.getInstance().getUid() != null) {
+            progressBarHandler.show();
+
             Query query = FirebaseDatabase.getInstance()
                     .getReference()
                     .child("restaurateurs")
@@ -65,6 +70,8 @@ public class OrdersFragment extends Fragment {
         super.onStop();
         if (FirebaseAuth.getInstance().getUid() != null)
             mAdapter.stopListening();
+
+        progressBarHandler.hide();
     }
 
 }

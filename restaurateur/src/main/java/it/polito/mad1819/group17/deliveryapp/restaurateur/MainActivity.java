@@ -59,9 +59,6 @@ public class MainActivity extends AppCompatActivity {
     private ChildEventListener onChildAddedListener;
     private int notificationRequestCode = 0;
 
-    private Order notification_order;
-    private PendingIntent pendingIntent;
-
     Fragment offersFragment = new OffersFragment();
     Fragment ordersFragment = new OrdersFragment();
     Fragment profileFragment = new ProfileFragment();

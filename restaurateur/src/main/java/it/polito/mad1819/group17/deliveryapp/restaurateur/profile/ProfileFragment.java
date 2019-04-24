@@ -1,6 +1,8 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.profile;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import it.polito.mad1819.group17.deliveryapp.restaurateur.Restaurateur;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.restaurateur.R;
 
 
@@ -41,6 +48,8 @@ public class ProfileFragment extends Fragment {
     private TextView txt_working_time;
     private TextView txt_bio;
 
+    private ProgressBarHandler progressBarHandler;
+
     private void locateViews(View view) {
         image_user_photo = view.findViewById(R.id.image_user_photo_sign_in);
         txt_name = view.findViewById(R.id.txt_name);
@@ -58,7 +67,24 @@ public class ProfileFragment extends Fragment {
             if (!restaurateur.getImage_path().isEmpty()) {
                 Glide.with(image_user_photo.getContext())
                         .load(restaurateur.getImage_path())
-                        .into(image_user_photo);
+                        .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                Target<Drawable> target, boolean isFirstResource) {
+                        progressBarHandler.hide();
+                        Log.e("ProfileFragment","Image load failed");
+                        return false; // leave false
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model,
+                                                   Target<Drawable> target, DataSource dataSource,
+                                                   boolean isFirstResource) {
+                        Log.v("ProfileFragment","Image load OK");
+                        progressBarHandler.hide();
+                        return false; // leave false
+                    }
+                }).into(image_user_photo);
             }
             txt_name.setText(restaurateur.getName());
             txt_phone.setText(restaurateur.getPhone());
@@ -78,6 +104,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        progressBarHandler = new ProgressBarHandler(getContext());
         setHasOptionsMenu(true);
         locateViews(view);
         return view;
@@ -86,11 +113,17 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        progressBarHandler.show();
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        progressBarHandler.hide();
     }
 
     @Override
@@ -98,7 +131,6 @@ public class ProfileFragment extends Fragment {
         super.onPause();
         detachValueEventListener(mFirebaseAuth.getUid());
         Log.v("FIREBASE_LOG", "EventListener removed onPause - ProfileFragment");
-
     }
 
     @Override
@@ -106,7 +138,6 @@ public class ProfileFragment extends Fragment {
         super.onResume();
         attachValueEventListener(mFirebaseAuth.getUid());
         Log.v("FIREBASE_LOG", "EventListener added onResume - ProfileFragment");
-
     }
 
     private void attachValueEventListener(String userId) {
@@ -118,6 +149,9 @@ public class ProfileFragment extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Restaurateur restaurateur = dataSnapshot.getValue(Restaurateur.class);
                     feedViews(restaurateur);
+
+                    // already done for the image (it loads slower)
+                    // progressBarHandler.hide();
                 }
 
                 @Override

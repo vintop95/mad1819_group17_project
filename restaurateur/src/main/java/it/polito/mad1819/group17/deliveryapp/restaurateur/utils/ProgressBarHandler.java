@@ -2,6 +2,7 @@ package it.polito.mad1819.group17.deliveryapp.restaurateur.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;

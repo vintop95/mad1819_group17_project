@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer.OffersFragment;
 import it.polito.mad1819.group17.restaurateur.R;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -90,8 +91,18 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
         return new OrderHolder(view);
     }
 
-    public static Order getOrderById(String id){
+    @Override
+    public void onDataChanged() {
+        // Called each time there is a new data snapshot. You may want to use this method
+        // to hide a loading spinner or check for the "no documents" state and update your UI.
+        // ...
+        super.onDataChanged();
+        if(fragment instanceof OrdersFragment) {
+            ((OrdersFragment) fragment).progressBarHandler.hide();
+        }
+    }
 
+    public static Order getOrderById(String id){
         return null;
     }
 }
