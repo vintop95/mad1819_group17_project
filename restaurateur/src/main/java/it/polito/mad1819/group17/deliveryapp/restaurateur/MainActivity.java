@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
     private ProgressBarHandler progressBarHandler;
+    private BottomNavigationView navigation;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     private void initBottomNavigation(){
         if(active == null) throw new IllegalStateException("'active' must be initalized");
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
         mOnNavigationItemSelectedListener
                 = item -> {
             switch (item.getItemId()) {
@@ -151,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 // Toast.makeText(MainActivity.this, "Signed In!", Toast.LENGTH_SHORT).show();
                 initFirebaseDb(mFirebaseAuth.getCurrentUser().getUid());
             } else {
+                progressBarHandler.show();
                 startActivityForResult(
                         AuthUI.getInstance()
                                 .createSignInIntentBuilder()
@@ -285,9 +287,11 @@ public class MainActivity extends AppCompatActivity {
                 initFirebaseDb(mFirebaseAuth.getCurrentUser().getUid());
                 if (isNewSignUp()) {
                     Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
-                    editNewProfile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    // editNewProfile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(editNewProfile);
-                    finish();
+                    progressBarHandler.hide();
+                    if(navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
+                    // finish();
                 }
                 Toast.makeText(this, "Signed In!", Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {

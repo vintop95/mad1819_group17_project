@@ -352,7 +352,7 @@ public class EditProfileActivity extends AppCompatActivity {
             if (result == 1) {
                 Toast.makeText(getApplicationContext(),
                         getString(R.string.settings_changed), Toast.LENGTH_LONG).show();
-                startActivity(new Intent(EditProfileActivity.this, MainActivity.class));
+                // startActivity(new Intent(EditProfileActivity.this, MainActivity.class));
                 finish();
             } else if (result == -1)
                 Toast.makeText(getApplicationContext(),
