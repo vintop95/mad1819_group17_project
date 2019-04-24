@@ -19,8 +19,8 @@
             android:id="@+id/txt_delivery_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="24dp"
             android:padding="8dp"
             android:text="@string/time"
@@ -47,12 +47,13 @@
             android:id="@+id/label_delivery_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginLeft="28dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="8dp"
             android:text="@string/delivery_date"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             card_view:layout_constraintStart_toEndOf="@+id/txt_delivery_time"
-            card_view:layout_constraintTop_toTopOf="@+id/txt_delivery_time" />
+            card_view:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txt_delivery_date"
@@ -66,18 +67,19 @@
             android:id="@+id/label_customer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginTop="4dp"
             android:text="Customer Name"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            card_view:layout_constraintStart_toEndOf="@+id/label_delivery_date"
-            card_view:layout_constraintTop_toTopOf="@+id/label_delivery_date" />
+            card_view:layout_constraintStart_toStartOf="@+id/txt_state"
+            card_view:layout_constraintTop_toBottomOf="@+id/txt_state" />
 
         <TextView
             android:id="@+id/txt_customer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:text="Customer Name"
+            card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintStart_toStartOf="@+id/label_customer_name"
             card_view:layout_constraintTop_toBottomOf="@+id/label_customer_name" />
 
@@ -85,7 +87,7 @@
             android:id="@+id/label_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="4dp"
             android:text="Delivery Address"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             card_view:layout_constraintStart_toStartOf="@+id/txt_delivery_date"
@@ -103,12 +105,11 @@
             android:id="@+id/label_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
+            android:layout_marginTop="4dp"
             android:text="State"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            card_view:layout_constraintStart_toEndOf="@+id/label_address"
-            card_view:layout_constraintTop_toTopOf="@+id/label_address" />
+            card_view:layout_constraintStart_toStartOf="@+id/txt_address"
+            card_view:layout_constraintTop_toBottomOf="@+id/txt_address" />
 
         <TextView
             android:id="@+id/txt_state"

@@ -14,8 +14,6 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
-import java.io.Serializable;
-
 import it.polito.mad1819.group17.deliveryapp.deliveryman.R;
 
 public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryRequest, DeliveryRequestsAdapter.DeliveryRequestHolder> {
@@ -61,8 +59,24 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
 
     @Override
     protected void onBindViewHolder(DeliveryRequestHolder holder, int position, DeliveryRequest model) {
-        holder.txt_delivery_time.setText(model.getTimestamp().split(" ")[1]);
-        holder.txt_delivery_date.setText(model.getTimestamp().split(" ")[0]);
+        holder.txt_delivery_time.setText(model.getDelivery_time());
+        holder.txt_delivery_date.setText(model.getDelivery_date());
+        holder.txt_state.setText(model.getCurrentState());
+        holder.txt_customer_name.setText(model.getCustomer_name());
+        switch (model.getCurrentState()) {
+            case DeliveryRequest.STATE1:
+                holder.cardView.setBackgroundColor(
+                        fragment.getActivity().getResources().getColor(R.color.colorState1));
+                break;
+            case DeliveryRequest.STATE2:
+                holder.cardView.setBackgroundColor(
+                        fragment.getActivity().getResources().getColor(R.color.colorState2));
+                break;
+            case DeliveryRequest.STATE3:
+                holder.cardView.setBackgroundColor(
+                        fragment.getActivity().getResources().getColor(R.color.colorState3));
+                break;
+        }
     }
 
 
@@ -73,8 +87,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
         return new DeliveryRequestHolder(view);
     }
 
-    public static DeliveryRequest getOrderById(String id){
-
+    public static DeliveryRequest getOrderById(String id) {
         return null;
     }
 }

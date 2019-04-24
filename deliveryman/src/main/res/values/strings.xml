@@ -6,6 +6,8 @@
 
 
     <string name="time" translatable="false">--:--</string>
+    <string name="customer_name">Customer Name</string>
+    <string name="customer_phone">Customer Phone</string>
     <string name="delivery_time">Delivery Time</string>
     <string name="delivery_date">Delivery Date</string>
 </resources>

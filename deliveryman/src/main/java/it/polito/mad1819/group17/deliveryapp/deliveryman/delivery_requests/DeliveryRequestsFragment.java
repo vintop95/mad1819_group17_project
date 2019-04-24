@@ -51,9 +51,7 @@ public class DeliveryRequestsFragment extends Fragment {
                 .child("deliverymen")
                 .child(FirebaseAuth.getInstance().getUid())
                 .child("delivery_requests")
-                //.orderByChild("sorting_field")
-                /*.startAt(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .endAt(FirebaseAuth.getInstance().getCurrentUser().getUid()+"\uf8ff")*/;
+                .orderByChild("sorting_field");
 
         FirebaseRecyclerOptions<DeliveryRequest> options = new FirebaseRecyclerOptions.Builder<DeliveryRequest>()
                 .setQuery(query, DeliveryRequest.class)

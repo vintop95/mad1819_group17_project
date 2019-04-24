@@ -4,7 +4,6 @@ android {
     compileSdkVersion 28
 
 
-
     defaultConfig {
         applicationId "it.polito.mad1819.group17.deliveryapp.deliveryman"
         minSdkVersion 16
@@ -43,7 +42,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.1.0'
     implementation 'com.google.firebase:firebase-auth:16.2.1'
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
-    implementation 'com.firebaseui:firebase-ui-database:4.0.1' //if it doesn't work, try with another version (dependency problems)
+    implementation 'com.firebaseui:firebase-ui-database:4.0.1'
+    //if it doesn't work, try with another version (dependency problems)
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

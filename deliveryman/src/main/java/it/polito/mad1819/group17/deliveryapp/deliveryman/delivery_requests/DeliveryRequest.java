@@ -1,6 +1,8 @@
 package it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 public class DeliveryRequest implements Serializable {
@@ -75,5 +77,61 @@ public class DeliveryRequest implements Serializable {
 
     public void setState_stateTime(HashMap<String, String> state_stateTime) {
         this.state_stateTime = state_stateTime;
+    }
+
+    public String getDelivery_time(){
+        return timestamp.split(" ")[1];
+    }
+
+    public String getDelivery_date(){
+        return timestamp.split(" ")[0];
+    }
+
+    public String getCurrentState() {
+        if (state_stateTime.get("state3") != null)
+            return STATE3;
+        else if (state_stateTime.get("state2") != null)
+            return STATE2;
+        else
+            return STATE1;
+    }
+
+    public String getStateHistoryToString() {
+        String state_history = "";
+        switch (getCurrentState()) {
+            case STATE1:
+                state_history = getState_stateTime().get("state1") + " " + STATE1;
+                state_history += "\n" + "----/--/-- --:--" + " " + STATE2;
+                state_history += "\n" + "----/--/-- --:--" + " " + STATE3;
+                break;
+            case STATE2:
+                state_history = getState_stateTime().get("state1") + "  " + STATE1;
+                state_history += "\n" + getState_stateTime().get("state2") + "  " + STATE2;
+                state_history += "\n" + "----/--/-- --:--" + "  " + STATE3;
+                break;
+            case STATE3:
+                state_history = getState_stateTime().get("state1") + "  " + STATE1;
+                state_history += "\n" + getState_stateTime().get("state2") + "  " + STATE2;
+                state_history += "\n" + getState_stateTime().get("state3") + "  " + STATE3;
+                break;
+        }
+        return state_history;
+    }
+
+    public boolean moveToNextState() {
+        if (getCurrentState() == STATE3)
+            return false;
+        else {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+            String currentTimestamp = formatter.format(new Date());
+
+            if (getCurrentState() == STATE1)
+                this.state_stateTime.put("state2", currentTimestamp);
+            else if (getCurrentState() == STATE2) {
+                this.state_stateTime.put("state3", currentTimestamp);
+                this.sorting_field = "state3_" + this.sorting_field.split("_")[1];
+            }
+            return true;
+        }
     }
 }
