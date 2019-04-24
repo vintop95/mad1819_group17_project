@@ -155,6 +155,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // select the deliveryman
                 int randomValue = new Random().nextInt((int) dataSnapshot.getChildrenCount());
+                //Toast.makeText(getApplicationContext(), "AAAAA: " + randomValue + " " + dataSnapshot.getChildrenCount(), Toast.LENGTH_LONG).show();
                 int i = 0;
                 Deliveryman selectedDeliveryman = null;
                 for (DataSnapshot dataSnapshotDeliveryman : dataSnapshot.getChildren()) {
