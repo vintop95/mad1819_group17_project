@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +27,7 @@ public class DeliveryRequestsFragment extends Fragment {
     public final static int SHOW_DETAILS_REQUEST = 1;
 
     private DeliveryRequestsAdapter mAdapter;
-
-    //private OnFragmentInteractionListener mListener;
+    private RecyclerView recyclerView;
 
     public DeliveryRequestsFragment() {
         // Required empty public constructor
@@ -36,41 +36,40 @@ public class DeliveryRequestsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_delivery_requests, container, false);
+        View view = inflater.inflate(R.layout.fragment_delivery_requests, container, false);
+        recyclerView=view.findViewById(R.id.rv_delivery_requests);
+        return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        Query query = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("deliverymen")
-                .child(FirebaseAuth.getInstance().getUid())
-                .child("delivery_requests")
-                .orderByChild("sorting_field");
-
-        FirebaseRecyclerOptions<DeliveryRequest> options = new FirebaseRecyclerOptions.Builder<DeliveryRequest>()
-                .setQuery(query, DeliveryRequest.class)
-                .build();
-
-        mAdapter = new DeliveryRequestsAdapter(options, getFragmentManager()
-                .findFragmentByTag(DeliveryRequestsFragment.class.getName()));
-        RecyclerView recyclerView = view.findViewById(R.id.rv_delivery_requests);
-        recyclerView.setHasFixedSize(false);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(mAdapter);
-    }
 
     @Override
     public void onStart() {
         super.onStart();
-        mAdapter.startListening();
+        if (FirebaseAuth.getInstance().getUid() != null) {
+            Query query = FirebaseDatabase.getInstance()
+                    .getReference()
+                    .child("deliverymen")
+                    .child(FirebaseAuth.getInstance().getUid())
+                    .child("delivery_requests")
+                    .orderByChild("sorting_field");
+
+            FirebaseRecyclerOptions<DeliveryRequest> options = new FirebaseRecyclerOptions.Builder<DeliveryRequest>()
+                    .setQuery(query, DeliveryRequest.class)
+                    .build();
+
+            mAdapter = new DeliveryRequestsAdapter(options, getFragmentManager()
+                    .findFragmentByTag(DeliveryRequestsFragment.class.getName()));
+            recyclerView.setHasFixedSize(false);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(mAdapter);
+            mAdapter.startListening();
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mAdapter.stopListening();
+        if (FirebaseAuth.getInstance().getUid() != null)
+            mAdapter.stopListening();
     }
 }

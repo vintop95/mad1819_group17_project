@@ -40,28 +40,31 @@ public class OrdersFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Query query = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("restaurateurs")
-                .child(FirebaseAuth.getInstance().getUid())
-                .child("orders")
-                .orderByChild("sorting_field");
+        if (FirebaseAuth.getInstance().getUid() != null) {
+            Query query = FirebaseDatabase.getInstance()
+                    .getReference()
+                    .child("restaurateurs")
+                    .child(FirebaseAuth.getInstance().getUid())
+                    .child("orders")
+                    .orderByChild("sorting_field");
 
-        FirebaseRecyclerOptions<Order> options = new FirebaseRecyclerOptions.Builder<Order>()
-                .setQuery(query, Order.class)
-                .build();
+            FirebaseRecyclerOptions<Order> options = new FirebaseRecyclerOptions.Builder<Order>()
+                    .setQuery(query, Order.class)
+                    .build();
 
-        mAdapter = new OrdersAdapter(options, getFragmentManager().findFragmentByTag(OrdersFragment.class.getName()));
-        recyclerView.setHasFixedSize(false);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(mAdapter);
-        mAdapter.startListening();
+            mAdapter = new OrdersAdapter(options, getFragmentManager().findFragmentByTag(OrdersFragment.class.getName()));
+            recyclerView.setHasFixedSize(false);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(mAdapter);
+            mAdapter.startListening();
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mAdapter.stopListening();
+        if (FirebaseAuth.getInstance().getUid() != null)
+            mAdapter.stopListening();
     }
 
 }
