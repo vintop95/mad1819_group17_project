@@ -15,6 +15,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +23,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.util.ui.TextHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
@@ -42,15 +44,16 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.profile.EditProfileAct
 import it.polito.mad1819.group17.deliveryapp.restaurateur.profile.ProfileFragment;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.restaurateur.R;
 
 public class MainActivity extends AppCompatActivity {
 
     public final static int RC_SIGN_IN = 1;
 
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mRestaurateurDatabaseReference;
-    private DatabaseReference ordersRef;
+    private FirebaseDatabase mFirebaseDatabase = null;
+    private DatabaseReference mRestaurateurDatabaseReference = null;
+    private DatabaseReference mOrdersRef = null;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private ChildEventListener onChildAddedListener;
@@ -64,8 +67,10 @@ public class MainActivity extends AppCompatActivity {
     Fragment profileFragment = new ProfileFragment();
 
     final FragmentManager fm = getSupportFragmentManager();
-    Fragment active;
+    private Fragment active;
+    private Toolbar toolbar;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
+    private ProgressBarHandler progressBarHandler;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -81,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle inState) {
         instantiateFragments(inState);
     }
-
-    private Toolbar toolbar;
 
     private void instantiateFragments(Bundle inState) {
         if (inState != null) {
@@ -103,6 +106,106 @@ public class MainActivity extends AppCompatActivity {
             active = ordersFragment;
         }
         fm.beginTransaction().attach(active).commit();
+    }
+
+    private void initBottomNavigation(){
+        if(active == null) throw new IllegalStateException("'active' must be initalized");
+
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        mOnNavigationItemSelectedListener
+                = item -> {
+            switch (item.getItemId()) {
+                case R.id.navigation_profile:
+                    fm.beginTransaction().detach(active).attach(profileFragment).commit();
+                    active = profileFragment;
+                    return true;
+                case R.id.navigation_dailyoffer:
+                    fm.beginTransaction().detach(active).attach(offersFragment).commit();
+                    active = offersFragment;
+                    return true;
+                case R.id.navigation_orders:
+                    fm.beginTransaction().detach(active).attach(ordersFragment).commit();
+                    active = ordersFragment;
+                    return true;
+            }
+            return false;
+        };
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        int navSelected = R.id.navigation_orders;
+        if (active.equals(offersFragment)) {
+            navSelected = R.id.navigation_dailyoffer;
+        } else if (active.equals(ordersFragment)) {
+            navSelected = R.id.navigation_orders;
+        } else if (active.equals(profileFragment)) {
+            navSelected = R.id.navigation_profile;
+        }
+        navigation.setSelectedItemId(navSelected);
+    }
+
+    private void initFirebaseAuth(){
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mAuthStateListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                // Toast.makeText(MainActivity.this, "Signed In!", Toast.LENGTH_SHORT).show();
+                initFirebaseDb(mFirebaseAuth.getCurrentUser().getUid());
+            } else {
+                startActivityForResult(
+                        AuthUI.getInstance()
+                                .createSignInIntentBuilder()
+                                .setIsSmartLockEnabled(false)
+                                .setAvailableProviders(Arrays.asList(
+                                        new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                        new AuthUI.IdpConfig.EmailBuilder().build()))
+                                .build(),
+                        RC_SIGN_IN);
+            }
+        };
+    }
+
+    private void initFirebaseDb(String userId){
+        if (TextUtils.isEmpty(userId)) {
+            throw new IllegalStateException("Log in with FirebaseAuth first");
+        }
+
+        if(mOrdersRef != null)
+            return;
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
+        mOrdersRef = mRestaurateurDatabaseReference.child(userId).child("orders");
+
+        onChildAddedListener = mOrdersRef
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+                        Order newOrder = dataSnapshot.getValue(Order.class);
+                        if (newOrder.getNotified().equals("no")) {
+                            sendNotification(newOrder.getId(), newOrder.getDelivery_timestamp());
+                            Log.d("WWW", "WWW");
+                            mOrdersRef.child(newOrder.getId()).child("notified").setValue("yes");
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+
+        progressBarHandler.hide();
     }
 
     private void createNotificationChannel() {
@@ -139,111 +242,39 @@ public class MainActivity extends AppCompatActivity {
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(notificationRequestCode++, builder.build());
-
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        createNotificationChannel();
-
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
-
-        ordersRef = mRestaurateurDatabaseReference.child(mFirebaseAuth.getUid()).child("orders");
-
-        onChildAddedListener = ordersRef
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Order newOrder = dataSnapshot.getValue(Order.class);
-                        if (newOrder.getNotified().equals("no")) {
-                            sendNotification(newOrder.getId(), newOrder.getDelivery_timestamp());
-                            Log.d("WWW", "WWW");
-                            ordersRef.child(newOrder.getId()).child("notified").setValue("yes");
-                        }
-                    }
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
-
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+    private void initUtils(){
         PrefHelper.setMainContext(this);
 
         // TODO: LET THE USER CHANGE THE CURRENCY FROM SETTINGS?
         String language = Locale.ITALY.getLanguage();
         String country = Locale.ITALY.getCountry();
         CurrencyHelper.setLocaleCurrency(new Locale(language, country));
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        progressBarHandler = new ProgressBarHandler(this);
+        progressBarHandler.show();
+
+        initFirebaseAuth();
+        createNotificationChannel();
+
+        // DONE IN SIGN IN CALLBACK because it needs a reference to the user
+        // that could not exist
+        // initFirebaseDb();
+
+        // Init toolbar
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        initUtils();
 
         instantiateFragments(savedInstanceState);
-
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        mOnNavigationItemSelectedListener
-                = item -> {
-            switch (item.getItemId()) {
-                case R.id.navigation_profile:
-                    fm.beginTransaction().detach(active).attach(profileFragment).commit();
-                    active = profileFragment;
-                    return true;
-                case R.id.navigation_dailyoffer:
-                    fm.beginTransaction().detach(active).attach(offersFragment).commit();
-                    active = offersFragment;
-                    return true;
-                case R.id.navigation_orders:
-                    fm.beginTransaction().detach(active).attach(ordersFragment).commit();
-                    active = ordersFragment;
-                    return true;
-            }
-            return false;
-        };
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        int navSelected = R.id.navigation_orders;
-        if (active.equals(offersFragment)) {
-            navSelected = R.id.navigation_dailyoffer;
-        } else if (active.equals(ordersFragment)) {
-            navSelected = R.id.navigation_orders;
-        } else if (active.equals(profileFragment)) {
-            navSelected = R.id.navigation_profile;
-        }
-        navigation.setSelectedItemId(navSelected);
-
-        mAuthStateListener = firebaseAuth -> {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user != null) {
-                // Toast.makeText(MainActivity.this, "Signed In!", Toast.LENGTH_SHORT).show();
-            } else {
-                startActivityForResult(
-                        AuthUI.getInstance()
-                                .createSignInIntentBuilder()
-                                .setIsSmartLockEnabled(false)
-                                .setAvailableProviders(Arrays.asList(
-                                        new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                        new AuthUI.IdpConfig.EmailBuilder().build()))
-                                .build(),
-                        RC_SIGN_IN);
-            }
-        };
+        initBottomNavigation();
     }
 
     @Override
@@ -251,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
+                initFirebaseDb(mFirebaseAuth.getCurrentUser().getUid());
                 if (isNewSignUp()) {
                     Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
                     editNewProfile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -277,9 +309,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-        Log.v("FIREBASE_LOG", "AuthListener added onResume - MainActivity");
-
+        setAuthStateListener();
     }
 
     @Override
@@ -310,11 +340,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        ordersRef.removeEventListener(onChildAddedListener);
+        mOrdersRef.removeEventListener(onChildAddedListener);
     }
 
     public boolean isNewSignUp() {
         FirebaseUserMetadata metadata = mFirebaseAuth.getCurrentUser().getMetadata();
         return metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp();
+    }
+
+    private void setAuthStateListener(){
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+        Log.v("FIREBASE_LOG", "AuthListener added - MainActivity");
     }
 }
