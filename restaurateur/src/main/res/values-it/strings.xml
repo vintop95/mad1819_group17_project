@@ -24,8 +24,8 @@
 
     <!-- Order Details Strings -->
     <string name="title_activity_order_details">Dettagli Ordine</string>
-    <string name="rider_name">Nome Rider</string>
-    <string name="rider_phone">Telefono Rider</string>
+    <string name="deliveryman_name">Nome Rider</string>
+    <string name="deliveryman_phone">Telefono Rider</string>
     <!-- Labels -->
     <string name="name">Nome Cliente</string>
     <string name="phone">Telefono Cliente</string>

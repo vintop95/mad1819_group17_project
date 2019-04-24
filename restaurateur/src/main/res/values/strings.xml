@@ -23,8 +23,8 @@
 
     <!-- Order Details Strings -->
     <string name="title_activity_order_details">Order Details</string>
-    <string name="rider_name">Rider Name</string>
-    <string name="rider_phone">Rider Phone</string>
+    <string name="deliveryman_name">Rider Name</string>
+    <string name="deliveryman_phone">Rider Phone</string>
     <!-- Icons -->
     <string name="icon_restaurateur" translatable="false">Icon Restaurateur</string>
     <string name="icon_content" translatable="false">Icon Content</string>

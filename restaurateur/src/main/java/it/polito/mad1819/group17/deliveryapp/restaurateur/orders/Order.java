@@ -20,18 +20,18 @@ public class Order implements Serializable {
     private HashMap<String, String> state_stateTime;
     private HashMap<String, Integer> item_itemQuantity;
     private String notes;
-    private String rider_id;
-    private String rider_name;
-    private String rider_phone;
+    private String deliveryman_id;
+    private String deliveryman_name;
+    private String deliveryman_phone;
     private String sorting_field;
-    private String notified = "false";
+    private String notified = "no";
 
 
     public Order() {
 
     }
 
-    public Order(String id, /*String restaurant_id, */String customer_name, String customer_phone, String delivery_timestamp, String delivery_address, HashMap<String, String> state_stateTime, HashMap<String, Integer> item_itemQuantity, String notes, String rider_id, String rider_name, String rider_phone, String sorting_field, String notified) {
+    public Order(String id, /*String restaurant_id, */String customer_name, String customer_phone, String delivery_timestamp, String delivery_address, HashMap<String, String> state_stateTime, HashMap<String, Integer> item_itemQuantity, String notes, String deliveryman_id, String deliveryman_name, String deliveryman_phone, String sorting_field, String notified) {
         this.id = id;
         //this.restaurant_id = restaurant_id;
         this.customer_name = customer_name;
@@ -41,35 +41,35 @@ public class Order implements Serializable {
         this.state_stateTime = state_stateTime;
         this.item_itemQuantity = item_itemQuantity;
         this.notes = notes;
-        this.rider_id = rider_id;
-        this.rider_name = rider_name;
-        this.rider_phone = rider_phone;
+        this.deliveryman_id = deliveryman_id;
+        this.deliveryman_name = deliveryman_name;
+        this.deliveryman_phone = deliveryman_phone;
         this.sorting_field = sorting_field;
         this.notified = notified;
     }
 
-    public String getRider_id() {
-        return rider_id;
+    public String getDeliveryman_id() {
+        return deliveryman_id;
     }
 
-    public void setRider_id(String rider_id) {
-        this.rider_id = rider_id;
+    public void setDeliveryman_id(String deliveryman_id) {
+        this.deliveryman_id = deliveryman_id;
     }
 
-    public String getRider_name() {
-        return rider_name;
+    public String getDeliveryman_name() {
+        return deliveryman_name;
     }
 
-    public void setRider_name(String rider_name) {
-        this.rider_name = rider_name;
+    public void setDeliveryman_name(String deliveryman_name) {
+        this.deliveryman_name = deliveryman_name;
     }
 
-    public String getRider_phone() {
-        return rider_phone;
+    public String getDeliveryman_phone() {
+        return deliveryman_phone;
     }
 
-    public void setRider_phone(String rider_phone) {
-        this.rider_phone = rider_phone;
+    public void setDeliveryman_phone(String deliveryman_phone) {
+        this.deliveryman_phone = deliveryman_phone;
     }
 
     public String getNotified() {
