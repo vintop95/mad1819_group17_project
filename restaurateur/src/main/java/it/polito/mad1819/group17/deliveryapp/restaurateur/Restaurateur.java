@@ -1,13 +1,9 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur;
 
-import com.google.firebase.database.Exclude;
-
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Restaurateur implements Serializable {
-    private String photo = "";
+    private String image_path = "";
     private String name = "";
     private String phone = "";
     private String mail = "";
@@ -22,8 +18,8 @@ public class Restaurateur implements Serializable {
 
     }
 
-    public Restaurateur(String photo, String name, String phone, String mail, String address, String restaurant_type, String free_day, String working_time_opening, String working_time_closing, String bio) {
-        this.photo = photo;
+    public Restaurateur(String image_path, String name, String phone, String mail, String address, String restaurant_type, String free_day, String working_time_opening, String working_time_closing, String bio) {
+        this.image_path = image_path;
         this.name = name;
         this.phone = phone;
         this.mail = mail;
@@ -35,29 +31,12 @@ public class Restaurateur implements Serializable {
         this.bio = bio;
     }
 
-    @Exclude
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("photo", photo);
-        result.put("name", name);
-        result.put("phone", phone);
-        result.put("mail", mail);
-        result.put("address", address);
-        result.put("restaurant_type", restaurant_type);
-        result.put("free_day", free_day);
-        result.put("working_time_opening", working_time_opening);
-        result.put("working_time_closing", working_time_closing);
-        result.put("bio", bio);
-
-        return result;
+    public String getImage_path() {
+        return image_path;
     }
 
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setPhoto(String image_path) {
+        this.image_path = image_path;
     }
 
     public String getName() {
