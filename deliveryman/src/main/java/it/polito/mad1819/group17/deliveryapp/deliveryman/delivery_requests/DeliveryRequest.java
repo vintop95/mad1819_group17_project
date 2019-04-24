@@ -11,6 +11,7 @@ public class DeliveryRequest implements Serializable {
     public final static String STATE2 = "Accepted";
     public final static String STATE3 = "Delivered";
 
+    private String id;
     private String address;
     private String customer_name;
     private String customer_phone;
@@ -21,6 +22,14 @@ public class DeliveryRequest implements Serializable {
 
     public DeliveryRequest() {
 
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getAddress() {

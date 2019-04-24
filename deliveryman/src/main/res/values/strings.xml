@@ -12,10 +12,18 @@
     <string name="time" translatable="false">--:--</string>
     <string name="customer_name">Customer Name</string>
     <string name="customer_phone">Customer Phone</string>
+    <string name="notes">Notes</string>
     <string name="delivery_time">Delivery Time</string>
     <string name="delivery_date">Delivery Date</string>
     <string name="delivery_request_id">Request ID</string>
     <string name="delivery_address">Delivery Address</string>
     <string name="request_history">Request History</string>
     <string name="button_history" translatable="false">NEXT STATE</string>
+
+
+    <!-- Alert Dialogs -->
+    <string name="confirm_next_state_title">Do you want to confirm the next state?</string>
+    <string name="confirm_next_state_message">Is the meal ready for the next state? This is not a reversible operation.</string>
+    <string name="positive_button">OK</string>
+    <string name="negative_button">CANCEL</string>
 </resources>

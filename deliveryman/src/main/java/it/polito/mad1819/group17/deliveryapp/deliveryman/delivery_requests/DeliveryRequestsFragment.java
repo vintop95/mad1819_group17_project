@@ -43,9 +43,6 @@ public class DeliveryRequestsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Toast.makeText(getContext(), "/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders",
-                Toast.LENGTH_LONG).show();
-
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("deliverymen")
@@ -63,7 +60,7 @@ public class DeliveryRequestsFragment extends Fragment {
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(mAdapter);
-        mAdapter.startListening();
+        //mAdapter.startListening();
     }
 
     @Override

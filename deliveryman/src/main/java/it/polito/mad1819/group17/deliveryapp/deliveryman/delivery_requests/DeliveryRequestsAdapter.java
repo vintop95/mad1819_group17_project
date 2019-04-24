@@ -1,11 +1,11 @@
 package it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
-import it.polito.mad1819.group17.deliveryapp.deliveryman.DeliveryRequestDetailsActivity;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.R;
 
 public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryRequest, DeliveryRequestsAdapter.DeliveryRequestHolder> {
@@ -49,20 +48,18 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
 
         @Override
         public void onClick(View v) {
-            /*DeliveryRequest clickedDeliveryRequest = getItem(getAdapterPosition());
+            DeliveryRequest clickedDeliveryRequest = getItem(getAdapterPosition());
             fragment.startActivityForResult(
                     new Intent(fragment.getActivity().getApplicationContext(), DeliveryRequestDetailsActivity.class)
                             .putExtra("delivery_request", clickedDeliveryRequest),
                     DeliveryRequestsFragment.SHOW_DETAILS_REQUEST);
-        }*/
-            fragment.startActivity(
-                    new Intent(fragment.getActivity().getApplicationContext(), DeliveryRequestDetailsActivity.class));
         }
     }
     /* ------------------------------------------------------------------------------------------- */
 
     @Override
     protected void onBindViewHolder(DeliveryRequestHolder holder, int position, DeliveryRequest model) {
+        model.setId(getRef(position).getKey());
         holder.txt_delivery_time.setText(model.getDelivery_time());
         holder.txt_delivery_date.setText(model.getDelivery_date());
         holder.txt_state.setText(model.getCurrentState());
@@ -94,4 +91,5 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
     public static DeliveryRequest getOrderById(String id) {
         return null;
     }
+
 }

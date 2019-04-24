@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DeliveryRequestDetailsActivity"></activity>
+        <activity android:name=".delivery_requests.DeliveryRequestDetailsActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
