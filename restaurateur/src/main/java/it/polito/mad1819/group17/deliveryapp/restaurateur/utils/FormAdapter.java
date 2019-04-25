@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.restaurateur.R;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer.FoodDetailsActivity;
 

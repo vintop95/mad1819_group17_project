@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -23,10 +22,10 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import it.polito.mad1819.group17.deliveryapp.common.utils.PrefHelper;
 import it.polito.mad1819.group17.restaurateur.R;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.FormAdapter;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.FormAdapter.ListItem;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
 public class FoodDetailsActivity extends AppCompatActivity {
 

@@ -12,18 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
-import com.google.firebase.database.FirebaseDatabase;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.Query;
 
-import java.io.Serializable;
-
-import it.polito.mad1819.group17.deliveryapp.restaurateur.MainActivity;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.ProgressBarHandler;
+import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.restaurateur.R;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
 /**
  * IMPLEMENTING RecyclerView

@@ -26,8 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.Restaurateur;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.restaurateur.R;
 
 

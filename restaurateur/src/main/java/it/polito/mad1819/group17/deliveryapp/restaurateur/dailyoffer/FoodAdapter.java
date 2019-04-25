@@ -14,12 +14,11 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
 
 import java.util.Locale;
 
+import it.polito.mad1819.group17.deliveryapp.common.utils.PrefHelper;
 import it.polito.mad1819.group17.restaurateur.R;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
 
 // https://github.com/firebase/FirebaseUI-Android/tree/master/database#using-firebaseui-to-populate-a-recyclerview
 public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.FoodHolder> {
@@ -27,7 +26,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
 
     private OffersFragment mOffersFragment;
 
-    public FoodAdapter(OffersFragment of, FirebaseRecyclerOptions options){
+    public FoodAdapter(OffersFragment of, FirebaseRecyclerOptions<FoodModel> options){
         super(options);
         mOffersFragment = of;
     }

@@ -1,16 +1,12 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.orders;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,7 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import com.google.firebase.database.Query;
 
-import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.ProgressBarHandler;
+import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.restaurateur.R;
 
 

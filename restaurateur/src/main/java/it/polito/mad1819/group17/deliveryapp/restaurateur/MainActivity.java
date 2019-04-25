@@ -23,7 +23,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.util.ui.TextHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
@@ -36,15 +35,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Arrays;
 import java.util.Locale;
 
+import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
+import it.polito.mad1819.group17.deliveryapp.common.utils.PrefHelper;
+import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer.OffersFragment;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.orders.OrderDetailsActivity;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.orders.OrdersFragment;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.profile.EditProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.profile.ProfileFragment;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.CurrencyHelper;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.PrefHelper;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.restaurateur.R;
 
 public class MainActivity extends AppCompatActivity {

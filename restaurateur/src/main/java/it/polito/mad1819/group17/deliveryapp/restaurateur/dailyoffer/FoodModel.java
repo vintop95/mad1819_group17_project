@@ -1,7 +1,6 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer;
 
 import android.content.Context;
-import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -17,7 +16,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.CurrencyHelper;
+import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 
 /**
  * Utilities regarding food that cannot stay in javaBean FoodModel class
