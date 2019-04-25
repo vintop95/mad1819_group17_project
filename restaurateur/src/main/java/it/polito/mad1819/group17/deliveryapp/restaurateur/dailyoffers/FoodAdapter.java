@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer;
+package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffers;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.Locale;
 
+import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
 import it.polito.mad1819.group17.deliveryapp.common.utils.PrefHelper;
 import it.polito.mad1819.group17.restaurateur.R;
 

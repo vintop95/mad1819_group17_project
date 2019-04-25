@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.restaurateur.R;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer.FoodDetailsActivity;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffers.FoodDetailsActivity;
 
 public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FieldHolder> {
 

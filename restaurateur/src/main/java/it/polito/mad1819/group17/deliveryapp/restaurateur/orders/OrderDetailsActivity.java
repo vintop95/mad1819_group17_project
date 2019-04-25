@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import it.polito.mad1819.group17.deliveryapp.common.Deliveryman;
+import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.restaurateur.R;
 
 public class OrderDetailsActivity extends AppCompatActivity {

@@ -1,7 +1,6 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.orders;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer.OffersFragment;
+import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.restaurateur.R;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -53,7 +52,8 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
         public void onClick(View v) {
             Order clickedOrder = getItem(getAdapterPosition());
             fragment.startActivityForResult(
-                    new Intent(fragment.getActivity().getApplicationContext(), OrderDetailsActivity.class).putExtra("order", (Serializable)clickedOrder),
+                    new Intent(fragment.getContext(), OrderDetailsActivity.class)
+                            .putExtra("order", clickedOrder),
                     OrdersFragment.SHOW_DETAILS_REQUEST);
         }
     }

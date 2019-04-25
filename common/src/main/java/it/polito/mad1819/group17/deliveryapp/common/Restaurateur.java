@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.deliveryapp.restaurateur;
+package it.polito.mad1819.group17.deliveryapp.common;
 
 import java.io.Serializable;
 

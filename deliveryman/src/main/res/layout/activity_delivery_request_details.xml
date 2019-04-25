@@ -244,7 +244,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="@string/customer_name"
+                        android:text="@string/name_label"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                         app:layout_constraintStart_toStartOf="@+id/txt_customer_name"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -253,7 +253,7 @@
                         android:id="@+id/txt_customer_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/customer_name"
+                        android:text="@string/name_label"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                         app:layout_constraintStart_toStartOf="@+id/guideline_content"
                         app:layout_constraintTop_toBottomOf="@+id/label_customer_name" />
@@ -263,7 +263,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="@string/customer_phone"
+                        android:text="@string/phone_label"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                         app:layout_constraintStart_toStartOf="@+id/txt_customer_name"
                         app:layout_constraintTop_toBottomOf="@+id/txt_customer_name" />
@@ -273,7 +273,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        android:text="@string/customer_phone"
+                        android:text="@string/phone_label"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/label_customer_phone"

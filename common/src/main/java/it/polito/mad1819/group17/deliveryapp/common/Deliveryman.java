@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.deliveryapp.restaurateur.orders;
+package it.polito.mad1819.group17.deliveryapp.common;
 
 import java.io.Serializable;
 
@@ -9,7 +9,7 @@ public class Deliveryman implements Serializable {
     private String phone;
     private String busy;
 
-    public void Deliveryman (){
+    public Deliveryman (){
 
     }
 

@@ -1,13 +1,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 <item>
     <shape android:shape="oval">
-        <solid android:color="@color/colorPrimaryLight"
-            ></solid>
+        <solid android:color="@color/colorPrimaryLight"/>
         <padding
             android:bottom="2dp"
             android:left="2dp"
             android:right="2dp"
-            android:top="2dp"></padding>
+            android:top="2dp"/>
     </shape>
 </item>
 <item android:drawable="@drawable/ic_person_black_24dp" />
