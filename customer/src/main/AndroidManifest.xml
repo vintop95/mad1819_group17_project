@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".orders.OrderDetailsActivity"></activity>
-        <activity android:name=".restaurants.DailyMenuActivity"></activity>
+        <activity android:name=".restaurants.dailyoffers.DailyMenuActivity"></activity>
         <activity android:name=".restaurants.RestaurantsActivity" />
         <activity
             android:name=".MainActivity"

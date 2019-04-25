@@ -122,16 +122,16 @@ public class OffersFragment extends Fragment {
     /////// FIREBASE MGMT ////////
     public void addFoodInList(FoodModel newFood){
         Log.d(TAG, "Item " + newFood.id + " added");
-        FoodModelUtil.pushToFirebase(getContext(), newFood);
+        FoodModelRestaurateurUtil.pushToFirebase(getContext(), newFood);
     }
 
     public void modifyItem(FoodModel newFood){
         Log.d(TAG, "Item " + newFood.id + " modified");
-        FoodModelUtil.modifyInFirebase(getContext(), newFood);
+        FoodModelRestaurateurUtil.modifyInFirebase(getContext(), newFood);
     }
 
     private void setFirebaseRecycler(){
-        Query query = FoodModelUtil.getDailyOffersRef();
+        Query query = FoodModelRestaurateurUtil.getDailyOffersRef();
 
         FirebaseRecyclerOptions<FoodModel> options =
                 new FirebaseRecyclerOptions.Builder<FoodModel>()
