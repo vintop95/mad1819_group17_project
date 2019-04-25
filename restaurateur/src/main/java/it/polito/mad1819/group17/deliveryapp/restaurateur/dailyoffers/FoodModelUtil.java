@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer;
+package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,12 +10,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 
 /**
@@ -79,42 +78,11 @@ class FoodModelUtil {
         DatabaseReference foodRef = getDailyOffersRef().child(food.id);
         foodRef.removeValue(
                 (@Nullable DatabaseError err, @NonNull DatabaseReference ref)
-                -> handleCompletionListener(context, err, ref, "Removed")
+                        -> handleCompletionListener(context, err, ref, "Removed")
         );
     }
 
     public static String getPriceFormatted(double price) {
         return CurrencyHelper.getCurrency(price);
     }
-}
-
-/**
- * it must follow the javabean convention
- * https://firebase.google.com/docs/database/android/read-and-write
- * https://www.learnhowtoprogram.com/android/data-persistence/firebase-writing-pojos
- */
-@IgnoreExtraProperties
-public class FoodModel implements Serializable{
-    public String id = "";
-//    public int pos = -1; // not useful now and hard to update
-    public String name = "", description = "";
-    public String photo = "";
-    public double price = 0.0;
-    public int availableQty = 0;
-
-    /////////////////////////////////////////////////////////////////
-    public FoodModel() {}
-
-    public FoodModel(String name, String description,
-                     String photo, double price,
-                     int availableQty) {
-//        this.pos = pos;
-        this.name = name;
-        this.description = description;
-        this.photo = photo;
-        this.price = price;
-        this.availableQty = availableQty;
-    }
-
-    /////////////////////////////////////////////////////////
 }

@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 
 public class RestaurantsActivity extends AppCompatActivity {
@@ -41,7 +42,7 @@ public class RestaurantsActivity extends AppCompatActivity {
     private FirebaseRecyclerAdapter adapter;
 
     private Intent intent;
-
+    private ProgressBarHandler pbHandler;
 
     private void showBackArrowOnToolbar() {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
@@ -58,12 +59,14 @@ public class RestaurantsActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         adapter.startListening();
+        pbHandler.show();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+        pbHandler.hide();
     }
 
 
@@ -74,6 +77,8 @@ public class RestaurantsActivity extends AppCompatActivity {
         category_selected = intent.getStringExtra("category");
         Log.d("aaa",category_selected);
         setContentView(R.layout.activity_restaurant);
+
+        pbHandler = new ProgressBarHandler(this);
 
         showBackArrowOnToolbar();
 
@@ -112,10 +117,11 @@ public class ViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View v){
                 int position = getAdapterPosition();
 
+                // TODO: pass the ID of the restaurant
                 Context context = v.getContext();
                 Intent intent = new Intent(context, DailyMenuActivity.class);
                 intent.putExtra("name",name.getText());
-                Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
+                // Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
                 startActivity(intent);
             }
 
@@ -194,6 +200,11 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
             }
 
+            @Override
+            public void onDataChanged() {
+                super.onDataChanged();
+                pbHandler.hide();
+            }
         };
         recyclerView.setAdapter(adapter);
 

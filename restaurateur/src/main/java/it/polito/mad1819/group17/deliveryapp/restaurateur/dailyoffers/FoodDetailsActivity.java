@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer;
+package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffers;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
 import it.polito.mad1819.group17.deliveryapp.common.utils.PrefHelper;
 import it.polito.mad1819.group17.restaurateur.R;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.FormAdapter;

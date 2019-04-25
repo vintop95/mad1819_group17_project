@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import com.google.firebase.database.Query;
 
+import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.restaurateur.R;
 

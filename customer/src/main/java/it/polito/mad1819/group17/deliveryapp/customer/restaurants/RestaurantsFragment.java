@@ -16,9 +16,6 @@ import android.widget.Toast;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 import it.polito.mad1819.group17.deliveryapp.customer.utils.CategoryListView;
 
-
-
-
 public class RestaurantsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,7 +60,6 @@ public class RestaurantsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
@@ -83,13 +79,12 @@ public class RestaurantsFragment extends Fragment {
                 b.putString("category", categories[i]); //Your category selected
                 intent.putExtras(b); //Put your category in the next Intent
                 startActivity(intent);
-
             }
         });
+
         Log.d("aia", "onCreateView: "+categories.length+"///"+imgid.length);
         CategoryListView categoryListView = new CategoryListView(this.getActivity(),categories,imgid);
         lst.setAdapter(categoryListView);
         return view;
     }
-
 }

@@ -30,7 +30,6 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:contentDescription">@string/image_background</item>
         <item name="android:scaleType">centerCrop</item>
-        <item name="srcCompat">@drawable/background_profile</item>
     </style>
 
 
@@ -64,7 +63,6 @@
         <item name="android:contentDescription">@string/image_profile_change</item>
         <item name="android:elevation">2dp</item>
         <item name="layout_constraintDimensionRatio">w,1:1</item>
-        <item name="srcCompat">@mipmap/ic_launcher_round</item>
     </style>
 
     <style name="textOnBackgroundStyle">

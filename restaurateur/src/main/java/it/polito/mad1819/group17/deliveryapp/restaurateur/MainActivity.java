@@ -35,11 +35,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Arrays;
 import java.util.Locale;
 
+import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.PrefHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffer.OffersFragment;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.orders.Order;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffers.OffersFragment;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.orders.OrderDetailsActivity;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.orders.OrdersFragment;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.profile.EditProfileActivity;

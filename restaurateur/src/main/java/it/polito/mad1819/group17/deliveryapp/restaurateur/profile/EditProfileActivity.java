@@ -25,8 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
@@ -46,8 +44,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import it.polito.mad1819.group17.deliveryapp.restaurateur.MainActivity;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.Restaurateur;
+import it.polito.mad1819.group17.deliveryapp.common.Restaurateur;
 import it.polito.mad1819.group17.restaurateur.R;
 
 public class EditProfileActivity extends AppCompatActivity {

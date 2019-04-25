@@ -2,33 +2,56 @@ package it.polito.mad1819.group17.deliveryapp.customer;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
-import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Arrays;
 import java.util.Locale;
 
-import it.polito.mad1819.group17.deliveryapp.customer.R;
+import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
+import it.polito.mad1819.group17.deliveryapp.common.utils.PrefHelper;
+import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.customer.orders.OrdersFragment;
 import it.polito.mad1819.group17.deliveryapp.customer.profile.ProfileFragment;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
+    public final static int RC_SIGN_IN = 1;
+
+    private FirebaseDatabase mFirebaseDatabase = null;
+    private DatabaseReference mCustomerDatabaseReference = null;
+    private DatabaseReference mCustomerOrdersRef = null;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     Fragment restaurantsFragment = new RestaurantsFragment();
     Fragment ordersFragment = new OrdersFragment();
     Fragment profileFragment = new ProfileFragment();
 
     final FragmentManager fm = getSupportFragmentManager();
-    Fragment active;
+    private Fragment active;
+    private Toolbar toolbar;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
+    private ProgressBarHandler progressBarHandler;
+    private BottomNavigationView navigation;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -44,9 +67,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle inState) {
         instantiateFragments(inState);
     }
-
-    private Toolbar toolbar;
-    private MenuItem btn_edit;
 
     private void instantiateFragments(Bundle inState) {
         if (inState != null) {
@@ -64,58 +84,36 @@ public class MainActivity extends AppCompatActivity {
             profileFragment = new ProfileFragment();
             fm.beginTransaction().add(R.id.main_container, profileFragment,
                     ProfileFragment.class.getName()).detach(profileFragment).commit();
-            active = ordersFragment;
+            active = restaurantsFragment;
         }
         fm.beginTransaction().attach(active).commit();
     }
 
-    /*public final static Restaurateur getCurrentRestaurateur() {
-        return currentRestaurateur;
-    }
-*/
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    private void initBottomNavigation(){
+        if(active == null) throw new IllegalStateException("'active' must be initalized");
 
-        toolbar = findViewById(R.id.toolbar);
-        //PrefHelper.setMainContext(this);
-
-        // TODO: LET THE USER CHANGE THE CURRENCY FROM SETTINGS?
-        String language = Locale.ITALY.getLanguage();
-        String country = Locale.ITALY.getCountry();
-        //CurrencyHelper.setLocaleCurrency(new Locale(language, country));
-
-        instantiateFragments(savedInstanceState);
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
         mOnNavigationItemSelectedListener
-                = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-
-                switch (item.getItemId()) {
-                    case R.id.navigation_profile:
-                        fm.beginTransaction().detach(active).attach(profileFragment).commit();
-                        active = profileFragment;
-                        return true;
-                    case R.id.navigation_restaurants:
-                        fm.beginTransaction().detach(active).attach(restaurantsFragment).commit();
-                        active = restaurantsFragment;
-                        return true;
-                    case R.id.navigation_orders:
-                        fm.beginTransaction().detach(active).attach(ordersFragment).commit();
-                        active = ordersFragment;
-                        return true;
-                }
-                return false;
+                = item -> {
+            switch (item.getItemId()) {
+                case R.id.navigation_profile:
+                    fm.beginTransaction().detach(active).attach(profileFragment).commit();
+                    active = profileFragment;
+                    return true;
+                case R.id.navigation_restaurants:
+                    fm.beginTransaction().detach(active).attach(restaurantsFragment).commit();
+                    active = restaurantsFragment;
+                    return true;
+                case R.id.navigation_orders:
+                    fm.beginTransaction().detach(active).attach(ordersFragment).commit();
+                    active = ordersFragment;
+                    return true;
             }
+            return false;
         };
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        int navSelected = R.id.navigation_orders;
+        int navSelected = R.id.navigation_restaurants;
         if (active.equals(restaurantsFragment)) {
             navSelected = R.id.navigation_restaurants;
         } else if (active.equals(ordersFragment)) {
@@ -125,5 +123,146 @@ public class MainActivity extends AppCompatActivity {
         }
 
         navigation.setSelectedItemId(navSelected);
+    }
+
+    private void initFirebaseAuth(){
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mAuthStateListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                // Toast.makeText(MainActivity.this, "Signed In!", Toast.LENGTH_SHORT).show();
+                initFirebaseDb(mFirebaseAuth.getCurrentUser().getUid());
+            } else {
+                progressBarHandler.show();
+                startActivityForResult(
+                        AuthUI.getInstance()
+                                .createSignInIntentBuilder()
+                                .setIsSmartLockEnabled(false)
+                                .setAvailableProviders(Arrays.asList(
+                                        new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                        new AuthUI.IdpConfig.EmailBuilder().build()))
+                                .build(),
+                        RC_SIGN_IN);
+            }
+        };
+    }
+
+    private void initFirebaseDb(String userId){
+        if (TextUtils.isEmpty(userId)) {
+            throw new IllegalStateException("Log in with FirebaseAuth first");
+        }
+
+        if(mCustomerOrdersRef != null)
+            return;
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mCustomerDatabaseReference = mFirebaseDatabase.getReference().child("customers");
+        mCustomerOrdersRef = mCustomerDatabaseReference.child(userId).child("orders");
+
+        progressBarHandler.hide();
+    }
+
+    private void initUtils(){
+        PrefHelper.setMainContext(this);
+
+        // TODO: LET THE USER CHANGE THE CURRENCY FROM SETTINGS?
+        String language = Locale.ITALY.getLanguage();
+        String country = Locale.ITALY.getCountry();
+        CurrencyHelper.setLocaleCurrency(new Locale(language, country));
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        progressBarHandler = new ProgressBarHandler(this);
+        progressBarHandler.show();
+
+        initFirebaseAuth();
+
+        // DONE IN SIGN IN CALLBACK because it needs a reference to the user
+        // that could not exist
+        // initFirebaseDb();
+
+        // Init toolbar
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        initUtils();
+
+        instantiateFragments(savedInstanceState);
+        initBottomNavigation();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
+                initFirebaseDb(mFirebaseAuth.getCurrentUser().getUid());
+                if (isNewSignUp()) {
+                    // Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
+                    // startActivity(editNewProfile);
+                    progressBarHandler.hide();
+                    if(navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
+                }
+                Toast.makeText(this, "Signed In!", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Sign in canceled!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mAuthStateListener != null) {
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+            Log.v("FIREBASE_LOG", "AuthListener removed onPause - MainActivity");
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setAuthStateListener();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_signout, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sign_out_menu:
+                AuthUI.getInstance().signOut(this);
+                Log.v("FIREBASE_LOG", "Sign Out - MainActivity");
+                return true;
+
+                // TODO: reinsert once editProfile is added
+//            case R.id.btn_edit:
+//                Intent intent = new Intent(this, EditProfileActivity.class);
+//                startActivity(intent);
+//                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    public boolean isNewSignUp() {
+        FirebaseUserMetadata metadata = mFirebaseAuth.getCurrentUser().getMetadata();
+        return metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp();
+    }
+
+    private void setAuthStateListener(){
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+        Log.v("FIREBASE_LOG", "AuthListener added - MainActivity");
     }
 }
