@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,7 @@ public class OrdersFragment extends Fragment {
 
             Query query = FirebaseDatabase.getInstance()
                     .getReference()
-                    .child("restaurateurs")
+                    .child("customers")
                     .child(FirebaseAuth.getInstance().getUid())
                     .child("orders")
                     .orderByChild("sorting_field");
@@ -54,7 +55,8 @@ public class OrdersFragment extends Fragment {
                     .setQuery(query, Order.class)
                     .build();
 
-            mAdapter = new OrdersAdapter(options, getFragmentManager().findFragmentByTag(OrdersFragment.class.getName()));
+            mAdapter = new OrdersAdapter(options, getFragmentManager()
+                    .findFragmentByTag(OrdersFragment.class.getName()));
             recyclerView.setHasFixedSize(false);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(mAdapter);
