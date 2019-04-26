@@ -3,6 +3,7 @@ package it.polito.mad1819.group17.deliveryapp.common;
 import java.io.Serializable;
 
 public class Customer implements Serializable {
+    private String id = "";
     private String image_path = "";
     private String name = "";
     private String phone = "";
@@ -14,7 +15,8 @@ public class Customer implements Serializable {
 
     }
 
-    public Customer(String image_path, String name, String phone, String mail, String address, String restaurant_type, String free_day, String working_time_opening, String working_time_closing, String bio) {
+    public Customer(String id, String image_path, String name, String phone, String mail, String address, String bio) {
+        this.id = id;
         this.image_path = image_path;
         this.name = name;
         this.phone = phone;
@@ -23,11 +25,19 @@ public class Customer implements Serializable {
         this.bio = bio;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getImage_path() {
         return image_path;
     }
 
-    public void setPhoto(String image_path) {
+    public void setImage_path(String image_path) {
         this.image_path = image_path;
     }
 

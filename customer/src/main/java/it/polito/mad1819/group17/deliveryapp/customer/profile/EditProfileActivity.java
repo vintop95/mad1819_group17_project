@@ -122,6 +122,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private int saveProfile() {
+        String id = mFirebaseAuth.getUid();
         String name = input_name.getText().toString();
         String phone = input_phone.getText().toString();
         String mail = input_mail.getText().toString();
@@ -138,13 +139,14 @@ public class EditProfileActivity extends AppCompatActivity {
             if (image_changed) uploadImage();
 
             Map<String, Object> childUpdates = new HashMap<>();
+            childUpdates.put("id", id);
             childUpdates.put("name", name);
             childUpdates.put("phone", phone);
             childUpdates.put("mail", mail);
             childUpdates.put("address", address);
             childUpdates.put("bio", bio);
 
-            mCustomerDatabaseReference.child(mFirebaseAuth.getUid())
+            mCustomerDatabaseReference.child(id)
                     .updateChildren(childUpdates);
 
             if (mFirebaseAuth.getCurrentUser().getDisplayName() != name ||
@@ -288,9 +290,6 @@ public class EditProfileActivity extends AppCompatActivity {
             } else if (result == -1)
                 Toast.makeText(getApplicationContext(),
                         getString(R.string.fill_required_fields), Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(getApplicationContext(),
-                        getString(R.string.wrong_times), Toast.LENGTH_LONG).show();
             return true;
         }
         return false;

@@ -17,6 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment deliveryRequestsFragment = new DeliveryRequestsFragment();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
     private ProgressBarHandler progressBarHandler;
+    private BottomNavigationView navigation;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -210,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initBottomNavigation(){
-        if(active == null) throw new IllegalStateException("'active' must be initalized");
+        if(active == null) throw new IllegalStateException("'active' must be initialized");
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         mOnNavigationItemSelectedListener
@@ -237,6 +240,7 @@ public class MainActivity extends AppCompatActivity {
             navSelected = R.id.navigation_delivery_requests;
         else if (active.equals(profileFragment))
             navSelected = R.id.navigation_profile;
+
         navigation.setSelectedItemId(navSelected);
     }
 
@@ -269,15 +273,40 @@ public class MainActivity extends AppCompatActivity {
                 initFirebaseDb(mFirebaseAuth.getCurrentUser().getUid());
                 if (isNewSignUp()) {
                     Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
-                    editNewProfile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(editNewProfile);
-                    finish();
+                    progressBarHandler.hide();
+                    if(navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
                 }
                 Toast.makeText(this, "Signed In!", Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Sign in canceled!", Toast.LENGTH_SHORT).show();
                 finish();
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_signout, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sign_out_menu:
+                AuthUI.getInstance().signOut(this);
+                Log.v("FIREBASE_LOG", "Sign Out - MainActivity");
+                return true;
+
+            case R.id.btn_edit:
+                Intent intent = new Intent(this, EditProfileActivity.class);
+                startActivity(intent);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

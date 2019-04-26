@@ -75,6 +75,16 @@
 
 
     <!-- ////////////// -->
+    <!-- Delivery Strings -->
+    <!-- ////////////// -->
+
+    <string name="notes">Note</string>
+    <string name="delivery_request_id">ID Richiesta</string>
+    <string name="request_history">Storico Richiesta</string>
+    <string name="new_delivery_request">NUOVA RICHIESTA CONSEGNA</string>
+
+
+    <!-- ////////////// -->
     <!-- Profile Strings -->
     <!-- ////////////// -->
 
@@ -90,6 +100,7 @@
     <string name="mail">Email:</string>
     <string name="password">Password:</string>
     <string name="city">Città:</string>
+    <string name="birthday">Data di nascita:</string>
     <string name="bio">Breve Descrizione:</string>
     <string name="address">Indirizzo:</string>
     <string name="address_delivery">Indirizzo Consegna:</string>
@@ -103,6 +114,7 @@
     <string name="hint_mail">"Il tuo indirizzo email"</string>
     <string name="hint_password">"La tua password"</string>
     <string name="hint_city">La tua città</string>
+    <string name="hint_birthday">La tua data di nascita</string>
     <string name="hint_bio">"La tua descrizione"</string>
     <string name="hint_address">Il tuo indirizzo</string>
     <string name="hint_phone">"Il tuo telefono"</string>
