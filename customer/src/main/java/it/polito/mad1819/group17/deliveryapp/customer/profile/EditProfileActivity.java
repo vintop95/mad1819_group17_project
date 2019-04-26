@@ -1,6 +1,5 @@
-package it.polito.mad1819.group17.deliveryapp.restaurateur.profile;
+package it.polito.mad1819.group17.deliveryapp.customer.profile;
 
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,11 +16,8 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -38,19 +34,16 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import it.polito.mad1819.group17.deliveryapp.common.Restaurateur;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
+import it.polito.mad1819.group17.deliveryapp.common.Customer;
+import it.polito.mad1819.group17.deliveryapp.customer.R;
 
 public class EditProfileActivity extends AppCompatActivity {
 
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mRestaurateurDatabaseReference;
+    private DatabaseReference mCustomerDatabaseReference;
     private ValueEventListener mEditEventListener;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseStorage mFirebaseStorage;
@@ -66,10 +59,6 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText input_phone;
     private EditText input_mail;
     private EditText input_address;
-    private Spinner input_restaurant_type;
-    private Spinner input_free_day;
-    private TextView input_working_time_opening;
-    private TextView input_working_time_closing;
     private EditText input_bio;
 
 
@@ -84,47 +73,21 @@ public class EditProfileActivity extends AppCompatActivity {
         input_phone = findViewById(R.id.input_phone_sign_in);
         input_mail = findViewById(R.id.input_mail_sign_in);
         input_address = findViewById(R.id.input_address_sign_in);
-        input_restaurant_type = findViewById(R.id.input_restaurant_type_sign_in);
-        input_free_day = findViewById(R.id.input_free_day_sign_in);
-        input_working_time_opening = findViewById(R.id.input_working_time_opening_sign_in);
-        input_working_time_closing = findViewById(R.id.input_working_time_closing_sign_in);
         input_bio = findViewById(R.id.input_bio_sign_in);
     }
 
-    private void feedViews(Restaurateur restaurateur) {
-        if (restaurateur != null) {
-            if (!image_changed && restaurateur.getImage_path() != "") {
-                Glide.with(image_user_photo.getContext()).load(restaurateur.getImage_path())
+    private void feedViews(Customer customer) {
+        if (customer != null) {
+            if (!image_changed && customer.getImage_path() != "") {
+                Glide.with(image_user_photo.getContext()).load(customer.getImage_path())
                         .into(image_user_photo);
             }
-            input_name.setText(restaurateur.getName());
-            input_phone.setText(restaurateur.getPhone());
-            input_mail.setText(restaurateur.getMail());
-            input_address.setText(restaurateur.getAddress());
-            String restaurant_type = restaurateur.getRestaurant_type();
-            if (restaurant_type != null)
-                for (int i = 0; i < getResources().getStringArray(R.array.restaurant_types).length; i++)
-                    if (getResources().getStringArray(R.array.restaurant_types)[i].equals(restaurant_type)) {
-                        input_restaurant_type.setSelection(i);
-                        break;
-                    }
-            String free_day = restaurateur.getFree_day();
-            if (free_day != null)
-                for (int i = 0; i < getResources().getStringArray(R.array.days_of_week).length; i++)
-                    if (getResources().getStringArray(R.array.days_of_week)[i].equals(free_day)) {
-                        input_free_day.setSelection(i);
-                        break;
-                    }
-
-            String time_opening = restaurateur.getWorking_time_opening();
-            if (time_opening != null)
-                input_working_time_opening.setText(time_opening);
-
-            String time_closing = restaurateur.getWorking_time_closing();
-            if (time_closing != null)
-                input_working_time_closing.setText(time_closing);
-            if (restaurateur.getBio() != "")
-                input_bio.setText(restaurateur.getBio());
+            input_name.setText(customer.getName());
+            input_phone.setText(customer.getPhone());
+            input_mail.setText(customer.getMail());
+            input_address.setText(customer.getAddress());
+            if (customer.getBio() != "")
+                input_bio.setText(customer.getBio());
         } else {
             input_name.setText(mFirebaseAuth.getCurrentUser().getDisplayName());
             input_mail.setText(mFirebaseAuth.getCurrentUser().getEmail());
@@ -144,17 +107,17 @@ public class EditProfileActivity extends AppCompatActivity {
         uploadTask.addOnFailureListener((@NonNull Exception exception) -> {
             Log.e("FIREBASE_LOG", "Picture Upload Fail - EditProfileActivity");
             Toast.makeText(getApplicationContext(),
-                "Picture Upload Fail - EditProfileActivity",
-                Toast.LENGTH_LONG).show();
+                    "Picture Upload Fail - EditProfileActivity",
+                    Toast.LENGTH_LONG).show();
         }).addOnSuccessListener((UploadTask.TaskSnapshot taskSnapshot) -> {
             mFirebaseStorageReference.child("profile_picture.jpg")
-                .getDownloadUrl()
-                .addOnSuccessListener((Uri uri) -> {
-                    Uri downUri = uri;
-                    Log.v("FIREBASE_LOG", "Picture Upload Success - EditProfileActivity");
-                    mRestaurateurDatabaseReference.child(mFirebaseAuth.getUid())
-                            .child("image_path").setValue(downUri.toString());
-                });
+                    .getDownloadUrl()
+                    .addOnSuccessListener((Uri uri) -> {
+                        Uri downUri = uri;
+                        Log.v("FIREBASE_LOG", "Picture Upload Success - EditProfileActivity");
+                        mCustomerDatabaseReference.child(mFirebaseAuth.getUid())
+                                .child("image_path").setValue(downUri.toString());
+                    });
         });
     }
 
@@ -163,64 +126,38 @@ public class EditProfileActivity extends AppCompatActivity {
         String phone = input_phone.getText().toString();
         String mail = input_mail.getText().toString();
         String address = input_address.getText().toString();
-        String restaurant_type = input_restaurant_type.getSelectedItem().toString();
-        String free_day = input_free_day.getSelectedItem().toString();
-        String time_opening = input_working_time_opening.getText().toString();
-        String time_closing = input_working_time_closing.getText().toString();
-        Date date_timeOpening = null;
-        Date date_timeClosing = null;
         String bio = input_bio.getText().toString();
 
         if (name.isEmpty() ||
                 phone.isEmpty() || !Patterns.PHONE.matcher(phone).matches() ||
                 mail.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(mail).matches() ||
-                address.isEmpty() ||
-                restaurant_type.isEmpty() ||
-                free_day.isEmpty() ||
-                time_opening.equals("--:--") || time_closing.equals("--:--"))
+                address.isEmpty())
             return -1;
 
-        else if (!time_opening.equals("--:--") && !time_closing.equals("--:--")) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-            try {
-                date_timeOpening = simpleDateFormat.parse(time_opening);
-                date_timeClosing = simpleDateFormat.parse(time_closing);
-            } catch (ParseException e) {
-                e.printStackTrace();
+        else {
+            if (image_changed) uploadImage();
+
+            Map<String, Object> childUpdates = new HashMap<>();
+            childUpdates.put("name", name);
+            childUpdates.put("phone", phone);
+            childUpdates.put("mail", mail);
+            childUpdates.put("address", address);
+            childUpdates.put("bio", bio);
+
+            mCustomerDatabaseReference.child(mFirebaseAuth.getUid())
+                    .updateChildren(childUpdates);
+
+            if (mFirebaseAuth.getCurrentUser().getDisplayName() != name ||
+                    mFirebaseAuth.getCurrentUser().getEmail() != mail) {
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName(name)
+                        .build();
+                mFirebaseAuth.getCurrentUser().updateProfile(profileUpdates);
+                mFirebaseAuth.getCurrentUser().updateEmail(mail);
             }
 
-            if (date_timeOpening.compareTo(date_timeClosing) >= 0)
-                return 0;
-            else {
-                if (image_changed) uploadImage();
-
-                Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put("name", name);
-                childUpdates.put("phone", phone);
-                childUpdates.put("mail", mail);
-                childUpdates.put("address", address);
-                childUpdates.put("restaurant_type", restaurant_type);
-                childUpdates.put("free_day", free_day);
-                childUpdates.put("working_time_opening", time_opening);
-                childUpdates.put("working_time_closing", time_closing);
-                childUpdates.put("bio", bio);
-
-                mRestaurateurDatabaseReference.child(mFirebaseAuth.getUid())
-                        .updateChildren(childUpdates);
-
-                if (mFirebaseAuth.getCurrentUser().getDisplayName() != name ||
-                        mFirebaseAuth.getCurrentUser().getEmail() != mail) {
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(name)
-                            .build();
-                    mFirebaseAuth.getCurrentUser().updateProfile(profileUpdates);
-                    mFirebaseAuth.getCurrentUser().updateEmail(mail);
-                }
-
-                return 1;
-            }
-        } else
-            return -1;
+            return 1;
+        }
     }
 
     @Override
@@ -270,12 +207,9 @@ public class EditProfileActivity extends AppCompatActivity {
         addOnFocusChangeListener(input_address);
         addOnFocusChangeListener(input_bio);
 
-        addTimePickerOnClick(input_working_time_opening);
-        addTimePickerOnClick(input_working_time_closing);
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
+        mCustomerDatabaseReference = mFirebaseDatabase.getReference().child("customers");
 
         mFirebaseStorage = FirebaseStorage.getInstance();
         mFirebaseStorageReference = mFirebaseStorage.getReference().child(mFirebaseAuth.getUid())
@@ -307,24 +241,24 @@ public class EditProfileActivity extends AppCompatActivity {
             mEditEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Restaurateur restaurateur = dataSnapshot.getValue(Restaurateur.class);
-                    feedViews(restaurateur);
+                    Customer customer = dataSnapshot.getValue(Customer.class);
+                    feedViews(customer);
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                     Toast.makeText(getApplicationContext(),
-                            "Unable to retrieve restaurateur's information", Toast.LENGTH_LONG).show();
+                            "Unable to retrieve customer's information", Toast.LENGTH_LONG).show();
                 }
             };
-            mRestaurateurDatabaseReference.child(userId)
+            mCustomerDatabaseReference.child(userId)
                     .addListenerForSingleValueEvent(mEditEventListener);
         }
     }
 
     private void detachValueEventListener(String userId) {
         if (mEditEventListener != null && userId != null) {
-            mRestaurateurDatabaseReference.child(userId).removeEventListener(mEditEventListener);
+            mCustomerDatabaseReference.child(userId).removeEventListener(mEditEventListener);
             mEditEventListener = null;
         }
     }
@@ -362,30 +296,6 @@ public class EditProfileActivity extends AppCompatActivity {
         return false;
     }
 
-    private void addTimePickerOnClick(View view) {
-        view.setOnClickListener(v ->
-        {
-            TimePickerDialog timePickerDialog = new TimePickerDialog(EditProfileActivity.this,
-                    (view1, hourOfDay, minute) -> {
-                        String timestamp = "";
-
-                        if (hourOfDay < 10)
-                            timestamp += "0";
-                        timestamp += hourOfDay + ":";
-
-                        if (minute < 10)
-                            timestamp += "0";
-                        timestamp += minute;
-
-                        ((TextView) view).setText(timestamp);
-                    },
-                    0,
-                    0,
-                    false);
-            timePickerDialog.show();
-        });
-    }
-
     private void startPickPictureDialog() {
         AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this);
 
@@ -393,7 +303,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         myAlertDialog.setPositiveButton(R.string.gallery,
                 (dialog, which) -> {
-                    Intent picFromGalleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    Intent picFromGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     try {
                         startActivityForResult(picFromGalleryIntent, GALLERY_REQUEST);
                     } catch (android.content.ActivityNotFoundException e) {

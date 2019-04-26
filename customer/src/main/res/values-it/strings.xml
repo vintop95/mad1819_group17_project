@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AppetiTO</string>
+    <string name="app_name">AppetiTO Cliente</string>
+
+    <!-- FirebaseUI Auth -->
+    <string name="fui_name_hint">Nome Cliente</string>
 </resources>

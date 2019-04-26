@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
 import it.polito.mad1819.group17.deliveryapp.common.utils.PrefHelper;
-import it.polito.mad1819.group17.restaurateur.R;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.FormAdapter;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.FormAdapter.ListItem;
 

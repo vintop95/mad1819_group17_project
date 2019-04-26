@@ -28,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.common.Restaurateur;
-import it.polito.mad1819.group17.restaurateur.R;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
 
 public class ProfileFragment extends Fragment {

@@ -27,8 +27,8 @@
     <string name="deliveryman_name">Nome Rider</string>
     <string name="deliveryman_phone">Telefono Rider</string>
     <!-- Labels -->
-    <string name="name_label">Nome</string>
-    <string name="phone_label">Telefono</string>
+    <string name="name_label">Nome:</string>
+    <string name="phone_label">Telefono:</string>
     <string name="delivery_address">Indirizzo Consegna</string>
     <string name="order_content">Contenuto Ordine</string>
     <string name="order_info">Informazioni Ordine</string>
@@ -81,13 +81,18 @@
     <!-- Show Profile Strings -->
     <!-- Labels -->
     <string name="info">Info</string>
-    <string name="name_restaurant">Nome Ristorante</string>
-    <string name="phone_restaurant">Telefono Ristorante</string>
+    <string name="name_restaurant">Nome Ristorante:</string>
+    <string name="name_customer">Nome Cliente:</string>
+    <string name="name_deliveryman">Nome Fattorino:</string>
+    <string name="phone_restaurant">Telefono Ristorante:</string>
+    <string name="phone_customer">Telefono Cliente:</string>
+    <string name="phone_deliveryman">Telefono Ristorante:</string>
     <string name="mail">Email:</string>
     <string name="password">Password:</string>
     <string name="city">Città:</string>
     <string name="bio">Breve Descrizione:</string>
     <string name="address">Indirizzo:</string>
+    <string name="address_delivery">Indirizzo Consegna:</string>
     <string name="restaurant_type">Tipologia Ristorante</string>
     <string name="free_day">Giorno di riposo</string>
     <string name="working_time">Orario Lavorativo</string>

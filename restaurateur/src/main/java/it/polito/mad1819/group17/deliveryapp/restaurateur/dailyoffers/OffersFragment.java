@@ -18,7 +18,7 @@ import com.google.firebase.database.Query;
 
 import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
-import it.polito.mad1819.group17.restaurateur.R;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
 /**
  * IMPLEMENTING RecyclerView

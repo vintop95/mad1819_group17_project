@@ -29,6 +29,7 @@ import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.PrefHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.customer.orders.OrdersFragment;
+import it.polito.mad1819.group17.deliveryapp.customer.profile.EditProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.profile.ProfileFragment;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantsFragment;
 
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initBottomNavigation(){
-        if(active == null) throw new IllegalStateException("'active' must be initalized");
+        if(active == null) throw new IllegalStateException("'active' must be initialized");
 
         navigation = findViewById(R.id.navigation);
         mOnNavigationItemSelectedListener
@@ -201,8 +202,8 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 initFirebaseDb(mFirebaseAuth.getCurrentUser().getUid());
                 if (isNewSignUp()) {
-                    // Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
-                    // startActivity(editNewProfile);
+                    Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
+                    startActivity(editNewProfile);
                     progressBarHandler.hide();
                     if(navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
                 }
@@ -244,11 +245,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.v("FIREBASE_LOG", "Sign Out - MainActivity");
                 return true;
 
-                // TODO: reinsert once editProfile is added
-//            case R.id.btn_edit:
-//                Intent intent = new Intent(this, EditProfileActivity.class);
-//                startActivity(intent);
-//                return true;
+            case R.id.btn_edit:
+                Intent intent = new Intent(this, EditProfileActivity.class);
+                startActivity(intent);
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);

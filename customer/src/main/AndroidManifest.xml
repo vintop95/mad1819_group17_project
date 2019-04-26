@@ -11,9 +11,9 @@
         android:theme="@style/AppTheme">
         <activity android:name=".orders.OrderDetailsActivity"></activity>
         <activity android:name=".restaurants.DailyMenuActivity"></activity>
-        <activity android:name=".restaurants.RestaurantsActivity" />
+        <activity android:name=".restaurants.RestaurantsActivity"></activity>
         <activity
-            android:name=".MainActivity"
+            android:name="it.polito.mad1819.group17.deliveryapp.customer.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="it.polito.mad1819.group17.deliveryapp.customer.profile.EditProfileActivity" />
     </application>
 
 </manifest>

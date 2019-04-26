@@ -32,8 +32,8 @@
     <string name="icon_history" translatable="false">Icon History</string>
     <string name="icon_rider" translatable="false">Icon Rider</string>
     <!-- Labels -->
-    <string name="name_label">Name</string>
-    <string name="phone_label">Phone</string>
+    <string name="name_label">Name:</string>
+    <string name="phone_label">Phone:</string>
     <string name="phone_hint">Your Phone</string>
     <string name="delivery_address">Delivery Address</string>
     <string name="order_content">Order Content</string>
@@ -103,13 +103,18 @@
     <string name="icon_bio" translatable="false">Description Icon</string>
     <!-- Labels -->
     <string name="info">Info</string>
-    <string name="name_restaurant">Restaurant Name</string>
-    <string name="phone_restaurant">Restaurant Phone</string>
+    <string name="name_restaurant">Restaurant Name:</string>
+    <string name="name_customer">Customer Name:</string>
+    <string name="name_deliveryman">Deliveryman Name:</string>
+    <string name="phone_restaurant">Restaurant Phone:</string>
+    <string name="phone_customer">Customer Phone:</string>
+    <string name="phone_deliveryman">Deliveryman Phone:</string>
     <string name="mail">Email:</string>
     <string name="password">Password:</string>
     <string name="city">City:</string>
     <string name="bio">Short Description:</string>
     <string name="address">Address:</string>
+    <string name="address_delivery">Delivery Address:</string>
     <string name="required" translatable="false">*</string>
     <string name="restaurant_type">Restaurant Type</string>
     <string name="free_day">Free Day</string>

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Il tuo Ristorante</string>
+    <string name="app_name">AppetiTO Ristorante</string>
+
+    <!-- FirebaseUI Auth -->
+    <string name="fui_name_hint">Nome Ristorante</string>
 </resources>
