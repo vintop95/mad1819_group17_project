@@ -98,6 +98,11 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     public ImageView photo;
     public TextView address;
     public TextView avgPrice;
+    public String id;
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public ViewHolder(View itemView) {
         super(itemView);
@@ -107,6 +112,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         photo = itemView.findViewById(R.id.restaurant_image);
         address = itemView.findViewById(R.id.restaurant_address);
         avgPrice = itemView.findViewById(R.id.restaurant_avgprice);
+
         itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -114,6 +120,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
                 Context context = v.getContext();
                 Intent intent = new Intent(context, DailyMenuActivity.class);
+                intent.putExtra("id", id);
                 intent.putExtra("name",name.getText());
                 Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
                 startActivity(intent);
@@ -131,6 +138,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     public void setBio(String bio) {
         this.bio.setText(bio);
     }
+
+
 
     public void setPhoto(String photo) {
         Bitmap bmp;
@@ -167,7 +176,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                                         snapshot.child("address").getValue(String.class),
                                         snapshot.child("name").getValue(String.class),
                                         snapshot.child("bio").getValue(String.class),
-                                        snapshot.child("photo").getValue(String.class)
+                                        snapshot.child("photo").getValue(String.class),
+                                        snapshot.getKey()
                                 );
                             }
                         })
@@ -191,6 +201,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                 holder.setName(model.getName());
                 holder.setPhoto(model.getPhoto());
                 holder.setAvgPrice("Pr$");
+                holder.setId(model.getKey());
 
             }
 
@@ -216,5 +227,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         );
 */
     }
+
+
+
 
 }
