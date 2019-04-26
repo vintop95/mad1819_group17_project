@@ -43,6 +43,7 @@ public class DailyMenuActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private FirebaseRecyclerAdapter adapter;
+    private boolean somethingAdded;
 
     private ArrayList<ShoppingItem> shoppingCart;
 
@@ -76,7 +77,9 @@ public class DailyMenuActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
+        somethingAdded=false;
         showBackArrowOnToolbar();
+
 
         fetch();
 
@@ -126,6 +129,7 @@ public class DailyMenuActivity extends AppCompatActivity {
                     ));
                     Log.d("aaaa",Integer.toString(shoppingCart.size()));
                     updateToolbarText(1);
+                    somethingAdded=true;
                 }
 
             });
@@ -232,23 +236,26 @@ public class DailyMenuActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        builder.setTitle("Sure to quit? All shopping cart items will be lost");
-        builder.setPositiveButton("yes",new DialogInterface.OnClickListener() {
+        if(somethingAdded) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Sure to quit? All shopping cart items will be lost");
+            builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                DailyMenuActivity.super.onBackPressed();
-            }
-        });
-        builder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    DailyMenuActivity.super.onBackPressed();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        AlertDialog alert=builder.create();
-        alert.show();
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        else super.onBackPressed();
     }
 }

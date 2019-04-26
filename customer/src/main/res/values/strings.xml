@@ -4,4 +4,16 @@
     <string name="title_orders">Orders</string>
     <string name="title_profile">Profile</string>
 
+    <string-array name="restaurant_types">
+        <item>Pizza</item>
+        <item>Hamburger</item>
+        <item>Chicken</item>
+        <item>Vegan</item>
+        <item>Ice cream</item>
+        <item>Dessert</item>
+        <item>Healthy</item>
+        <item>Japanese</item>
+        <item>Mexican</item>
+    </string-array>
+
 </resources>

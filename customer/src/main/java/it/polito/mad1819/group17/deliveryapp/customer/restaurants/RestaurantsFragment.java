@@ -13,6 +13,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 import it.polito.mad1819.group17.deliveryapp.customer.utils.CategoryListView;
 
@@ -29,8 +32,18 @@ public class RestaurantsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    String[] categories = {"Pizza","Japanese","Hamburgers","Chinese"};
-    Integer[] imgid = {R.drawable.pizza,R.drawable.japanese,R.drawable.pizza,R.drawable.japanese};
+    String[] categories;
+    Integer[] imgid = {
+            R.drawable.pizza,       //pizza
+            R.drawable.hamburger,    //hamburger
+            R.drawable.chicken,       //chicken
+            R.drawable.vegan,        //vegan
+            R.drawable.icecream,       //icecream
+            R.drawable.dessert,       //dessert
+            R.drawable.healthy,       //healthy
+            R.drawable.japanese,       //japanese
+            R.drawable.mexican,       //mexican
+    };
     ListView lst;
 
 
@@ -63,6 +76,7 @@ public class RestaurantsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        categories = getResources().getStringArray(R.array.restaurant_types);
 
     }
 
