@@ -110,11 +110,13 @@
             app:layout_constraintTop_toBottomOf="@+id/view_divider_info" />
 
         <TextView
-            style="@style/standardTextStyle"
             android:id="@+id/txt_name"
+            style="@style/standardTextStyle"
             android:text="@string/hint_name"
-            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="16dp"
             app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintTop_toBottomOf="@+id/label_name" />
 
         <View
@@ -146,8 +148,10 @@
             style="@style/standardTextStyle"
             android:id="@+id/txt_phone"
             android:text="@string/hint_phone"
-            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="16dp"
             app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintTop_toBottomOf="@+id/label_phone" />
 
         <View
@@ -179,8 +183,10 @@
             style="@style/standardTextStyle"
             android:id="@+id/txt_mail"
             android:text="@string/hint_mail"
-            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="16dp"
             app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintTop_toBottomOf="@+id/label_mail" />
 
         <View
@@ -213,9 +219,11 @@
             android:id="@+id/txt_city"
             style="@style/standardTextStyle.longText"
             android:text="@string/hint_city"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
             app:layout_constraintTop_toBottomOf="@+id/label_city" />
 
         <View
@@ -282,9 +290,11 @@
             android:id="@+id/txt_bio"
             style="@style/standardTextStyle"
             android:text="@string/hint_bio"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
             app:layout_constraintTop_toBottomOf="@id/label_bio" />
 
         <View

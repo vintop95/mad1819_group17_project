@@ -59,7 +59,6 @@ public class ProfileFragment extends Fragment {
     private void feedViews(Customer customer) {
         if (customer != null) {
             if (!customer.getImage_path().isEmpty()) {
-                Log.d("NOT_NULL", "NOT_NULL");
                 Glide.with(image_user_photo.getContext())
                         .load(customer.getImage_path())
                         .listener(new RequestListener<Drawable>() {
@@ -67,7 +66,7 @@ public class ProfileFragment extends Fragment {
                             public boolean onLoadFailed(@Nullable GlideException e, Object model,
                                                         Target<Drawable> target, boolean isFirstResource) {
                                 progressBarHandler.hide();
-                                Log.e("ProfileFragment","Image load failed");
+                                Log.e("ProfileFragment", "Image load failed");
                                 return false; // leave false
                             }
 
@@ -75,13 +74,13 @@ public class ProfileFragment extends Fragment {
                             public boolean onResourceReady(Drawable resource, Object model,
                                                            Target<Drawable> target, DataSource dataSource,
                                                            boolean isFirstResource) {
-                                Log.v("ProfileFragment","Image load OK");
+                                Log.v("ProfileFragment", "Image load OK");
                                 progressBarHandler.hide();
                                 return false; // leave false
                             }
                         }).into(image_user_photo);
-            }
-            Log.d("NULL", "NULL");
+            } else
+                progressBarHandler.hide();
             txt_name.setText(customer.getName());
             txt_phone.setText(customer.getPhone());
             txt_mail.setText(customer.getMail());

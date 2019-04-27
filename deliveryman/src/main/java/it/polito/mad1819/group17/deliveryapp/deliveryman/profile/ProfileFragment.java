@@ -66,7 +66,7 @@ public class ProfileFragment extends Fragment {
                             public boolean onLoadFailed(@Nullable GlideException e, Object model,
                                                         Target<Drawable> target, boolean isFirstResource) {
                                 progressBarHandler.hide();
-                                Log.e("ProfileFragment","Image load failed");
+                                Log.e("ProfileFragment", "Image load failed");
                                 return false; // leave false
                             }
 
@@ -74,12 +74,13 @@ public class ProfileFragment extends Fragment {
                             public boolean onResourceReady(Drawable resource, Object model,
                                                            Target<Drawable> target, DataSource dataSource,
                                                            boolean isFirstResource) {
-                                Log.v("ProfileFragment","Image load OK");
+                                Log.v("ProfileFragment", "Image load OK");
                                 progressBarHandler.hide();
                                 return false; // leave false
                             }
                         }).into(image_user_photo);
-            }
+            } else
+                progressBarHandler.hide();
             txt_name.setText(deliveryman.getName());
             txt_phone.setText(deliveryman.getPhone());
             txt_mail.setText(deliveryman.getMail());
