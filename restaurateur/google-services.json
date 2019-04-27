@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "668888096038-b3f1l1t6co21067qgqq82v3rdrig6uhp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.polito.mad1819.group17.deliveryapp.customer",
+            "certificate_hash": "deb54b3f147e0bc6059bddbf0b220543e05c72d2"
+          }
+        },
+        {
           "client_id": "668888096038-6hnrmkbdu4jj2ghvl097eekfbg5vor1d.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -86,6 +94,14 @@
           "android_info": {
             "package_name": "it.polito.mad1819.group17.deliveryapp.restaurateur",
             "certificate_hash": "deb54b3f147e0bc6059bddbf0b220543e05c72d2"
+          }
+        },
+        {
+          "client_id": "668888096038-384fr4gkjiomk6qag8ege6j600umbvus.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.polito.mad1819.group17.deliveryapp.restaurateur",
+            "certificate_hash": "b9cce0a0f4881dc3272ee6201f4774439d8fa8c8"
           }
         },
         {

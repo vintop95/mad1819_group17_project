@@ -27,8 +27,8 @@
     <string name="deliveryman_name">Nome Rider</string>
     <string name="deliveryman_phone">Telefono Rider</string>
     <!-- Labels -->
-    <string name="name_label">Nome</string>
-    <string name="phone_label">Telefono</string>
+    <string name="name_label">Nome:</string>
+    <string name="phone_label">Telefono:</string>
     <string name="delivery_address">Indirizzo Consegna</string>
     <string name="order_content">Contenuto Ordine</string>
     <string name="order_info">Informazioni Ordine</string>
@@ -75,19 +75,35 @@
 
 
     <!-- ////////////// -->
+    <!-- Delivery Strings -->
+    <!-- ////////////// -->
+
+    <string name="notes">Note</string>
+    <string name="delivery_request_id">ID Richiesta</string>
+    <string name="request_history">Storico Richiesta</string>
+    <string name="new_delivery_request">NUOVA RICHIESTA CONSEGNA</string>
+
+
+    <!-- ////////////// -->
     <!-- Profile Strings -->
     <!-- ////////////// -->
 
     <!-- Show Profile Strings -->
     <!-- Labels -->
     <string name="info">Info</string>
-    <string name="name_restaurant">Nome Ristorante</string>
-    <string name="phone_restaurant">Telefono Ristorante</string>
+    <string name="name_restaurant">Nome Ristorante:</string>
+    <string name="name_customer">Nome Cliente:</string>
+    <string name="name_deliveryman">Nome Fattorino:</string>
+    <string name="phone_restaurant">Telefono Ristorante:</string>
+    <string name="phone_customer">Telefono Cliente:</string>
+    <string name="phone_deliveryman">Telefono Ristorante:</string>
     <string name="mail">Email:</string>
     <string name="password">Password:</string>
     <string name="city">Città:</string>
+    <string name="birthday">Data di nascita:</string>
     <string name="bio">Breve Descrizione:</string>
     <string name="address">Indirizzo:</string>
+    <string name="address_delivery">Indirizzo Consegna:</string>
     <string name="restaurant_type">Tipologia Ristorante</string>
     <string name="free_day">Giorno di riposo</string>
     <string name="working_time">Orario Lavorativo</string>
@@ -98,6 +114,7 @@
     <string name="hint_mail">"Il tuo indirizzo email"</string>
     <string name="hint_password">"La tua password"</string>
     <string name="hint_city">La tua città</string>
+    <string name="hint_birthday">La tua data di nascita</string>
     <string name="hint_bio">"La tua descrizione"</string>
     <string name="hint_address">Il tuo indirizzo</string>
     <string name="hint_phone">"Il tuo telefono"</string>

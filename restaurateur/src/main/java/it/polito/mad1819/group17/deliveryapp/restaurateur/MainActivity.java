@@ -44,7 +44,6 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.orders.OrderDetailsAct
 import it.polito.mad1819.group17.deliveryapp.restaurateur.orders.OrdersFragment;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.profile.EditProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.profile.ProfileFragment;
-import it.polito.mad1819.group17.restaurateur.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -106,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initBottomNavigation(){
-        if(active == null) throw new IllegalStateException("'active' must be initalized");
+        if(active == null) throw new IllegalStateException("'active' must be initialized");
 
         navigation = findViewById(R.id.navigation);
         mOnNavigationItemSelectedListener

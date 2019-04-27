@@ -1,10 +1,12 @@
 <resources>
 
     <!-- Main Activity Strings -->
+    <string name="title_home" translatable="false">Home</string>
     <string name="title_profile">Profile</string>
     <string name="title_dailyoffer">Daily Offers</string>
     <string name="title_orders">Orders</string>
     <string name="title_restaurants">Restaurants</string>
+    <string name="title_delivery_requests">Delivery Requests</string>
 
     <string name="sign_out_menu">Sign Out</string>
 
@@ -32,8 +34,8 @@
     <string name="icon_history" translatable="false">Icon History</string>
     <string name="icon_rider" translatable="false">Icon Rider</string>
     <!-- Labels -->
-    <string name="name_label">Name</string>
-    <string name="phone_label">Phone</string>
+    <string name="name_label">Name:</string>
+    <string name="phone_label">Phone:</string>
     <string name="phone_hint">Your Phone</string>
     <string name="delivery_address">Delivery Address</string>
     <string name="order_content">Order Content</string>
@@ -86,6 +88,17 @@
 
 
     <!-- ////////////// -->
+    <!-- Delivery Strings -->
+    <!-- ////////////// -->
+
+    <string name="icon_delivery_request" translatable="false">Icon Delivery Request</string>
+    <string name="notes">Notes</string>
+    <string name="delivery_request_id">Request ID</string>
+    <string name="request_history">Request History</string>
+    <string name="new_delivery_request">NEW DELIVERY REQUEST</string>
+
+
+    <!-- ////////////// -->
     <!-- Profile Strings -->
     <!-- ////////////// -->
 
@@ -97,19 +110,28 @@
     <string name="icon_password" translatable="false">Password Icon</string>
     <string name="icon_delivery" translatable="false">Delivery Icon</string>
     <string name="icon_address" translatable="false">Address Icon</string>
+    <string name="icon_city" translatable="false">City Icon</string>
+    <string name="icon_birthday" translatable="false">Birthday Icon</string>
     <string name="icon_restaurant_type" translatable="false">Restaurant Type Icon</string>
     <string name="icon_free_day" translatable="false">Free Day Icon</string>
     <string name="icon_working_time" translatable="false">Working Time Icon</string>
     <string name="icon_bio" translatable="false">Description Icon</string>
+    <string name="icon_customer" translatable="false">Icon Customer</string>
     <!-- Labels -->
     <string name="info">Info</string>
-    <string name="name_restaurant">Restaurant Name</string>
-    <string name="phone_restaurant">Restaurant Phone</string>
+    <string name="name_restaurant">Restaurant Name:</string>
+    <string name="name_customer">Customer Name:</string>
+    <string name="name_deliveryman">Deliveryman Name:</string>
+    <string name="phone_restaurant">Restaurant Phone:</string>
+    <string name="phone_customer">Customer Phone:</string>
+    <string name="phone_deliveryman">Deliveryman Phone:</string>
     <string name="mail">Email:</string>
     <string name="password">Password:</string>
     <string name="city">City:</string>
+    <string name="birthday">Birthday:</string>
     <string name="bio">Short Description:</string>
     <string name="address">Address:</string>
+    <string name="address_delivery">Delivery Address:</string>
     <string name="required" translatable="false">*</string>
     <string name="restaurant_type">Restaurant Type</string>
     <string name="free_day">Free Day</string>
@@ -121,6 +143,7 @@
     <string name="hint_mail">"Your email address"</string>
     <string name="hint_password">"Your password"</string>
     <string name="hint_city">Your city</string>
+    <string name="hint_birthday">Your birthday</string>
     <string name="hint_bio">"Your description"</string>
     <string name="hint_address">Your address</string>
     <string name="hint_phone">"Your phone"</string>
