@@ -59,6 +59,7 @@ public class ProfileFragment extends Fragment {
     private void feedViews(Customer customer) {
         if (customer != null) {
             if (!customer.getImage_path().isEmpty()) {
+                Log.d("NOT_NULL", "NOT_NULL");
                 Glide.with(image_user_photo.getContext())
                         .load(customer.getImage_path())
                         .listener(new RequestListener<Drawable>() {
@@ -80,6 +81,7 @@ public class ProfileFragment extends Fragment {
                             }
                         }).into(image_user_photo);
             }
+            Log.d("NULL", "NULL");
             txt_name.setText(customer.getName());
             txt_phone.setText(customer.getPhone());
             txt_mail.setText(customer.getMail());

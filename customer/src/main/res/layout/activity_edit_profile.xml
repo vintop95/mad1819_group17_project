@@ -170,6 +170,10 @@
 
             <EditText
                 android:id="@+id/input_name_sign_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="64dp"
+                android:layout_marginRight="16dp"
                 style="@style/standardInputStyle.name.autofill"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
@@ -213,6 +217,10 @@
 
             <EditText
                 android:id="@+id/input_phone_sign_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="64dp"
+                android:layout_marginRight="16dp"
                 style="@style/standardInputStyle.phone"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
@@ -256,6 +264,10 @@
 
             <EditText
                 android:id="@+id/input_mail_sign_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="64dp"
+                android:layout_marginRight="16dp"
                 style="@style/standardInputStyle.mail.autofill"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
@@ -300,6 +312,10 @@
 
             <EditText
                 android:id="@+id/input_address_sign_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="64dp"
+                android:layout_marginRight="16dp"
                 style="@style/standardInputStyle.address.autofill"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
@@ -333,6 +349,10 @@
 
             <EditText
                 android:id="@+id/input_bio_sign_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="64dp"
+                android:layout_marginRight="16dp"
                 style="@style/standardInputStyle.bio.autofill"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"

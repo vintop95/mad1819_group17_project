@@ -144,10 +144,10 @@
                 android:id="@+id/image_name"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_person"
+                android:src="@drawable/ic_person_black_24dp"
                 app:layout_constraintBottom_toBottomOf="@+id/input_name_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toTopOf="@+id/label_name"
-                android:src="@drawable/ic_person_black_24dp" />
+                app:layout_constraintTop_toTopOf="@+id/label_name" />
 
             <TextView
                 android:id="@+id/text_name_req"
@@ -171,8 +171,14 @@
             <EditText
                 android:id="@+id/input_name_sign_in"
                 style="@style/standardInputStyle.name.autofill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginLeft="64dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
-                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+                app:layout_constraintStart_toStartOf="@+id/label_name"
                 app:layout_constraintTop_toBottomOf="@+id/label_name" />
 
             <View
@@ -188,14 +194,14 @@
                 android:id="@+id/image_phone"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_phone"
+                android:src="@drawable/ic_baseline_phone_24px"
                 app:layout_constraintBottom_toBottomOf="@+id/input_phone_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toTopOf="@+id/label_phone"
-                android:src="@drawable/ic_baseline_phone_24px" />
+                app:layout_constraintTop_toTopOf="@+id/label_phone" />
 
             <TextView
                 android:id="@+id/text_phone_req"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
@@ -214,6 +220,12 @@
             <EditText
                 android:id="@+id/input_phone_sign_in"
                 style="@style/standardInputStyle.phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginLeft="64dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
                 app:layout_constraintTop_toBottomOf="@+id/label_phone" />
@@ -231,14 +243,14 @@
                 android:id="@+id/image_mail"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_mail"
+                android:src="@drawable/ic_email_black_24dp"
                 app:layout_constraintBottom_toBottomOf="@+id/input_mail_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toTopOf="@+id/label_mail"
-                android:src="@drawable/ic_email_black_24dp" />
+                app:layout_constraintTop_toTopOf="@+id/label_mail" />
 
             <TextView
                 android:id="@+id/text_mail_req"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
@@ -257,6 +269,12 @@
             <EditText
                 android:id="@+id/input_mail_sign_in"
                 style="@style/standardInputStyle.mail.autofill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginLeft="64dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
                 app:layout_constraintTop_toBottomOf="@+id/label_mail" />
@@ -280,7 +298,7 @@
 
             <TextView
                 android:id="@+id/text_city_req"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
@@ -293,14 +311,20 @@
                 android:id="@+id/image_city"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_city"
+                android:src="@drawable/ic_location_city_black_24dp"
                 app:layout_constraintBottom_toBottomOf="@+id/input_city_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toTopOf="@+id/label_city"
-                android:src="@drawable/ic_location_city_black_24dp" />
+                app:layout_constraintTop_toTopOf="@+id/label_city" />
 
             <EditText
                 android:id="@+id/input_city_sign_in"
                 style="@style/standardInputStyle.city.autofill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginLeft="64dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
                 app:layout_constraintTop_toBottomOf="@+id/label_city" />
@@ -363,10 +387,10 @@
                 android:id="@+id/image_bio"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_bio"
+                android:src="@drawable/ic_baseline_description_24px"
                 app:layout_constraintBottom_toBottomOf="@+id/input_bio_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toTopOf="@+id/label_bio"
-                android:src="@drawable/ic_baseline_description_24px" />
+                app:layout_constraintTop_toTopOf="@+id/label_bio" />
 
             <TextView
                 android:id="@+id/label_bio"
@@ -378,6 +402,12 @@
             <EditText
                 android:id="@+id/input_bio_sign_in"
                 style="@style/standardInputStyle.bio.autofill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginLeft="64dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
                 app:layout_constraintTop_toBottomOf="@+id/label_bio" />
