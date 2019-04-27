@@ -24,7 +24,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
     Double totalprice;
     Integer itemquantity;
     HashMap<String,Integer> itemsMap;
-
+//
     ArrayList<String> keys;
     ArrayList<Integer> values;
 
