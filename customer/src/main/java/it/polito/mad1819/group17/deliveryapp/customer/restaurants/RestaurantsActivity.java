@@ -124,7 +124,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                 Intent intent = new Intent(context, DailyMenuActivity.class);
                 intent.putExtra("id", id);
                 intent.putExtra("name",name.getText());
-                Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
+                // Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
                 startActivity(intent);
             }
         });

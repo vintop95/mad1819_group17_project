@@ -6,6 +6,7 @@
     <string name="title_orders">Ordini</string>
     <string name="title_dailyoffer">Offerte Giornaliere</string>
     <string name="title_restaurants">Ristoranti</string>
+    <string name="title_delivery_requests">Richieste di consegna</string>
 
     <string name="sign_out_menu">Disconnetti</string>
 
@@ -131,7 +132,6 @@
     <string name="required_text">*Richiesto</string>
     <!-- Hints -->
     <string-array name="restaurant_types">
-        <item></item>
         <item>Pizza</item>
         <item>Hamburger</item>
         <item>Pollo</item>

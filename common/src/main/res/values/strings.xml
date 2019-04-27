@@ -161,7 +161,6 @@
     <string name="required_text">*Required</string>
     <!-- Hints -->
     <string-array name="restaurant_types">
-        <item></item>
         <item>Pizza</item>
         <item>Hamburger</item>
         <item>Chicken</item>

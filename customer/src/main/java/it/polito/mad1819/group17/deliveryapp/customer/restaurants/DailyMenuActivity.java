@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 
 import static it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantsActivity.stringToBitMap;
@@ -85,9 +86,7 @@ public class DailyMenuActivity extends AppCompatActivity {
         somethingAdded=false;
         showBackArrowOnToolbar();
 
-
         fetch();
-
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -190,7 +189,9 @@ public class DailyMenuActivity extends AppCompatActivity {
                 holder.setDesc(model.getDescription());
                 holder.setPhoto(model.getPhoto());
                 holder.setTitle(model.getTitle());
-                holder.setPrice(model.getPrice());
+                holder.setPrice(
+                        CurrencyHelper.getCurrency(
+                                Double.valueOf(model.getPrice())));
 
             }
 
