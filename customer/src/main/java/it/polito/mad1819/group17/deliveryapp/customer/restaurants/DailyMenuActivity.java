@@ -29,6 +29,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 
@@ -44,8 +46,10 @@ public class DailyMenuActivity extends AppCompatActivity {
     private LinearLayoutManager linearLayoutManager;
     private FirebaseRecyclerAdapter adapter;
     private boolean somethingAdded;
+    private ShoppingCart shoppingCart;
 
-    private ArrayList<ShoppingItem> shoppingCart;
+   /* private ArrayList<String> shoppingCart_names;
+    private ArrayList<Double> shoppingCart_prices;*/
 
 
     private void showBackArrowOnToolbar() {
@@ -70,7 +74,8 @@ public class DailyMenuActivity extends AppCompatActivity {
         tv = (TextView) findViewById(R.id.subtitle_rn);
         tv.setText(restaurant_name);
 
-        shoppingCart = new ArrayList<ShoppingItem>();
+        shoppingCart = new ShoppingCart();
+
         recyclerView = findViewById(R.id.restaurant_list);
 
         linearLayoutManager = new LinearLayoutManager(this);
@@ -123,12 +128,12 @@ public class DailyMenuActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     Toast.makeText(v.getContext(), title.getText()+" added", Toast.LENGTH_SHORT).show();
-                    shoppingCart.add(new ShoppingItem(
-                            title.getText().toString(),
-                            price.getText().toString()
-                    ));
-                    Log.d("aaaa",Integer.toString(shoppingCart.size()));
-                    updateToolbarText(1);
+                    shoppingCart.add(new ShoppingItem(title.getText().toString(),Double.parseDouble(price.getText().toString()),1));
+                    /*shoppingCart_names.add(title.getText().toString());
+                    shoppingCart_prices.add(Double.parseDouble(price.getText().toString()));
+                    Log.d("aaaa",Integer.toString(shoppingCart_names.size()));*/
+
+                    updateToolbarText(shoppingCart.getCounter());
                     somethingAdded=true;
                 }
 
@@ -140,9 +145,7 @@ public class DailyMenuActivity extends AppCompatActivity {
 
     private void updateToolbarText(int i) {
         TextView counter = findViewById(R.id.shoppingcart_counter);
-        Integer count = Integer.parseInt(counter.getText().toString());
-        count = count + i;
-        counter.setText(Integer.toString(count));
+        counter.setText(Integer.toString(i));
     }
 
 
@@ -230,6 +233,23 @@ public class DailyMenuActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu_daily_menu,menu);
+        final Menu m = menu;
+        final MenuItem menuItem = m.findItem(R.id.shoppingcart_itemmenu);
+        menuItem.getActionView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DailyMenuActivity.this, OrderConfirmActivity.class);
+                HashMap<String,Integer> itemsMap = shoppingCart.getItemsMap();
+                Log.d("pedro",Integer.toString(itemsMap.size()));
+                intent.putExtra("itemsMap",itemsMap);
+                intent.putExtra("items_quantity",shoppingCart.getCounter());
+                intent.putExtra("items_tot_price",shoppingCart.getTotal_price());
+                startActivity(intent);
+            }
+        });
+
+
+
         return super.onCreateOptionsMenu(menu);
     }
 

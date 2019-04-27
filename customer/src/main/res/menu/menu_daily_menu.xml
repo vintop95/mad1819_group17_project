@@ -4,7 +4,7 @@
 
     <item
         android:title="shoppingCart"
-        android:id="@+id/shoppingcart"
+        android:id="@+id/shoppingcart_itemmenu"
         app:actionLayout="@layout/shoppingcart_badge"
         app:showAsAction="always"
         />
