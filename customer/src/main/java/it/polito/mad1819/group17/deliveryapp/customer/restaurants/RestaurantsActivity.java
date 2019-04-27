@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -27,10 +28,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import it.polito.mad1819.group17.deliveryapp.common.Restaurateur;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
-import it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers.DailyMenuActivity;
 
 public class RestaurantsActivity extends AppCompatActivity {
 
@@ -101,7 +100,11 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     public ImageView photo;
     public TextView address;
     public TextView avgPrice;
-    public Restaurateur restaurateur;
+    public String id;
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public ViewHolder(View itemView) {
         super(itemView);
@@ -111,21 +114,17 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         photo = itemView.findViewById(R.id.restaurant_image);
         address = itemView.findViewById(R.id.restaurant_address);
         avgPrice = itemView.findViewById(R.id.restaurant_avgprice);
-    }
 
-    public void setData(Restaurateur rest){
-        restaurateur = rest;
         itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 int position = getAdapterPosition();
 
-                // TODO: pass the ID of the restaurant
                 Context context = v.getContext();
                 Intent intent = new Intent(context, DailyMenuActivity.class);
-                intent.putExtra("restaurateur_id", restaurateur.id);
-                // Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
-
+                intent.putExtra("id", id);
+                intent.putExtra("name",name.getText());
+                Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
                 startActivity(intent);
             }
         });
@@ -139,6 +138,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     public void setBio(String bio) {
         this.bio.setText(bio);
     }
+
+
 
     public void setPhoto(String photo) {
         Bitmap bmp;
@@ -164,12 +165,25 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                 .getReference();
         Query query = ref.child("restaurateurs").orderByChild("restaurant_type").equalTo(category_selected);
 
-        FirebaseRecyclerOptions<Restaurateur> options =
-                new FirebaseRecyclerOptions.Builder<Restaurateur>()
-                        .setQuery(query, Restaurateur.class)
+        FirebaseRecyclerOptions<RestaurantModel> options =
+                new FirebaseRecyclerOptions.Builder<RestaurantModel>()
+                        .setQuery(query, new SnapshotParser<RestaurantModel>() {
+                            @NonNull
+                            @Override
+                            public RestaurantModel parseSnapshot(@NonNull DataSnapshot snapshot) {
+
+                                return new RestaurantModel(
+                                        snapshot.child("address").getValue(String.class),
+                                        snapshot.child("name").getValue(String.class),
+                                        snapshot.child("bio").getValue(String.class),
+                                        snapshot.child("photo").getValue(String.class),
+                                        snapshot.getKey()
+                                );
+                            }
+                        })
                         .build();
 
-        adapter = new FirebaseRecyclerAdapter<Restaurateur, ViewHolder>(options) {
+        adapter = new FirebaseRecyclerAdapter<RestaurantModel, ViewHolder>(options) {
 
             @Override
             public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -181,12 +195,14 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
 
             @Override
-            protected void onBindViewHolder(ViewHolder holder, final int position, Restaurateur model) {
+            protected void onBindViewHolder(ViewHolder holder, final int position, RestaurantModel model) {
                 holder.setAddress(model.getAddress());
                 holder.setBio(model.getBio());
                 holder.setName(model.getName());
-                // holder.setPhoto(model.getImage_path());
+                holder.setPhoto(model.getPhoto());
                 holder.setAvgPrice("Pr$");
+                holder.setId(model.getKey());
+
             }
 
             @Override
@@ -216,5 +232,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         );
 */
     }
+
+
+
 
 }

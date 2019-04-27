@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="types_images">
+        <item>@drawable/pizza</item>
+        <item>@drawable/japanese</item>
+        <item>@drawable/pizza</item>
+        <item>@drawable/japanese</item>
+        <item>@drawable/pizza</item>
+        <item>@drawable/japanese</item>
+        <item>@drawable/pizza</item>
+        <item>@drawable/japanese</item>
+        <item>@drawable/pizza</item>
+    </integer-array>
+</resources>
