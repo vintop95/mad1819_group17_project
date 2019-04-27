@@ -3,6 +3,7 @@ package it.polito.mad1819.group17.deliveryapp.common;
 import java.io.Serializable;
 
 public class Restaurateur implements Serializable {
+
     private String id = "";
     private String image_path = "";
     private String name = "";

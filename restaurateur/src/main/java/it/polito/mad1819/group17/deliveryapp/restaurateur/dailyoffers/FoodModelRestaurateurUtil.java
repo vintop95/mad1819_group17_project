@@ -20,7 +20,7 @@ import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 /**
  * Utilities regarding food that cannot stay in javaBean FoodModel class
  */
-class FoodModelUtil {
+class FoodModelRestaurateurUtil {
     private final static String FIREBASE_DAILYOFFERS = "daily_offers";
     private static String restaurateur_id = null;
 

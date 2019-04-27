@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffers;
+package it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
@@ -18,18 +18,19 @@ import com.google.firebase.database.DatabaseError;
 import java.util.Locale;
 
 import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
+import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.common.utils.PrefHelper;
-import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
+import it.polito.mad1819.group17.deliveryapp.customer.R;
 
 // https://github.com/firebase/FirebaseUI-Android/tree/master/database#using-firebaseui-to-populate-a-recyclerview
 public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.FoodHolder> {
     private static final String TAG = FoodAdapter.class.getName();
 
-    private OffersFragment mOffersFragment;
+    private DailyMenuActivity activity;
 
-    public FoodAdapter(OffersFragment of, FirebaseRecyclerOptions<FoodModel> options){
+    public FoodAdapter(DailyMenuActivity act, FirebaseRecyclerOptions<FoodModel> options){
         super(options);
-        mOffersFragment = of;
+        activity = act;
     }
 
     // PHASE 1 OF PROTOCOL: build FoodHolder (ViewHolder)
@@ -57,7 +58,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
         // to hide a loading spinner or check for the "no documents" state and update your UI.
         // ...
         super.onDataChanged();
-        mOffersFragment.progressBarHandler.hide();
+        activity.progressBarHandler.hide();
     }
 
     @Override
@@ -65,16 +66,10 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
         // Called when there is an error getting data. You may want to update
         // your UI to display an error message to the user.
         // ...
-        Toast.makeText(mOffersFragment.getContext(),
+        Toast.makeText(activity,
                 e.getMessage(), Toast.LENGTH_LONG).show();
     }
 
-    // NOT COMPATIBLE WITH FIREBASE RECYCLER ADAPTER
-//    @Override
-//    public int getItemCount() {
-//        // Log.d(TAG,"itemCount: " + mFoodList.size());
-//        return mFoodList.size();
-//    }
 
     public class FoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView itemPhoto, itemImgModify, itemImgDelete;
@@ -84,6 +79,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
 
         public FoodHolder(@NonNull View itemView){
             super(itemView);
+            itemView.setOnClickListener(this);
             // Parameters of rv_food_item-layout
             itemPhoto = itemView.findViewById(R.id.img_food_photo);
             itemName = itemView.findViewById(R.id.txt_food_name);
@@ -102,36 +98,27 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
             }
             itemName.setText(currentFoodItem.name);
             itemPlace.setText(currentFoodItem.description);
-            itemPrice.setText(FoodModelRestaurateurUtil.getPriceFormatted(currentFoodItem.price));
+            itemPrice.setText(FoodModelCustomerUtil.getPriceFormatted(currentFoodItem.price));
             itemAvailableQty.setText(
                     String.format(Locale.getDefault(), "%d", currentFoodItem.availableQty));
 //            this.pos = pos;
             this.currentFoodItem = currentFoodItem;
-        }
 
+            itemImgDelete.setVisibility(View.GONE);
+            itemImgModify.setVisibility(View.GONE);
+        }
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()){
-                case R.id.img_food_modify:
-                    v.setEnabled(false);
-                    mOffersFragment.openFoodDetailsActivityModify(currentFoodItem, v);
-                    break;
-                case R.id.img_food_delete:
-                    deleteItem(currentFoodItem);
-                    break;
-            }
+            FoodModel clickedFood = getItem(getAdapterPosition());
+            v.setEnabled(false);
+            Log.d("FOOD!!", clickedFood.toString());
         }
 
 
         public void setListeners(){
             itemImgModify.setOnClickListener(FoodHolder.this);
             itemImgDelete.setOnClickListener(FoodHolder.this);
-        }
-
-        public void deleteItem(FoodModel food){
-            FoodModelRestaurateurUtil.removeFromFirebase(mOffersFragment.getContext(), food);
-            Log.d(TAG, "Item " + food.id + " removed");
         }
     }
 }
