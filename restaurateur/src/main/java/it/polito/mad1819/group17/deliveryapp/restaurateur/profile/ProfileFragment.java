@@ -28,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.common.Restaurateur;
-import it.polito.mad1819.group17.restaurateur.R;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
 
 public class ProfileFragment extends Fragment {
@@ -68,24 +68,25 @@ public class ProfileFragment extends Fragment {
                 Glide.with(image_user_photo.getContext())
                         .load(restaurateur.getImage_path())
                         .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                                Target<Drawable> target, boolean isFirstResource) {
-                        progressBarHandler.hide();
-                        Log.e("ProfileFragment","Image load failed");
-                        return false; // leave false
-                    }
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                        Target<Drawable> target, boolean isFirstResource) {
+                                progressBarHandler.hide();
+                                Log.e("ProfileFragment", "Image load failed");
+                                return false; // leave false
+                            }
 
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model,
-                                                   Target<Drawable> target, DataSource dataSource,
-                                                   boolean isFirstResource) {
-                        Log.v("ProfileFragment","Image load OK");
-                        progressBarHandler.hide();
-                        return false; // leave false
-                    }
-                }).into(image_user_photo);
-            }
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model,
+                                                           Target<Drawable> target, DataSource dataSource,
+                                                           boolean isFirstResource) {
+                                Log.v("ProfileFragment", "Image load OK");
+                                progressBarHandler.hide();
+                                return false; // leave false
+                            }
+                        }).into(image_user_photo);
+            } else
+                progressBarHandler.hide();
             txt_name.setText(restaurateur.getName());
             txt_phone.setText(restaurateur.getPhone());
             txt_mail.setText(restaurateur.getMail());

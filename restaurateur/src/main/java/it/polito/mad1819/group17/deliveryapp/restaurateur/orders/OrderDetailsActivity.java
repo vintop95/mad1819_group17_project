@@ -29,7 +29,7 @@ import java.util.Random;
 import it.polito.mad1819.group17.deliveryapp.common.Deliveryman;
 import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
-import it.polito.mad1819.group17.restaurateur.R;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
 public class OrderDetailsActivity extends AppCompatActivity {
 

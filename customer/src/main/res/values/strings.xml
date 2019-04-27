@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">AppetiTO</string>
+    <string name="app_name">AppetiTO Customer</string>
+
+    <!-- FirebaseUI Auth -->
+    <string name="fui_name_hint">Customer Name</string>
 </resources>

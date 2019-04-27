@@ -1,31 +1,6 @@
 <resources>
-    <string name="app_name" translatable="false">Delivery Man</string>
-    <string name="title_home" translatable="false">Home</string>
-    <string name="title_delivery_requests">Delivery requests</string>
-    <string name="title_profile">Profile</string>
+    <string name="app_name" translatable="false">AppetiTO Deliveryman</string>
 
-    <string name="icon_customer" translatable="false">Icon Customer</string>
-    <string name="icon_delivery_request" translatable="false">Icon Delivery Request</string>
-    <string name="icon_history" translatable="false">Icon History</string>
-
-
-    <string name="time" translatable="false">--:--</string>
-    <string name="customer_name">Customer Name</string>
-    <string name="customer_phone">Customer Phone</string>
-    <string name="notes">Notes</string>
-    <string name="delivery_time">Delivery Time</string>
-    <string name="delivery_date">Delivery Date</string>
-    <string name="delivery_request_id">Request ID</string>
-    <string name="delivery_address">Delivery Address</string>
-    <string name="request_history">Request History</string>
-    <string name="button_history" translatable="false">NEXT STATE</string>
-
-    <string name="new_delivery_request">NEW DELIVERY REQUEST</string>
-
-
-    <!-- Alert Dialogs -->
-    <string name="confirm_next_state_title">Do you want to confirm the next state?</string>
-    <string name="confirm_next_state_message">Is the meal ready for the next state? This is not a reversible operation.</string>
-    <string name="positive_button">OK</string>
-    <string name="negative_button">CANCEL</string>
+    <!-- FirebaseUI Auth -->
+    <string name="fui_name_hint">Deliveryman Name</string>
 </resources>

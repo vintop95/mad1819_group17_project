@@ -2,30 +2,27 @@ package it.polito.mad1819.group17.deliveryapp.common;
 
 import java.io.Serializable;
 
-public class Deliveryman implements Serializable {
-
+public class Customer implements Serializable {
     private String id = "";
     private String image_path = "";
     private String name = "";
     private String phone = "";
     private String mail = "";
-    private String city = "";
+    private String address = "";
     private String bio = "";
-    private String busy = "";
 
-    public Deliveryman() {
+    public Customer() {
 
     }
 
-    public Deliveryman (String id, String image_path, String name, String phone, String mail, String city, String bio, String busy){
+    public Customer(String id, String image_path, String name, String phone, String mail, String address, String bio) {
         this.id = id;
         this.image_path = image_path;
         this.name = name;
         this.phone = phone;
         this.mail = mail;
-        this.city = city;
+        this.address = address;
         this.bio = bio;
-        this.busy = busy;
     }
 
     public String getId() {
@@ -68,12 +65,12 @@ public class Deliveryman implements Serializable {
         this.mail = mail;
     }
 
-    public String getCity() {
-        return city;
+    public String getAddress() {
+        return address;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getBio() {
@@ -82,13 +79,5 @@ public class Deliveryman implements Serializable {
 
     public void setBio(String bio) {
         this.bio = bio;
-    }
-
-    public String getBusy() {
-        return busy;
-    }
-
-    public void setBusy(String busy) {
-        this.busy = busy;
     }
 }
