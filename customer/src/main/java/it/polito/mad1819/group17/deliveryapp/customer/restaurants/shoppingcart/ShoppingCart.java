@@ -1,11 +1,8 @@
-package it.polito.mad1819.group17.deliveryapp.customer.restaurants;
+package it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart;
 
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Observable;
 import java.util.Vector;
 
 public class ShoppingCart {
@@ -60,6 +57,7 @@ public class ShoppingCart {
             ShoppingItem currItem = (ShoppingItem) items.elementAt(currIndex);
             total_price -= oldItem.getPrice();
             currItem.subtractOne();
+            counter -= 1;
             if (currItem.getQuantity() == 0) {
                 items.removeElementAt(currIndex);
             }

@@ -197,7 +197,7 @@
 
     <string name="sign_in"> Otherwise <u>Sign Up</u>. </string>
     <string name="new_order">NEW ORDER</string>
-
+    <string name="confirm_order">Confirm Order</string>
 
 
 </resources>

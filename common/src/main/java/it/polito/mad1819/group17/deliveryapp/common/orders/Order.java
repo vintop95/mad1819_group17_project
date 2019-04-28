@@ -11,19 +11,18 @@ public class Order implements Serializable {
     public final static String STATE2 = "In preparation";
     public final static String STATE3 = "Delivering";
 
-    private String id;
-    //private String restaurant_id;
-    private String customer_name;
-    private String customer_phone;
-    private String delivery_timestamp;
-    private String delivery_address;
-    private HashMap<String, String> state_stateTime;
-    private HashMap<String, Integer> item_itemQuantity;
-    private String notes;
-    private String deliveryman_id;
-    private String deliveryman_name;
-    private String deliveryman_phone;
-    private String sorting_field;
+    private String id = "";
+    private String customer_name = "";
+    private String customer_phone = "";
+    private String delivery_timestamp = "";
+    private String delivery_address = "";
+    private HashMap<String, String> state_stateTime = new HashMap<>();
+    private HashMap<String, Integer> item_itemQuantity = new HashMap<>();
+    private String notes = "";
+    private String deliveryman_id = "";
+    private String deliveryman_name = "";
+    private String deliveryman_phone = "";
+    private String sorting_field = "";
     private String notified = "no";
 
 
@@ -137,7 +136,8 @@ public class Order implements Serializable {
     }
 
     public String getDelivery_time() {
-        return this.delivery_timestamp.split(" ")[1];
+        if(delivery_timestamp.length() <= 1) return "";
+        else return this.delivery_timestamp.split(" ")[1];
     }
 
     public HashMap<String, String> getState_stateTime() {

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".restaurants.OrderConfirmActivity">
+    tools:context=".restaurants.shoppingcart.OrderConfirmActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar2"
@@ -15,12 +15,12 @@
         android:gravity="center"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintBottom_toTopOf="@id/listview_items" />
 
     <ListView
         android:id="@+id/listview_items"
         android:layout_width="match_parent"
-        android:layout_height="514dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
@@ -28,35 +28,40 @@
         android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
+        app:layout_constraintBottom_toTopOf="@+id/final_tv"/>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_confirm_order"
         android:layout_width="165dp"
         android:layout_height="66dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:background="@color/colorContrast"
         android:gravity="center"
-        android:text="Confirm Order"
+        android:text="@string/confirm_order"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/final_tv" />
 
     <TextView
         android:id="@+id/final_tv"
         android:layout_width="0dp"
-        android:gravity="center"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        android:layout_marginTop="8dp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@+id/btn_confirm_order"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/listview_items" />

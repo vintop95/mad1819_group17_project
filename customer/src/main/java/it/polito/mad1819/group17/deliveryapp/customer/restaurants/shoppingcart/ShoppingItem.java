@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.deliveryapp.customer.restaurants;
+package it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart;
 
 public class ShoppingItem {
     String name;

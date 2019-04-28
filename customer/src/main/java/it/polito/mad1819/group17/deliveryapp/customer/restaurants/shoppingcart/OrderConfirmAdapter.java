@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.deliveryapp.customer.restaurants;
+package it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
@@ -56,47 +56,3 @@ public class OrderConfirmAdapter extends ArrayAdapter<String> {
         return r;
     }
 }
-
-/*
-
-
-public class CategoryListView extends ArrayAdapter<String> {
-
-    private String[] categories;
-    private Integer[] imgid;
-    private Activity context;
-
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View r=convertView;
-        it.polito.mad1819.group17.deliveryapp.customer.utils.CategoryListView.ViewHolder viewHolder = null;
-        if(r==null){
-            LayoutInflater layoutInflater=context.getLayoutInflater();
-            r=layoutInflater.inflate(R.layout.category_item,null,true);
-            viewHolder = new it.polito.mad1819.group17.deliveryapp.customer.utils.CategoryListView.ViewHolder(r);
-            r.setTag(viewHolder);
-        }
-        else{
-            viewHolder=(it.polito.mad1819.group17.deliveryapp.customer.utils.CategoryListView.ViewHolder) r.getTag();
-        }
-
-        Log.d("aia", "onCreateView: "+categories.length+"///"+imgid.length);
-        viewHolder.ivw.setImageResource((Integer)imgid[position]);
-        viewHolder.tv1.setText(categories[position]);
-
-        return r;
-    }
-
-    class ViewHolder {
-        TextView tv1;
-        ImageView ivw;
-
-        ViewHolder(View v){
-            tv1=v.findViewById(R.id.category_name);
-            ivw=v.findViewById(R.id.category_image);
-        }
-    }
-}
-*/

@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.deliveryapp.customer.restaurants;
+package it.polito.mad1819.group17.deliveryapp.customer.utils;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

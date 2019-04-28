@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -30,6 +29,7 @@ import com.google.firebase.database.Query;
 
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
+import it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers.DailyMenuActivity;
 
 public class RestaurantsActivity extends AppCompatActivity {
 
@@ -139,8 +139,6 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         this.bio.setText(bio);
     }
 
-
-
     public void setPhoto(String photo) {
         Bitmap bmp;
         if(photo != null) {
@@ -158,7 +156,6 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     }
 
 }
-
 
     private void fetch() {
         DatabaseReference ref = FirebaseDatabase.getInstance()
@@ -200,9 +197,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                 holder.setBio(model.getBio());
                 holder.setName(model.getName());
                 holder.setPhoto(model.getPhoto());
-                holder.setAvgPrice("Pr$");
+                // holder.setAvgPrice("Pr$");
                 holder.setId(model.getKey());
-
             }
 
             @Override
@@ -212,28 +208,5 @@ public class ViewHolder extends RecyclerView.ViewHolder {
             }
         };
         recyclerView.setAdapter(adapter);
-
-        /*recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(this, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-                        // do whatever
-                        Intent intent = new Intent(view.getContext(), DailyMenuActivity.class);
-                        Bundle b = new Bundle();
-                        b.putString("category",); //Your category selected
-                        intent.putExtras(b); //Put your category in the next Intent
-                        startActivity(intent);
-
-                    }
-
-                    @Override public void onLongItemClick(View view, int position) {
-                        // do whatever
-                    }
-                })
-        );
-*/
     }
-
-
-
-
 }

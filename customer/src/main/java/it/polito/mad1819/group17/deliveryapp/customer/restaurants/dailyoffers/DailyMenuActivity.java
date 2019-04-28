@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.deliveryapp.customer.restaurants;
+package it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,17 +28,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
+import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.OrderConfirmActivity;
+import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.ShoppingCart;
+import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.ShoppingItem;
 
 import static it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantsActivity.stringToBitMap;
 
 public class DailyMenuActivity extends AppCompatActivity {
-
     private String restaurant_name;
     public String restaurant_id;
     private Intent intent;
@@ -48,10 +48,6 @@ public class DailyMenuActivity extends AppCompatActivity {
     private FirebaseRecyclerAdapter adapter;
     private boolean somethingAdded;
     private ShoppingCart shoppingCart;
-
-   /* private ArrayList<String> shoppingCart_names;
-    private ArrayList<Double> shoppingCart_prices;*/
-
 
     private void showBackArrowOnToolbar() {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
@@ -92,8 +88,13 @@ public class DailyMenuActivity extends AppCompatActivity {
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
         public TextView desc;
-        public TextView price;
+        public TextView priceFormatted;
         public ImageView photo;
+        public double priceDouble;
+
+        int countAdded = 0;
+        private ImageView addButton;
+        private ImageView subtractButton;
 
         public void setTitle(String title) {
             this.title.setText(title);
@@ -104,8 +105,13 @@ public class DailyMenuActivity extends AppCompatActivity {
             this.desc.setText(desc);
         }
 
-        public void setPrice(String price) {
-            this.price.setText(price);
+        // public void setPrice(String price) {
+        //     this.priceFormatted.setText(price);
+        // }
+
+        public void setPrice(double price){
+            this.priceDouble = price;
+            this.priceFormatted.setText(CurrencyHelper.getCurrency(priceDouble));
         }
 
         public void setPhoto(String photo) {
@@ -121,23 +127,26 @@ public class DailyMenuActivity extends AppCompatActivity {
             title = itemView.findViewById(R.id.if_name);
             desc = itemView.findViewById(R.id.if_description);
             photo = itemView.findViewById(R.id.if_photo);
-            price = itemView.findViewById(R.id.if_price);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    Toast.makeText(v.getContext(), title.getText()+" added", Toast.LENGTH_SHORT).show();
-                    shoppingCart.add(new ShoppingItem(title.getText().toString(),Double.parseDouble(price.getText().toString()),1));
-                    /*shoppingCart_names.add(title.getText().toString());
-                    shoppingCart_prices.add(Double.parseDouble(price.getText().toString()));
-                    Log.d("aaaa",Integer.toString(shoppingCart_names.size()));*/
+            priceFormatted = itemView.findViewById(R.id.if_price);
+            addButton = itemView.findViewById(R.id.if_add_button);
+            subtractButton = itemView.findViewById(R.id.if_subtract_button);
+            addButton.setOnClickListener((View v) -> {
+                Toast.makeText(v.getContext(), "1 " + title.getText()+" added", Toast.LENGTH_SHORT).show();
+                shoppingCart.add(new ShoppingItem(title.getText().toString(),priceDouble,1));
+                countAdded++;
+                subtractButton.setVisibility(View.VISIBLE);
 
-                    updateToolbarText(shoppingCart.getCounter());
-                    somethingAdded=true;
-                }
-
+                updateToolbarText(shoppingCart.getCounter());
+                somethingAdded=true;
             });
+            subtractButton.setOnClickListener((View v) -> {
+                Toast.makeText(v.getContext(), "1 " + title.getText()+" removed", Toast.LENGTH_SHORT).show();
+                shoppingCart.remove(new ShoppingItem(title.getText().toString(),priceDouble,1));
+                countAdded--;
+                if(countAdded <= 0) subtractButton.setVisibility(View.GONE);
 
+                updateToolbarText(shoppingCart.getCounter());
+            });
         }
 
     }
@@ -189,33 +198,11 @@ public class DailyMenuActivity extends AppCompatActivity {
                 holder.setDesc(model.getDescription());
                 holder.setPhoto(model.getPhoto());
                 holder.setTitle(model.getTitle());
-                holder.setPrice(
-                        CurrencyHelper.getCurrency(
-                                Double.valueOf(model.getPrice())));
-
+                holder.setPrice(Double.valueOf(model.getPrice()));
             }
 
         };
         recyclerView.setAdapter(adapter);
-
-        /*recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(this, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-                        // do whatever
-                        Intent intent = new Intent(view.getContext(), DailyMenuActivity.class);
-                        Bundle b = new Bundle();
-                        b.putString("category",); //Your category selected
-                        intent.putExtras(b); //Put your category in the next Intent
-                        startActivity(intent);
-
-                    }
-
-                    @Override public void onLongItemClick(View view, int position) {
-                        // do whatever
-                    }
-                })
-        );
-*/
     }
 
     @Override
@@ -242,6 +229,7 @@ public class DailyMenuActivity extends AppCompatActivity {
                 Intent intent = new Intent(DailyMenuActivity.this, OrderConfirmActivity.class);
                 HashMap<String,Integer> itemsMap = shoppingCart.getItemsMap();
                 Log.d("pedro",Integer.toString(itemsMap.size()));
+                intent.putExtra("restaurant_id", restaurant_id);
                 intent.putExtra("itemsMap",itemsMap);
                 intent.putExtra("items_quantity",shoppingCart.getCounter());
                 intent.putExtra("items_tot_price",shoppingCart.getTotal_price());

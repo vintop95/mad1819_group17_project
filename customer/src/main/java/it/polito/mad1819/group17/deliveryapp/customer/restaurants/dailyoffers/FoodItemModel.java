@@ -1,4 +1,4 @@
-package it.polito.mad1819.group17.deliveryapp.customer.restaurants;
+package it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers;
 
 public class FoodItemModel {
 
