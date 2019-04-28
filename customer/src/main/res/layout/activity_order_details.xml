@@ -109,7 +109,6 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
                         android:text="@string/order_number"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         app:layout_constraintStart_toStartOf="@+id/guideline_customer"
                         app:layout_constraintTop_toBottomOf="@+id/label_order_number" />
 
@@ -141,7 +140,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/delivery_time"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                         app:layout_constraintStart_toStartOf="@+id/label_delivery_time"
                         app:layout_constraintTop_toBottomOf="@+id/label_delivery_time" />
 
@@ -158,7 +156,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/delivery_date"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                         app:layout_constraintStart_toStartOf="@+id/label_delivery_date"
                         app:layout_constraintTop_toBottomOf="@+id/label_delivery_date" />
 
@@ -180,11 +177,27 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
                         android:text="@string/name_label"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                         app:layout_constraintHorizontal_chainStyle="spread_inside"
                         app:layout_constraintStart_toStartOf="@+id/guideline_customer"
                         app:layout_constraintTop_toBottomOf="@+id/label_customer_name"
                         app:autoSizeTextType="uniform"/>
+
+                    <TextView
+                        android:id="@+id/label_customer_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/phone_label"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        app:layout_constraintStart_toStartOf="@+id/guideline_customer_center"
+                        app:layout_constraintTop_toTopOf="@+id/label_customer_name" />
+
+                    <TextView
+                        android:id="@+id/txt_customer_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/phone_hint"
+                        app:layout_constraintStart_toStartOf="@+id/label_customer_phone"
+                        app:layout_constraintTop_toBottomOf="@+id/label_customer_phone" />
 
                     <TextView
                         android:id="@+id/label_delivery_address"
@@ -205,7 +218,6 @@
                         android:layout_marginBottom="16dp"
                         android:singleLine="false"
                         android:text="@string/delivery_address"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline_customer"
@@ -270,7 +282,6 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:text="@string/order_content"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toTopOf="@+id/view_divider_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline_content"
@@ -307,7 +318,6 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="16dp"
                         android:text="@string/order_info"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline_content"
@@ -374,7 +384,6 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
                         android:text="@string/deliveryman_name"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                         app:layout_constraintHorizontal_chainStyle="spread_inside"
                         app:layout_constraintStart_toStartOf="@+id/guideline_deliveryman"
                         app:layout_constraintTop_toBottomOf="@+id/label_deliveryman_name" />
@@ -396,7 +405,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/deliveryman_phone"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                         app:layout_constraintStart_toStartOf="@+id/label_deliveryman_phone"
                         app:layout_constraintTop_toBottomOf="@+id/label_deliveryman_phone" />
 
@@ -439,7 +447,7 @@
                         android:contentDescription="@string/icon_history"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:src="@drawable/ic_assignment_black_24dp" />
+                        app:srcCompat="@drawable/ic_assignment_black_24dp" />
 
                     <TextView
                         android:id="@+id/label_state_history"
@@ -457,7 +465,6 @@
                         android:layout_height="0dp"
                         android:layout_marginBottom="16dp"
                         android:text="@string/order_history"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/btn_next_state"
                         app:layout_constraintHorizontal_chainStyle="spread_inside"

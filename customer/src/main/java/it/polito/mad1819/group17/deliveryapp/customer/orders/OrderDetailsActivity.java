@@ -71,6 +71,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         card_deliveryman = findViewById(R.id.card_deliveryman);
         txt_deliveryman_name = findViewById(R.id.txt_deliveryman_name);
         txt_deliveryman_phone = findViewById(R.id.txt_deliveryman_phone);
+        txt_customer_phone = findViewById(R.id.txt_customer_phone);
     }
 
     private void feedViews(Order selectedOrder) {
