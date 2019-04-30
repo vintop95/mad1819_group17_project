@@ -198,6 +198,8 @@
     <string name="sign_in"> Otherwise <u>Sign Up</u>. </string>
     <string name="new_order">NEW ORDER</string>
     <string name="confirm_order">Confirm Order</string>
+    <string name="shopping_cart_empty">Shopping cart is empty</string>
+    <string name="label_order_id">Order id</string>
 
 
 </resources>

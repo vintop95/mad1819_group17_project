@@ -41,7 +41,7 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
             state_background = itemView.findViewById(R.id.view_state_background);
             txt_delivery_time = itemView.findViewById(R.id.txt_delivery_time);
             txt_delivery_date = itemView.findViewById(R.id.txt_delivery_date);
-            txt_order_number = itemView.findViewById(R.id.txt_order_number);
+            txt_order_number = itemView.findViewById(R.id.txt_order_id);
             txt_total_items = itemView.findViewById(R.id.txt_total_items);
             txt_order_state = itemView.findViewById(R.id.txt_order_state);
         }

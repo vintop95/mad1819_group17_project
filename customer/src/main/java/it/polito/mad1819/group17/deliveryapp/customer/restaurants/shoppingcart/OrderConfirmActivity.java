@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -16,37 +16,33 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.security.Timestamp;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
+import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
-import it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers.DailyMenuActivity;
 
 public class OrderConfirmActivity extends AppCompatActivity {
 
     private TextView final_results;
     private EditText deliveryAddress_edit;
     private EditText deliveryHour_edit;
+    private EditText txtOrderNotes_edit;
     private String restaurant_id;
     private String customer_id;
     private Intent intent;
@@ -57,12 +53,29 @@ public class OrderConfirmActivity extends AppCompatActivity {
     private String deliveryAddress;
     private String phoneNumber;
     private String name;
+    private ProgressBarHandler pbHandler;
 
 
     private ArrayList<String> keys;
     private ArrayList<Integer> values;
 
     ListView lst;
+
+    private AtomicInteger countFetched = new AtomicInteger(0);
+    private static int N_FIELD_TO_FETCH = 2;
+
+    private void showBackArrowOnToolbar() {
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar2));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +83,11 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
         final_results = findViewById(R.id.final_tv);
         btnConfirmOrder = findViewById(R.id.btn_confirm_order);
+        txtOrderNotes_edit = findViewById(R.id.oc_input_order_notes);
         intent = getIntent();
+
+        pbHandler = new ProgressBarHandler(this);
+        initFetchHandler();
 
         customer_id = FirebaseAuth.getInstance().getUid();
         if(TextUtils.isEmpty(customer_id)){
@@ -96,8 +113,8 @@ public class OrderConfirmActivity extends AppCompatActivity {
         itemquantity = intent.getIntExtra("items_quantity",0);
         totalprice = intent.getDoubleExtra("items_tot_price",0);
 
-          deliveryAddress_edit = (EditText) findViewById(R.id.deliveryAddress);
-          deliveryHour_edit = (EditText) findViewById(R.id.deliveryHour);
+        deliveryAddress_edit = (EditText) findViewById(R.id.deliveryAddress);
+        deliveryHour_edit = (EditText) findViewById(R.id.deliveryHour);
 
         String finalResultString =
                 String.format(Locale.getDefault(),
@@ -111,12 +128,27 @@ public class OrderConfirmActivity extends AppCompatActivity {
         OrderConfirmAdapter orderConfirmAdapter = new OrderConfirmAdapter(names,quantities,this);
         lst.setAdapter(orderConfirmAdapter);
 
+
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.MINUTE, 60);
+        Date oneHourFromNow = now.getTime();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm", Locale.getDefault());
+        String oneHourFromNowString = simpleDateFormat.format(oneHourFromNow);
+        deliveryHour_edit.setText(oneHourFromNowString);
+
         btnConfirmOrder.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                if(itemquantity <= 0){
+                    Toast.makeText(getApplicationContext(),
+                            getApplicationContext().getString(R.string.shopping_cart_empty),
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 // TODO: complete filling order
                 Order ord = new Order();
-                HashMap<String,String> state_stateTime = new HashMap<String,String>();
+                HashMap<String,String> state_stateTime = new HashMap<>();
 
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm");
                 String current_timestamp = simpleDateFormat.format(new Date());
@@ -140,16 +172,35 @@ public class OrderConfirmActivity extends AppCompatActivity {
                // ord.setDelivery_address(deliveryAddress);
                 ord.setDelivery_address(deliveryAddress_edit.getText().toString());
                 ord.setItem_itemQuantity(itemsMap);
+                ord.setNotes(txtOrderNotes_edit.getText().toString());
 
-                //setId do not needed
-
+                ord.setCustomer_id(customer_id);
+                ord.setRestaurant_id(restaurant_id);
 
                 pushOrderToFirebase(ord);
 
+
+
                 Toast.makeText(getApplicationContext(), "Order confirmed",Toast.LENGTH_LONG).show();
+                setResult(RESULT_OK);
                 finish();
             }
         });
+
+        showBackArrowOnToolbar();
+    }
+
+    private void initFetchHandler(){
+        pbHandler.show();
+        btnConfirmOrder.setEnabled(false);
+    }
+
+    private void handleFetch(){
+        if(countFetched.incrementAndGet() >= N_FIELD_TO_FETCH){
+            pbHandler.hide();
+            btnConfirmOrder.setEnabled(true);
+            countFetched.set(0);
+        }
     }
 
     ////////////////// FIREBASE ORDER MGMT ////////////////////////////////////
@@ -193,11 +244,14 @@ public class OrderConfirmActivity extends AppCompatActivity {
         ord.setId(newCustomerOrderRef.getKey());
         newCustomerOrderRef.setValue(ord,
                 (@Nullable DatabaseError err, @NonNull DatabaseReference ref)
-                        -> handleCompletionListener(getApplicationContext(), err, ref, "Added")
+                        -> handleCompletionListener(getApplicationContext(), err, ref, "Added in customer")
         );
 
         DatabaseReference newRestaurateurOrderRef = getRestaurateurOrdersRef().child(ord.getId());
-        moveFirebaseRecord(newCustomerOrderRef, newRestaurateurOrderRef);
+        newRestaurateurOrderRef.setValue(ord,
+                (@Nullable DatabaseError err, @NonNull DatabaseReference ref)
+                        -> handleCompletionListener(getApplicationContext(), err, ref, "Added in restaurant")
+        );
     }
 
     public void moveFirebaseRecord(DatabaseReference fromPath, final DatabaseReference toPath)
@@ -237,7 +291,12 @@ public class OrderConfirmActivity extends AppCompatActivity {
         customerReference.child("address").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                deliveryAddress = (String) dataSnapshot.getValue(String.class);
+                deliveryAddress = dataSnapshot.getValue(String.class);
+                if(deliveryAddress == null) deliveryAddress = "";
+
+                deliveryAddress_edit.setText(deliveryAddress);
+
+                handleFetch();
                 Log.d("retrieve", deliveryAddress);
             }
 
@@ -250,7 +309,10 @@ public class OrderConfirmActivity extends AppCompatActivity {
         customerReference.child("phone").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                phoneNumber = (String) dataSnapshot.getValue(String.class);
+                phoneNumber = dataSnapshot.getValue(String.class);
+                if(phoneNumber == null) phoneNumber = "";
+
+                handleFetch();
                 Log.d("retrieve", phoneNumber);
             }
 

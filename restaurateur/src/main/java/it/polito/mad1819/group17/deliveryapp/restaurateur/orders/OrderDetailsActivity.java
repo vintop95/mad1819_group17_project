@@ -14,12 +14,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -59,7 +62,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     }
 
     private void locateViews() {
-        txt_order_number = findViewById(R.id.txt_order_number);
+        txt_order_number = findViewById(R.id.txt_order_id);
         txt_delivery_time = findViewById(R.id.txt_delivery_time);
         txt_delivery_date = findViewById(R.id.txt_delivery_date);
         txt_order_content = findViewById(R.id.txt_order_content);
@@ -125,6 +128,31 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 .show();
     }
 
+    private void updateOrderInFirebase(Order ord){
+        String userId = FirebaseAuth.getInstance().getUid();
+        if (userId == null) throw new IllegalArgumentException("user id is not set");
+
+        FirebaseDatabase.getInstance().getReference()
+                .child("restaurateurs")
+                .child(userId)
+                .child("orders")
+                .child(ord.getId())
+                .setValue(ord);
+
+        if (! TextUtils.isEmpty(ord.getCustomer_id())) {
+            FirebaseDatabase.getInstance().getReference()
+                    .child("customers")
+                    .child(ord.getCustomer_id())
+                    .child("orders")
+                    .child(ord.getId())
+                    .setValue(ord);
+        } else{
+            Toast.makeText(getApplicationContext(),
+                    "Customer id was not set, customer order not updated",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void positiveButtonAction() {
         if (inputOrder.moveToNextState()) {
 
@@ -135,10 +163,9 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 btn_next_state.setEnabled(false);
                 selectDeliveryman();
                 card_deliveryman.setVisibility(View.VISIBLE);
-            } else
-                FirebaseDatabase.getInstance()
-                        .getReference("/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders/" + inputOrder.getId())
-                        .setValue(inputOrder);
+            } else {
+                updateOrderInFirebase(inputOrder);
+            }
         }
 
     }
@@ -195,16 +222,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 inputOrder.setDeliveryman_id(selectedDeliveryman.getId());
                 inputOrder.setDeliveryman_name(selectedDeliveryman.getName());
                 inputOrder.setDeliveryman_phone(selectedDeliveryman.getPhone());
-                FirebaseDatabase.getInstance()
-                        .getReference("/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders/" + inputOrder.getId())
-                        .setValue(inputOrder);
-                /*Map<String, Object> updates = new HashMap<>();
-                updates.put("deliveyman_id", inputOrder.getDeliveryman_id());
-                updates.put("deliveyman_name", inputOrder.getDeliveryman_name());
-                updates.put("deliveyman_phone", inputOrder.getDeliveryman_phone());
-                FirebaseDatabase.getInstance().getReference().child("deliverymen")
-                        .child(selectedDeliveryman.getId()).child("delivery_requests")
-                        .child(newDeliveryRequestKey).updateChildren(updates);*/
+                updateOrderInFirebase(inputOrder);
 
                 // update UI
                 txt_deliveryman_name.setText(inputOrder.getDeliveryman_name());

@@ -12,6 +12,8 @@ public class Order implements Serializable {
     public final static String STATE3 = "Delivering";
 
     private String id = "";
+    private String restaurant_id = "";
+    private String customer_id = "";
     private String customer_name = "";
     private String customer_phone = "";
     private String delivery_timestamp = "";
@@ -30,9 +32,26 @@ public class Order implements Serializable {
 
     }
 
-    public Order(String id, /*String restaurant_id, */String customer_name, String customer_phone, String delivery_timestamp, String delivery_address, HashMap<String, String> state_stateTime, HashMap<String, Integer> item_itemQuantity, String notes, String deliveryman_id, String deliveryman_name, String deliveryman_phone, String sorting_field, String notified) {
+    public String getRestaurant_id() {
+        return restaurant_id;
+    }
+
+    public void setRestaurant_id(String restaurant_id) {
+        this.restaurant_id = restaurant_id;
+    }
+
+    public String getCustomer_id() {
+        return customer_id;
+    }
+
+    public void setCustomer_id(String customer_id) {
+        this.customer_id = customer_id;
+    }
+
+    public Order(String id, String restaurant_id, String customer_id, String customer_name, String customer_phone, String delivery_timestamp, String delivery_address, HashMap<String, String> state_stateTime, HashMap<String, Integer> item_itemQuantity, String notes, String deliveryman_id, String deliveryman_name, String deliveryman_phone, String sorting_field, String notified) {
         this.id = id;
-        //this.restaurant_id = restaurant_id;
+        this.restaurant_id = restaurant_id;
+        this.customer_id = customer_id;
         this.customer_name = customer_name;
         this.customer_phone = customer_phone;
         this.delivery_timestamp = delivery_timestamp;
