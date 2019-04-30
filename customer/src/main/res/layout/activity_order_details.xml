@@ -90,27 +90,27 @@
                         android:contentDescription="@string/icon_restaurateur"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:src="@drawable/ic_assignment_ind_black_24dp" />
+                        app:srcCompat="@drawable/ic_assignment_ind_black_24dp" />
 
                     <TextView
-                        android:id="@+id/label_order_number"
+                        android:id="@+id/label_order_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="@string/order_number"
+                        android:text="@string/label_order_id"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        app:layout_constraintStart_toStartOf="@+id/txt_order_number"
+                        app:layout_constraintStart_toStartOf="@+id/txt_order_id"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/txt_order_number"
+                        android:id="@+id/txt_order_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
-                        android:text="@string/order_number"
+                        android:text="@string/label_order_id"
                         app:layout_constraintStart_toStartOf="@+id/guideline_customer"
-                        app:layout_constraintTop_toBottomOf="@+id/label_order_number" />
+                        app:layout_constraintTop_toBottomOf="@+id/label_order_id" />
 
                     <View
                         android:id="@+id/view_divider_customer"
@@ -122,7 +122,7 @@
                         android:background="@color/colorPrimary"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/txt_order_number" />
+                        app:layout_constraintTop_toBottomOf="@+id/txt_order_id" />
 
                     <TextView
                         android:id="@+id/label_delivery_time"
@@ -261,7 +261,7 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginRight="16dp"
                         android:contentDescription="@string/icon_content"
-                        android:src="@drawable/ic_assignment_turned_in_black_24dp"
+                        app:srcCompat="@drawable/ic_assignment_turned_in_black_24dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -365,7 +365,7 @@
                         android:contentDescription="@string/icon_rider"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:src="@drawable/ic_baseline_motorcycle_24px" />
+                        app:srcCompat="@drawable/ic_baseline_motorcycle_24px" />
 
                     <TextView
                         android:id="@+id/label_deliveryman_name"
@@ -462,30 +462,20 @@
                     <TextView
                         android:id="@+id/txt_state_history"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
                         android:layout_marginBottom="16dp"
                         android:text="@string/order_history"
+                        app:autoSizeTextType="uniform"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/btn_next_state"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_chainStyle="spread_inside"
                         app:layout_constraintStart_toStartOf="@+id/label_state_history"
                         app:layout_constraintTop_toBottomOf="@+id/label_state_history"
-                        app:layout_constraintVertical_bias="0.0"
-                        app:autoSizeTextType="uniform"/>
+                        app:layout_constraintVertical_bias="0.0" />
 
-                    <Button
-                        android:id="@+id/btn_next_state"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginRight="32dp"
-                        android:backgroundTint="@color/colorPrimary"
-                        android:text="@string/button_history"
-                        app:layout_constraintBottom_toBottomOf="@+id/txt_state_history"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/txt_state_history"
-                        app:layout_constraintTop_toTopOf="@+id/txt_state_history"
-                        app:layout_constraintVertical_bias="0.444" />
+
 
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>

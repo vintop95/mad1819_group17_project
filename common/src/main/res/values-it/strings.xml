@@ -168,5 +168,7 @@
     <string name="sign_in">Altrimenti <u>Registrati</u>.</string>
     <string name="new_order">NUOVO ORDINE</string>
     <string name="confirm_order">CONFERMA ORDINE</string>
+    <string name="shopping_cart_empty">Il carrello è vuoto</string>
+    <string name="label_order_id">ID Ordine</string>
 
 </resources>

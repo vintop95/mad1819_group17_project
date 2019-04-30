@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,7 +32,9 @@ import com.google.firebase.database.Query;
 import java.util.HashMap;
 
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
+import it.polito.mad1819.group17.deliveryapp.customer.MainActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
+import it.polito.mad1819.group17.deliveryapp.customer.profile.EditProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.OrderConfirmActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.ShoppingCart;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.ShoppingItem;
@@ -48,6 +51,8 @@ public class DailyMenuActivity extends AppCompatActivity {
     private FirebaseRecyclerAdapter adapter;
     private boolean somethingAdded;
     private ShoppingCart shoppingCart;
+
+    public static int RC_ORDER_CONFIRM = 0;
 
     private void showBackArrowOnToolbar() {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
@@ -226,14 +231,20 @@ public class DailyMenuActivity extends AppCompatActivity {
         menuItem.getActionView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DailyMenuActivity.this, OrderConfirmActivity.class);
-                HashMap<String,Integer> itemsMap = shoppingCart.getItemsMap();
-                Log.d("pedro",Integer.toString(itemsMap.size()));
-                intent.putExtra("restaurant_id", restaurant_id);
-                intent.putExtra("itemsMap",itemsMap);
-                intent.putExtra("items_quantity",shoppingCart.getCounter());
-                intent.putExtra("items_tot_price",shoppingCart.getTotal_price());
-                startActivity(intent);
+                if (shoppingCart.getCounter() > 0) {
+                    Intent intent = new Intent(DailyMenuActivity.this, OrderConfirmActivity.class);
+                    HashMap<String,Integer> itemsMap = shoppingCart.getItemsMap();
+                    Log.d("pedro",Integer.toString(itemsMap.size()));
+                    intent.putExtra("restaurant_id", restaurant_id);
+                    intent.putExtra("itemsMap",itemsMap);
+                    intent.putExtra("items_quantity",shoppingCart.getCounter());
+                    intent.putExtra("items_tot_price",shoppingCart.getTotal_price());
+                    startActivityForResult(intent, RC_ORDER_CONFIRM);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.shopping_cart_empty),
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -242,6 +253,16 @@ public class DailyMenuActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_ORDER_CONFIRM) {
+            if (resultCode == RESULT_OK) {
+                finish();
+            }
+        }
+
+    }
 
     @Override
     public void onBackPressed() {

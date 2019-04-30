@@ -153,14 +153,14 @@ public class MainActivity extends AppCompatActivity {
             throw new IllegalStateException("Log in with FirebaseAuth first");
         }
 
+        progressBarHandler.hide();
+
         if(mCustomerOrdersRef != null)
             return;
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mCustomerDatabaseReference = mFirebaseDatabase.getReference().child("customers");
         mCustomerOrdersRef = mCustomerDatabaseReference.child(userId).child("orders");
-
-        progressBarHandler.hide();
     }
 
     private void initUtils(){
@@ -213,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }
+        progressBarHandler.hide();
     }
 
     @Override

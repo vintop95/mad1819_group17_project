@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent">
+
+<android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".restaurants.shoppingcart.OrderConfirmActivity">
 
     <android.support.v7.widget.Toolbar
@@ -11,16 +15,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
         android:gravity="center"
+        android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/listview_items" />
+        app:layout_constraintBottom_toTopOf="@id/listview_items"/>
 
     <ListView
         android:id="@+id/listview_items"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="220dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
@@ -29,7 +33,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2"
-        app:layout_constraintBottom_toTopOf="@+id/final_tv"/>
+        app:layout_constraintBottom_toTopOf="@+id/deliveryAddress"/>
 
     <Button
         android:id="@+id/btn_confirm_order"
@@ -37,34 +41,123 @@
         android:layout_height="66dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@color/colorContrast"
         android:gravity="center"
         android:text="@string/confirm_order"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/final_tv" />
+        app:layout_constraintTop_toBottomOf="@id/final_tv"
+        />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_confirm_order"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
         android:id="@+id/final_tv"
+        android:layout_width="395dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="12dp"
+        android:gravity="center"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@+id/btn_confirm_order"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deliveryHour"
+        app:layout_constraintVertical_bias="0.275" />
+
+
+    <EditText
+        android:id="@+id/deliveryAddress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Delivery Address"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listview_items" />
+
+    <EditText
+        android:id="@+id/deliveryHour"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ems="10"
+        android:inputType="time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deliveryAddress"
+        app:layout_constraintBottom_toTopOf="@id/oc_input_order_notes"/>
+
+    <EditText
+        android:id="@+id/oc_input_order_notes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/final_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/deliveryHour" />
+
+    <TextView
+        android:id="@+id/oc_label_delivery_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintBottom_toTopOf="@+id/btn_confirm_order"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/delivery_address"
+        app:layout_constraintBottom_toTopOf="@+id/deliveryAddress"
+        app:layout_constraintEnd_toStartOf="@+id/deliveryAddress"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listview_items" />
+        app:layout_constraintTop_toTopOf="@+id/deliveryHour" />
 
+    <TextView
+    android:id="@+id/oc_label_delivery_hour"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginRight="8dp"
+    android:text="@string/delivery_time"
+    app:layout_constraintBottom_toTopOf="@+id/deliveryHour"
+    app:layout_constraintEnd_toStartOf="@+id/deliveryHour"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/deliveryHour" />
+
+    <TextView
+        android:id="@+id/oc_label_order_notes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/notes"
+        app:layout_constraintBottom_toTopOf="@+id/oc_input_order_notes"
+        app:layout_constraintEnd_toStartOf="@+id/oc_input_order_notes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/oc_input_order_notes" />
 
 </android.support.constraint.ConstraintLayout>
+
+</ScrollView>
