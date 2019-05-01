@@ -32,13 +32,11 @@ import com.google.firebase.database.Query;
 import java.util.HashMap;
 
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
-import it.polito.mad1819.group17.deliveryapp.customer.MainActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
-import it.polito.mad1819.group17.deliveryapp.customer.profile.EditProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.OrderConfirmActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.ShoppingCart;
-import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.ShoppingItem;
+import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
 
 import static it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantsActivity.stringToBitMap;
 
@@ -55,7 +53,6 @@ public class DailyMenuActivity extends AppCompatActivity {
     private FirebaseRecyclerAdapter adapter;
     private boolean somethingAdded;
     private ShoppingCart shoppingCart;
-
 
     public static int RC_ORDER_CONFIRM = 0;
     public static int RC_RESTAURANT_DETAILS = 1;
@@ -259,10 +256,10 @@ public class DailyMenuActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (shoppingCart.getCounter() > 0) {
                     Intent intent = new Intent(DailyMenuActivity.this, OrderConfirmActivity.class);
-                    HashMap<String,Integer> itemsMap = shoppingCart.getItemsMap();
-                    Log.d("pedro",Integer.toString(itemsMap.size()));
+                    Log.d("pedro",Integer.toString(shoppingCart.getItemsMap().size()));
                     intent.putExtra("restaurant_id", restaurant_id);
-                    intent.putExtra("itemsMap",itemsMap);
+                    intent.putExtra("restaurant_name", restaurant_name);
+                    intent.putExtra("itemsMap",shoppingCart.getItemsMap());
                     intent.putExtra("items_quantity",shoppingCart.getCounter());
                     intent.putExtra("items_tot_price",shoppingCart.getTotal_price());
                     startActivityForResult(intent, RC_ORDER_CONFIRM);

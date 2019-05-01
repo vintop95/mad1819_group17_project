@@ -5,12 +5,13 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Vector;
 
+import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
+
 public class ShoppingCart {
 
     private Vector<ShoppingItem> items;
     private int counter;
     private double total_price;
-
 
     public int getCounter() {
         return counter;
@@ -64,10 +65,10 @@ public class ShoppingCart {
         }
     }
 
-    public HashMap<String,Integer> getItemsMap() {
-        HashMap<String,Integer> retValue = new HashMap<String,Integer>();
+    public HashMap<String,ShoppingItem> getItemsMap() {
+        HashMap<String,ShoppingItem> retValue = new HashMap<>();
         for (ShoppingItem item : this.items){
-            retValue.put(item.getName(),item.getQuantity());
+            retValue.put(item.getName(), item);
         }
         return retValue;
     }

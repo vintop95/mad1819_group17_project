@@ -14,19 +14,21 @@ public class Order implements Serializable {
     private String id = "";
     private String restaurant_id = "";
     private String customer_id = "";
+
+    private String restaurant_name = "";
     private String customer_name = "";
     private String customer_phone = "";
     private String delivery_timestamp = "";
     private String delivery_address = "";
     private HashMap<String, String> state_stateTime = new HashMap<>();
-    private HashMap<String, Integer> item_itemQuantity = new HashMap<>();
+    private HashMap<String, ShoppingItem> item_itemDetails = new HashMap<>();
+
     private String notes = "";
     private String deliveryman_id = "";
     private String deliveryman_name = "";
     private String deliveryman_phone = "";
     private String sorting_field = "";
     private String notified = "no";
-
 
     public Order() {
 
@@ -35,7 +37,6 @@ public class Order implements Serializable {
     public String getRestaurant_id() {
         return restaurant_id;
     }
-
     public void setRestaurant_id(String restaurant_id) {
         this.restaurant_id = restaurant_id;
     }
@@ -43,33 +44,20 @@ public class Order implements Serializable {
     public String getCustomer_id() {
         return customer_id;
     }
-
     public void setCustomer_id(String customer_id) {
         this.customer_id = customer_id;
     }
 
-    public Order(String id, String restaurant_id, String customer_id, String customer_name, String customer_phone, String delivery_timestamp, String delivery_address, HashMap<String, String> state_stateTime, HashMap<String, Integer> item_itemQuantity, String notes, String deliveryman_id, String deliveryman_name, String deliveryman_phone, String sorting_field, String notified) {
-        this.id = id;
-        this.restaurant_id = restaurant_id;
-        this.customer_id = customer_id;
-        this.customer_name = customer_name;
-        this.customer_phone = customer_phone;
-        this.delivery_timestamp = delivery_timestamp;
-        this.delivery_address = delivery_address;
-        this.state_stateTime = state_stateTime;
-        this.item_itemQuantity = item_itemQuantity;
-        this.notes = notes;
-        this.deliveryman_id = deliveryman_id;
-        this.deliveryman_name = deliveryman_name;
-        this.deliveryman_phone = deliveryman_phone;
-        this.sorting_field = sorting_field;
-        this.notified = notified;
+    public String getRestaurant_name() {
+        return restaurant_name;
+    }
+    public void setRestaurant_name(String restaurant_name) {
+        this.restaurant_name = restaurant_name;
     }
 
     public String getDeliveryman_id() {
         return deliveryman_id;
     }
-
     public void setDeliveryman_id(String deliveryman_id) {
         this.deliveryman_id = deliveryman_id;
     }
@@ -77,7 +65,6 @@ public class Order implements Serializable {
     public String getDeliveryman_name() {
         return deliveryman_name;
     }
-
     public void setDeliveryman_name(String deliveryman_name) {
         this.deliveryman_name = deliveryman_name;
     }
@@ -85,7 +72,6 @@ public class Order implements Serializable {
     public String getDeliveryman_phone() {
         return deliveryman_phone;
     }
-
     public void setDeliveryman_phone(String deliveryman_phone) {
         this.deliveryman_phone = deliveryman_phone;
     }
@@ -93,19 +79,14 @@ public class Order implements Serializable {
     public String getNotified() {
         return notified;
     }
-
     public void setNotified(String notified) {
         this.notified = notified;
     }
 
-    /*public void setRestaurant_id(String restaurant_id) {
-        this.restaurant_id = restaurant_id;
-    }*/
 
     public String getSorting_field() {
         return sorting_field;
     }
-
     public void setSorting_field(String sorting_field) {
         this.sorting_field = sorting_field;
     }
@@ -114,8 +95,8 @@ public class Order implements Serializable {
         this.delivery_timestamp = delivery_timestamp;
     }
 
-    public void setItem_itemQuantity(HashMap<String, Integer> item_itemQuantity) {
-        this.item_itemQuantity = item_itemQuantity;
+    public void setItem_itemDetails(HashMap<String, ShoppingItem> item_itemDetails) {
+        this.item_itemDetails = item_itemDetails;
     }
 
     public String getDelivery_address() {
@@ -134,14 +115,9 @@ public class Order implements Serializable {
         this.id = id;
     }
 
-    /*public String getRestaurant_id() {
-        return restaurant_id;
-    }*/
-
     public String getNotes() {
         return notes;
     }
-
     public void setNotes(String notes) {
         this.notes = notes;
     }
@@ -167,8 +143,8 @@ public class Order implements Serializable {
         this.state_stateTime = state_stateTime;
     }
 
-    public HashMap<String, Integer> getItem_itemQuantity() {
-        return item_itemQuantity;
+    public HashMap<String, ShoppingItem> getItem_itemDetails() {
+        return item_itemDetails;
     }
 
     public String getCustomer_name() {
@@ -189,8 +165,10 @@ public class Order implements Serializable {
 
     public int getTotalItemsQuantity() {
         int totOrderedItems = 0;
-        for (String orderedItem : item_itemQuantity.keySet())
-            totOrderedItems += item_itemQuantity.get(orderedItem);
+        for (String orderedItem : item_itemDetails.keySet()){
+            totOrderedItems += item_itemDetails.get(orderedItem).getQuantity();
+        }
+
         return totOrderedItems;
     }
 

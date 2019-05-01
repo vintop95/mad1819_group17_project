@@ -2,7 +2,6 @@ package it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart;
 
 import android.content.Context;
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +34,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
+import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
@@ -47,19 +47,19 @@ public class OrderConfirmActivity extends AppCompatActivity {
     private EditText txtOrderNotes_edit;
     private String restaurant_id;
     private String customer_id;
+    private String restaurant_name;
     private Intent intent;
     private Double totalprice;
     private Integer itemquantity;
-    private HashMap<String,Integer> itemsMap;
+    private HashMap<String, ShoppingItem> itemsMap;
     private Button btnConfirmOrder;
     private String deliveryAddress;
     private String phoneNumber;
     private String name;
     private ProgressBarHandler pbHandler;
 
-
     private ArrayList<String> keys;
-    private ArrayList<Integer> values;
+    private ArrayList<ShoppingItem> values;
 
     ListView lst;
 
@@ -97,37 +97,41 @@ public class OrderConfirmActivity extends AppCompatActivity {
         }
 
         restaurant_id = intent.getStringExtra("restaurant_id");
+        restaurant_name = intent.getStringExtra("restaurant_name");
         if (restaurant_id == null) throw new IllegalStateException("restaurant_id must not be null!");
 
-        itemsMap = (HashMap<String, Integer>)intent.getSerializableExtra("itemsMap");
+        itemsMap = (HashMap<String, ShoppingItem>) intent.getSerializableExtra("itemsMap");
         retrieveData();
         keys = new ArrayList<String>(itemsMap.keySet());
-        values = new ArrayList<Integer>(itemsMap.values());
+        values = new ArrayList<ShoppingItem>(itemsMap.values());
 
-        String[] names = keys.toArray(new String[values.size()]);
-        Integer[] quantities = values.toArray(new Integer[keys.size()]);
+        ArrayList<Integer> arrQuantities = new ArrayList<>();
+        ArrayList<Double> arrPrices = new ArrayList<>();
+        for(ShoppingItem details: itemsMap.values()){
+            arrQuantities.add(details.getQuantity());
+            arrPrices.add(details.getPrice());
+        }
 
-        intent.putExtra("restaurant_id", restaurant_id);
+        String[] names = keys.toArray(new String[keys.size()]);
+        Integer[] quantities = arrQuantities.toArray(new Integer[values.size()]);
+        Double[] prices = arrPrices.toArray(new Double[values.size()]);
 
         Log.d("elem_quantities", Integer.toString(quantities.length));
         Log.d("elem_names", Integer.toString(names.length));
-
         itemquantity = intent.getIntExtra("items_quantity",0);
         totalprice = intent.getDoubleExtra("items_tot_price",0);
 
         deliveryAddress_edit = (EditText) findViewById(R.id.deliveryAddress);
         deliveryHour_edit = (EditText) findViewById(R.id.deliveryHour);
-
         String finalResultString =
                 String.format(Locale.getDefault(),
                         "Buying %d element(s) for the total price of: %s",
                         itemquantity, CurrencyHelper.getCurrency(totalprice)
                 );
-
         final_results.setText(finalResultString);
 
         lst = (ListView) findViewById(R.id.listview_items);
-        OrderConfirmAdapter orderConfirmAdapter = new OrderConfirmAdapter(names,quantities,this);
+        OrderConfirmAdapter orderConfirmAdapter = new OrderConfirmAdapter(names,quantities,prices,this);
         lst.setAdapter(orderConfirmAdapter);
 
 
@@ -150,12 +154,13 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
                 // TODO: complete filling order
                 Order ord = new Order();
+                ord.setCustomer_id(customer_id);
+                ord.setRestaurant_id(restaurant_id);
+
                 HashMap<String,String> state_stateTime = new HashMap<>();
-
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm");
+                SimpleDateFormat simpleDateFormat =
+                        new SimpleDateFormat("yyyy/MM/dd hh:mm", Locale.getDefault());
                 String current_timestamp = simpleDateFormat.format(new Date());
-
-
                 String day = current_timestamp.split(" ")[0];
                 String delivery_timestamp = day+" "+deliveryHour_edit.getText().toString();
 
@@ -169,19 +174,14 @@ public class OrderConfirmActivity extends AppCompatActivity {
                 ord.setSorting_field("state0_"+delivery_timestamp);
                 ord.setCustomer_name(name);
                 ord.setCustomer_phone(phoneNumber);
+                ord.setRestaurant_name(restaurant_name);
                 //from query
                 ord.setDelivery_timestamp(delivery_timestamp);
-               // ord.setDelivery_address(deliveryAddress);
                 ord.setDelivery_address(deliveryAddress_edit.getText().toString());
-                ord.setItem_itemQuantity(itemsMap);
+                ord.setItem_itemDetails(itemsMap);
                 ord.setNotes(txtOrderNotes_edit.getText().toString());
 
-                ord.setCustomer_id(customer_id);
-                ord.setRestaurant_id(restaurant_id);
-
                 pushOrderToFirebase(ord);
-
-
 
                 Toast.makeText(getApplicationContext(), "Order confirmed",Toast.LENGTH_LONG).show();
                 setResult(RESULT_OK);

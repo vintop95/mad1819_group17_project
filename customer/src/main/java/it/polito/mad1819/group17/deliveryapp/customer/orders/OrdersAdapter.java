@@ -30,7 +30,7 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
         View state_background;
         TextView txt_delivery_time;
         TextView txt_delivery_date;
-        TextView txt_order_number;
+        TextView txt_restaurant_name;
         TextView txt_total_items;
         TextView txt_order_state;
 
@@ -41,7 +41,7 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
             state_background = itemView.findViewById(R.id.view_state_background);
             txt_delivery_time = itemView.findViewById(R.id.txt_delivery_time);
             txt_delivery_date = itemView.findViewById(R.id.txt_delivery_date);
-            txt_order_number = itemView.findViewById(R.id.txt_order_id);
+            txt_restaurant_name = itemView.findViewById(R.id.txt_restaurant_name);
             txt_total_items = itemView.findViewById(R.id.txt_total_items);
             txt_order_state = itemView.findViewById(R.id.txt_order_state);
         }
@@ -62,7 +62,7 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
     protected void onBindViewHolder(OrderHolder holder, int position, Order model) {
         holder.txt_delivery_time.setText(model.getDelivery_time());
         holder.txt_delivery_date.setText(model.getDelivery_date());
-        holder.txt_order_number.setText("" + model.getId());
+        holder.txt_restaurant_name.setText(model.getRestaurant_name());
         holder.txt_total_items.setText("" + model.getTotalItemsQuantity());
         holder.txt_order_state.setText(model.getCurrentState());
         switch (model.getCurrentState()) {

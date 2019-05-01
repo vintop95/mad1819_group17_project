@@ -26,8 +26,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,6 +35,8 @@ import java.util.Random;
 import it.polito.mad1819.group17.deliveryapp.common.Deliveryman;
 import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
+import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
+import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
 public class OrderDetailsActivity extends AppCompatActivity {
@@ -44,7 +44,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     public final static int STATE_CHANGED = 1;
     public final static int STATE_NOT_CHANGED = 0;
 
-    private TextView txt_order_number;
+    private TextView txt_restaurant_name;
     private TextView txt_delivery_time;
     private TextView txt_delivery_date;
     private TextView txt_order_content;
@@ -67,7 +67,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     }
 
     private void locateViews() {
-        txt_order_number = findViewById(R.id.txt_order_id);
+        txt_restaurant_name = findViewById(R.id.txt_restaurant_name);
         txt_delivery_time = findViewById(R.id.txt_delivery_time);
         txt_delivery_date = findViewById(R.id.txt_delivery_date);
         txt_order_content = findViewById(R.id.txt_order_content);
@@ -83,7 +83,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     }
 
     private void feedViews(Order selectedOrder) {
-        txt_order_number.setText("" + selectedOrder.getId());
+        txt_restaurant_name.setText(selectedOrder.getRestaurant_name());
         txt_delivery_time.setText(selectedOrder.getDelivery_timestamp().split(" ")[1]);
         txt_delivery_date.setText(selectedOrder.getDelivery_timestamp().split(" ")[0]);
         txt_customer_name.setText(selectedOrder.getCustomer_name());
@@ -92,10 +92,14 @@ public class OrderDetailsActivity extends AppCompatActivity {
         txt_order_notes.setText(selectedOrder.getNotes());
 
         String order_content = "";
-        for (String item : selectedOrder.getItem_itemQuantity().keySet()) {
+        for (String item : selectedOrder.getItem_itemDetails().keySet()) {
             if (!order_content.equals(""))
                 order_content += "\n";
-            order_content += "x" + selectedOrder.getItem_itemQuantity().get(item) + " " + item;
+
+            ShoppingItem shoppingItem = selectedOrder.getItem_itemDetails().get(item);
+            order_content += "x" + shoppingItem.getQuantity()
+                    + " " + item
+                    + " - " + CurrencyHelper.getCurrency(shoppingItem.getPrice()*shoppingItem.getQuantity());
         }
         txt_order_content.setText(order_content);
 

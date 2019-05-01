@@ -1,16 +1,13 @@
-package it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart;
+package it.polito.mad1819.group17.deliveryapp.common.orders;
 
-public class ShoppingItem {
-    String name;
-    Double price;
-    int quantity;
+import java.io.Serializable;
 
-    public int getQuantity() {
-        return quantity;
-    }
+public class ShoppingItem implements Serializable {
+    private String name = "";
+    private Double price = 0.0;
+    private int quantity = 0;
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public ShoppingItem() {
     }
 
     public ShoppingItem(String name, Double price, int quantity) {
@@ -19,13 +16,17 @@ public class ShoppingItem {
         this.quantity = quantity;
     }
 
-    public ShoppingItem() {
+    public int getQuantity() {
+        return quantity;
     }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
 
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -33,7 +34,6 @@ public class ShoppingItem {
     public Double getPrice() {
         return price;
     }
-
     public void setPrice(Double price) {
         this.price = price;
     }
@@ -48,9 +48,8 @@ public class ShoppingItem {
     }
 
     // The equals method does something a little dirty here, it only
-// compares the item names and item costs. Technically, this is
-// not the way that equals was intended to work.
-
+    // compares the item names and item costs. Technically, this is
+    // not the way that equals was intended to work.
     public boolean equals(Object other)
     {
         if (this == other) return true;

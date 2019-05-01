@@ -71,7 +71,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
             android:text="@string/delivery_time"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             card_view:layout_constraintBottom_toBottomOf="@+id/label_delivery_time"
             card_view:layout_constraintEnd_toStartOf="@+id/txt_order_state"
             card_view:layout_constraintHorizontal_chainStyle="spread"
@@ -95,7 +95,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginEnd="8dp"
             android:text="@string/order_state"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toEndOf="@+id/txt_delivery_date"
             card_view:layout_constraintTop_toBottomOf="@+id/label_order_state" />
@@ -111,14 +111,13 @@
             card_view:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:visibility="invisible"
-            android:id="@+id/label_order_id"
+            android:id="@+id/label_restaurant_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text="@string/order_number"
+            android:text="@string/name_restaurant"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textStyle="bold"
             card_view:layout_constraintEnd_toStartOf="@+id/label_total_items"
@@ -128,17 +127,16 @@
             card_view:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
-            android:visibility="invisible"
-            android:id="@+id/txt_order_id"
+            android:id="@+id/txt_restaurant_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="@string/order_number"
+            android:text="@string/name_restaurant"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:textColor="@color/textPrimary"
             card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintStart_toStartOf="@+id/label_order_id"
-            card_view:layout_constraintTop_toBottomOf="@+id/label_order_id" />
+            card_view:layout_constraintStart_toStartOf="@+id/label_restaurant_name"
+            card_view:layout_constraintTop_toBottomOf="@+id/label_restaurant_name" />
 
         <TextView
             android:id="@+id/label_total_items"
@@ -151,7 +149,7 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textStyle="bold"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toEndOf="@+id/label_order_id"
+            card_view:layout_constraintStart_toEndOf="@+id/label_restaurant_name"
             card_view:layout_constraintTop_toBottomOf="@+id/view_divider_order" />
 
         <TextView

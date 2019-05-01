@@ -93,24 +93,24 @@
                         app:srcCompat="@drawable/ic_assignment_ind_black_24dp" />
 
                     <TextView
-                        android:id="@+id/label_order_id"
+                        android:id="@+id/label_restaurant_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="@string/label_order_id"
+                        android:text="@string/name_restaurant"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        app:layout_constraintStart_toStartOf="@+id/txt_order_id"
+                        app:layout_constraintStart_toStartOf="@+id/txt_restaurant_name"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/txt_order_id"
+                        android:id="@+id/txt_restaurant_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
-                        android:text="@string/label_order_id"
+                        android:text="restaurant_name"
                         app:layout_constraintStart_toStartOf="@+id/guideline_customer"
-                        app:layout_constraintTop_toBottomOf="@+id/label_order_id" />
+                        app:layout_constraintTop_toBottomOf="@+id/label_restaurant_name" />
 
                     <View
                         android:id="@+id/view_divider_customer"
@@ -122,7 +122,7 @@
                         android:background="@color/colorPrimary"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/txt_order_id" />
+                        app:layout_constraintTop_toBottomOf="@+id/txt_restaurant_name" />
 
                     <TextView
                         android:id="@+id/label_delivery_time"
