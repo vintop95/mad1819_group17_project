@@ -297,7 +297,6 @@ public class DailyMenuActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Sure to quit? All shopping cart items will be lost");
             builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
-
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     DailyMenuActivity.super.onBackPressed();

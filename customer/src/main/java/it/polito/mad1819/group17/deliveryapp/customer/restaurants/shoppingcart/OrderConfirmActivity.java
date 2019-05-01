@@ -159,7 +159,6 @@ public class OrderConfirmActivity extends AppCompatActivity {
                     return;
                 }
 
-                // TODO: complete filling order
                 Order ord = new Order();
                 ord.setCustomer_id(customer_id);
                 ord.setRestaurant_id(restaurant_id);
@@ -301,7 +300,9 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(getApplicationContext(),
+                        "Cannot retrieve your address!",
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -317,7 +318,10 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(getApplicationContext(),
+                        "Cannot retrieve your phone from your profile! Check internet connection and retry",
+                        Toast.LENGTH_LONG).show();
+                finish();
             }
         });
     }
