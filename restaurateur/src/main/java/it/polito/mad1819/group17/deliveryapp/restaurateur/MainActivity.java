@@ -350,4 +350,15 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
         Log.v("FIREBASE_LOG", "AuthListener added - MainActivity");
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        progressBarHandler.hide();
+    }
 }

@@ -19,7 +19,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:text="CATEGORY"/>
+            android:text="@string/category"/>
 
 
         <ListView

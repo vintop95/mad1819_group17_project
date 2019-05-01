@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">AppetiTO Deliveryman</string>
+    <string name="app_name">AppetiTO Deliveryman</string>
 
     <!-- FirebaseUI Auth -->
     <string name="fui_name_hint">Deliveryman Name</string>

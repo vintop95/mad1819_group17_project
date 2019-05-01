@@ -34,7 +34,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:text="Restaurants"
+                android:text="@string/restaurants"
                 android:gravity="center"/>
 
         <android.support.v7.widget.RecyclerView

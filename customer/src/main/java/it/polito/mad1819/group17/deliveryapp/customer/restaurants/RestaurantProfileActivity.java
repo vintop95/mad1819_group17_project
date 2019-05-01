@@ -1,19 +1,13 @@
 package it.polito.mad1819.group17.deliveryapp.customer.restaurants;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -169,7 +163,7 @@ public class RestaurantProfileActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                     Toast.makeText(getApplicationContext(),
-                            "Unable to retrieve restaurateur's information",
+                            getApplicationContext().getString(R.string.cannot_retrieve_restaurateur_info),
                             Toast.LENGTH_LONG).show();
                 }
             };

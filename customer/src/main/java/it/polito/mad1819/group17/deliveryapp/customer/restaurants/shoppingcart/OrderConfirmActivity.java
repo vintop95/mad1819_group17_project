@@ -132,7 +132,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
         deliveryHour_edit = (EditText) findViewById(R.id.deliveryHour);
         String finalResultString =
                 String.format(Locale.getDefault(),
-                        "Buying %d element(s) for the total price of: %s",
+                        getApplicationContext().getString(R.string.buying_elements_summary),
                         itemquantity, CurrencyHelper.getCurrency(totalprice)
                 );
         final_results.setText(finalResultString);
@@ -190,8 +190,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
                 ord.setNotes(txtOrderNotes_edit.getText().toString());
 
                 pushOrderToFirebase(ord);
-
-                Toast.makeText(getApplicationContext(), "Order confirmed",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.order_confirmed),Toast.LENGTH_LONG).show();
                 setResult(RESULT_OK);
                 finish();
             }
@@ -301,7 +300,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(getApplicationContext(),
-                        "Cannot retrieve your address!",
+                        getApplicationContext().getString(R.string.cannot_retrieve_your_address),
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -319,7 +318,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(getApplicationContext(),
-                        "Cannot retrieve your phone from your profile! Check internet connection and retry",
+                        getApplicationContext().getString(R.string.cannot_retrieve_your_phone),
                         Toast.LENGTH_LONG).show();
                 finish();
             }

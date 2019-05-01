@@ -73,7 +73,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         intent = getIntent();
         category_selected = intent.getStringExtra("category");
         Log.d("aaa",category_selected);
-        setContentView(R.layout.activity_restaurant);
+        setContentView(R.layout.activity_restaurants);
 
         pbHandler = new ProgressBarHandler(this);
 

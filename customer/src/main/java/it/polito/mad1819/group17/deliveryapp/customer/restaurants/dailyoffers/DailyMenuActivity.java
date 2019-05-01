@@ -165,7 +165,9 @@ public class DailyMenuActivity extends AppCompatActivity {
             addButton = itemView.findViewById(R.id.if_add_button);
             subtractButton = itemView.findViewById(R.id.if_subtract_button);
             addButton.setOnClickListener((View v) -> {
-                Toast.makeText(v.getContext(), "1 " + title.getText()+" added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "1 " + title.getText() + " "
+                        + getApplicationContext().getString(R.string.added), Toast.LENGTH_SHORT).show();
+
                 shoppingCart.add(new ShoppingItem(title.getText().toString(),priceDouble,1));
                 countAdded++;
                 subtractButton.setVisibility(View.VISIBLE);
@@ -174,7 +176,9 @@ public class DailyMenuActivity extends AppCompatActivity {
                 somethingAdded=true;
             });
             subtractButton.setOnClickListener((View v) -> {
-                Toast.makeText(v.getContext(), "1 " + title.getText()+" removed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "1 " + title.getText() + " "
+                        + getString(R.string.removed), Toast.LENGTH_SHORT).show();
+
                 shoppingCart.remove(new ShoppingItem(title.getText().toString(),priceDouble,1));
                 countAdded--;
                 if(countAdded <= 0) subtractButton.setVisibility(View.GONE);
@@ -295,20 +299,21 @@ public class DailyMenuActivity extends AppCompatActivity {
     public void onBackPressed() {
         if(somethingAdded) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Sure to quit? All shopping cart items will be lost");
-            builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+            builder.setTitle(getString(R.string.shopping_cart_exit_warning));
+            builder.setPositiveButton(this.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     DailyMenuActivity.super.onBackPressed();
                 }
             });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(this.getString(android.R.string.no), new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                 }
             });
+
             AlertDialog alert = builder.create();
             alert.show();
         }

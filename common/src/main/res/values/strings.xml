@@ -201,6 +201,16 @@
     <string name="shopping_cart_empty">Shopping cart is empty</string>
     <string name="label_order_id">Order id</string>
     <string name="restaurant_profile">Restaurant Profile</string>
+    <string name="category">CATEGORY</string>
+    <string name="restaurants">Restaurants</string>
+    <string name="cannot_retrieve_restaurateur_info">Unable to retrieve restaurateur\'s information</string>
+    <string name="added">added</string>
+    <string name="removed">removed</string>
+    <string name="shopping_cart_exit_warning">Sure to quit? All shopping cart items will be lost</string>
+    <string name="buying_elements_summary">Buying %d element(s) for the total price of: %s</string>
+    <string name="order_confirmed">Order confirmed</string>
+    <string name="cannot_retrieve_your_address">Cannot retrieve your address!</string>
+    <string name="cannot_retrieve_your_phone">Cannot retrieve your phone from your profile! Check internet connection and retry</string>
 
 
 </resources>
