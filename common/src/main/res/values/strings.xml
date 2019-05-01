@@ -200,6 +200,7 @@
     <string name="confirm_order">Confirm Order</string>
     <string name="shopping_cart_empty">Shopping cart is empty</string>
     <string name="label_order_id">Order id</string>
+    <string name="restaurant_profile">Restaurant Profile</string>
 
 
 </resources>

@@ -15,6 +15,7 @@
         <activity android:name=".restaurants.shoppingcart.OrderConfirmActivity"/>
         <activity android:name=".restaurants.dailyoffers.DailyMenuActivity" />
         <activity android:name=".restaurants.RestaurantsActivity" />
+        <activity android:name=".restaurants.RestaurantProfileActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">

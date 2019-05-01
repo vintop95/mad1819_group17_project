@@ -35,6 +35,7 @@ import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.customer.MainActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 import it.polito.mad1819.group17.deliveryapp.customer.profile.EditProfileActivity;
+import it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.OrderConfirmActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.ShoppingCart;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.ShoppingItem;
@@ -45,14 +46,19 @@ public class DailyMenuActivity extends AppCompatActivity {
     private String restaurant_name;
     public String restaurant_id;
     private Intent intent;
+
     private TextView tv;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
+    private ImageView btnInfo;
+
     private FirebaseRecyclerAdapter adapter;
     private boolean somethingAdded;
     private ShoppingCart shoppingCart;
 
+
     public static int RC_ORDER_CONFIRM = 0;
+    public static int RC_RESTAURANT_DETAILS = 1;
 
     private void showBackArrowOnToolbar() {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
@@ -66,15 +72,36 @@ public class DailyMenuActivity extends AppCompatActivity {
         return true;
     }
 
+    private void openRestaurantProfile(){
+        Intent intent = new Intent(DailyMenuActivity.this, RestaurantProfileActivity.class);
+        intent.putExtra("restaurant_id", restaurant_id);
+        startActivityForResult(intent, RC_RESTAURANT_DETAILS);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_menu);
         intent = getIntent();
+
         restaurant_name = intent.getStringExtra("name");
         restaurant_id = intent.getStringExtra("id");
-        tv = (TextView) findViewById(R.id.subtitle_rn);
+        btnInfo = findViewById(R.id.btn_info);
+        btnInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openRestaurantProfile();
+            }
+        });
+
+        tv = findViewById(R.id.subtitle_rn);
         tv.setText(restaurant_name);
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openRestaurantProfile();
+            }
+        });
 
         shoppingCart = new ShoppingCart();
 
@@ -224,7 +251,6 @@ public class DailyMenuActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.menu_daily_menu,menu);
         final Menu m = menu;
         final MenuItem menuItem = m.findItem(R.id.shoppingcart_itemmenu);
@@ -248,8 +274,6 @@ public class DailyMenuActivity extends AppCompatActivity {
             }
         });
 
-
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -261,7 +285,6 @@ public class DailyMenuActivity extends AppCompatActivity {
                 finish();
             }
         }
-
     }
 
     @Override

@@ -61,7 +61,7 @@
 
     <TextView
         android:id="@+id/final_tv"
-        android:layout_width="395dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -118,13 +118,15 @@
 
     <TextView
         android:id="@+id/oc_label_delivery_address"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/delivery_address"
+        android:gravity="end"
+        app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@+id/deliveryAddress"
         app:layout_constraintEnd_toStartOf="@+id/deliveryAddress"
         app:layout_constraintStart_toStartOf="parent"
@@ -132,13 +134,15 @@
 
     <TextView
     android:id="@+id/oc_label_delivery_hour"
-    android:layout_width="wrap_content"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
     android:layout_marginLeft="8dp"
     android:layout_marginEnd="8dp"
     android:layout_marginRight="8dp"
     android:text="@string/delivery_time"
+        android:gravity="end"
+    app:autoSizeTextType="uniform"
     app:layout_constraintBottom_toTopOf="@+id/deliveryHour"
     app:layout_constraintEnd_toStartOf="@+id/deliveryHour"
     app:layout_constraintStart_toStartOf="parent"
@@ -146,13 +150,15 @@
 
     <TextView
         android:id="@+id/oc_label_order_notes"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/notes"
+        app:autoSizeTextType="uniform"
+        android:gravity="end"
         app:layout_constraintBottom_toTopOf="@+id/oc_input_order_notes"
         app:layout_constraintEnd_toStartOf="@+id/oc_input_order_notes"
         app:layout_constraintStart_toStartOf="parent"

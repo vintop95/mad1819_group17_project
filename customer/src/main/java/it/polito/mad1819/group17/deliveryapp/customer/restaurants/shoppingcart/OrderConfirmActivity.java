@@ -2,6 +2,7 @@ package it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart;
 
 import android.content.Context;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
@@ -206,7 +208,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
     ////////////////// FIREBASE ORDER MGMT ////////////////////////////////////
     private final static String FIREBASE_ORDERS = "orders";
 
-    public DatabaseReference getRestaurateurOrdersRef(){
+    public DatabaseReference getRestaurateurOrdersRef() {
         if(TextUtils.isEmpty(restaurant_id)){
             throw new IllegalStateException("restaurateur_id is NULL!!!");
         }
@@ -217,7 +219,11 @@ public class OrderConfirmActivity extends AppCompatActivity {
                 .child(FIREBASE_ORDERS);
     }
 
-    public DatabaseReference getCustomerOrdersRef(){
+    public String getRestaurateurOrdersPath(@NonNull String orderId) {
+        return "restaurateurs/" + restaurant_id + "/" + FIREBASE_ORDERS + "/" + orderId;
+    }
+
+    public DatabaseReference getCustomerOrdersRef() {
         if(TextUtils.isEmpty(customer_id)){
             throw new IllegalStateException("customer_id is NULL!!!");
         }
@@ -226,6 +232,10 @@ public class OrderConfirmActivity extends AppCompatActivity {
                 .child("customers")
                 .child(customer_id)
                 .child(FIREBASE_ORDERS);
+    }
+
+    public String getCustomerOrdersPath(@NonNull String orderId) {
+        return "customers/" + customer_id + "/" + FIREBASE_ORDERS + "/" + orderId;
     }
 
     private static void handleCompletionListener
@@ -240,42 +250,22 @@ public class OrderConfirmActivity extends AppCompatActivity {
     }
 
     public void pushOrderToFirebase(Order ord){
+        DatabaseReference rootRef =FirebaseDatabase.getInstance().getReference();
         DatabaseReference newCustomerOrderRef = getCustomerOrdersRef().push();
         ord.setId(newCustomerOrderRef.getKey());
-        newCustomerOrderRef.setValue(ord,
-                (@Nullable DatabaseError err, @NonNull DatabaseReference ref)
-                        -> handleCompletionListener(getApplicationContext(), err, ref, "Added in customer")
-        );
 
-        DatabaseReference newRestaurateurOrderRef = getRestaurateurOrdersRef().child(ord.getId());
-        newRestaurateurOrderRef.setValue(ord,
+        Map<String, Object> insertedOrderData = new HashMap<>();
+        insertedOrderData.put(getRestaurateurOrdersPath(ord.getId()), ord);
+        insertedOrderData.put(getCustomerOrdersPath(ord.getId()), ord);
+
+        rootRef.updateChildren(insertedOrderData,
                 (@Nullable DatabaseError err, @NonNull DatabaseReference ref)
-                        -> handleCompletionListener(getApplicationContext(), err, ref, "Added in restaurant")
+                -> handleCompletionListener(getApplicationContext(),
+                        err, ref, "Added in customer and restaurateur of ")
         );
     }
-
-    public void moveFirebaseRecord(DatabaseReference fromPath, final DatabaseReference toPath)
-    {
-        fromPath.addListenerForSingleValueEvent(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                toPath.setValue(dataSnapshot.getValue(), (@Nullable DatabaseError err, @NonNull DatabaseReference ref)
-                        -> handleCompletionListener(OrderConfirmActivity.this, err, ref, "Added"));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError firebaseError)
-            {
-                Log.e("FIREBASE_LOG", "Copy failed");
-            }
-        });
-    }
-
 
     public void retrieveData(){
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // Name, email address, and profile photo Url

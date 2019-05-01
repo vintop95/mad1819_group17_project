@@ -198,7 +198,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
         locateViews();
 
-        toolbar = findViewById(R.id.toolbar_edit);
         showBackArrowOnToolbar();
 
         image_user_photo.setOnClickListener(v -> startPickPictureDialog());

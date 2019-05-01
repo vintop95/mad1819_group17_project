@@ -170,5 +170,6 @@
     <string name="confirm_order">CONFERMA ORDINE</string>
     <string name="shopping_cart_empty">Il carrello è vuoto</string>
     <string name="label_order_id">ID Ordine</string>
+    <string name="restaurant_profile">Profilo del Ristorante</string>
 
 </resources>

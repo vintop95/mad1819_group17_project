@@ -1,15 +1,18 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.orders;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,6 +22,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -27,6 +31,7 @@ import org.w3c.dom.Text;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import it.polito.mad1819.group17.deliveryapp.common.Deliveryman;
@@ -128,24 +133,45 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 .show();
     }
 
+    ////////////////// FIREBASE ORDER MGMT ////////////////////////////////////
+    private final static String FIREBASE_ORDERS = "orders";
+
+    private String getRestaurateurOrdersPath(String restaurateurId, String orderId) {
+        return "restaurateurs/" + restaurateurId + "/" + FIREBASE_ORDERS + "/" + orderId ;
+    }
+
+    private String getCustomerOrdersPath(String customerId, String orderId) {
+        return "customers/" + customerId + "/" + FIREBASE_ORDERS + "/" + orderId ;
+    }
+
+    private static void handleCompletionListener
+            (Context context, @Nullable DatabaseError err,
+             @NonNull DatabaseReference ref, String msg){
+        if(err != null){
+            Log.e("FIREBASE_LOG",err.getMessage());
+            Toast.makeText(context, err.getMessage(), Toast.LENGTH_LONG).show();
+        }else{
+            Log.d("FIREBASE_LOG", msg + " " + ref.toString());
+        }
+    }
+
     private void updateOrderInFirebase(Order ord){
         String userId = FirebaseAuth.getInstance().getUid();
         if (userId == null) throw new IllegalArgumentException("user id is not set");
 
-        FirebaseDatabase.getInstance().getReference()
-                .child("restaurateurs")
-                .child(userId)
-                .child("orders")
-                .child(ord.getId())
-                .setValue(ord);
-
         if (! TextUtils.isEmpty(ord.getCustomer_id())) {
-            FirebaseDatabase.getInstance().getReference()
-                    .child("customers")
-                    .child(ord.getCustomer_id())
-                    .child("orders")
-                    .child(ord.getId())
-                    .setValue(ord);
+            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+
+            Map<String, Object> insertedOrderData = new HashMap<>();
+            insertedOrderData.put(getRestaurateurOrdersPath(userId, ord.getId()), ord);
+            insertedOrderData.put(getCustomerOrdersPath(ord.getCustomer_id(), ord.getId()), ord);
+
+            rootRef.updateChildren(insertedOrderData,
+                    (@Nullable DatabaseError err, @NonNull DatabaseReference ref)
+                            -> handleCompletionListener(getApplicationContext(),
+                            err, ref, "Updated order " + ord.getId() + " in customer and restaurateur of ")
+            );
+
         } else{
             Toast.makeText(getApplicationContext(),
                     "Customer id was not set, customer order not updated",
