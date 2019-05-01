@@ -45,9 +45,13 @@ public class OrderConfirmActivity extends AppCompatActivity {
     private EditText deliveryAddress_edit;
     private EditText deliveryHour_edit;
     private EditText txtOrderNotes_edit;
+
     private String restaurant_id;
-    private String customer_id;
     private String restaurant_name;
+    private String restaurant_address;
+    private String restaurant_phone;
+    private String customer_id;
+
     private Intent intent;
     private Double totalprice;
     private Integer itemquantity;
@@ -98,6 +102,9 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
         restaurant_id = intent.getStringExtra("restaurant_id");
         restaurant_name = intent.getStringExtra("restaurant_name");
+        restaurant_address = intent.getStringExtra("restaurant_address");
+        restaurant_phone = intent.getStringExtra("restaurant_phone");
+
         if (restaurant_id == null) throw new IllegalStateException("restaurant_id must not be null!");
 
         itemsMap = (HashMap<String, ShoppingItem>) intent.getSerializableExtra("itemsMap");
@@ -175,6 +182,8 @@ public class OrderConfirmActivity extends AppCompatActivity {
                 ord.setCustomer_name(name);
                 ord.setCustomer_phone(phoneNumber);
                 ord.setRestaurant_name(restaurant_name);
+                ord.setRestaurant_address(restaurant_address);
+                ord.setRestaurant_phone(restaurant_phone);
                 //from query
                 ord.setDelivery_timestamp(delivery_timestamp);
                 ord.setDelivery_address(deliveryAddress_edit.getText().toString());

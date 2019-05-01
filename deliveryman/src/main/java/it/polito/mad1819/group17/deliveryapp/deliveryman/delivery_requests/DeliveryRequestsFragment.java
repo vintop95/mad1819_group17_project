@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import it.polito.mad1819.group17.deliveryapp.deliveryman.R;
+import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.ProgressBarHandler;
 
 
 public class DeliveryRequestsFragment extends Fragment {
@@ -28,6 +29,7 @@ public class DeliveryRequestsFragment extends Fragment {
 
     private DeliveryRequestsAdapter mAdapter;
     private RecyclerView recyclerView;
+    private ProgressBarHandler progressBarHandler;
 
     public DeliveryRequestsFragment() {
         // Required empty public constructor
@@ -38,6 +40,7 @@ public class DeliveryRequestsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_delivery_requests, container, false);
         recyclerView=view.findViewById(R.id.rv_delivery_requests);
+        progressBarHandler = new ProgressBarHandler(getContext());
         return view;
     }
 
@@ -45,7 +48,10 @@ public class DeliveryRequestsFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
         if (FirebaseAuth.getInstance().getUid() != null) {
+            progressBarHandler.show();
+
             Query query = FirebaseDatabase.getInstance()
                     .getReference()
                     .child("deliverymen")
@@ -58,7 +64,7 @@ public class DeliveryRequestsFragment extends Fragment {
                     .build();
 
             mAdapter = new DeliveryRequestsAdapter(options, getFragmentManager()
-                    .findFragmentByTag(DeliveryRequestsFragment.class.getName()));
+                    .findFragmentByTag(DeliveryRequestsFragment.class.getName()),progressBarHandler);
             recyclerView.setHasFixedSize(false);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(mAdapter);

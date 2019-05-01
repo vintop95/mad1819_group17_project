@@ -2,6 +2,7 @@ package it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests;
 
 import android.content.Intent;
 import android.icu.text.UnicodeSetSpanner;
+import android.media.tv.TvContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -17,14 +18,18 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 import it.polito.mad1819.group17.deliveryapp.deliveryman.R;
+import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.ProgressBarHandler;
 
 public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryRequest, DeliveryRequestsAdapter.DeliveryRequestHolder> {
 
     private Fragment fragment;
+    private ProgressBarHandler pbHandler;
 
-    public DeliveryRequestsAdapter(FirebaseRecyclerOptions<DeliveryRequest> options, Fragment fragment) {
+    public DeliveryRequestsAdapter(FirebaseRecyclerOptions<DeliveryRequest> options,
+                                   Fragment fragment, ProgressBarHandler pbHandler ) {
         super(options);
         this.fragment = fragment;
+        this.pbHandler = pbHandler;
     }
 
 
@@ -59,6 +64,12 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
         }
     }
     /* ------------------------------------------------------------------------------------------- */
+
+    @Override
+    public void onDataChanged() {
+        super.onDataChanged();
+        pbHandler.hide();
+    }
 
     @Override
     protected void onBindViewHolder(DeliveryRequestHolder holder, int position, DeliveryRequest model) {

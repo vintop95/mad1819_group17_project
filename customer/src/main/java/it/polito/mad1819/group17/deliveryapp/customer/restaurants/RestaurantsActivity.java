@@ -101,6 +101,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     public TextView address;
     public TextView avgPrice;
     public String id;
+    public String phone;
 
     public void setId(String id) {
         this.id = id;
@@ -123,7 +124,9 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, DailyMenuActivity.class);
                 intent.putExtra("id", id);
-                intent.putExtra("name",name.getText());
+                intent.putExtra("name", name.getText());
+                intent.putExtra("address", address.getText());
+                intent.putExtra("phone", phone);
                 // Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
                 startActivity(intent);
             }
@@ -151,8 +154,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         this.address.setText(address);
     }
 
-    public void setAvgPrice(String avgPrice) {
-        this.avgPrice.setText(avgPrice);
+    public void setPhone(String phone){
+        this.phone = phone;
     }
 
 }
@@ -174,7 +177,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                                         snapshot.child("name").getValue(String.class),
                                         snapshot.child("bio").getValue(String.class),
                                         snapshot.child("photo").getValue(String.class),
-                                        snapshot.getKey()
+                                        snapshot.getKey(),
+                                        snapshot.child("phone").getValue(String.class)
                                 );
                             }
                         })
@@ -197,8 +201,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                 holder.setBio(model.getBio());
                 holder.setName(model.getName());
                 holder.setPhoto(model.getPhoto());
-                // holder.setAvgPrice("Pr$");
                 holder.setId(model.getKey());
+                holder.setPhone(model.phone);
             }
 
             @Override

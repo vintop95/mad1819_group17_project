@@ -6,13 +6,15 @@ public class RestaurantModel {
     public String name;
     public String bio;
     public String photo;
+    public String phone;
 
-    public RestaurantModel(String address, String name, String bio, String photo,String key) {
+    public RestaurantModel(String address, String name, String bio, String photo,String key, String phone) {
         this.address = address;
         this.name = name;
         this.bio = bio;
         this.photo = photo;
         this.key = key;
+        this.phone = phone;
     }
 
     public RestaurantModel() {

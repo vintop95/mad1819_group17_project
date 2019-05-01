@@ -16,6 +16,12 @@ public class Order implements Serializable {
     private String customer_id = "";
 
     private String restaurant_name = "";
+
+
+
+    private String restaurant_phone = "";
+    private String restaurant_address = "";
+
     private String customer_name = "";
     private String customer_phone = "";
     private String delivery_timestamp = "";
@@ -53,6 +59,20 @@ public class Order implements Serializable {
     }
     public void setRestaurant_name(String restaurant_name) {
         this.restaurant_name = restaurant_name;
+    }
+
+    public String getRestaurant_phone() {
+        return restaurant_phone;
+    }
+    public void setRestaurant_phone(String restaurant_phone) {
+        this.restaurant_phone = restaurant_phone;
+    }
+
+    public String getRestaurant_address() {
+        return restaurant_address;
+    }
+    public void setRestaurant_address(String restaurant_address) {
+        this.restaurant_address = restaurant_address;
     }
 
     public String getDeliveryman_id() {

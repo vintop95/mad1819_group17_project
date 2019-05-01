@@ -41,8 +41,10 @@ import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
 import static it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantsActivity.stringToBitMap;
 
 public class DailyMenuActivity extends AppCompatActivity {
+    private String restaurant_id;
     private String restaurant_name;
-    public String restaurant_id;
+    private String restaurant_address;
+    private String restaurant_phone;
     private Intent intent;
 
     private TextView tv;
@@ -81,8 +83,11 @@ public class DailyMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_daily_menu);
         intent = getIntent();
 
-        restaurant_name = intent.getStringExtra("name");
         restaurant_id = intent.getStringExtra("id");
+        restaurant_name = intent.getStringExtra("name");
+        restaurant_address = intent.getStringExtra("address");
+        restaurant_phone = intent.getStringExtra("phone");
+
         btnInfo = findViewById(R.id.btn_info);
         btnInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,6 +264,8 @@ public class DailyMenuActivity extends AppCompatActivity {
                     Log.d("pedro",Integer.toString(shoppingCart.getItemsMap().size()));
                     intent.putExtra("restaurant_id", restaurant_id);
                     intent.putExtra("restaurant_name", restaurant_name);
+                    intent.putExtra("restaurant_address", restaurant_address);
+                    intent.putExtra("restaurant_phone", restaurant_phone);
                     intent.putExtra("itemsMap",shoppingCart.getItemsMap());
                     intent.putExtra("items_quantity",shoppingCart.getCounter());
                     intent.putExtra("items_tot_price",shoppingCart.getTotal_price());
