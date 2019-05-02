@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +23,8 @@ import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
+import it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantProfileActivity;
+import it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers.DailyMenuActivity;
 
 public class OrderDetailsActivity extends AppCompatActivity {
 
@@ -40,6 +43,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
     private CardView card_deliveryman;
     private TextView txt_deliveryman_name;
     private TextView txt_deliveryman_phone;
+
+    private ImageView image_restaurant_info;
 
     private Order inputOrder;
 
@@ -62,6 +67,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         txt_deliveryman_name = findViewById(R.id.txt_deliveryman_name);
         txt_deliveryman_phone = findViewById(R.id.txt_deliveryman_phone);
         txt_customer_phone = findViewById(R.id.txt_customer_phone);
+        image_restaurant_info = findViewById(R.id.image_restaurant_info);
     }
 
     private void feedViews(Order selectedOrder) {
@@ -109,6 +115,12 @@ public class OrderDetailsActivity extends AppCompatActivity {
         feedViews(inputOrder);
     }
 
+    private void openRestaurantProfile(){
+        Intent intent = new Intent(OrderDetailsActivity.this, RestaurantProfileActivity.class);
+        intent.putExtra("restaurant_id", inputOrder.getRestaurant_id());
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +134,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
             String phoneNumber = ((TextView) v).getText().toString();
             startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
         });
+        image_restaurant_info.setOnClickListener(v -> openRestaurantProfile());
+        txt_restaurant_name.setOnClickListener(v -> openRestaurantProfile());
 
         if (!TextUtils.isEmpty(getIntent().getStringExtra("id"))) {
             // we came here due to a tap on the notification so let us read the (updated) order from firebase

@@ -160,15 +160,15 @@ public class DailyMenuActivity extends AppCompatActivity {
 
             addButton.setOnClickListener((View v) -> {
                 if (addItemInCart()) {
-                    Toast.makeText(v.getContext(), "1 " + title.getText() + " "
-                            + getApplicationContext().getString(R.string.added), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(v.getContext(), "1 " + title.getText() + " "
+//                            + getApplicationContext().getString(R.string.added), Toast.LENGTH_SHORT).show();
                 }
             });
 
             subtractButton.setOnClickListener((View v) -> {
                 if (removeItemFromCart()) {
-                    Toast.makeText(v.getContext(), "1 " + title.getText() + " "
-                            + getString(R.string.removed), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(v.getContext(), "1 " + title.getText() + " "
+//                            + getString(R.string.removed), Toast.LENGTH_SHORT).show();
                 }
             });
         }
