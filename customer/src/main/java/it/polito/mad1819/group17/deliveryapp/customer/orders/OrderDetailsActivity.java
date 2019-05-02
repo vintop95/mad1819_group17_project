@@ -106,7 +106,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
 
     public void adjustLayoutProgrammatically() {
-        if (inputOrder.getCurrentState() != Order.STATE3) {
+        if (!inputOrder.getCurrentState().equals(Order.STATE3)) {
             card_deliveryman.setVisibility(View.GONE);
         } else {
             card_deliveryman.setVisibility(View.VISIBLE);

@@ -164,13 +164,15 @@ public class EditProfileActivity extends AppCompatActivity {
         String phone = input_phone.getText().toString();
         String mail = input_mail.getText().toString();
         String address = input_address.getText().toString();
-        String restaurant_type = input_restaurant_type.getSelectedItem().toString();
-        String free_day = input_free_day.getSelectedItem().toString();
         String time_opening = input_working_time_opening.getText().toString();
         String time_closing = input_working_time_closing.getText().toString();
         Date date_timeOpening = null;
         Date date_timeClosing = null;
         String bio = input_bio.getText().toString();
+
+        // TODO: localize these
+        String free_day = input_free_day.getSelectedItem().toString();
+        String restaurant_type = input_restaurant_type.getSelectedItem().toString();
 
         if (name.isEmpty() ||
                 phone.isEmpty() || !Patterns.PHONE.matcher(phone).matches() ||

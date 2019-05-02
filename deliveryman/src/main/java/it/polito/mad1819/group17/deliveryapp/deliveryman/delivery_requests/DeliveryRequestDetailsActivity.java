@@ -98,7 +98,7 @@ public class DeliveryRequestDetailsActivity extends AppCompatActivity {
             txt_state_history.setText(inputDeliveryRequest.getStateHistoryToString());
             Log.d("XX", inputDeliveryRequest.getStateHistoryToString());
 
-            if (inputDeliveryRequest.getCurrentState() == inputDeliveryRequest.STATE3) {
+            if (inputDeliveryRequest.getCurrentState().equals(inputDeliveryRequest.STATE3)) {
                 btn_next_state.setTextColor(getResources().getColor(R.color.button_disabled_text));
                 btn_next_state.setEnabled(false);
             }

@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import it.polito.mad1819.group17.deliveryapp.common.Restaurateur;
+import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.PrefHelper;
@@ -249,6 +250,17 @@ public class MainActivity extends AppCompatActivity {
         String language = Locale.ITALY.getLanguage();
         String country = Locale.ITALY.getCountry();
         CurrencyHelper.setLocaleCurrency(new Locale(language, country));
+
+        Order.setStateLocal(getString(R.string.state_accepted),
+                getString(R.string.state_in_preparation),
+                getString(R.string.state_delivering)
+        );
+
+
+        DeliveryRequest.setStateLocal(getString(R.string.state_assigned),
+                getString(R.string.state_accepted),
+                getString(R.string.state_delivered)
+        );
     }
 
     @Override

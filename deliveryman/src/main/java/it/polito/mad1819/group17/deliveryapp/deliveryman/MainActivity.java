@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
+import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.DeliveryRequestDetailsActivity;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.DeliveryRequestsFragment;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.profile.EditProfileActivity;
@@ -210,6 +211,16 @@ public class MainActivity extends AppCompatActivity {
         String language = Locale.ITALY.getLanguage();
         String country = Locale.ITALY.getCountry();
         CurrencyHelper.setLocaleCurrency(new Locale(language, country));
+
+        Order.setStateLocal(getString(R.string.state_accepted),
+                getString(R.string.state_in_preparation),
+                getString(R.string.state_delivering)
+        );
+
+        DeliveryRequest.setStateLocal(getString(R.string.state_assigned),
+                getString(R.string.state_accepted),
+                getString(R.string.state_delivered)
+        );
     }
 
     private void initBottomNavigation(){

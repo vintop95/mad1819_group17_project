@@ -190,5 +190,11 @@
     <string name="cannot_retrieve_your_address">Impossibile recuperare il tuo indirizzo!</string>
     <string name="cannot_retrieve_your_phone">Impossibile recuperare il tuo telefono dal tuo profilo! Verifica la connessione internet e riprova</string>
     <string name="error_transaction_push_order">Errore durante la transazione, riprova.</string>
+    <string name="state_accepted">Accettato</string>
+    <string name="state_in_preparation">In preparazione</string>
+    <string name="state_delivering">In consegna</string>
+    <string name="state_delivered">Consegnato</string>
+    <string name="state_assigned">Assegnato</string>
+    <string name="state">Stato</string>
 
 </resources>

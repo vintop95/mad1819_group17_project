@@ -83,7 +83,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
         model.setId(getRef(position).getKey());
         holder.txt_delivery_time.setText(model.getDelivery_time());
         holder.txt_delivery_date.setText(model.getDelivery_date());
-        holder.txt_state.setText(model.getCurrentState());
+        holder.txt_state.setText(model.getCurrentStateLocal());
         holder.txt_delivery_address.setText(model.getAddress());
         //holder.txt_customer_name.setText(model.getCustomer_name());
         holder.txt_restaurant_name.setText(model.getRestaurant_name());

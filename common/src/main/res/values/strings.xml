@@ -221,6 +221,12 @@
     <string name="cannot_retrieve_your_address">Cannot retrieve your address!</string>
     <string name="cannot_retrieve_your_phone">Cannot retrieve your phone from your profile! Check internet connection and retry</string>
     <string name="error_transaction_push_order">Error during transaction, retry.</string>
+    <string name="state_accepted">Accepted</string>
+    <string name="state_in_preparation">In preparation</string>
+    <string name="state_delivering">Delivering</string>
+    <string name="state_delivered">Delivered</string>
+    <string name="state_assigned">Assigned</string>
+    <string name="state">State</string>
 
 
 </resources>

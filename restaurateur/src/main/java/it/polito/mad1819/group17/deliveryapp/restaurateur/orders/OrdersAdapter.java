@@ -64,7 +64,7 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
         holder.txt_delivery_date.setText(model.getDelivery_date());
         holder.txt_restaurant_name.setText(model.getRestaurant_name());
         holder.txt_total_items.setText("" + model.getTotalItemsQuantity());
-        holder.txt_order_state.setText(model.getCurrentState());
+        holder.txt_order_state.setText(model.getCurrentStateLocal());
         switch (model.getCurrentState()) {
             case Order.STATE1:
                 holder.state_background.setBackgroundColor(

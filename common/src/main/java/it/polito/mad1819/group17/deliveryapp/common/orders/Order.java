@@ -11,6 +11,10 @@ public class Order implements Serializable {
     public final static String STATE2 = "In preparation";
     public final static String STATE3 = "Delivering";
 
+    private static String state1Local = STATE1;
+    private static String state2Local = STATE2;
+    private static String state3Local = STATE3;
+
     private String id = "";
     private String restaurant_id = "";
     private String customer_id = "";
@@ -189,6 +193,25 @@ public class Order implements Serializable {
         return totOrderedItems;
     }
 
+    public static void setStateLocal(String s1, String s2, String s3){
+        state1Local = s1;
+        state2Local = s2;
+        state3Local = s3;
+    }
+
+    public String getCurrentStateLocal() {
+        switch (getCurrentState()) {
+            case STATE1:
+                return state1Local;
+            case STATE2:
+                return state2Local;
+            case STATE3:
+                return state3Local;
+            default:
+                return null;
+        }
+    }
+
     public String getCurrentState() {
         if (state_stateTime.get("state3") != null)
             return STATE3;
@@ -202,19 +225,19 @@ public class Order implements Serializable {
         String state_history = "";
         switch (getCurrentState()) {
             case STATE1:
-                state_history = getState_stateTime().get("state1") + " " + Order.STATE1;
-                state_history += "\n" + "----/--/-- --:--" + " " + Order.STATE2;
-                state_history += "\n" + "----/--/-- --:--" + " " + Order.STATE3;
+                state_history = getState_stateTime().get("state1") + " " + state1Local;
+                state_history += "\n" + "----/--/-- --:--" + " " + state2Local;
+                state_history += "\n" + "----/--/-- --:--" + " " + state3Local;
                 break;
             case STATE2:
-                state_history = getState_stateTime().get("state1") + "  " + Order.STATE1;
-                state_history += "\n" + getState_stateTime().get("state2") + "  " + Order.STATE2;
-                state_history += "\n" + "----/--/-- --:--" + "  " + Order.STATE3;
+                state_history = getState_stateTime().get("state1") + "  " + state1Local;
+                state_history += "\n" + getState_stateTime().get("state2") + "  " + state2Local;
+                state_history += "\n" + "----/--/-- --:--" + "  " + state3Local;
                 break;
             case STATE3:
-                state_history = getState_stateTime().get("state1") + "  " + Order.STATE1;
-                state_history += "\n" + getState_stateTime().get("state2") + "  " + Order.STATE2;
-                state_history += "\n" + getState_stateTime().get("state3") + "  " + Order.STATE3;
+                state_history = getState_stateTime().get("state1") + "  " + state1Local;
+                state_history += "\n" + getState_stateTime().get("state2") + "  " + state2Local;
+                state_history += "\n" + getState_stateTime().get("state3") + "  " + state3Local;
                 break;
         }
         return state_history;
