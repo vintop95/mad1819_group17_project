@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.R;
 
 public class DeliveryRequestDetailsActivity extends AppCompatActivity {
@@ -34,6 +35,9 @@ public class DeliveryRequestDetailsActivity extends AppCompatActivity {
     private TextView txt_address;
     private TextView txt_customer_name;
     private TextView txt_customer_phone;
+    private TextView txt_restaurant_name;
+    private TextView txt_restaurant_phone;
+    private TextView txt_restaurant_address;
     private TextView txt_state_history;
     private TextView txt_notes;
     private Button btn_next_state;
@@ -43,6 +47,9 @@ public class DeliveryRequestDetailsActivity extends AppCompatActivity {
         txt_delivery_date = findViewById(R.id.txt_delivery_date);
         txt_customer_name = findViewById(R.id.txt_customer_name);
         txt_customer_phone = findViewById(R.id.txt_customer_phone);
+        txt_restaurant_name = findViewById(R.id.txt_restaurant_name);
+        txt_restaurant_phone = findViewById(R.id.txt_restaurant_phone);
+        txt_restaurant_address = findViewById(R.id.txt_restaurant_address);
         txt_state_history = findViewById(R.id.txt_state_history);
         txt_address = findViewById(R.id.txt_address);
         txt_notes = findViewById(R.id.txt_notes);
@@ -55,9 +62,13 @@ public class DeliveryRequestDetailsActivity extends AppCompatActivity {
         txt_delivery_date.setText(selectedDeliveryRequest.getDelivery_date());
         txt_customer_name.setText(selectedDeliveryRequest.getCustomer_name());
         txt_customer_phone.setText(Html.fromHtml("<u>" + selectedDeliveryRequest.getCustomer_phone() + "<u/>"));
+        txt_restaurant_name.setText(selectedDeliveryRequest.getRestaurant_name());
+        txt_restaurant_phone.setText(Html.fromHtml("<u>" + selectedDeliveryRequest.getRestaurant_phone() + "<u/>"));
+        txt_restaurant_address.setText(selectedDeliveryRequest.getRestaurant_address());
         txt_address.setText(selectedDeliveryRequest.getAddress());
         txt_notes.setText(selectedDeliveryRequest.getNotes());
         txt_state_history.setText(selectedDeliveryRequest.getStateHistoryToString());
+        Log.d("XX", selectedDeliveryRequest.getStateHistoryToString());
         txt_request_id.setText(selectedDeliveryRequest.getId());
     }
 
@@ -85,6 +96,7 @@ public class DeliveryRequestDetailsActivity extends AppCompatActivity {
     private void positiveButtonAction() {
         if (inputDeliveryRequest.moveToNextState()) {
             txt_state_history.setText(inputDeliveryRequest.getStateHistoryToString());
+            Log.d("XX", inputDeliveryRequest.getStateHistoryToString());
 
             if (inputDeliveryRequest.getCurrentState() == inputDeliveryRequest.STATE3) {
                 btn_next_state.setTextColor(getResources().getColor(R.color.button_disabled_text));
@@ -113,6 +125,18 @@ public class DeliveryRequestDetailsActivity extends AppCompatActivity {
         return true;
     }
 
+    private void setActionDialIntents(){
+        txt_customer_phone.setOnClickListener(v -> {
+            String phoneNumber = ((TextView) v).getText().toString();
+            startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
+        });
+        txt_restaurant_phone.setOnClickListener(v -> {
+            String phoneNumber = ((TextView) v).getText().toString();
+            startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
+        });
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,10 +146,7 @@ public class DeliveryRequestDetailsActivity extends AppCompatActivity {
 
         locateViews();
 
-        txt_customer_phone.setOnClickListener(v -> {
-            String phoneNumber = ((TextView) v).getText().toString();
-            startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
-        });
+        setActionDialIntents();
 
         if (!TextUtils.isEmpty(getIntent().getStringExtra("id"))) {
             btn_next_state.setOnClickListener(v -> {

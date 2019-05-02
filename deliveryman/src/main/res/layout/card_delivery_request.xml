@@ -5,10 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    card_view:cardCornerRadius="4dp"
+    card_view:cardCornerRadius="16dp"
     card_view:cardElevation="8dp"
     card_view:cardPreventCornerOverlap="true"
-    card_view:cardUseCompatPadding="true">
+    card_view:cardUseCompatPadding="true"
+    android:layout_marginBottom="8dp"
+    android:layout_marginRight="4dp"
+    android:layout_marginLeft="4dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,7 +27,7 @@
             android:layout_marginTop="24dp"
             android:padding="8dp"
             android:text="@string/time"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Display2"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
             android:textColor="@color/textPrimary"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
@@ -38,7 +41,6 @@
             android:layout_marginBottom="32dp"
             android:padding="4dp"
             android:text="@string/delivery_time"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             card_view:layout_constraintEnd_toEndOf="@+id/txt_delivery_time"
             card_view:layout_constraintStart_toStartOf="@+id/txt_delivery_time"
             card_view:layout_constraintTop_toBottomOf="@+id/txt_delivery_time" />
@@ -47,11 +49,10 @@
             android:id="@+id/label_delivery_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="4dp"
             android:text="@string/delivery_date"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             card_view:layout_constraintStart_toEndOf="@+id/txt_delivery_time"
             card_view:layout_constraintTop_toTopOf="parent" />
 
@@ -60,18 +61,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/delivery_date"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             card_view:layout_constraintStart_toStartOf="@+id/label_delivery_date"
             card_view:layout_constraintTop_toBottomOf="@+id/label_delivery_date" />
 
-        <TextView
+        <!--<TextView
             android:id="@+id/label_customer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="Customer Name"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            card_view:layout_constraintStart_toStartOf="@+id/txt_state"
-            card_view:layout_constraintTop_toBottomOf="@+id/txt_state" />
+            card_view:layout_constraintStart_toStartOf="@+id/txt_address"
+            card_view:layout_constraintTop_toBottomOf="@+id/txt_address" />
 
         <TextView
             android:id="@+id/txt_customer_name"
@@ -81,7 +82,7 @@
             android:text="Customer Name"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintStart_toStartOf="@+id/label_customer_name"
-            card_view:layout_constraintTop_toBottomOf="@+id/label_customer_name" />
+            card_view:layout_constraintTop_toBottomOf="@+id/label_customer_name" />-->
 
         <TextView
             android:id="@+id/label_address"
@@ -89,15 +90,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="Delivery Address"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             card_view:layout_constraintStart_toStartOf="@+id/txt_delivery_date"
             card_view:layout_constraintTop_toBottomOf="@+id/txt_delivery_date" />
 
         <TextView
             android:id="@+id/txt_address"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
             android:text="Delivery Address"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintHorizontal_bias="0.0"
             card_view:layout_constraintStart_toStartOf="@+id/label_address"
             card_view:layout_constraintTop_toBottomOf="@+id/label_address" />
 
@@ -105,19 +110,66 @@
             android:id="@+id/label_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:text="State"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            card_view:layout_constraintStart_toStartOf="@+id/txt_address"
-            card_view:layout_constraintTop_toBottomOf="@+id/txt_address" />
+            card_view:layout_constraintStart_toStartOf="@+id/txt_state"
+            card_view:layout_constraintTop_toTopOf="@+id/label_delivery_date" />
 
         <TextView
             android:id="@+id/txt_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:text="State"
-            card_view:layout_constraintStart_toStartOf="@+id/label_state"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/label_state" />
+
+        <TextView
+            android:id="@+id/label_restaurant_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/restaurant_name"
+            card_view:layout_constraintStart_toStartOf="@+id/txt_address"
+            card_view:layout_constraintTop_toBottomOf="@+id/txt_address" />
+
+        <TextView
+            android:id="@+id/txt_restaurant_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:text="@string/restaurant_name"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintHorizontal_bias="0.0"
+            card_view:layout_constraintStart_toStartOf="@+id/label_restaurant_name"
+            card_view:layout_constraintTop_toBottomOf="@+id/label_restaurant_name" />
+
+        <TextView
+            android:id="@+id/label_restaurant_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/restaurant_address"
+            card_view:layout_constraintStart_toStartOf="@+id/label_restaurant_name"
+            card_view:layout_constraintTop_toBottomOf="@+id/txt_restaurant_name" />
+
+        <TextView
+            android:id="@+id/txt_restaurant_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/restaurant_address"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintHorizontal_bias="0.0"
+            card_view:layout_constraintStart_toStartOf="@+id/label_restaurant_address"
+            card_view:layout_constraintTop_toBottomOf="@+id/label_restaurant_address" />
 
 
     </android.support.constraint.ConstraintLayout>
