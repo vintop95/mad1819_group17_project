@@ -35,7 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Arrays;
 import java.util.Locale;
 
-import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.DeliveryRequest;
+import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.DeliveryRequestDetailsActivity;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.DeliveryRequestsFragment;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.profile.EditProfileActivity;

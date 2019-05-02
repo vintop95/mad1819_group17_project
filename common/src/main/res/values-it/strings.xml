@@ -22,6 +22,14 @@
     <string name="order_number">Numero Ordine</string>
     <string name="total_items">Totale Articoli</string>
 
+    <!-- Delivery Request -->
+    <string name="restaurant_name">Nome Ristorante</string>
+    <string name="restaurant_phone">Telefono Ristorante</string>
+    <string name="restaurant_address">Indirizzo Ristorante</string>
+    <string name="customer_phone">Telefono Cliente</string>
+    <string name="customer_name">Nome Cliente</string>
+
+
 
     <!-- Order Details Strings -->
     <string name="title_activity_order_details">Dettagli Ordine</string>

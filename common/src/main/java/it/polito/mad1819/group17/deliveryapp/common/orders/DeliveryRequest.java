@@ -1,5 +1,7 @@
 package it.polito.mad1819.group17.deliveryapp.common.orders;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,12 +22,15 @@ public class DeliveryRequest implements Serializable {
     private String timestamp;
     private HashMap<String, String> state_stateTime;
     private String notified = "no";
+    private String restaurant_name;
+    private String restaurant_phone;
+    private String restaurant_address;
 
     public DeliveryRequest() {
 
     }
 
-    public DeliveryRequest(String address, String customer_name, String customer_phone, String notes, String sorting_field, String timestamp, HashMap<String, String> state_stateTime) {
+    public DeliveryRequest(String address, String customer_name, String customer_phone, String notes, String sorting_field, String timestamp, HashMap<String, String> state_stateTime, String restaurant_name, String restaurant_phone, String restaurant_address) {
         this.address = address;
         this.customer_name = customer_name;
         this.customer_phone = customer_phone;
@@ -33,6 +38,33 @@ public class DeliveryRequest implements Serializable {
         this.sorting_field = sorting_field;
         this.timestamp = timestamp;
         this.state_stateTime = state_stateTime;
+        this.restaurant_name = restaurant_name;
+        this.restaurant_phone = restaurant_phone;
+        this.restaurant_address = restaurant_address;
+    }
+
+    public String getRestaurant_name() {
+        return restaurant_name;
+    }
+
+    public void setRestaurant_name(String restaurant_name) {
+        this.restaurant_name = restaurant_name;
+    }
+
+    public String getRestaurant_phone() {
+        return restaurant_phone;
+    }
+
+    public void setRestaurant_phone(String restaurant_phone) {
+        this.restaurant_phone = restaurant_phone;
+    }
+
+    public String getRestaurant_address() {
+        return restaurant_address;
+    }
+
+    public void setRestaurant_address(String restaurant_address) {
+        this.restaurant_address = restaurant_address;
     }
 
     public String getNotified() {
@@ -160,6 +192,7 @@ public class DeliveryRequest implements Serializable {
                 this.sorting_field = "state3_" + this.sorting_field.split("_")[1];
             }
             return true;
+
         }
     }
 }

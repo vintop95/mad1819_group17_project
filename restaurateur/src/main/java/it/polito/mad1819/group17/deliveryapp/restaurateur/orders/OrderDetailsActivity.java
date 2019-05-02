@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Random;
 
 import it.polito.mad1819.group17.deliveryapp.common.Deliveryman;
+import it.polito.mad1819.group17.deliveryapp.common.Restaurateur;
 import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
@@ -43,6 +44,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
     public final static int STATE_CHANGED = 1;
     public final static int STATE_NOT_CHANGED = 0;
+
+    private Restaurateur currentRestaurateur;
 
     private TextView txt_restaurant_name;
     private TextView txt_delivery_time;
@@ -99,7 +102,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
             ShoppingItem shoppingItem = selectedOrder.getItem_itemDetails().get(item);
             order_content += "x" + shoppingItem.getQuantity()
                     + " " + item
-                    + " - " + CurrencyHelper.getCurrency(shoppingItem.getPrice()*shoppingItem.getQuantity());
+                    + " - " + CurrencyHelper.getCurrency(shoppingItem.getPrice() * shoppingItem.getQuantity());
         }
         txt_order_content.setText(order_content);
 
@@ -141,29 +144,29 @@ public class OrderDetailsActivity extends AppCompatActivity {
     private final static String FIREBASE_ORDERS = "orders";
 
     private String getRestaurateurOrdersPath(String restaurateurId, String orderId) {
-        return "restaurateurs/" + restaurateurId + "/" + FIREBASE_ORDERS + "/" + orderId ;
+        return "restaurateurs/" + restaurateurId + "/" + FIREBASE_ORDERS + "/" + orderId;
     }
 
     private String getCustomerOrdersPath(String customerId, String orderId) {
-        return "customers/" + customerId + "/" + FIREBASE_ORDERS + "/" + orderId ;
+        return "customers/" + customerId + "/" + FIREBASE_ORDERS + "/" + orderId;
     }
 
     private static void handleCompletionListener
             (Context context, @Nullable DatabaseError err,
-             @NonNull DatabaseReference ref, String msg){
-        if(err != null){
-            Log.e("FIREBASE_LOG",err.getMessage());
+             @NonNull DatabaseReference ref, String msg) {
+        if (err != null) {
+            Log.e("FIREBASE_LOG", err.getMessage());
             Toast.makeText(context, err.getMessage(), Toast.LENGTH_LONG).show();
-        }else{
+        } else {
             Log.d("FIREBASE_LOG", msg + " " + ref.toString());
         }
     }
 
-    private void updateOrderInFirebase(Order ord){
+    private void updateOrderInFirebase(Order ord) {
         String userId = FirebaseAuth.getInstance().getUid();
         if (userId == null) throw new IllegalArgumentException("user id is not set");
 
-        if (! TextUtils.isEmpty(ord.getCustomer_id())) {
+        if (!TextUtils.isEmpty(ord.getCustomer_id())) {
             DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
 
             Map<String, Object> insertedOrderData = new HashMap<>();
@@ -176,7 +179,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
                             err, ref, "Updated order " + ord.getId() + " in customer and restaurateur of ")
             );
 
-        } else{
+        } else {
             Toast.makeText(getApplicationContext(),
                     "Customer id was not set, customer order not updated",
                     Toast.LENGTH_SHORT).show();
@@ -204,6 +207,58 @@ public class OrderDetailsActivity extends AppCompatActivity {
         setResult(STATE_NOT_CHANGED);
     }
 
+    private void retrieveCurrentRestaurateur(Deliveryman selectedDeliveryman) {
+        FirebaseDatabase.getInstance().getReference().child("restaurateurs")
+                .child(FirebaseAuth.getInstance().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                currentRestaurateur = dataSnapshot.getValue(Restaurateur.class);
+
+
+                // create the new delivery request
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                String currentTimestamp = formatter.format(new Date());
+                HashMap<String, String> state_stateTime = new HashMap<String, String>();
+                state_stateTime.put("state1", currentTimestamp);
+                DeliveryRequest newDeliveryRequest = new DeliveryRequest(
+                        inputOrder.getDelivery_address(),
+                        inputOrder.getCustomer_name(),
+                        inputOrder.getCustomer_phone(),
+                        "note...",
+                        "state0_" + inputOrder.getDelivery_timestamp(),
+                        inputOrder.getDelivery_timestamp(),
+                        state_stateTime,
+                        currentRestaurateur.getName(),
+                        currentRestaurateur.getPhone(),
+                        currentRestaurateur.getAddress()
+                );
+
+                // send delivery request to the rider
+                String newDeliveryRequestKey = FirebaseDatabase.getInstance().getReference()
+                        .child("deliverymen").child(selectedDeliveryman.getId())
+                        .child("delivery_requests").push().getKey();
+                FirebaseDatabase.getInstance().getReference().child("deliverymen")
+                        .child(selectedDeliveryman.getId()).child("delivery_requests")
+                        .child(newDeliveryRequestKey).setValue(newDeliveryRequest);
+
+                // update the order with deliveryman's information
+                inputOrder.setDeliveryman_id(selectedDeliveryman.getId());
+                inputOrder.setDeliveryman_name(selectedDeliveryman.getName());
+                inputOrder.setDeliveryman_phone(selectedDeliveryman.getPhone());
+                updateOrderInFirebase(inputOrder);
+
+                // update UI
+                txt_deliveryman_name.setText(inputOrder.getDeliveryman_name());
+                txt_deliveryman_phone.setText(Html.fromHtml("<u>" + inputOrder.getDeliveryman_phone() + "<u/>"));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void selectDeliveryman() {
 
         //choose rider from firebase
@@ -225,6 +280,9 @@ public class OrderDetailsActivity extends AppCompatActivity {
                     i++;
                 }
 
+                retrieveCurrentRestaurateur(selectedDeliveryman);
+
+                /*
                 // create the new delivery request
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
                 String currentTimestamp = formatter.format(new Date());
@@ -237,7 +295,10 @@ public class OrderDetailsActivity extends AppCompatActivity {
                         "note...",
                         "state0_" + inputOrder.getDelivery_timestamp(),
                         inputOrder.getDelivery_timestamp(),
-                        state_stateTime
+                        state_stateTime,
+                        currentRestaurateur.getName(),
+                        currentRestaurateur.getPhone(),
+                        currentRestaurateur.getAddress()
                 );
 
                 // send delivery request to the rider
@@ -256,12 +317,12 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
                 // update UI
                 txt_deliveryman_name.setText(inputOrder.getDeliveryman_name());
-                txt_deliveryman_phone.setText(Html.fromHtml("<u>" + inputOrder.getDeliveryman_phone() + "<u/>"));
-                txt_deliveryman_phone.setOnClickListener(v -> {
+                txt_deliveryman_phone.setText(Html.fromHtml("<u>" + inputOrder.getDeliveryman_phone() + "<u/>"));*/
+                /*txt_deliveryman_phone.setOnClickListener(v -> {
                     String phoneNumber = ((TextView) v).getText().toString();
-                    startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
-                });
-            }
+                    startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));*/
+                }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

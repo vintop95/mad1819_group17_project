@@ -23,6 +23,13 @@
     <string name="order_number">Order Number</string>
     <string name="total_items">Total Items</string>
 
+    <!-- Delivery Request -->
+    <string name="restaurant_name">Restaurant Name</string>
+    <string name="restaurant_phone">Restaurant Phone</string>
+    <string name="restaurant_address">Restaurant Address</string>
+    <string name="customer_phone">Customer Phone</string>
+    <string name="customer_name">Customer Name</string>
+
 
     <!-- Order Details Strings -->
     <string name="title_activity_order_details">Order Details</string>
@@ -33,6 +40,8 @@
     <string name="icon_content" translatable="false">Icon Content</string>
     <string name="icon_history" translatable="false">Icon History</string>
     <string name="icon_rider" translatable="false">Icon Rider</string>
+    <string name="icon_restaurant" translatable="false">Icon Restaurant</string>
+
     <!-- Labels -->
     <string name="name_label">Name:</string>
     <string name="phone_label">Phone:</string>
