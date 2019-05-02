@@ -16,9 +16,6 @@ public class Order implements Serializable {
     private String customer_id = "";
 
     private String restaurant_name = "";
-
-
-
     private String restaurant_phone = "";
     private String restaurant_address = "";
 

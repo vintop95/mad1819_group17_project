@@ -68,7 +68,7 @@ public class ShoppingCart {
     public HashMap<String,ShoppingItem> getItemsMap() {
         HashMap<String,ShoppingItem> retValue = new HashMap<>();
         for (ShoppingItem item : this.items){
-            retValue.put(item.getName(), item);
+            retValue.put(item.getId(), item);
         }
         return retValue;
     }

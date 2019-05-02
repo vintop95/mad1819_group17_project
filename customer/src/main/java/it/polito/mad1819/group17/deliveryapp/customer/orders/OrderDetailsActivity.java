@@ -80,7 +80,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
             ShoppingItem shoppingItem = selectedOrder.getItem_itemDetails().get(item);
             order_content += "x" + shoppingItem.getQuantity()
-                    + " " + item
+                    + " " + shoppingItem.getName()
                     + " - " + CurrencyHelper.getCurrency(shoppingItem.getPrice()*shoppingItem.getQuantity());
         }
         txt_order_content.setText(order_content);

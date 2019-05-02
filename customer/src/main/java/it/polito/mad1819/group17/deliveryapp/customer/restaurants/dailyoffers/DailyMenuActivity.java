@@ -120,41 +120,18 @@ public class DailyMenuActivity extends AppCompatActivity {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        private ImageView addButton;
+        private ImageView subtractButton;
         public TextView title;
         public TextView desc;
         public TextView priceFormatted;
         public ImageView photo;
+        public TextView orderedQty;
+        public TextView availableQty;
+
+        public String id;
         public double priceDouble;
-
         int countAdded = 0;
-        private ImageView addButton;
-        private ImageView subtractButton;
-
-        public void setTitle(String title) {
-            this.title.setText(title);
-        }
-
-        public void setDesc(String desc) {
-            Log.d("ffff", desc);
-            this.desc.setText(desc);
-        }
-
-        // public void setPrice(String price) {
-        //     this.priceFormatted.setText(price);
-        // }
-
-        public void setPrice(double price){
-            this.priceDouble = price;
-            this.priceFormatted.setText(CurrencyHelper.getCurrency(priceDouble));
-        }
-
-        public void setPhoto(String photo) {
-            Bitmap bmp;
-            if (photo != null) {
-                bmp = stringToBitMap(photo);
-                this.photo.setImageBitmap(bmp);
-            }
-        }
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -164,36 +141,114 @@ public class DailyMenuActivity extends AppCompatActivity {
             priceFormatted = itemView.findViewById(R.id.if_price);
             addButton = itemView.findViewById(R.id.if_add_button);
             subtractButton = itemView.findViewById(R.id.if_subtract_button);
+            availableQty = itemView.findViewById(R.id.if_available_qty);
+            orderedQty = itemView.findViewById(R.id.if_ordered_qty);
+            setOrderedQty(countAdded);
+        }
+
+        public void setData(FoodItemModel model){
+            this.id = model.getId();
+            setDesc(model.getDescription());
+            setPhoto(model.getPhoto());
+            setTitle(model.getTitle());
+            setPrice(Double.valueOf(model.getPrice()));
+            setAvailableQty(model.getAvailableQty());
+
+            while(countAdded > model.getAvailableQty() && removeItemFromCart());
+            if (countAdded < getAvailableQty()) addButton.setVisibility(View.VISIBLE);
+            if (countAdded > 0) subtractButton.setVisibility(View.VISIBLE);
+
             addButton.setOnClickListener((View v) -> {
-                Toast.makeText(v.getContext(), "1 " + title.getText() + " "
-                        + getApplicationContext().getString(R.string.added), Toast.LENGTH_SHORT).show();
-
-                shoppingCart.add(new ShoppingItem(title.getText().toString(),priceDouble,1));
-                countAdded++;
-                subtractButton.setVisibility(View.VISIBLE);
-
-                updateToolbarText(shoppingCart.getCounter());
-                somethingAdded=true;
+                if (addItemInCart()) {
+                    Toast.makeText(v.getContext(), "1 " + title.getText() + " "
+                            + getApplicationContext().getString(R.string.added), Toast.LENGTH_SHORT).show();
+                }
             });
+
             subtractButton.setOnClickListener((View v) -> {
-                Toast.makeText(v.getContext(), "1 " + title.getText() + " "
-                        + getString(R.string.removed), Toast.LENGTH_SHORT).show();
-
-                shoppingCart.remove(new ShoppingItem(title.getText().toString(),priceDouble,1));
-                countAdded--;
-                if(countAdded <= 0) subtractButton.setVisibility(View.GONE);
-
-                updateToolbarText(shoppingCart.getCounter());
+                if (removeItemFromCart()) {
+                    Toast.makeText(v.getContext(), "1 " + title.getText() + " "
+                            + getString(R.string.removed), Toast.LENGTH_SHORT).show();
+                }
             });
         }
 
+        // false if trying to add more than possible
+        private boolean addItemInCart(){
+            if(countAdded >= getAvailableQty()){
+                return false;
+            }
+
+            shoppingCart.add(new ShoppingItem(id, title.getText().toString(),priceDouble,1));
+            countAdded++;
+            setOrderedQty(countAdded);
+            if (countAdded > 0) subtractButton.setVisibility(View.VISIBLE);
+            if (countAdded >= getAvailableQty()) addButton.setVisibility(View.INVISIBLE);
+
+            updateToolbarText(shoppingCart.getCounter());
+            somethingAdded=true;
+            return true;
+        }
+
+        // false if trying to remove more than possible
+        private boolean removeItemFromCart(){
+            if(countAdded <= 0){
+                return false;
+            }
+
+            shoppingCart.remove(new ShoppingItem(id, title.getText().toString(),priceDouble,1));
+            countAdded--;
+            setOrderedQty(countAdded);
+            if (countAdded < getAvailableQty()) addButton.setVisibility(View.VISIBLE);
+            if (countAdded <= 0) subtractButton.setVisibility(View.GONE);
+
+            updateToolbarText(shoppingCart.getCounter());
+            return true;
+        }
+
+        private Integer getAvailableQty(){
+            return Integer.parseInt(availableQty.getText().toString());
+        }
+
+        private void setAvailableQty(Integer availableQty) {
+            String avQty = "0";
+            if(availableQty != null) avQty = availableQty.toString();
+            this.availableQty.setText(avQty);
+        }
+
+        private void setOrderedQty(Integer orderedQty) {
+            // confronta orderedQty e countadded
+            String ordQty = "0";
+            if(orderedQty != null) ordQty = orderedQty.toString();
+            this.orderedQty.setText("(" + ordQty + ")");
+        }
+
+        private void setTitle(String title) {
+            this.title.setText(title);
+        }
+
+        private void setDesc(String desc) {
+            this.desc.setText(desc);
+        }
+
+        private void setPrice(double price){
+            this.priceDouble = price;
+            this.priceFormatted.setText(CurrencyHelper.getCurrency(priceDouble));
+        }
+
+        private void setPhoto(String photo) {
+            Bitmap bmp;
+            if (photo != null) {
+                bmp = stringToBitMap(photo);
+                this.photo.setImageBitmap(bmp);
+            }
+        }
     }
 
     private void updateToolbarText(int i) {
         TextView counter = findViewById(R.id.shoppingcart_counter);
         counter.setText(Integer.toString(i));
     }
-
 
     private void fetch() {
         DatabaseReference ref = FirebaseDatabase.getInstance()
@@ -208,12 +263,17 @@ public class DailyMenuActivity extends AppCompatActivity {
                             @Override
                             public FoodItemModel parseSnapshot(@NonNull DataSnapshot snapshot) {
                                 Log.d("ff", snapshot.getKey());
+                                Double priceDbl = snapshot.child("price").getValue(Double.class);
+                                String price = "0";
+                                if (priceDbl != null ) price = priceDbl.toString();
+
                                 return new FoodItemModel(
                                         (String) snapshot.getKey(),
                                         snapshot.child("name").getValue(String.class),
                                         snapshot.child("description").getValue(String.class),
                                         snapshot.child("photo").getValue(String.class),
-                                        snapshot.child("price").getValue(Double.class).toString()
+                                        price,
+                                        snapshot.child("availableQty").getValue(Integer.class)
                                 );
                             }
                         })
@@ -233,10 +293,7 @@ public class DailyMenuActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(ViewHolder holder, final int position, FoodItemModel model) {
                 Log.d("fff", model.getDescription() + "," + model.getTitle() + "," + model.getPrice() + "," + model.getId());
-                holder.setDesc(model.getDescription());
-                holder.setPhoto(model.getPhoto());
-                holder.setTitle(model.getTitle());
-                holder.setPrice(Double.valueOf(model.getPrice()));
+                holder.setData(model);
             }
 
         };
@@ -290,6 +347,7 @@ public class DailyMenuActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_ORDER_CONFIRM) {
             if (resultCode == RESULT_OK) {
+                setResult(RESULT_OK);
                 finish();
             }
         }

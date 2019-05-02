@@ -22,6 +22,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -36,6 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
+import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 
@@ -62,8 +65,8 @@ public class OrderConfirmActivity extends AppCompatActivity {
     private String name;
     private ProgressBarHandler pbHandler;
 
-    private ArrayList<String> keys;
-    private ArrayList<ShoppingItem> values;
+    private ArrayList<String> itemIds;
+    private ArrayList<ShoppingItem> itemValues;
 
     ListView lst;
 
@@ -108,20 +111,22 @@ public class OrderConfirmActivity extends AppCompatActivity {
         if (restaurant_id == null) throw new IllegalStateException("restaurant_id must not be null!");
 
         itemsMap = (HashMap<String, ShoppingItem>) intent.getSerializableExtra("itemsMap");
-        retrieveData();
-        keys = new ArrayList<String>(itemsMap.keySet());
-        values = new ArrayList<ShoppingItem>(itemsMap.values());
+        retrieveCustomerInfo();
+        itemIds = new ArrayList<String>(itemsMap.keySet());
+        itemValues = new ArrayList<ShoppingItem>(itemsMap.values());
 
+        ArrayList<String> arrNames = new ArrayList<>();
         ArrayList<Integer> arrQuantities = new ArrayList<>();
         ArrayList<Double> arrPrices = new ArrayList<>();
         for(ShoppingItem details: itemsMap.values()){
+            arrNames.add(details.getName());
             arrQuantities.add(details.getQuantity());
             arrPrices.add(details.getPrice());
         }
 
-        String[] names = keys.toArray(new String[keys.size()]);
-        Integer[] quantities = arrQuantities.toArray(new Integer[values.size()]);
-        Double[] prices = arrPrices.toArray(new Double[values.size()]);
+        String[] names = arrNames.toArray(new String[itemValues.size()]);
+        Integer[] quantities = arrQuantities.toArray(new Integer[itemValues.size()]);
+        Double[] prices = arrPrices.toArray(new Double[itemValues.size()]);
 
         Log.d("elem_quantities", Integer.toString(quantities.length));
         Log.d("elem_names", Integer.toString(names.length));
@@ -145,58 +150,117 @@ public class OrderConfirmActivity extends AppCompatActivity {
         Calendar now = Calendar.getInstance();
         now.add(Calendar.MINUTE, 60);
         Date oneHourFromNow = now.getTime();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm", Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String oneHourFromNowString = simpleDateFormat.format(oneHourFromNow);
         deliveryHour_edit.setText(oneHourFromNowString);
 
         btnConfirmOrder.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(itemquantity <= 0){
-                    Toast.makeText(getApplicationContext(),
-                            getApplicationContext().getString(R.string.shopping_cart_empty),
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                Order ord = new Order();
-                ord.setCustomer_id(customer_id);
-                ord.setRestaurant_id(restaurant_id);
-
-                HashMap<String,String> state_stateTime = new HashMap<>();
-                SimpleDateFormat simpleDateFormat =
-                        new SimpleDateFormat("yyyy/MM/dd hh:mm", Locale.getDefault());
-                String current_timestamp = simpleDateFormat.format(new Date());
-                String day = current_timestamp.split(" ")[0];
-                String delivery_timestamp = day+" "+deliveryHour_edit.getText().toString();
-
-                state_stateTime.put("state1",current_timestamp);
-                DatabaseReference customerReference = FirebaseDatabase.getInstance().getReference()
-                        .child("customers")
-                        .child(customer_id);
-
-                //Filling the order:
-                ord.setState_stateTime(state_stateTime);
-                ord.setSorting_field("state0_"+delivery_timestamp);
-                ord.setCustomer_name(name);
-                ord.setCustomer_phone(phoneNumber);
-                ord.setRestaurant_name(restaurant_name);
-                ord.setRestaurant_address(restaurant_address);
-                ord.setRestaurant_phone(restaurant_phone);
-                //from query
-                ord.setDelivery_timestamp(delivery_timestamp);
-                ord.setDelivery_address(deliveryAddress_edit.getText().toString());
-                ord.setItem_itemDetails(itemsMap);
-                ord.setNotes(txtOrderNotes_edit.getText().toString());
-
-                pushOrderToFirebase(ord);
-                Toast.makeText(getApplicationContext(), getString(R.string.order_confirmed),Toast.LENGTH_LONG).show();
-                setResult(RESULT_OK);
-                finish();
+                confirmOrder(v);
             }
         });
 
         showBackArrowOnToolbar();
+    }
+
+    private Order getOrderToPush(){
+        Order ord = new Order();
+        ord.setCustomer_id(customer_id);
+        ord.setRestaurant_id(restaurant_id);
+
+        HashMap<String,String> state_stateTime = new HashMap<>();
+        SimpleDateFormat simpleDateFormat =
+                new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault());
+        String current_timestamp = simpleDateFormat.format(new Date());
+        String day = current_timestamp.split(" ")[0];
+        String delivery_timestamp = day+" "+deliveryHour_edit.getText().toString();
+        state_stateTime.put("state1",current_timestamp);
+
+        //Filling the order:
+        ord.setState_stateTime(state_stateTime);
+        ord.setSorting_field("state0_"+delivery_timestamp);
+        ord.setCustomer_name(name);
+        ord.setCustomer_phone(phoneNumber);
+        ord.setRestaurant_name(restaurant_name);
+        ord.setRestaurant_address(restaurant_address);
+        ord.setRestaurant_phone(restaurant_phone);
+        //from query
+        ord.setDelivery_timestamp(delivery_timestamp);
+        ord.setDelivery_address(deliveryAddress_edit.getText().toString());
+        ord.setItem_itemDetails(itemsMap);
+        ord.setNotes(txtOrderNotes_edit.getText().toString());
+
+        return ord;
+    }
+
+    private void confirmOrder(View v){
+        // If shopping cart is empty don't send the order
+        if(itemquantity <= 0){
+            Toast.makeText(getApplicationContext(),
+                    getApplicationContext().getString(R.string.shopping_cart_empty),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Must be done first in order to have a lighter transaction
+        Order ord = getOrderToPush();
+
+        // Check if there is enough available qty for the order
+        if (TextUtils.isEmpty(restaurant_id)) throw new IllegalStateException("rest_id null!");
+        DatabaseReference dailyOffersRef = FirebaseDatabase.getInstance().getReference()
+                .child("restaurateurs")
+                .child(restaurant_id)
+                .child(FIREBASE_DAILY_OFFERS);
+
+        dailyOffersRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+
+                // Check and update availableQty for each item
+                for(String itemId: itemsMap.keySet()){
+                    MutableData currentQtyRef = mutableData.child(itemId).child("availableQty");
+
+                    Integer availableQty = currentQtyRef.getValue(Integer.class);
+                    Integer orderedQty = itemsMap.get(itemId).getQuantity();
+
+                    // may be null but doTransaction will be called more than once
+                    if(availableQty == null) return Transaction.success(mutableData);
+
+                    if(availableQty < orderedQty){
+                        return Transaction.abort();
+                    }else{
+                        int newQty = availableQty - orderedQty;
+                        if(newQty >= 0) currentQtyRef.setValue(newQty);
+                        else return Transaction.abort();
+                    }
+                }
+
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean committed,
+                                   DataSnapshot currentData) {
+                // Transaction completed
+                Log.d("ORDER_CONFIRM",
+                        "postTransaction:onComplete:" + databaseError);
+
+                // Push the order to get an id if quantites were reduced in a correct way
+                if(committed){
+                    pushOrderToFirebase(ord);
+                    setResult(RESULT_OK);
+                    finish();
+                } else{
+                    PopupHelper.showToast(
+                            OrderConfirmActivity.this.getApplicationContext(),
+                            getString(R.string.error_transaction_push_order));
+                    setResult(RESULT_CANCELED);
+                    finish();
+                }
+
+            }
+        });
     }
 
     private void initFetchHandler(){
@@ -214,20 +278,26 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
     ////////////////// FIREBASE ORDER MGMT ////////////////////////////////////
     private final static String FIREBASE_ORDERS = "orders";
+    private final static String FIREBASE_DAILY_OFFERS = "daily_offers";
 
-    public DatabaseReference getRestaurateurOrdersRef() {
-        if(TextUtils.isEmpty(restaurant_id)){
+    public String getRestaurateurOrdersPath(@Nullable String orderId) {
+        if (TextUtils.isEmpty(restaurant_id)) {
             throw new IllegalStateException("restaurateur_id is NULL!!!");
         }
 
-        return FirebaseDatabase.getInstance().getReference()
-                .child("restaurateurs")
-                .child(restaurant_id)
-                .child(FIREBASE_ORDERS);
+        String path = "restaurateurs/" + restaurant_id + "/" + FIREBASE_ORDERS;
+        if (!TextUtils.isEmpty(orderId)) path = path + "/" + orderId;
+        return path;
     }
 
-    public String getRestaurateurOrdersPath(@NonNull String orderId) {
-        return "restaurateurs/" + restaurant_id + "/" + FIREBASE_ORDERS + "/" + orderId;
+    public String getCustomerOrdersPath(@Nullable String orderId) {
+        if(TextUtils.isEmpty(customer_id)){
+            throw new IllegalStateException("customer_id is NULL!!!");
+        }
+        String path = "customers/" + customer_id + "/" + FIREBASE_ORDERS;
+        if (!TextUtils.isEmpty(orderId)) path = path + "/" + orderId;
+
+        return path;
     }
 
     public DatabaseReference getCustomerOrdersRef() {
@@ -239,10 +309,6 @@ public class OrderConfirmActivity extends AppCompatActivity {
                 .child("customers")
                 .child(customer_id)
                 .child(FIREBASE_ORDERS);
-    }
-
-    public String getCustomerOrdersPath(@NonNull String orderId) {
-        return "customers/" + customer_id + "/" + FIREBASE_ORDERS + "/" + orderId;
     }
 
     private static void handleCompletionListener
@@ -257,7 +323,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
     }
 
     public void pushOrderToFirebase(Order ord){
-        DatabaseReference rootRef =FirebaseDatabase.getInstance().getReference();
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference newCustomerOrderRef = getCustomerOrdersRef().push();
         ord.setId(newCustomerOrderRef.getKey());
 
@@ -272,7 +338,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
         );
     }
 
-    public void retrieveData(){
+    public void retrieveCustomerInfo(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // Name, email address, and profile photo Url

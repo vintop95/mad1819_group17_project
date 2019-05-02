@@ -3,6 +3,7 @@ package it.polito.mad1819.group17.deliveryapp.common.orders;
 import java.io.Serializable;
 
 public class ShoppingItem implements Serializable {
+    private String id = "";
     private String name = "";
     private Double price = 0.0;
     private int quantity = 0;
@@ -10,10 +11,18 @@ public class ShoppingItem implements Serializable {
     public ShoppingItem() {
     }
 
-    public ShoppingItem(String name, Double price, int quantity) {
+    public ShoppingItem(String id, String name, Double price, int quantity) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 
     public int getQuantity() {
@@ -22,7 +31,6 @@ public class ShoppingItem implements Serializable {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
 
     public String getName() {
         return name;
@@ -60,7 +68,7 @@ public class ShoppingItem implements Serializable {
         ShoppingItem otherItem =
                 (ShoppingItem) other;
 
-        return (name.equals(otherItem.name));
+        return (id.equals(otherItem.id));
     }
 
 }

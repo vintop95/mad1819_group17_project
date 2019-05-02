@@ -95,13 +95,13 @@ public class OrderDetailsActivity extends AppCompatActivity {
         txt_order_notes.setText(selectedOrder.getNotes());
 
         String order_content = "";
-        for (String item : selectedOrder.getItem_itemDetails().keySet()) {
+        for (String itemId : selectedOrder.getItem_itemDetails().keySet()) {
             if (!order_content.equals(""))
                 order_content += "\n";
 
-            ShoppingItem shoppingItem = selectedOrder.getItem_itemDetails().get(item);
+            ShoppingItem shoppingItem = selectedOrder.getItem_itemDetails().get(itemId);
             order_content += "x" + shoppingItem.getQuantity()
-                    + " " + item
+                    + " " + shoppingItem.getName()
                     + " - " + CurrencyHelper.getCurrency(shoppingItem.getPrice() * shoppingItem.getQuantity());
         }
         txt_order_content.setText(order_content);

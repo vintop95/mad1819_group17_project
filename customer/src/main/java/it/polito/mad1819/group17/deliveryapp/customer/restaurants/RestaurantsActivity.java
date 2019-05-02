@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,11 +28,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers.DailyMenuActivity;
 
+import static it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers.DailyMenuActivity.RC_ORDER_CONFIRM;
+
 public class RestaurantsActivity extends AppCompatActivity {
+    private final int RC_DAILY_MENU = 0;
+
 
     private String category_selected;
     private RecyclerView recyclerView;
@@ -70,10 +76,10 @@ public class RestaurantsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_restaurants);
+
         intent = getIntent();
         category_selected = intent.getStringExtra("category");
-        Log.d("aaa",category_selected);
-        setContentView(R.layout.activity_restaurants);
 
         pbHandler = new ProgressBarHandler(this);
 
@@ -92,73 +98,6 @@ public class RestaurantsActivity extends AppCompatActivity {
         byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
     }
-
-public class ViewHolder extends RecyclerView.ViewHolder {
-    public LinearLayout root;
-    public TextView name;
-    public TextView bio;
-    public ImageView photo;
-    public TextView address;
-    public TextView avgPrice;
-    public String id;
-    public String phone;
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public ViewHolder(View itemView) {
-        super(itemView);
-        root = itemView.findViewById(R.id.restaurant_root_layout);
-        name = itemView.findViewById(R.id.restaurant_name);
-        bio = itemView.findViewById(R.id.restaurant_bio);
-        photo = itemView.findViewById(R.id.restaurant_image);
-        address = itemView.findViewById(R.id.restaurant_address);
-        avgPrice = itemView.findViewById(R.id.restaurant_avgprice);
-
-        itemView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                int position = getAdapterPosition();
-
-                Context context = v.getContext();
-                Intent intent = new Intent(context, DailyMenuActivity.class);
-                intent.putExtra("id", id);
-                intent.putExtra("name", name.getText());
-                intent.putExtra("address", address.getText());
-                intent.putExtra("phone", phone);
-                // Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
-                startActivity(intent);
-            }
-        });
-    }
-
-
-    public void setName(String name) {
-        this.name.setText(name);
-    }
-
-    public void setBio(String bio) {
-        this.bio.setText(bio);
-    }
-
-    public void setPhoto(String photo) {
-        Bitmap bmp;
-        if(photo != null) {
-            bmp = stringToBitMap(photo);
-            this.photo.setImageBitmap(bmp);
-        }
-    }
-
-    public void setAddress(String address) {
-        this.address.setText(address);
-    }
-
-    public void setPhone(String phone){
-        this.phone = phone;
-    }
-
-}
 
     private void fetch() {
         DatabaseReference ref = FirebaseDatabase.getInstance()
@@ -212,5 +151,82 @@ public class ViewHolder extends RecyclerView.ViewHolder {
             }
         };
         recyclerView.setAdapter(adapter);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public LinearLayout root;
+        public TextView name;
+        public TextView bio;
+        public ImageView photo;
+        public TextView address;
+        public TextView avgPrice;
+        public String id;
+        public String phone;
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            root = itemView.findViewById(R.id.restaurant_root_layout);
+            name = itemView.findViewById(R.id.restaurant_name);
+            bio = itemView.findViewById(R.id.restaurant_bio);
+            photo = itemView.findViewById(R.id.restaurant_image);
+            address = itemView.findViewById(R.id.restaurant_address);
+            avgPrice = itemView.findViewById(R.id.restaurant_avgprice);
+
+            itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    int position = getAdapterPosition();
+
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, DailyMenuActivity.class);
+                    intent.putExtra("id", id);
+                    intent.putExtra("name", name.getText());
+                    intent.putExtra("address", address.getText());
+                    intent.putExtra("phone", phone);
+                    // Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
+                    startActivityForResult(intent, RC_DAILY_MENU);
+                }
+            });
+        }
+
+        public void setName(String name) {
+            this.name.setText(name);
+        }
+
+        public void setBio(String bio) {
+            this.bio.setText(bio);
+        }
+
+        public void setPhoto(String photo) {
+            Bitmap bmp;
+            if(photo != null) {
+                bmp = stringToBitMap(photo);
+                this.photo.setImageBitmap(bmp);
+            }
+        }
+
+        public void setAddress(String address) {
+            this.address.setText(address);
+        }
+
+        public void setPhone(String phone){
+            this.phone = phone;
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_DAILY_MENU) {
+            if (resultCode == RESULT_OK) {
+                PopupHelper.showSnackbar(findViewById(android.R.id.content),
+                        getString(R.string.order_confirmed));
+            }
+        }
     }
 }

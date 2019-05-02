@@ -184,10 +184,11 @@
     <string name="cannot_retrieve_restaurateur_info">Impossibile recuperare le informazioni del ristoratore</string>
     <string name="added">aggiunto</string>
     <string name="removed">rimosso</string>
-    <string name="shopping_cart_exit_warning">Vuoi veramente uscire? Tutti gli oggetti nel carrello saranno rimossi</string>
+    <string name="shopping_cart_exit_warning">Vuoi uscire? Tutti gli oggetti nel carrello saranno rimossi</string>
     <string name="buying_elements_summary">Acquista %d oggetti per il prezzo totale di: %s</string>
     <string name="order_confirmed">Ordine confermato</string>
     <string name="cannot_retrieve_your_address">Impossibile recuperare il tuo indirizzo!</string>
     <string name="cannot_retrieve_your_phone">Impossibile recuperare il tuo telefono dal tuo profilo! Verifica la connessione internet e riprova</string>
+    <string name="error_transaction_push_order">Errore durante la transazione, riprova.</string>
 
 </resources>

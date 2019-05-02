@@ -220,6 +220,7 @@
     <string name="order_confirmed">Order confirmed</string>
     <string name="cannot_retrieve_your_address">Cannot retrieve your address!</string>
     <string name="cannot_retrieve_your_phone">Cannot retrieve your phone from your profile! Check internet connection and retry</string>
+    <string name="error_transaction_push_order">Error during transaction, retry.</string>
 
 
 </resources>
