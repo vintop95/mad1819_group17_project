@@ -3,6 +3,7 @@ package it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +25,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
@@ -31,6 +38,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantProfileActivity;
@@ -147,15 +155,15 @@ public class DailyMenuActivity extends AppCompatActivity {
             setOrderedQty(countAdded);
         }
 
-        public void setData(FoodItemModel model){
-            this.id = model.getId();
-            setDesc(model.getDescription());
-            setPhoto(model.getPhoto());
-            setTitle(model.getTitle());
-            setPrice(Double.valueOf(model.getPrice()));
-            setAvailableQty(model.getAvailableQty());
+        public void setData(FoodModel model){
+            this.id = model.id;
+            setDesc(model.description);
+            setPhoto(model.image_path);
+            setTitle(model.name);
+            setPrice(model.price);
+            setAvailableQty(model.availableQty);
 
-            while(countAdded > model.getAvailableQty() && removeItemFromCart());
+            while(countAdded > model.availableQty && removeItemFromCart());
             if (countAdded < getAvailableQty()) addButton.setVisibility(View.VISIBLE);
             if (countAdded > 0) subtractButton.setVisibility(View.VISIBLE);
 
@@ -237,11 +245,26 @@ public class DailyMenuActivity extends AppCompatActivity {
             this.priceFormatted.setText(CurrencyHelper.getCurrency(priceDouble));
         }
 
-        private void setPhoto(String photo) {
-            Bitmap bmp;
-            if (photo != null) {
-                bmp = stringToBitMap(photo);
-                this.photo.setImageBitmap(bmp);
+        private void setPhoto(String image_path) {
+            if (!TextUtils.isEmpty(image_path)) {
+                Glide.with(photo.getContext())
+                        .load(image_path)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                        Target<Drawable> target, boolean isFirstResource) {
+                                Log.e("ProfileFragment", "Image load failed");
+                                return false; // leave false
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model,
+                                                           Target<Drawable> target, DataSource dataSource,
+                                                           boolean isFirstResource) {
+                                Log.v("ProfileFragment", "Image load OK");
+                                return false; // leave false
+                            }
+                        }).into(photo);
             }
         }
     }
@@ -257,30 +280,31 @@ public class DailyMenuActivity extends AppCompatActivity {
         Log.d("ff", restaurant_id + "..." + restaurant_name);
         Query query = ref.child("restaurateurs").child(restaurant_id).child("daily_offers");
 
-        FirebaseRecyclerOptions<FoodItemModel> options =
-                new FirebaseRecyclerOptions.Builder<FoodItemModel>()
-                        .setQuery(query, new SnapshotParser<FoodItemModel>() {
+        FirebaseRecyclerOptions<FoodModel> options =
+                new FirebaseRecyclerOptions.Builder<FoodModel>()
+                        .setQuery(query, new SnapshotParser<FoodModel>() {
                             @NonNull
                             @Override
-                            public FoodItemModel parseSnapshot(@NonNull DataSnapshot snapshot) {
+                            public FoodModel parseSnapshot(@NonNull DataSnapshot snapshot) {
                                 Log.d("ff", snapshot.getKey());
                                 Double priceDbl = snapshot.child("price").getValue(Double.class);
                                 String price = "0";
                                 if (priceDbl != null ) price = priceDbl.toString();
 
-                                return new FoodItemModel(
-                                        (String) snapshot.getKey(),
-                                        snapshot.child("name").getValue(String.class),
-                                        snapshot.child("description").getValue(String.class),
-                                        snapshot.child("photo").getValue(String.class),
-                                        price,
-                                        snapshot.child("availableQty").getValue(Integer.class)
-                                );
+                                FoodModel foodModel = new FoodModel();
+                                foodModel.id = (String) snapshot.getKey();
+                                foodModel.name = snapshot.child("name").getValue(String.class);
+                                foodModel.description = snapshot.child("description").getValue(String.class);
+                                foodModel.image_path = snapshot.child("image_path").getValue(String.class);
+                                foodModel.price = priceDbl;
+                                foodModel.availableQty = snapshot.child("availableQty").getValue(Integer.class);
+
+                                return foodModel;
                             }
                         })
                         .build();
 
-        adapter = new FirebaseRecyclerAdapter<FoodItemModel, ViewHolder>(options) {
+        adapter = new FirebaseRecyclerAdapter<FoodModel, ViewHolder>(options) {
 
             @Override
             public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -292,8 +316,8 @@ public class DailyMenuActivity extends AppCompatActivity {
 
 
             @Override
-            protected void onBindViewHolder(ViewHolder holder, final int position, FoodItemModel model) {
-                Log.d("fff", model.getDescription() + "," + model.getTitle() + "," + model.getPrice() + "," + model.getId());
+            protected void onBindViewHolder(ViewHolder holder, final int position, FoodModel model) {
+                Log.d("fff", model.description + "," + model.name + "," + model.price + "," + model.id);
                 holder.setData(model);
             }
 

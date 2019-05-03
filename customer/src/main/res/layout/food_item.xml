@@ -24,7 +24,6 @@
             android:layout_margin="8dp"
             android:contentDescription="description"
             android:scaleType="centerCrop"
-            android:src="@drawable/pizza"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

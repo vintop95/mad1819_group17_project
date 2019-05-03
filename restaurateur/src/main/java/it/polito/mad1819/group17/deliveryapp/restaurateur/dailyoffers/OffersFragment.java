@@ -146,24 +146,29 @@ public class OffersFragment extends Fragment {
 
     ////////////////////// OPEN ACTIVITY //////////////////////////////////////////
     private void openFoodDetailsActivityAdd(){
-        Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
+        FoodModel food = new FoodModel();
+        addFoodInList(food);
 
-//        Bitmap img1bmp = BitmapFactory.decodeResource(getResources(), R.drawable.food_photo_1);
-//        String img1 = PrefHelper.bitMapToStringLossJpg(img1bmp);
-//        FoodModel testFood = new FoodModel(mAdapter.getItemCount(), "Crispy bacon",
-//                "carne 500g, provolazza, bacon, insalata", img1,
-//                55.0, 3);
-        Bundle bundle = new Bundle();
-        bundle.putInt("pos", mAdapter.getItemCount());
-        intent.putExtra("args", bundle);
+        openFoodDetailsActivityModify(food,null);
 
-        startActivityForResult(intent, ADD_FOOD_REQUEST);
+//        Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
+//
+////        Bitmap img1bmp = BitmapFactory.decodeResource(getResources(), R.drawable.food_photo_1);
+////        String img1 = PrefHelper.bitMapToStringLossJpg(img1bmp);
+////        FoodModel testFood = new FoodModel(mAdapter.getItemCount(), "Crispy bacon",
+////                "carne 500g, provolazza, bacon, insalata", img1,
+////                55.0, 3);
+//        Bundle bundle = new Bundle();
+//        bundle.putInt("pos", mAdapter.getItemCount());
+//        intent.putExtra("args", bundle);
+//
+//        startActivityForResult(intent, ADD_FOOD_REQUEST);
     }
 
     private View btnEditItem;
 
     public void openFoodDetailsActivityModify(FoodModel foodToModify, View v){
-        btnEditItem = v;
+        if(v != null) btnEditItem = v;
 
         Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
 
@@ -190,7 +195,8 @@ public class OffersFragment extends Fragment {
                     modifyItem(modifiedFood);
                 }
             }
-            btnEditItem.setEnabled(true);
+            if(btnEditItem != null) btnEditItem.setEnabled(true);
+            btnAddOffer.setEnabled(true);
         }
     }
 }

@@ -1,23 +1,40 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffers;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -99,9 +116,27 @@ public class FoodDetailsActivity extends AppCompatActivity {
             mFields.add(new ListItem(LABEL_FOOD_AVAILABLE_QTY, Integer.toString(selFood.availableQty)));
         }
 
-        String photoString = selFood.photo;
-        Bitmap photoBmp = PrefHelper.stringToBitMap(photoString);
-        img_food_photo.setImageBitmap(photoBmp);
+        // Load image
+        if (!TextUtils.isEmpty(selFood.image_path)) {
+            Glide.with(img_food_photo.getContext())
+                    .load(selFood.image_path)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                    Target<Drawable> target, boolean isFirstResource) {
+                            Log.e("ProfileFragment", "Image load failed");
+                            return false; // leave false
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model,
+                                                       Target<Drawable> target, DataSource dataSource,
+                                                       boolean isFirstResource) {
+                            Log.v("ProfileFragment", "Image load OK");
+                            return false; // leave false
+                        }
+                    }).into(img_food_photo);
+        }
     }
 
 
@@ -135,17 +170,46 @@ public class FoodDetailsActivity extends AppCompatActivity {
         mFoodForm.setAdapter(mFormAdapter);
     }
 
+    private void uploadImage(Context context, ImageView img_food_photo, FoodModel foodLoaded){
+        if(img_food_photo.getDrawable() == null) return;
+
+        Bitmap bitmap = ((BitmapDrawable) img_food_photo.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        StorageReference firebaseStorageReference = FirebaseStorage.getInstance()
+                .getReference().child("daily_offers").child(foodLoaded.id);
+
+        UploadTask uploadTask = firebaseStorageReference
+                .child("food_photo.jpg")
+                .putBytes(data);
+
+        uploadTask.addOnFailureListener((@NonNull Exception exception) -> {
+            Log.e("FIREBASE_LOG", "Picture Upload Fail - EditProfileActivity");
+            Toast.makeText(context,
+                    "Picture Upload Fail - EditProfileActivity",
+                    Toast.LENGTH_LONG).show();
+        }).addOnSuccessListener((UploadTask.TaskSnapshot taskSnapshot) -> {
+            firebaseStorageReference.child("food_photo.jpg")
+                    .getDownloadUrl()
+                    .addOnSuccessListener((Uri uri) -> {
+                        Uri downUri = uri;
+                        Log.v("FIREBASE_LOG", "Picture Upload Success - EditProfileActivity");
+                        FirebaseDatabase.getInstance().getReference()
+                                .child("restaurateurs")
+                                .child(FirebaseAuth.getInstance().getUid())
+                                .child("daily_offers")
+                                .child(foodLoaded.id)
+                                .child("image_path").setValue(downUri.toString());
+                    });
+        });
+    }
+
     private FoodModel getUpdatedFood() {
         FoodModel food = new FoodModel();
 //        food.pos = pos;
         food.id = mFoodLoaded.id;
-
-        // GET PHOTO FROM IMAGEVIEW
-        Bitmap bmp = ((BitmapDrawable)img_food_photo.getDrawable()).getBitmap();
-        if(bmp != null){
-            String imgStr = PrefHelper.bitMapToStringLossless(bmp);
-            food.photo = imgStr;
-        }
 
         for(ListItem field: mFields){
             switch(field.fieldNameRes){
@@ -162,6 +226,13 @@ public class FoodDetailsActivity extends AppCompatActivity {
                     food.availableQty = Integer.valueOf(field.fieldValue);
                     break;
             }
+        }
+
+        // GET PHOTO FROM IMAGEVIEW
+        if(TextUtils.isEmpty(food.id)){
+
+        }else{
+            uploadImage(getApplicationContext(), img_food_photo, mFoodLoaded);
         }
 
         return food;

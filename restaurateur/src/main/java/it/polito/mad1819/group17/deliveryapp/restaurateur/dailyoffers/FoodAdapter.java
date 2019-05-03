@@ -1,8 +1,11 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffers;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseError;
@@ -96,10 +104,29 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
         }
 
         public void setData(FoodModel currentFoodItem, int pos){
-            if(currentFoodItem.photo != null){
-                Bitmap bmp = PrefHelper.stringToBitMap(currentFoodItem.photo);
-                itemPhoto.setImageBitmap(bmp);
+
+            // Load image
+            if (!TextUtils.isEmpty(currentFoodItem.image_path)) {
+                Glide.with(itemPhoto.getContext())
+                        .load(currentFoodItem.image_path)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                        Target<Drawable> target, boolean isFirstResource) {
+                                Log.e("ProfileFragment", "Image load failed");
+                                return false; // leave false
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model,
+                                                           Target<Drawable> target, DataSource dataSource,
+                                                           boolean isFirstResource) {
+                                Log.v("ProfileFragment", "Image load OK");
+                                return false; // leave false
+                            }
+                        }).into(itemPhoto);
             }
+
             itemName.setText(currentFoodItem.name);
             itemPlace.setText(currentFoodItem.description);
             itemPrice.setText(FoodModelRestaurateurUtil.getPriceFormatted(currentFoodItem.price));
