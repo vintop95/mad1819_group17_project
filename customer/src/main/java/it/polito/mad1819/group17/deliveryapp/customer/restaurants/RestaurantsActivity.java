@@ -171,15 +171,29 @@ public class RestaurantsActivity extends AppCompatActivity {
             public void onDataChanged() {
                 super.onDataChanged();
                 pbHandler.hide();
+                // getFilter().filter("aa");
             }
 
             @Override
             protected boolean filterCondition(RestaurantModel model, String filterPattern) {
-                return model.orders_count > 3;
+                if(filterPattern.equals(FILTER_ORDERS_COUNT)){
+                    Integer count = model.orders_count;
+                    if (count == null) count = 0;
+                    return count >= 3;
+                } else if(filterPattern.startsWith(FILTER_SEARCH + "=")){
+                    String search = filterPattern.replace(FILTER_SEARCH + "=", "");
+                    return model.getName().contains(search);
+                } else{
+                    return true;
+                }
             }
         };
         recyclerView.setAdapter(adapter);
+
     }
+
+    public static String FILTER_ORDERS_COUNT = "filter_orders_count";
+    public static String FILTER_SEARCH = "filter_search";
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public LinearLayout root;
@@ -281,29 +295,15 @@ public class RestaurantsActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case 0://no filter
-                            adapter.stopListening();
-                            filterField = null;
-                            filterValue = null;
-                            fetch(filterField, filterValue);
-                            adapter.startListening();
+                            //adapter.getFilter().filter("");
+                            String search = "e";
+                            adapter.getFilter().filter(FILTER_SEARCH + "=" + search);
                             break;
-                        case 1: // 5+
-                            adapter.stopListening();
-                            filterField = OrderConfirmActivity.FIREBASE_FILTER_BY_VOTE;
-                            filterValue = category_selected + "_5";
-                            fetch(filterField, filterValue);
-                            adapter.startListening();
+                        case 1: // popular
+                            adapter.getFilter().filter(FILTER_ORDERS_COUNT);
                             break;
                         case 2: // Free Day
-                            adapter.stopListening();
-
-                            Calendar calendar = Calendar.getInstance();
-                            int dayIndex = calendar.get(Calendar.DAY_OF_WEEK);
-                            String[] daysOfWeek = getResources().getStringArray(R.array.days_of_week);
-                            filterField = category_selected + "_" + daysOfWeek[dayIndex];
-                            filterValue = null;
-
-                            fetch(filterField, filterValue);
+                            //
                             adapter.startListening();
                             break;
                     }

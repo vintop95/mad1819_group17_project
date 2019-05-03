@@ -193,6 +193,7 @@ public abstract class FirebaseRecyclerAdapter<T, VH extends RecyclerView.ViewHol
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
+            Log.d("PERFORM_FILTERING","CALLED");
             final FilterResults results = new FilterResults();
             if (constraint.length() == 0) {
                 results.values = backupList;
