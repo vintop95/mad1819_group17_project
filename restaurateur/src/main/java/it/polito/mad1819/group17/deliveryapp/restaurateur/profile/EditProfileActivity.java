@@ -102,19 +102,39 @@ public class EditProfileActivity extends AppCompatActivity {
             input_mail.setText(restaurateur.getMail());
             input_address.setText(restaurateur.getAddress());
             String restaurant_type = restaurateur.getRestaurant_type();
-            if (restaurant_type != null)
-                for (int i = 0; i < getResources().getStringArray(R.array.restaurant_types).length; i++)
-                    if (getResources().getStringArray(R.array.restaurant_types)[i].equals(restaurant_type)) {
-                        input_restaurant_type.setSelection(i);
-                        break;
-                    }
+            if (restaurant_type != null){
+                Integer index;
+                try {
+                    index = Integer.valueOf(restaurateur.getRestaurant_type());
+                }catch(NumberFormatException e){
+                    index=0;
+                }
+
+                input_restaurant_type.setSelection(index);
+//                for (int i = 0; i < getResources().getStringArray(R.array.restaurant_types).length; i++)
+//                    if (getResources().getStringArray(R.array.restaurant_types)[i].equals(restaurant_type)) {
+//                        input_restaurant_type.setSelection(i);
+//                        break;
+//                    }
+            }
+
             String free_day = restaurateur.getFree_day();
-            if (free_day != null)
-                for (int i = 0; i < getResources().getStringArray(R.array.days_of_week).length; i++)
-                    if (getResources().getStringArray(R.array.days_of_week)[i].equals(free_day)) {
-                        input_free_day.setSelection(i);
-                        break;
-                    }
+            if (free_day != null){
+                Integer dayIndex;
+                try {
+                    dayIndex = Integer.valueOf(restaurateur.getFree_day());
+                }catch(NumberFormatException e){
+                    dayIndex=0;
+                }
+
+                input_free_day.setSelection(dayIndex);
+
+//                for (int i = 0; i < getResources().getStringArray(R.array.days_of_week).length; i++)
+//                    if (getResources().getStringArray(R.array.days_of_week)[i].equals(free_day)) {
+//                        input_free_day.setSelection(i);
+//                        break;
+//                    }
+            }
 
             String time_opening = restaurateur.getWorking_time_opening();
             if (time_opening != null)
@@ -170,9 +190,8 @@ public class EditProfileActivity extends AppCompatActivity {
         Date date_timeClosing = null;
         String bio = input_bio.getText().toString();
 
-        // TODO: localize these
-        String free_day = input_free_day.getSelectedItem().toString();
-        String restaurant_type = input_restaurant_type.getSelectedItem().toString();
+        String free_day = Integer.toString(input_free_day.getSelectedItemPosition());
+        String restaurant_type = Integer.toString(input_restaurant_type.getSelectedItemPosition());
 
         if (name.isEmpty() ||
                 phone.isEmpty() || !Patterns.PHONE.matcher(phone).matches() ||

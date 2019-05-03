@@ -93,13 +93,29 @@ public class RestaurantProfileActivity extends AppCompatActivity {
             txt_phone.setText(restaurateur.getPhone());
             txt_mail.setText(restaurateur.getMail());
             txt_address.setText(restaurateur.getAddress());
-            txt_restaurant_type.setText(restaurateur.getRestaurant_type());
-            txt_free_day.setText(restaurateur.getFree_day());
             txt_working_time.setText(getString(R.string.from) + " " +
                     restaurateur.getWorking_time_opening() + " " +
                     getString(R.string.to) + " " + restaurateur.getWorking_time_closing());
             if (!restaurateur.getBio().isEmpty())
                 txt_bio.setText(restaurateur.getBio());
+
+            String[] restTypes = getResources().getStringArray(R.array.restaurant_types);
+            Integer index;
+            try {
+                index = Integer.valueOf(restaurateur.getRestaurant_type());
+            }catch(NumberFormatException e){
+                index=0;
+            }
+            txt_restaurant_type.setText(restTypes[index]);
+
+            String[] days = getResources().getStringArray(R.array.days_of_week);
+            Integer dayIndex;
+            try {
+                dayIndex = Integer.valueOf(restaurateur.getFree_day());
+            }catch(NumberFormatException e){
+                dayIndex=0;
+            }
+            txt_free_day.setText(days[dayIndex]);
         }
     }
 

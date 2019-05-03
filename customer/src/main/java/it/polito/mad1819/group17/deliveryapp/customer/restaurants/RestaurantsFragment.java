@@ -60,7 +60,7 @@ public class RestaurantsFragment extends Fragment {
 
                 Intent intent = new Intent(getContext(), RestaurantsActivity.class);
                 Bundle b = new Bundle();
-                b.putString("category", categories[i]); //Your category selected
+                b.putString("category", Integer.toString(i)); //Your category selected
                 intent.putExtras(b); //Put your category in the next Intent
                 startActivity(intent);
             }

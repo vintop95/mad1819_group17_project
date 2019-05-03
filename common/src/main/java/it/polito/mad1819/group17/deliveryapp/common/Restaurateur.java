@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class Restaurateur implements Serializable {
 
+    public static Integer VOTE_5_THRESHOLD = 3;
+
     private String id = "";
     private String image_path = "";
     private String name = "";

@@ -7,14 +7,17 @@ public class RestaurantModel {
     public String bio;
     public String photo;
     public String phone;
+    public Integer orders_count;
 
-    public RestaurantModel(String address, String name, String bio, String photo,String key, String phone) {
+    public RestaurantModel(String address, String name, String bio,
+                           String photo,String key, String phone, Integer orders_count) {
         this.address = address;
         this.name = name;
         this.bio = bio;
         this.photo = photo;
         this.key = key;
         this.phone = phone;
+        this.orders_count = orders_count;
     }
 
     public RestaurantModel() {

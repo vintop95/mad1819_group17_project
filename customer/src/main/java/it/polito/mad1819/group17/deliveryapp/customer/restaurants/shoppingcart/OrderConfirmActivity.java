@@ -35,6 +35,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import it.polito.mad1819.group17.deliveryapp.common.Restaurateur;
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
@@ -208,18 +209,17 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
         // Check if there is enough available qty for the order
         if (TextUtils.isEmpty(restaurant_id)) throw new IllegalStateException("rest_id null!");
-        DatabaseReference dailyOffersRef = FirebaseDatabase.getInstance().getReference()
+        DatabaseReference restaurateurRef = FirebaseDatabase.getInstance().getReference()
                 .child("restaurateurs")
-                .child(restaurant_id)
-                .child(FIREBASE_DAILY_OFFERS);
+                .child(restaurant_id);
 
-        dailyOffersRef.runTransaction(new Transaction.Handler() {
+        restaurateurRef.runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
 
                 // Check and update availableQty for each item
                 for(String itemId: itemsMap.keySet()){
-                    MutableData currentQtyRef = mutableData.child(itemId).child("availableQty");
+                    MutableData currentQtyRef = mutableData.child(FIREBASE_DAILY_OFFERS).child(itemId).child("availableQty");
 
                     Integer availableQty = currentQtyRef.getValue(Integer.class);
                     Integer orderedQty = itemsMap.get(itemId).getQuantity();
@@ -234,6 +234,18 @@ public class OrderConfirmActivity extends AppCompatActivity {
                         if(newQty >= 0) currentQtyRef.setValue(newQty);
                         else return Transaction.abort();
                     }
+                }
+
+                MutableData ordersCountRef = mutableData.child(FIREBASE_ORDERS_COUNT);
+
+                Integer ordersCount = ordersCountRef.getValue(Integer.class);
+                if (ordersCount == null) ordersCount=0;
+                ordersCountRef.setValue(ordersCount+1);
+
+                // Set a field that will be used in filtering
+                if(ordersCount >= Restaurateur.VOTE_5_THRESHOLD){
+                    String restaurant_type = mutableData.child("restaurant_type").getValue(String.class);
+                    mutableData.child(FIREBASE_FILTER_BY_VOTE).setValue(restaurant_type + "_" + "5");
                 }
 
                 return Transaction.success(mutableData);
@@ -278,7 +290,10 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
     ////////////////// FIREBASE ORDER MGMT ////////////////////////////////////
     private final static String FIREBASE_ORDERS = "orders";
-    private final static String FIREBASE_DAILY_OFFERS = "daily_offers";
+    public final static String FIREBASE_DAILY_OFFERS = "daily_offers";
+    public final static String FIREBASE_ORDERS_COUNT = "orders_count";
+    public final static String FIREBASE_FILTER_BY_VOTE = "filter_by_vote";
+    public final static String FIREBASE_FILTER_BY_FREE_DAY = "filter_by_free_day";
 
     public String getRestaurateurOrdersPath(@Nullable String orderId) {
         if (TextUtils.isEmpty(restaurant_id)) {

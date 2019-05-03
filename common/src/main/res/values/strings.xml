@@ -182,13 +182,13 @@
     </string-array>
     <string-array name="days_of_week">
         <item>None</item>
+        <item>Sunday</item>
         <item>Monday</item>
         <item>Tuesday</item>
         <item>Wednesday</item>
         <item>Thursday</item>
         <item>Friday</item>
         <item>Saturday</item>
-        <item>Sunday</item>
     </string-array>
     <!-- Alert Dialogs -->
     <string name="gallery_not_found">Gallery app not found!</string>
@@ -227,6 +227,7 @@
     <string name="state_delivered">Delivered</string>
     <string name="state_assigned">Assigned</string>
     <string name="state">State</string>
+    <string name="filter">FILTER</string>
 
 
 </resources>
