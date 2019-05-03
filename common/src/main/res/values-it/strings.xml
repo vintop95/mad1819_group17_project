@@ -197,5 +197,8 @@
     <string name="state_assigned">Assegnato</string>
     <string name="state">Stato</string>
     <string name="filter">FILTRA</string>
+    <string name="choose_filter">Scegli un filtro</string>
+    <string name="no_filter">Nessun filtro</string>
+    <string name="popular">Popolari</string>
 
 </resources>

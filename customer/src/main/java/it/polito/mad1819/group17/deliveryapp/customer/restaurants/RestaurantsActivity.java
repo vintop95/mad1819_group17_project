@@ -270,11 +270,11 @@ public class RestaurantsActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.btn_filter) {
             // setup the alert builder
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Choose a filter");
+            builder.setTitle(R.string.choose_filter);
             // add a list
-            String[] filterFields = {"No filter",
-                    "5+",
-                    // "Free Day" // TODO: re-add
+            String[] filterFields = {getString(R.string.no_filter),
+                    getString(R.string.popular),
+                    //getString(R.string.free_day) // TODO: re-add
             };
             builder.setItems(filterFields, new DialogInterface.OnClickListener() {
                 @Override

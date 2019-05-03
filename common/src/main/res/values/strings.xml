@@ -228,6 +228,9 @@
     <string name="state_assigned">Assigned</string>
     <string name="state">State</string>
     <string name="filter">FILTER</string>
+    <string name="choose_filter">Choose a filter</string>
+    <string name="no_filter">No filter</string>
+    <string name="popular">Popular</string>
 
 
 </resources>
