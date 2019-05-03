@@ -41,7 +41,12 @@
         <SearchView
             android:id="@+id/input_search"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:iconifiedByDefault="false"
+            android:queryHint="@string/hint_search"
+            app:defaultQueryHint="@string/hint_search"
+            app:iconifiedByDefault="false"
+            app:queryHint="@string/hint_search" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/restaurant_list"

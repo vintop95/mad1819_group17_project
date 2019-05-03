@@ -231,6 +231,8 @@
     <string name="choose_filter">Choose a filter</string>
     <string name="no_filter">No filter</string>
     <string name="popular">Popular</string>
+    <string name="hint_search">Search</string>
+    <string name="open_now">Open Now</string>
 
 
 </resources>

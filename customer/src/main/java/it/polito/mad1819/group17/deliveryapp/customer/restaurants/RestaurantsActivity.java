@@ -45,6 +45,7 @@ import java.util.List;
 import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.common.utils.FirebaseRecyclerAdapter;
+import it.polito.mad1819.group17.deliveryapp.common.utils.TimeHelper;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers.DailyMenuActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.OrderConfirmActivity;
@@ -53,6 +54,9 @@ import static it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyof
 
 public class RestaurantsActivity extends AppCompatActivity {
     private final int RC_DAILY_MENU = 0;
+    public static String FILTER_ORDERS_COUNT = "filter_orders_count";
+    public static String FILTER_SEARCH = "filter_search";
+    public static String FILTER_OPEN_NOW = "filter_open_now";
 
     private String filterField = null, filterValue = null;
     private String category_selected;
@@ -167,7 +171,10 @@ public class RestaurantsActivity extends AppCompatActivity {
                                         snapshot.child("photo").getValue(String.class),
                                         snapshot.getKey(),
                                         snapshot.child("phone").getValue(String.class),
-                                        snapshot.child("orders_count").getValue(Integer.class)
+                                        snapshot.child("orders_count").getValue(Integer.class),
+                                        snapshot.child("free_day").getValue(String.class),
+                                        snapshot.child("working_time_opening").getValue(String.class),
+                                        snapshot.child("working_time_closing").getValue(String.class)
                                 );
                             }
                         })
@@ -198,7 +205,6 @@ public class RestaurantsActivity extends AppCompatActivity {
             public void onDataChanged() {
                 super.onDataChanged();
                 pbHandler.hide();
-                // getFilter().filter("aa");
             }
 
             @Override
@@ -210,17 +216,48 @@ public class RestaurantsActivity extends AppCompatActivity {
                 } else if (filterPattern.startsWith(FILTER_SEARCH + "=")) {
                     String search = filterPattern.replace(FILTER_SEARCH + "=", "");
                     return model.getName().contains(search);
+                } else if (filterPattern.startsWith(FILTER_OPEN_NOW)) {
+                    Integer freeDay;
+                    try {
+                        freeDay = Integer.valueOf(model.free_day);
+                    } catch(NumberFormatException e) {
+                        freeDay = 0;
+                    }
+
+//                    Log.d("FREE_DAY", "" + freeDay);
+
+                    Calendar calendar = Calendar.getInstance();
+                    int day = calendar.get(Calendar.DAY_OF_WEEK);
+//                    Log.d("day", "" + day);
+
+                    // If today is not closed
+                    if (!freeDay.equals(day)) {
+                        // Check the time
+                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                        int minute = calendar.get(Calendar.MINUTE);
+                        String currentTime = TimeHelper.getTimeAsString(hour, minute);
+                        String openingTime = model.working_time_opening;
+                        String closingTime = model.working_time_closing;
+//
+//                        Log.d("currentTime", currentTime);
+//                        Log.d("openingTime", openingTime);
+//                        Log.d("closingTime", closingTime);
+
+                        if (currentTime.compareTo(openingTime) > 0 &&
+                                currentTime.compareTo(closingTime) < 0){
+                            return true;
+                        } else return false;
+                    } else return false;
                 } else {
                     return true;
                 }
             }
         };
         recyclerView.setAdapter(adapter);
-
+        adapter.startListening();
     }
 
-    public static String FILTER_ORDERS_COUNT = "filter_orders_count";
-    public static String FILTER_SEARCH = "filter_search";
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public LinearLayout root;
@@ -315,21 +352,23 @@ public class RestaurantsActivity extends AppCompatActivity {
             // add a list
             String[] filterFields = {getString(R.string.no_filter),
                     getString(R.string.popular),
-                    //getString(R.string.free_day) // TODO: re-add
+                    getString(R.string.open_now)
             };
             builder.setItems(filterFields, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case 0://no filter
+                            adapter.startListening();
                             adapter.getFilter().filter("");
                             break;
                         case 1: // popular
+                            adapter.stopListening();
                             adapter.getFilter().filter(FILTER_ORDERS_COUNT);
                             break;
                         case 2: // Free Day
-                            //
-                            adapter.startListening();
+                            adapter.stopListening();
+                            adapter.getFilter().filter(FILTER_OPEN_NOW);
                             break;
                     }
                 }

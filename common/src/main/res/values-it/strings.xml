@@ -200,5 +200,7 @@
     <string name="choose_filter">Scegli un filtro</string>
     <string name="no_filter">Nessun filtro</string>
     <string name="popular">Popolari</string>
+    <string name="hint_search">Cerca</string>
+    <string name="open_now">Aperti ora</string>
 
 </resources>
