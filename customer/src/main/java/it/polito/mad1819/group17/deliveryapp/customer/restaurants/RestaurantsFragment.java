@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -44,6 +47,7 @@ public class RestaurantsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         categories = getResources().getStringArray(R.array.restaurant_types);
+
     }
 
     @Override
@@ -51,6 +55,7 @@ public class RestaurantsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_restaurant, container, false);
+
 
         lst = view.findViewById(R.id.list_view_category);
         lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -65,6 +70,7 @@ public class RestaurantsFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
 
         Log.d("aia", "onCreateView: "+categories.length+"///"+imgid.length);
         CategoryListView categoryListView = new CategoryListView(this.getActivity(),categories,imgid);

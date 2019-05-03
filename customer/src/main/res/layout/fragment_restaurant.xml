@@ -3,31 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".restaurants.RestaurantsFragment"
-    >
+    tools:context=".restaurants.RestaurantsFragment">
 
     <LinearLayout
-        android:weightSum="10"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="15dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="10">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:text="@string/category"/>
+            android:text="@string/category"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
 
 
         <ListView
             android:id="@+id/list_view_category"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="9">
-        </ListView>
+            android:layout_weight="9"></ListView>
     </LinearLayout>
 
 </FrameLayout>

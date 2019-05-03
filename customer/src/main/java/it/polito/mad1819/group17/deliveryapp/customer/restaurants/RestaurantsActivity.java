@@ -25,6 +25,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +59,9 @@ public class RestaurantsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private FirebaseRecyclerAdapter adapter;
+
+    private SearchView input_search;
+    private TextView label_subtitle;
 
     private Intent intent;
     private ProgressBarHandler pbHandler;
@@ -100,6 +104,29 @@ public class RestaurantsActivity extends AppCompatActivity {
 
         showBackArrowOnToolbar();
 
+        label_subtitle = findViewById(R.id.label_subtitle);
+        String[] restTypes = getResources().getStringArray(R.array.restaurant_types);
+        Integer index;
+        try {
+            index = Integer.valueOf(category_selected);
+        } catch (NumberFormatException e) {
+            index = 0;
+        }
+        label_subtitle.setText(getString(R.string.restaurants) + ": " + restTypes[index]);
+
+        input_search = findViewById(R.id.input_search);
+        input_search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(FILTER_SEARCH + "=" + newText);
+                return true;
+            }
+        });
         recyclerView = findViewById(R.id.restaurant_list);
 
         linearLayoutManager = new LinearLayoutManager(this);
@@ -109,14 +136,14 @@ public class RestaurantsActivity extends AppCompatActivity {
         fetch(filterField, filterValue);
     }
 
-    public static Bitmap stringToBitMap(String encodedString) throws IllegalArgumentException{
+    public static Bitmap stringToBitMap(String encodedString) throws IllegalArgumentException {
         byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
     }
 
     private void fetch(String filterField, String filterValue) {
 
-        if(TextUtils.isEmpty(filterField)){
+        if (TextUtils.isEmpty(filterField)) {
             filterField = "restaurant_type";
             filterValue = category_selected;
         }
@@ -176,14 +203,14 @@ public class RestaurantsActivity extends AppCompatActivity {
 
             @Override
             protected boolean filterCondition(RestaurantModel model, String filterPattern) {
-                if(filterPattern.equals(FILTER_ORDERS_COUNT)){
+                if (filterPattern.equals(FILTER_ORDERS_COUNT)) {
                     Integer count = model.orders_count;
                     if (count == null) count = 0;
                     return count >= 3;
-                } else if(filterPattern.startsWith(FILTER_SEARCH + "=")){
+                } else if (filterPattern.startsWith(FILTER_SEARCH + "=")) {
                     String search = filterPattern.replace(FILTER_SEARCH + "=", "");
                     return model.getName().contains(search);
-                } else{
+                } else {
                     return true;
                 }
             }
@@ -218,9 +245,9 @@ public class RestaurantsActivity extends AppCompatActivity {
             address = itemView.findViewById(R.id.restaurant_address);
             avgPrice = itemView.findViewById(R.id.restaurant_avgprice);
 
-            itemView.setOnClickListener(new View.OnClickListener(){
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){
+                public void onClick(View v) {
                     int position = getAdapterPosition();
 
                     Context context = v.getContext();
@@ -245,7 +272,7 @@ public class RestaurantsActivity extends AppCompatActivity {
 
         public void setPhoto(String photo) {
             Bitmap bmp;
-            if(photo != null) {
+            if (photo != null) {
                 bmp = stringToBitMap(photo);
                 this.photo.setImageBitmap(bmp);
             }
@@ -255,7 +282,7 @@ public class RestaurantsActivity extends AppCompatActivity {
             this.address.setText(address);
         }
 
-        public void setPhone(String phone){
+        public void setPhone(String phone) {
             this.phone = phone;
         }
 
@@ -295,9 +322,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case 0://no filter
-                            //adapter.getFilter().filter("");
-                            String search = "e";
-                            adapter.getFilter().filter(FILTER_SEARCH + "=" + search);
+                            adapter.getFilter().filter("");
                             break;
                         case 1: // popular
                             adapter.getFilter().filter(FILTER_ORDERS_COUNT);
