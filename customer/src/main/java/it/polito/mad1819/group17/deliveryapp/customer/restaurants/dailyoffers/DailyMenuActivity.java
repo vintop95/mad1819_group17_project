@@ -17,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,8 +30,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-
-import java.util.HashMap;
 
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
@@ -48,9 +48,9 @@ public class DailyMenuActivity extends AppCompatActivity {
     private Intent intent;
 
     private TextView tv;
+    private FrameLayout frameLayout;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
-    private ImageView btnInfo;
 
     private FirebaseRecyclerAdapter adapter;
     private boolean somethingAdded;
@@ -88,8 +88,9 @@ public class DailyMenuActivity extends AppCompatActivity {
         restaurant_address = intent.getStringExtra("address");
         restaurant_phone = intent.getStringExtra("phone");
 
-        btnInfo = findViewById(R.id.btn_info);
-        btnInfo.setOnClickListener(new View.OnClickListener() {
+
+        frameLayout = findViewById(R.id.frame_layout_restaurant_info);
+        frameLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openRestaurantProfile();

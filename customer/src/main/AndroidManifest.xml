@@ -14,7 +14,8 @@
         <activity android:name=".orders.OrderDetailsActivity"/>
         <activity android:name=".restaurants.shoppingcart.OrderConfirmActivity"/>
         <activity android:name=".restaurants.dailyoffers.DailyMenuActivity" />
-        <activity android:name=".restaurants.RestaurantsActivity" />
+        <activity android:name=".restaurants.RestaurantsActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".restaurants.RestaurantProfileActivity" />
         <activity
             android:name=".MainActivity"

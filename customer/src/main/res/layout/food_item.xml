@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     app:cardCornerRadius="4dp"
-    app:cardElevation="8dp"
+    app:cardElevation="4dp"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true"
     app:cardBackgroundColor="@android:color/background_light" >
@@ -31,13 +31,18 @@
 
         <TextView
             android:id="@+id/if_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:text="TextView"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:autoSizeTextType="uniform"
+            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout"
             app:layout_constraintStart_toEndOf="@+id/if_photo"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -78,16 +83,20 @@
 
         <TextView
             android:id="@+id/if_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
+            android:ellipsize="end"
             android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintBottom_toTopOf="@+id/if_label_food_available_qty3"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout"
             app:layout_constraintStart_toEndOf="@+id/if_photo"
-            app:layout_constraintTop_toBottomOf="@+id/if_name"
-            app:layout_constraintVertical_bias="0.161" />
+            app:layout_constraintTop_toBottomOf="@+id/if_name" />
 
         <TextView
             android:id="@+id/if_price"
@@ -109,16 +118,16 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/if_available_qty"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/if_subtract_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:minWidth="36dp"
                 android:minHeight="36dp"
                 android:visibility="gone"
@@ -130,10 +139,8 @@
 
             <ImageView
                 android:id="@+id/if_add_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:minWidth="36dp"
                 android:minHeight="36dp"
                 app:layout_constraintBottom_toTopOf="@+id/if_subtract_button"

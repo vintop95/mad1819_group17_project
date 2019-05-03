@@ -204,6 +204,8 @@ public class OrderConfirmActivity extends AppCompatActivity {
             return;
         }
 
+        pbHandler.show();
+
         // Must be done first in order to have a lighter transaction
         Order ord = getOrderToPush();
 
@@ -271,6 +273,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
                     finish();
                 }
 
+                pbHandler.hide();
             }
         });
     }

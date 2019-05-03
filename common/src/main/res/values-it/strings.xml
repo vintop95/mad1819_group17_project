@@ -202,5 +202,6 @@
     <string name="popular">Popolari</string>
     <string name="hint_search">Cerca</string>
     <string name="open_now">Aperti ora</string>
+    <string name="choose_category">SCEGLI LA CATEGORIA DEL RISTORANTE</string>
 
 </resources>

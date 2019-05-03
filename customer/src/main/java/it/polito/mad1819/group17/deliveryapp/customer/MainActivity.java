@@ -200,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
         // Init toolbar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         initUtils();
 

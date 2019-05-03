@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,6 +44,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     private CardView card_deliveryman;
     private TextView txt_deliveryman_name;
     private TextView txt_deliveryman_phone;
+    private FrameLayout frame_layout;
 
     private ImageView image_restaurant_info;
 
@@ -68,6 +70,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         txt_deliveryman_phone = findViewById(R.id.txt_deliveryman_phone);
         txt_customer_phone = findViewById(R.id.txt_customer_phone);
         image_restaurant_info = findViewById(R.id.image_restaurant_info);
+        frame_layout = findViewById(R.id.frame_layout_restaurant_info);
     }
 
     private void feedViews(Order selectedOrder) {
@@ -134,8 +137,9 @@ public class OrderDetailsActivity extends AppCompatActivity {
             String phoneNumber = ((TextView) v).getText().toString();
             startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
         });
-        image_restaurant_info.setOnClickListener(v -> openRestaurantProfile());
-        txt_restaurant_name.setOnClickListener(v -> openRestaurantProfile());
+        frame_layout.setOnClickListener(v -> openRestaurantProfile());
+//        image_restaurant_info.setOnClickListener(v -> openRestaurantProfile());
+//        txt_restaurant_name.setOnClickListener(v -> openRestaurantProfile());
 
         if (!TextUtils.isEmpty(getIntent().getStringExtra("id"))) {
             // we came here due to a tap on the notification so let us read the (updated) order from firebase

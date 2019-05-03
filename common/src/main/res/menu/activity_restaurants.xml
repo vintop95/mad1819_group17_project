@@ -6,5 +6,6 @@
         android:id="@+id/btn_filter"
         android:title="@string/filter"
         android:visible="true"
+        android:icon="@drawable/ic_filter"
         app:showAsAction="ifRoom" />
 </menu>

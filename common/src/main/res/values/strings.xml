@@ -211,6 +211,7 @@
     <string name="label_order_id">Order id</string>
     <string name="restaurant_profile">Restaurant Profile</string>
     <string name="category">CATEGORY</string>
+    <string name="choose_category">CHOOSE RESTAURANT CATEGORY</string>
     <string name="restaurants">Restaurants</string>
     <string name="cannot_retrieve_restaurateur_info">Unable to retrieve restaurateur\'s information</string>
     <string name="added">added</string>

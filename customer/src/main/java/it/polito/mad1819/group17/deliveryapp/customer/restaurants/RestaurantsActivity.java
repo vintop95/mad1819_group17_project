@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -29,6 +30,11 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.auth.data.model.User;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
@@ -170,7 +176,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                                         snapshot.child("address").getValue(String.class),
                                         snapshot.child("name").getValue(String.class),
                                         snapshot.child("bio").getValue(String.class),
-                                        snapshot.child("photo").getValue(String.class),
+                                        snapshot.child("image_path").getValue(String.class),
                                         snapshot.getKey(),
                                         snapshot.child("phone").getValue(String.class),
                                         snapshot.child("orders_count").getValue(Integer.class),
@@ -195,12 +201,7 @@ public class RestaurantsActivity extends AppCompatActivity {
 
             @Override
             protected void onBindViewHolder(ViewHolder holder, final int position, RestaurantModel model) {
-                holder.setAddress(model.getAddress());
-                holder.setBio(model.getBio());
-                holder.setName(model.getName());
-                holder.setPhoto(model.getPhoto());
-                holder.setId(model.getKey());
-                holder.setPhone(model.phone);
+                holder.setData(model);
             }
 
             @Override
@@ -218,7 +219,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                     return count >= 3;
                 } else if (filterPattern.startsWith(FILTER_SEARCH + "=")) {
                     String search = filterPattern.replace(FILTER_SEARCH + "=", "");
-                    return model.getName().contains(search);
+                    return model.name.contains(search);
                 } else if (filterPattern.startsWith(FILTER_OPEN_NOW)) {
                     Integer freeDay;
                     try {
@@ -260,9 +261,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         adapter.startListening();
     }
 
-
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         public LinearLayout root;
         public TextView name;
         public TextView bio;
@@ -272,9 +271,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         public String id;
         public String phone;
 
-        public void setId(String id) {
-            this.id = id;
-        }
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -302,30 +299,57 @@ public class RestaurantsActivity extends AppCompatActivity {
             });
         }
 
+        public void setData(RestaurantModel model) {
+            setAddress(model.address);
+            setBio(model.bio);
+            setName(model.name);
+            setPhoto(model.image_path);
+            setId(model.key);
+            setPhone(model.phone);
+        }
+
+        private void setId(String id) {
+            this.id = id;
+        }
+
         public void setName(String name) {
             this.name.setText(name);
         }
 
-        public void setBio(String bio) {
+        private void setBio(String bio) {
             this.bio.setText(bio);
         }
 
-        public void setPhoto(String photo) {
-            Bitmap bmp;
-            if (photo != null) {
-                bmp = stringToBitMap(photo);
-                this.photo.setImageBitmap(bmp);
+        private void setPhoto(String image_path) {
+            if (!TextUtils.isEmpty(image_path)) {
+                Glide.with(photo.getContext())
+                        .load(image_path)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                        Target<Drawable> target, boolean isFirstResource) {
+                                Log.e("ProfileFragment", "Image load failed");
+                                return false; // leave false
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model,
+                                                           Target<Drawable> target, DataSource dataSource,
+                                                           boolean isFirstResource) {
+                                // Log.v("ProfileFragment", "Image load OK");
+                                return false; // leave false
+                            }
+                        }).into(photo);
             }
         }
 
-        public void setAddress(String address) {
+        private void setAddress(String address) {
             this.address.setText(address);
         }
 
-        public void setPhone(String phone) {
+        private void setPhone(String phone) {
             this.phone = phone;
         }
-
     }
 
     @Override
