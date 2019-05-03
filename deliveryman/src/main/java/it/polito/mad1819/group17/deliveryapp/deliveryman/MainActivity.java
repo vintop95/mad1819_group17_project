@@ -31,6 +31,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     public final static int RC_SIGN_IN = 1;
     public final static String CHANNEL_ID = "new_delivery_request_channel_id";
-
+    public final static String FIREBASE_APP_NAME = "deliverymen";
 
     private FirebaseDatabase mFirebaseDatabase = null;
     private DatabaseReference mRestaurateurDatabaseReference = null;
@@ -260,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         progressBarHandler = new ProgressBarHandler(this);
-        progressBarHandler.show();
+        // progressBarHandler.show();
 
         initFirebaseAuth();
 
@@ -276,19 +278,43 @@ public class MainActivity extends AppCompatActivity {
         initBottomNavigation();
     }
 
+    // Check if user exists in the db even if it's authenticated because
+    // same account for different app
+    public void checkNewSignUp(String uid, String userPath) {
+        Query q = FirebaseDatabase.getInstance().getReference().child(userPath).child(uid);
+        Log.d("QUERY NEW_SIGN_UP", q.getPath().toString());
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                String key = dataSnapshot.getKey();
+//                if (key == null) key = "NONO";
+//                Log.d("SNAPSHOT NEW_SIGN_UP", key);
+
+                if(dataSnapshot.getValue() == null){
+                    Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
+                    startActivity(editNewProfile);
+                    if(navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(),
+                        getString(R.string.sign_in_canceled), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
+            progressBarHandler.hide();
             if (resultCode == RESULT_OK) {
-                initFirebaseDb(mFirebaseAuth.getCurrentUser().getUid());
-                if (isNewSignUp()) {
-                    Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
-                    startActivity(editNewProfile);
-                    progressBarHandler.hide();
-                    if(navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
-                }
-                Toast.makeText(this, "Signed In!", Toast.LENGTH_SHORT).show();
+                String uid = mFirebaseAuth.getCurrentUser().getUid();
+                initFirebaseDb(uid);
+                checkNewSignUp(uid, FIREBASE_APP_NAME);
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Sign in canceled!", Toast.LENGTH_SHORT).show();
                 finish();
@@ -319,11 +345,6 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public boolean isNewSignUp() {
-        FirebaseUserMetadata metadata = mFirebaseAuth.getCurrentUser().getMetadata();
-        return metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp();
     }
 
     @Override

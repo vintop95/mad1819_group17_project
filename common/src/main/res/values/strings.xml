@@ -234,6 +234,8 @@
     <string name="popular">Popular</string>
     <string name="hint_search">Search</string>
     <string name="open_now">Open Now</string>
+    <string name="signed_in">Signed In!</string>
+    <string name="sign_in_canceled">Sign in canceled!</string>
 
 
 </resources>

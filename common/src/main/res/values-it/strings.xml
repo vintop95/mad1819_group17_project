@@ -203,5 +203,7 @@
     <string name="hint_search">Cerca</string>
     <string name="open_now">Aperti ora</string>
     <string name="choose_category">SCEGLI LA CATEGORIA DEL RISTORANTE</string>
+    <string name="signed_in">Accesso eseguito!</string>
+    <string name="sign_in_canceled">Accesso annullato!</string>
 
 </resources>

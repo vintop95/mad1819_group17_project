@@ -2,6 +2,7 @@ package it.polito.mad1819.group17.deliveryapp.customer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -19,8 +20,12 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -36,7 +41,7 @@ import it.polito.mad1819.group17.deliveryapp.customer.profile.ProfileFragment;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantsFragment;
 
 public class MainActivity extends AppCompatActivity {
-
+    public final static String FIREBASE_APP_NAME = "customers";
     public final static int RC_SIGN_IN = 1;
 
     private FirebaseDatabase mFirebaseDatabase = null;
@@ -189,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         progressBarHandler = new ProgressBarHandler(this);
-        progressBarHandler.show();
+        // progressBarHandler.show();
 
         initFirebaseAuth();
 
@@ -208,26 +213,50 @@ public class MainActivity extends AppCompatActivity {
         initBottomNavigation();
     }
 
+    // Check if user exists in the db even if it's authenticated because
+    // same account for different app
+    public void checkNewSignUp(String uid, String userPath) {
+        Query q = FirebaseDatabase.getInstance().getReference().child(userPath).child(uid);
+        Log.d("QUERY NEW_SIGN_UP", q.getPath().toString());
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                String key = dataSnapshot.getKey();
+//                if (key == null) key = "NONO";
+//                Log.d("SNAPSHOT NEW_SIGN_UP", key);
+
+                if(dataSnapshot.getValue() == null){
+                    Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
+                    startActivity(editNewProfile);
+                    if(navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(),
+                        getString(R.string.sign_in_canceled), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
+            progressBarHandler.hide();
             if (resultCode == RESULT_OK) {
-                initFirebaseDb(mFirebaseAuth.getCurrentUser().getUid());
-                if (isNewSignUp()) {
-                    Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
-                    startActivity(editNewProfile);
-                    progressBarHandler.hide();
-                    if(navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
-                }
-                Toast.makeText(this, "Signed In!", Toast.LENGTH_SHORT).show();
+                String uid = mFirebaseAuth.getCurrentUser().getUid();
+                initFirebaseDb(uid);
+                checkNewSignUp(uid, FIREBASE_APP_NAME);
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Sign in canceled!", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
-        progressBarHandler.hide();
     }
+
 
     @Override
     protected void onPause() {
@@ -267,12 +296,6 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-
-    public boolean isNewSignUp() {
-        FirebaseUserMetadata metadata = mFirebaseAuth.getCurrentUser().getMetadata();
-        return metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp();
     }
 
     private void setAuthStateListener(){
