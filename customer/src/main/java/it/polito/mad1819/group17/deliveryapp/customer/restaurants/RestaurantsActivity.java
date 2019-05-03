@@ -84,8 +84,9 @@ public class RestaurantsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        adapter.startListening();
-        pbHandler.show();
+        // Just fetch one time data
+        // adapter.startListening();
+        // pbHandler.show();
     }
 
     @Override
@@ -138,6 +139,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         fetch(filterField, filterValue);
+        adapter.startListening();
     }
 
     public static Bitmap stringToBitMap(String encodedString) throws IllegalArgumentException {
@@ -205,6 +207,7 @@ public class RestaurantsActivity extends AppCompatActivity {
             public void onDataChanged() {
                 super.onDataChanged();
                 pbHandler.hide();
+                adapter.stopListening();
             }
 
             @Override
