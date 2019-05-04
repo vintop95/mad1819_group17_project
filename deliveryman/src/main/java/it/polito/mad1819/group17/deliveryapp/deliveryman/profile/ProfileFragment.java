@@ -99,18 +99,18 @@ public class ProfileFragment extends Fragment {
         progressBarHandler = new ProgressBarHandler(getContext());
         setHasOptionsMenu(true);
         locateViews(view);
-        progressBarHandler.show();
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mDeliverymanReference = mFirebaseDatabase.getReference().child("deliverymen");
+
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mDeliverymanReference = mFirebaseDatabase.getReference().child("deliverymen");
+        progressBarHandler.show();
     }
 
     @Override
@@ -154,8 +154,8 @@ public class ProfileFragment extends Fragment {
                             Toast.LENGTH_LONG).show();
                 }
             };
-            mDeliverymanReference.child(userId).addValueEventListener(mProfileEventListener);
         }
+        mDeliverymanReference.child(userId).addValueEventListener(mProfileEventListener);
     }
 
     private void detachValueEventListener(String userId) {

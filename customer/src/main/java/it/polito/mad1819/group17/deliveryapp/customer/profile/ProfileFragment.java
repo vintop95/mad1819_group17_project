@@ -154,8 +154,8 @@ public class ProfileFragment extends Fragment {
                             Toast.LENGTH_LONG).show();
                 }
             };
-            mCustomerDatabaseReference.child(userId).addValueEventListener(mProfileEventListener);
         }
+        mCustomerDatabaseReference.child(userId).addValueEventListener(mProfileEventListener);
     }
 
     private void detachValueEventListener(String userId) {

@@ -181,8 +181,8 @@ public class ProfileFragment extends Fragment {
                             Toast.LENGTH_LONG).show();
                 }
             };
-            mRestaurateurDatabaseReference.child(userId).addValueEventListener(mProfileEventListener);
         }
+        mRestaurateurDatabaseReference.child(userId).addValueEventListener(mProfileEventListener);
     }
 
     private void detachValueEventListener(String userId) {
