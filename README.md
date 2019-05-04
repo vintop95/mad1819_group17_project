@@ -1,4 +1,6 @@
-# Delivery app Project
+# Delivery App Project
+## Files
+- DBScheme.pdf: Model of Firebase Db
 
 ## Authors 
 **Copyright 2019 Group 17 Mobile Application Development PoliTO 2018-19**
