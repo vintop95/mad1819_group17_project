@@ -36,6 +36,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.auth.data.model.User;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.database.DataSnapshot;
@@ -50,7 +51,7 @@ import java.util.List;
 
 import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
-import it.polito.mad1819.group17.deliveryapp.common.utils.FirebaseRecyclerAdapter;
+import it.polito.mad1819.group17.deliveryapp.common.utils.MadFirebaseRecyclerAdapter;
 import it.polito.mad1819.group17.deliveryapp.common.utils.TimeHelper;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers.DailyMenuActivity;
@@ -68,7 +69,7 @@ public class RestaurantsActivity extends AppCompatActivity {
     private String category_selected;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
-    private FirebaseRecyclerAdapter adapter;
+    private MadFirebaseRecyclerAdapter adapter;
 
     private SearchView input_search;
     private TextView label_subtitle;
@@ -188,7 +189,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                         })
                         .build();
 
-        adapter = new FirebaseRecyclerAdapter<RestaurantModel, ViewHolder>(options, true) {
+        adapter = new MadFirebaseRecyclerAdapter<RestaurantModel, ViewHolder>(options, true) {
 
             @Override
             public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

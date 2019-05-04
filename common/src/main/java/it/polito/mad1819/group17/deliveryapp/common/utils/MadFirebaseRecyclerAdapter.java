@@ -3,6 +3,7 @@ package it.polito.mad1819.group17.deliveryapp.common.utils;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Filter;
@@ -19,6 +20,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * ORIGINAL FirebaseAdapter CLASS, BUT IMPLEMENTS ALSO FILTERABLE
+ *
  * This class is a generic way of backing a {@link RecyclerView} with a Firebase location. It
  * handles all of the child events at the given Firebase location and marshals received data into
  * the given class type.
@@ -30,8 +33,8 @@ import java.util.List;
  * @param <VH> The {@link RecyclerView.ViewHolder} class that contains the Views in the layout that
  *             is shown for each object.
  */
-public abstract class FirebaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
-        extends RecyclerView.Adapter<VH> implements FirebaseAdapter<T>, Filterable {
+public abstract class MadFirebaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
+        extends RecyclerView.Adapter<VH> implements MadFirebaseAdapter<T>, Filterable {
     private static final String TAG = "FirebaseRecyclerAdapter";
 
     private final ObservableSnapshotArray<T> mSnapshots;
@@ -43,7 +46,7 @@ public abstract class FirebaseRecyclerAdapter<T, VH extends RecyclerView.ViewHol
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
      * {@link FirebaseRecyclerOptions} for configuration options.
      */
-    public FirebaseRecyclerAdapter(FirebaseRecyclerOptions<T> options, boolean isFiltarable) {
+    public MadFirebaseRecyclerAdapter(FirebaseRecyclerOptions<T> options, boolean isFiltarable) {
         mSnapshots = options.getSnapshots();
         list = new ArrayList<>();
         backupList = new ArrayList<>();
@@ -86,7 +89,7 @@ public abstract class FirebaseRecyclerAdapter<T, VH extends RecyclerView.ViewHol
                                  int oldIndex) {
         switch (type) {
             case ADDED:
-                addItem(snapshot.getKey(), model);
+                addItem(snapshot.getKey(), model, newIndex);
                 notifyItemInserted(newIndex);
                 break;
             case CHANGED:
@@ -94,6 +97,7 @@ public abstract class FirebaseRecyclerAdapter<T, VH extends RecyclerView.ViewHol
                 notifyItemChanged(newIndex);
                 break;
             case REMOVED:
+                Log.d("REMOVE_REST_FROM_DB", model.toString());
                 removeItem(newIndex);
                 notifyItemRemoved(newIndex);
                 break;
@@ -122,11 +126,16 @@ public abstract class FirebaseRecyclerAdapter<T, VH extends RecyclerView.ViewHol
     }
 
     private void addItem(String key, T t, int newIndex) {
-        list.remove(newIndex);
-        list.add(newIndex, t);
-        if (isFiltarable) {
-            backupList.remove(newIndex);
-            backupList.add(newIndex, t);
+        if(newIndex < getItemCount()){
+            // Replace item
+            list.remove(newIndex);
+            list.add(newIndex, t);
+            if (isFiltarable) {
+                backupList.remove(newIndex);
+                backupList.add(newIndex, t);
+            }
+        } else {
+            addItem(key, t);
         }
     }
 
@@ -141,15 +150,17 @@ public abstract class FirebaseRecyclerAdapter<T, VH extends RecyclerView.ViewHol
     }
 
     @Override
-    public void onError(DatabaseError error) {
+    public void onError(@NonNull DatabaseError error) {
         Log.w(TAG, error.toException());
     }
 
+    @NonNull
     @Override
     public ObservableSnapshotArray<T> getSnapshots() {
         return mSnapshots;
     }
 
+    @NonNull
     @Override
     public T getItem(int position) {
         return list.get(position);
@@ -196,9 +207,13 @@ public abstract class FirebaseRecyclerAdapter<T, VH extends RecyclerView.ViewHol
             Log.d("PERFORM_FILTERING","CALLED");
             final FilterResults results = new FilterResults();
             if (constraint.length() == 0) {
+                for(Object a: backupList){
+                }
                 results.values = backupList;
                 results.count = backupList.size();
             } else {
+                for(Object a: backupList){
+                }
                 List<T> filteredList = new ArrayList<>();
                 final String filterPattern = constraint.toString().toLowerCase().trim();
                 for (T t : backupList) {
@@ -217,6 +232,7 @@ public abstract class FirebaseRecyclerAdapter<T, VH extends RecyclerView.ViewHol
         protected void publishResults(CharSequence constraint, FilterResults results) {
             list.clear();
             list.addAll((Collection<? extends T>) results.values);
+
             notifyDataSetChanged();
         }
     }
