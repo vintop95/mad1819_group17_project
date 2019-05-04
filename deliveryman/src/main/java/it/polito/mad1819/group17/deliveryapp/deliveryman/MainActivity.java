@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
             String description = "new_order_channel_description";
 
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("new_order_channel_id", name, importance);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this

@@ -110,19 +110,20 @@
             android:id="@+id/label_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="@string/state"
-            card_view:layout_constraintStart_toStartOf="@+id/txt_state"
-            card_view:layout_constraintTop_toTopOf="@+id/label_delivery_date" />
+            card_view:layout_constraintEnd_toEndOf="@+id/label_delivery_time"
+            card_view:layout_constraintStart_toStartOf="@+id/label_delivery_time"
+            card_view:layout_constraintTop_toBottomOf="@+id/label_delivery_time" />
 
         <TextView
             android:id="@+id/txt_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:text="State"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintEnd_toEndOf="@+id/label_state"
+            card_view:layout_constraintStart_toStartOf="@+id/label_state"
             card_view:layout_constraintTop_toBottomOf="@+id/label_state" />
 
         <TextView
