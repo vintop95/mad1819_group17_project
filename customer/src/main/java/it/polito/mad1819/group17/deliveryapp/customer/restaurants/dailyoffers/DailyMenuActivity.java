@@ -265,6 +265,8 @@ public class DailyMenuActivity extends AppCompatActivity {
                                 return false; // leave false
                             }
                         }).into(photo);
+            }else{
+                Glide.with(photo.getContext()).clear(photo);
             }
         }
     }

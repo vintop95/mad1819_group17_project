@@ -86,6 +86,8 @@ public class EditProfileActivity extends AppCompatActivity {
             if (!image_changed && deliveryman.getImage_path() != "") {
                 Glide.with(image_user_photo.getContext()).load(deliveryman.getImage_path())
                         .into(image_user_photo);
+            }else{
+                Glide.with(image_user_photo.getContext()).clear(image_user_photo);
             }
             input_name.setText(deliveryman.getName());
             input_phone.setText(deliveryman.getPhone());

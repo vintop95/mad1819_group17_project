@@ -136,6 +136,8 @@ public class FoodDetailsActivity extends AppCompatActivity {
                             return false; // leave false
                         }
                     }).into(img_food_photo);
+        }else{
+            Glide.with(img_food_photo.getContext()).clear(img_food_photo);
         }
     }
 

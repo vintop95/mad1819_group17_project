@@ -125,6 +125,8 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
                                 return false; // leave false
                             }
                         }).into(itemPhoto);
+            }else{
+                Glide.with(itemPhoto.getContext()).clear(itemPhoto);
             }
 
             itemName.setText(currentFoodItem.name);

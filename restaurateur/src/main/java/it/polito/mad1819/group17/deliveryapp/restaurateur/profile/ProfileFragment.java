@@ -85,8 +85,10 @@ public class ProfileFragment extends Fragment {
                                 return false; // leave false
                             }
                         }).into(image_user_photo);
-            } else
+            } else{
+                Glide.with(image_user_photo.getContext()).clear(image_user_photo);
                 progressBarHandler.hide();
+            }
             txt_name.setText(restaurateur.getName());
             txt_phone.setText(restaurateur.getPhone());
             txt_mail.setText(restaurateur.getMail());

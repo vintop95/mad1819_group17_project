@@ -130,7 +130,8 @@ public class RestaurantsActivity extends AppCompatActivity {
         input_search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                adapter.getFilter().filter(FILTER_SEARCH + "=" + query);
+                return true;
             }
 
             @Override
@@ -341,6 +342,8 @@ public class RestaurantsActivity extends AppCompatActivity {
                                 return false; // leave false
                             }
                         }).into(photo);
+            }else{
+                Glide.with(photo.getContext()).clear(photo);
             }
         }
 
