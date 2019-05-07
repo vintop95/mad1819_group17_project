@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private ChildEventListener onChildAddedListener;
+    private LocationManager mLocationManager = null;
+    private LocationListener mLocationListener = null;
     private int notificationRequestCode = 0;
 
     private Toolbar toolbar;
@@ -366,12 +368,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
             Log.v("FIREBASE_LOG", "AuthListener removed onPause - MainActivity");
         }
+        setDeliverymanUnaivable(FirebaseAuth.getInstance().getUid());
     }
 
     private void handleLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, new LocationListener() {
+            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            mLocationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
                     String deliveryman_id = FirebaseAuth.getInstance().getUid();
@@ -380,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                             new GeoFire.CompletionListener() {
                                 @Override
                                 public void onComplete(String key, DatabaseError error) {
-                                    // needed to make setLocation(..) to work
+                                    // workaround: needed to make setLocation(..) to work
                                 }
                             });
                 }
@@ -397,16 +400,26 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 @Override
                 public void onProviderDisabled(String provider) {
                 }
-            });
+            };
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, mLocationListener);
 
         } else
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_REQUEST);
     }
 
     private void setDeliverymanUnaivable(String deliveryman_id) {
+        if (mLocationManager != null) {
+            mLocationManager.removeUpdates(mLocationListener);
+            mLocationManager = null;
+        }
         if (deliveryman_id != null) {
             GeoFire geoFire = new GeoFire(mDeliverymenAvailableRef);
-            geoFire.removeLocation(deliveryman_id);
+            geoFire.removeLocation(deliveryman_id, new GeoFire.CompletionListener() {
+                @Override
+                public void onComplete(String key, DatabaseError error) {
+                    // workaround: needed to make removeLocation(..) to work
+                }
+            });
         }
     }
 
@@ -415,13 +428,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         super.onResume();
         setAuthStateListener();
         handleLocationUpdates();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        setDeliverymanUnaivable(FirebaseAuth.getInstance().getUid());
-
     }
 
     private void setAuthStateListener() {
