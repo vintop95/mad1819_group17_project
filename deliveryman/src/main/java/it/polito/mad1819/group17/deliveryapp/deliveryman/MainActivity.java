@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private FirebaseDatabase mFirebaseDatabase = null;
     private DatabaseReference mRestaurateurDatabaseReference = null;
     private DatabaseReference mDeliveryRequestsRef = null;
+    private DatabaseReference mDeliverymenAvailableRef = null;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private ChildEventListener onChildAddedListener;
@@ -145,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("deliverymen");
         mDeliveryRequestsRef = mRestaurateurDatabaseReference.child(userId).child("delivery_requests");
+        mDeliverymenAvailableRef = mFirebaseDatabase.getReference().child("deliverymen_available");
 
         onChildAddedListener = mDeliveryRequestsRef
                 .addChildEventListener(new ChildEventListener() {
@@ -369,12 +371,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private void handleLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, new LocationListener() {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-                    GeoFire geoFire = new GeoFire(FirebaseDatabase.getInstance().getReference()
-                            .child("deliverymen").child(FirebaseAuth.getInstance().getUid()));
-                    geoFire.setLocation("location", new GeoLocation(location.getLatitude(), location.getLongitude()),
+                    String deliveryman_id = FirebaseAuth.getInstance().getUid();
+                    GeoFire geoFire = new GeoFire(mDeliverymenAvailableRef);
+                    geoFire.setLocation(deliveryman_id, new GeoLocation(location.getLatitude(), location.getLongitude()),
                             new GeoFire.CompletionListener() {
                                 @Override
                                 public void onComplete(String key, DatabaseError error) {
@@ -401,11 +403,25 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_REQUEST);
     }
 
+    private void setDeliverymanUnaivable(String deliveryman_id) {
+        if (deliveryman_id != null) {
+            GeoFire geoFire = new GeoFire(mDeliverymenAvailableRef);
+            geoFire.removeLocation(deliveryman_id);
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         setAuthStateListener();
         handleLocationUpdates();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        setDeliverymanUnaivable(FirebaseAuth.getInstance().getUid());
+
     }
 
     private void setAuthStateListener() {
