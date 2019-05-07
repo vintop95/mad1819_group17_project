@@ -211,6 +211,18 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
+    private double[] getLatitudeAndLongitudeFromLocation(String location) {
+        Geocoder geocoder = new Geocoder(getBaseContext());
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocationName(location, 1);
+            return new double[]{addresses.get(0).getLatitude(), addresses.get(0).getLongitude()};
+        } catch (
+                IOException e) {
+            return null;
+        }
+    }
+
     private int saveProfile() {
         String id = mFirebaseAuth.getUid();
         String name = input_name.getText().toString();
