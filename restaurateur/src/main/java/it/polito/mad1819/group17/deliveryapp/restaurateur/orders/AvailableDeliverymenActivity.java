@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryDataEventListener;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -115,6 +116,7 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
                         Log.d("LAT_LONG", restaurantLatitude + "_" + restaurantLongitude);
 
                         availableDeliverymen = new ArrayList<AvailableDeliveryman>();
+
 
                         GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(restaurantLatitude, restaurantLongitude), RADIUS_KM);
                         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {

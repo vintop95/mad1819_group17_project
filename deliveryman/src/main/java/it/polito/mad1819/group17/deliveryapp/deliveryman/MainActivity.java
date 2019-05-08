@@ -43,8 +43,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
 
+import it.polito.mad1819.group17.deliveryapp.common.Deliveryman;
 import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.DeliveryRequestDetailsActivity;
@@ -64,9 +66,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public final static String FIREBASE_APP_NAME = "deliverymen";
 
     private FirebaseDatabase mFirebaseDatabase = null;
-    private DatabaseReference mRestaurateurDatabaseReference = null;
+    private DatabaseReference mDeliverymenDatabaseRef = null;
     private DatabaseReference mDeliveryRequestsRef = null;
-    private DatabaseReference mDeliverymenAvailableRef = null;
+    private DatabaseReference mDeliverymenAvailableDatabaseRef = null;
     private FirebaseAuth mFirebaseAuth = null;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private ChildEventListener onChildAddedListener;
@@ -146,9 +148,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             return;
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("deliverymen");
-        mDeliveryRequestsRef = mRestaurateurDatabaseReference.child(userId).child("delivery_requests");
-        mDeliverymenAvailableRef = mFirebaseDatabase.getReference().child("deliverymen_available");
+        mDeliverymenDatabaseRef = mFirebaseDatabase.getReference().child("deliverymen");
+        mDeliveryRequestsRef = mDeliverymenDatabaseRef.child(userId).child("delivery_requests");
+        mDeliverymenAvailableDatabaseRef = mFirebaseDatabase.getReference().child("deliverymen_available");
 
         onChildAddedListener = mDeliveryRequestsRef
                 .addChildEventListener(new ChildEventListener() {
@@ -378,13 +380,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 @Override
                 public void onLocationChanged(Location location) {
                     String deliveryman_id = FirebaseAuth.getInstance().getUid();
-                    GeoFire geoFire = new GeoFire(mDeliverymenAvailableRef);
+                    GeoFire geoFire = new GeoFire(mDeliverymenAvailableDatabaseRef);
                     geoFire.setLocation(deliveryman_id, new GeoLocation(location.getLatitude(), location.getLongitude()),
                             new GeoFire.CompletionListener() {
                                 @Override
                                 public void onComplete(String key, DatabaseError error) {
                                     // workaround: needed to make setLocation(..) to work
-                                    Log.d("OK", "OK");
+                                    Log.d("OK", "Location set to the server");
                                 }
                             });
                 }
@@ -414,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             mLocationManager = null;
         }
         if (deliveryman_id != null) {
-            GeoFire geoFire = new GeoFire(mDeliverymenAvailableRef);
+            GeoFire geoFire = new GeoFire(mDeliverymenAvailableDatabaseRef);
             geoFire.removeLocation(deliveryman_id, new GeoFire.CompletionListener() {
                 @Override
                 public void onComplete(String key, DatabaseError error) {
@@ -428,8 +430,41 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     protected void onResume() {
         super.onResume();
         setAuthStateListener();
-        if (mFirebaseAuth != null)
+        Log.d("YYYYY", "YYYYY");
+        if (mFirebaseAuth.getUid() != null) {
+            Log.d("XXXXXXX", "XXXXXX");
+
+            // read name and phone
+            /*FirebaseDatabase.getInstance().getReference()
+                    .child("deliverymen").child(mFirebaseAuth.getUid())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Deliveryman deliveryman = dataSnapshot.getValue(Deliveryman.class);
+                            Log.d("OK", "Deliveryman read");
+
+                            // copy name and phone from "/deliverymen/<current-deliveryman>" to "/deliverymen_available/<current-deliveryman>"
+                            HashMap<String, Object> updatesMap = new HashMap<>();
+                            updatesMap.put("name", deliveryman.getName());
+                            updatesMap.put("phone", deliveryman.getPhone());
+                            FirebaseDatabase.getInstance().getReference()
+                                    .child("deliverymen_available").child(mFirebaseAuth.getUid())
+                                    .updateChildren(updatesMap, new DatabaseReference.CompletionListener() {
+                                        @Override
+                                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                            Log.d("OK", "Name and Phone copied");
+                                            handleLocationUpdates();
+                                        }
+                                    });
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.d("KO", "KO");
+                        }
+                    });*/
             handleLocationUpdates();
+        }
     }
 
     private void setAuthStateListener() {

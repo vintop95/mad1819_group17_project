@@ -8,10 +8,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 import it.polito.mad1819.group17.deliveryapp.common.AvailableDeliveryman;
+import it.polito.mad1819.group17.deliveryapp.common.Deliveryman;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
 public class AvailableDeliverymenAdapter extends RecyclerView.Adapter<AvailableDeliverymenAdapter.AvailableDeliverymanHolder> {
@@ -26,14 +34,16 @@ public class AvailableDeliverymenAdapter extends RecyclerView.Adapter<AvailableD
 
     /* ------------------------------------------------------------------------------------------------------------- */
     public class AvailableDeliverymanHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView txt_deliveryman_id;
-        TextView txt_distance;
+        TextView txt_deliveryman_id, txt_distance, txt_name, txt_phone;
 
         public AvailableDeliverymanHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             txt_deliveryman_id = itemView.findViewById(R.id.txt_deliveryman_id);
             txt_distance = itemView.findViewById(R.id.txt_distance);
+            txt_name = itemView.findViewById(R.id.txt_name);
+            txt_phone = itemView.findViewById(R.id.txt_phone);
+
 
         }
 
@@ -54,8 +64,28 @@ public class AvailableDeliverymenAdapter extends RecyclerView.Adapter<AvailableD
     @Override
     public void onBindViewHolder(@NonNull AvailableDeliverymanHolder availableDeliverymanHolder, int i) {
         AvailableDeliveryman availableDeliveryman = availableDeliverymen.get(i);
-        availableDeliverymanHolder.txt_deliveryman_id.setText(availableDeliveryman.getId());
-        availableDeliverymanHolder.txt_distance.setText(availableDeliveryman.getHaversineDistanceFromReference().toString());
+
+        // retrieve for firebase name and phone of the current deliveryman, then feed the whole card view
+        FirebaseDatabase.getInstance().getReference()
+                .child("deliverymen").child(availableDeliveryman.getId())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Deliveryman deliveryman = dataSnapshot.getValue(Deliveryman.class);
+                        if (deliveryman != null) {
+                            availableDeliverymanHolder.txt_deliveryman_id.setText(availableDeliveryman.getId());
+                            availableDeliverymanHolder.txt_distance.setText(availableDeliveryman.getHaversineDistanceFromReference().toString());
+                            availableDeliverymanHolder.txt_name.setText(deliveryman.getName());
+                            availableDeliverymanHolder.txt_phone.setText(deliveryman.getPhone());
+                        } else
+                            Toast.makeText(context, "Unable to retrieve information for some deliverymen", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     @Override
