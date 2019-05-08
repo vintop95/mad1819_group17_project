@@ -56,7 +56,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FieldHolder> {
         mFormState = formState;
     }
 
-    // PHASE 1 OF PROTOCOL: build FieldHolder (ViewHolder)
+    // PHASE 1 OF PROTOCOL: build FieldHolder (AvailableDeliverymanHolder)
     // and link rv_field_edittext layout to FormAdapter (Adapter)
     @NonNull
     @Override
@@ -66,7 +66,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FieldHolder> {
         return new FieldHolder(itemView);
     }
 
-    // PHASE 2 OF PROTOCOL: fetch data from model and set data on FieldHolder (ViewHolder)
+    // PHASE 2 OF PROTOCOL: fetch data from model and set data on FieldHolder (AvailableDeliverymanHolder)
     @Override
     public void onBindViewHolder(@NonNull FieldHolder holder, int pos) {
         // Log.d(TAG, "onBindViewHolder " + pos);

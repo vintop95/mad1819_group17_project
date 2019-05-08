@@ -40,7 +40,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
         mOffersFragment = of;
     }
 
-    // PHASE 1 OF PROTOCOL: build FoodHolder (ViewHolder)
+    // PHASE 1 OF PROTOCOL: build FoodHolder (AvailableDeliverymanHolder)
     // and link rv_food_item layout to FoodAdapter (Adapter)
     @NonNull
     @Override
@@ -50,7 +50,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
         return new FoodHolder(foodItemView);
     }
 
-    // PHASE 2 OF PROTOCOL: fetch data from model and set data on FoodHolder (ViewHolder)
+    // PHASE 2 OF PROTOCOL: fetch data from model and set data on FoodHolder (AvailableDeliverymanHolder)
     @Override
     protected void onBindViewHolder(@NonNull FoodHolder holder, int pos, @NonNull FoodModel model) {
         // Log.d(TAG, "onBindViewHolder " + pos);

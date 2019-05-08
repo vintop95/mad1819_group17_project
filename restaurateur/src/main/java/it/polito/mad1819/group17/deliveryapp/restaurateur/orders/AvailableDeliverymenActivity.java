@@ -5,6 +5,8 @@ import android.location.Geocoder;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
@@ -46,6 +48,7 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
     private Double restaurantLongitude = null;
 
     private ArrayList<AvailableDeliveryman> availableDeliverymen;
+    private RecyclerView recyclerView;
 
     private void initUtils() {
         PrefHelper.setMainContext(this);
@@ -96,6 +99,9 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        recyclerView = findViewById(R.id.rv_available_deliverymen);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         initUtils();
 
         initFirebaseStuff();
@@ -106,7 +112,7 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         computeRestaurantLatitudeAndLongitude(dataSnapshot.getValue().toString());
 
-                        Log.d("LAT_LONG", restaurantLatitude+"_"+restaurantLongitude);
+                        Log.d("LAT_LONG", restaurantLatitude + "_" + restaurantLongitude);
 
                         availableDeliverymen = new ArrayList<AvailableDeliveryman>();
 
@@ -140,6 +146,10 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
 
                                 for (AvailableDeliveryman p : availableDeliverymen)
                                     Log.d("AFTER_SORT", p.toString());
+
+                                AvailableDeliverymenAdapter availableDeliverymenAdapter = new AvailableDeliverymenAdapter(availableDeliverymen, getApplicationContext());
+                                recyclerView.setAdapter(availableDeliverymenAdapter);
+
                             }
 
                             @Override

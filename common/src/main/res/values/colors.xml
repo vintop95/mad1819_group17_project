@@ -5,7 +5,7 @@
     <color name="colorPrimaryLight">#FFECB3</color>
     <color name="colorAccent">#FFC107</color>
     <color name="colorDivider">#BDBDBD</color>
- <color name="colorContrast">#0ab6ff</color>
+    <color name="colorContrast">#0ab6ff</color>
 
     <color name="colorState1">#ff4d4d</color>
     <color name="colorState2">#ffaf40</color>
@@ -17,5 +17,7 @@
     <color name="textSecondary">#757575</color>
 
     <color name="error_text">#ff0000</color>
+
+    <color name="colorAvailableDeliveryman">#e6f7ff</color>
 
 </resources>
