@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private DatabaseReference mRestaurateurDatabaseReference = null;
     private DatabaseReference mDeliveryRequestsRef = null;
     private DatabaseReference mDeliverymenAvailableRef = null;
-    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth mFirebaseAuth = null;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private ChildEventListener onChildAddedListener;
     private LocationManager mLocationManager = null;
@@ -384,6 +384,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                                 @Override
                                 public void onComplete(String key, DatabaseError error) {
                                     // workaround: needed to make setLocation(..) to work
+                                    Log.d("OK", "OK");
                                 }
                             });
                 }
@@ -401,7 +402,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 public void onProviderDisabled(String provider) {
                 }
             };
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, mLocationListener);
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, mLocationListener);
 
         } else
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_REQUEST);
@@ -427,7 +428,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     protected void onResume() {
         super.onResume();
         setAuthStateListener();
-        handleLocationUpdates();
+        if (mFirebaseAuth != null)
+            handleLocationUpdates();
     }
 
     private void setAuthStateListener() {

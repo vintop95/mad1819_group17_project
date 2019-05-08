@@ -42,8 +42,9 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
 public class OrderDetailsActivity extends AppCompatActivity {
 
-    public final static int STATE_CHANGED = 1;
+    //public final static int STATE_CHANGED = 1;
     public final static int STATE_NOT_CHANGED = 0;
+    public final static int SELECT_DELIVERYMEN =2;
 
     private Restaurateur currentRestaurateur;
 
@@ -261,7 +262,10 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
     private void selectDeliveryman() {
 
+        startActivityForResult(new Intent(this, AvailableDeliverymenActivity.class), SELECT_DELIVERYMEN);
         //choose rider from firebase
+        /*
+        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
         FirebaseDatabase.getInstance().getReference()
                 .child("deliverymen").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -281,6 +285,9 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 }
 
                 retrieveCurrentRestaurateur(selectedDeliveryman);
+                UNCOMMENT FROM HERE ABOVE
+          ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          */
 
                 /*
                 // create the new delivery request
@@ -321,14 +328,14 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 /*txt_deliveryman_phone.setOnClickListener(v -> {
                     String phoneNumber = ((TextView) v).getText().toString();
                     startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));*/
-                }
+                /*------------------------------------------------------------------}
 
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        });-----------------------------------------------------------------------*/
     }
 
     public void adjustLayoutProgrammatically() {
