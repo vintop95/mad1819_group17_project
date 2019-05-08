@@ -1,5 +1,6 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.orders;
 
+import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.annotation.NonNull;
@@ -38,6 +39,9 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
 public class AvailableDeliverymenActivity extends AppCompatActivity {
     public final static double RADIUS_KM = 10000.0;
+    public final static int RESULT_OK = 1;
+
+    private Context context = this;
 
     private Toolbar toolbar;
 
@@ -91,14 +95,19 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
 
     }
 
+    private void showBackArrowOnToolbar() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_available_deliverymen);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        showBackArrowOnToolbar();
 
         recyclerView = findViewById(R.id.rv_available_deliverymen);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -107,13 +116,14 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
 
         initFirebaseStuff();
 
+
         mDatabaseReference.child("restaurateurs").child(restaurateur_id).child("address")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         computeRestaurantLatitudeAndLongitude(dataSnapshot.getValue().toString());
 
-                        Log.d("LAT_LONG", restaurantLatitude + "_" + restaurantLongitude);
+                        //Log.d("RESTAURANT_COORDINATES", restaurantLatitude + "_" + restaurantLongitude);
 
                         availableDeliverymen = new ArrayList<AvailableDeliveryman>();
 
@@ -141,22 +151,23 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
                                 if (availableDeliverymen.size() == 0)
                                     Toast.makeText(getApplicationContext(), "No currently deliverymen available. Try again in a while!", Toast.LENGTH_LONG).show();
 
-                                for (AvailableDeliveryman p : availableDeliverymen)
-                                    Log.d("BEFORE_SORT", p.toString());
+                                /*for (AvailableDeliveryman p : availableDeliverymen)
+                                    Log.d("BEFORE_SORT", p.toString());*/
 
-                                Collections.sort(availableDeliverymen);
+                                else {
+                                    Collections.sort(availableDeliverymen);
 
-                                for (AvailableDeliveryman p : availableDeliverymen)
-                                    Log.d("AFTER_SORT", p.toString());
+                                /*for (AvailableDeliveryman p : availableDeliverymen)
+                                    Log.d("AFTER_SORT", p.toString());*/
 
-                                AvailableDeliverymenAdapter availableDeliverymenAdapter = new AvailableDeliverymenAdapter(availableDeliverymen, getApplicationContext());
-                                recyclerView.setAdapter(availableDeliverymenAdapter);
-
+                                    AvailableDeliverymenAdapter availableDeliverymenAdapter = new AvailableDeliverymenAdapter(availableDeliverymen, context);
+                                    recyclerView.setAdapter(availableDeliverymenAdapter);
+                                }
                             }
 
                             @Override
                             public void onGeoQueryError(DatabaseError error) {
-                                Log.d("ERROR", "ERROR");
+
                             }
                         });
 
@@ -170,5 +181,11 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
                 });
 
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

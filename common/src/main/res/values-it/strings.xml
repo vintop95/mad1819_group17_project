@@ -210,4 +210,7 @@
     <string name="signed_in">Accesso eseguito!</string>
     <string name="sign_in_canceled">Accesso annullato!</string>
 
+    <string name='alert_dialog_available_deliveryman_title'>Conferma la tua scelta</string>
+    <string name='alert_dialog_available_deliveryman_text'>Premendo OK proverai ad assegnare la consegna al deliveryman selezionat</string>
+
 </resources>

@@ -240,5 +240,8 @@
     <string name="signed_in">Signed In!</string>
     <string name="sign_in_canceled">Sign in canceled!</string>
 
+    <string name='alert_dialog_available_deliveryman_title'>Confirm you choice</string>
+    <string name='alert_dialog_available_deliveryman_text'>Pressing OK you will try to assign the delivery to the selected deliveryman</string>
+
 
 </resources>

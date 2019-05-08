@@ -1,9 +1,13 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.orders;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -26,6 +30,7 @@ import it.polito.mad1819.group17.deliveryapp.common.AvailableDeliveryman;
 import it.polito.mad1819.group17.deliveryapp.common.Deliveryman;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
+
 public class AvailableDeliverymenAdapter extends RecyclerView.Adapter<AvailableDeliverymenAdapter.AvailableDeliverymanHolder> {
 
     private ArrayList<AvailableDeliveryman> availableDeliverymen;
@@ -39,6 +44,7 @@ public class AvailableDeliverymenAdapter extends RecyclerView.Adapter<AvailableD
     /* ------------------------------------------------------------------------------------------------------------- */
     public class AvailableDeliverymanHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView txt_deliveryman_id, txt_distance, txt_name, txt_phone;
+        String selectedDeliverymanId;
 
         public AvailableDeliverymanHolder(@NonNull View itemView) {
             super(itemView);
@@ -53,7 +59,21 @@ public class AvailableDeliverymenAdapter extends RecyclerView.Adapter<AvailableD
 
         @Override
         public void onClick(View v) {
-            Log.d("CLICK", getAdapterPosition() + "");
+            selectedDeliverymanId = availableDeliverymen.get(getAdapterPosition()).getId();
+            showAlertDialog();
+        }
+
+        private void showAlertDialog() {
+            new AlertDialog.Builder(context).setTitle(context.getString(R.string.alert_dialog_available_deliveryman_title))
+                    .setMessage(context.getString(R.string.alert_dialog_available_deliveryman_text))
+                    .setNegativeButton(context.getString(R.string.negative_button), (dialog, which) -> dialog.cancel())
+                    .setPositiveButton(context.getString(R.string.positive_button), (dialog, which) -> returnSelectedDeliveymanAndFinish())
+                    .show();
+        }
+
+        private void returnSelectedDeliveymanAndFinish() {
+            ((AppCompatActivity)context).setResult(AvailableDeliverymenActivity.RESULT_OK, new Intent().putExtra("selected_deliveryman_id", selectedDeliverymanId));
+            ((AppCompatActivity)context).finish();
         }
     }
     /* ------------------------------------------------------------------------------------------------------------- */
