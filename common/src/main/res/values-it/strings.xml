@@ -36,6 +36,9 @@
     <string name="title_activity_order_details">Dettagli Ordine</string>
     <string name="deliveryman_name">Nome Rider</string>
     <string name="deliveryman_phone">Telefono Rider</string>
+    <string name="deliveryman_id">ID Rider</string>
+    <string name="distance">Distanza (Km)</string>
+
     <!-- Labels -->
     <string name="name_label">Nome:</string>
     <string name="phone_label">Telefono:</string>

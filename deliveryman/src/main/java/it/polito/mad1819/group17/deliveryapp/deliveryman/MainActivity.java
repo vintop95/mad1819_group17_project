@@ -374,40 +374,43 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     private void handleLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            mLocationListener = new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    String deliveryman_id = FirebaseAuth.getInstance().getUid();
-                    GeoFire geoFire = new GeoFire(mDeliverymenAvailableDatabaseRef);
-                    geoFire.setLocation(deliveryman_id, new GeoLocation(location.getLatitude(), location.getLongitude()),
-                            new GeoFire.CompletionListener() {
-                                @Override
-                                public void onComplete(String key, DatabaseError error) {
-                                    // workaround: needed to make setLocation(..) to work
-                                    Log.d("OK", "Location set to the server");
-                                }
-                            });
-                }
+        if (mFirebaseAuth.getUid() != null) {
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                mLocationListener = new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        String deliveryman_id = FirebaseAuth.getInstance().getUid();
+                        GeoFire geoFire = new GeoFire(mDeliverymenAvailableDatabaseRef);
+                        geoFire.setLocation(deliveryman_id, new GeoLocation(location.getLatitude(), location.getLongitude()),
+                                new GeoFire.CompletionListener() {
+                                    @Override
+                                    public void onComplete(String key, DatabaseError error) {
+                                        // workaround: needed to make setLocation(..) to work
+                                        Log.d("OK", "Location set to the server");
+                                    }
+                                });
+                    }
 
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
 
-                }
+                    }
 
-                @Override
-                public void onProviderEnabled(String provider) {
-                }
+                    @Override
+                    public void onProviderEnabled(String provider) {
+                    }
 
-                @Override
-                public void onProviderDisabled(String provider) {
-                }
-            };
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, mLocationListener);
+                    @Override
+                    public void onProviderDisabled(String provider) {
+                        Toast.makeText(getApplicationContext(), "Turn " + provider.toUpperCase() + " on !", Toast.LENGTH_LONG).show();
+                    }
+                };
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, mLocationListener);
 
-        } else
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_REQUEST);
+            } else
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_REQUEST);
+        }
     }
 
     private void setDeliverymanUnaivable(String deliveryman_id) {
@@ -430,41 +433,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     protected void onResume() {
         super.onResume();
         setAuthStateListener();
-        Log.d("YYYYY", "YYYYY");
-        if (mFirebaseAuth.getUid() != null) {
-            Log.d("XXXXXXX", "XXXXXX");
-
-            // read name and phone
-            /*FirebaseDatabase.getInstance().getReference()
-                    .child("deliverymen").child(mFirebaseAuth.getUid())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            Deliveryman deliveryman = dataSnapshot.getValue(Deliveryman.class);
-                            Log.d("OK", "Deliveryman read");
-
-                            // copy name and phone from "/deliverymen/<current-deliveryman>" to "/deliverymen_available/<current-deliveryman>"
-                            HashMap<String, Object> updatesMap = new HashMap<>();
-                            updatesMap.put("name", deliveryman.getName());
-                            updatesMap.put("phone", deliveryman.getPhone());
-                            FirebaseDatabase.getInstance().getReference()
-                                    .child("deliverymen_available").child(mFirebaseAuth.getUid())
-                                    .updateChildren(updatesMap, new DatabaseReference.CompletionListener() {
-                                        @Override
-                                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                            Log.d("OK", "Name and Phone copied");
-                                            handleLocationUpdates();
-                                        }
-                                    });
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Log.d("KO", "KO");
-                        }
-                    });*/
-            handleLocationUpdates();
-        }
+        handleLocationUpdates();
     }
 
     private void setAuthStateListener() {

@@ -1,8 +1,11 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.orders;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import it.polito.mad1819.group17.deliveryapp.common.AvailableDeliveryman;
@@ -74,9 +78,13 @@ public class AvailableDeliverymenAdapter extends RecyclerView.Adapter<AvailableD
                         Deliveryman deliveryman = dataSnapshot.getValue(Deliveryman.class);
                         if (deliveryman != null) {
                             availableDeliverymanHolder.txt_deliveryman_id.setText(availableDeliveryman.getId());
-                            availableDeliverymanHolder.txt_distance.setText(availableDeliveryman.getHaversineDistanceFromReference().toString());
+                            availableDeliverymanHolder.txt_distance.setText(new DecimalFormat("####0.00").format(availableDeliveryman.getHaversineDistanceFromReference()));
                             availableDeliverymanHolder.txt_name.setText(deliveryman.getName());
-                            availableDeliverymanHolder.txt_phone.setText(deliveryman.getPhone());
+                            availableDeliverymanHolder.txt_phone.setText(Html.fromHtml("<u>" + deliveryman.getPhone() + "<u/>"));
+
+                            availableDeliverymanHolder.txt_phone.setOnClickListener(v -> context.startActivity(
+                                    new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", ((TextView) v).getText().toString(), null)))
+                            );
                         } else
                             Toast.makeText(context, "Unable to retrieve information for some deliverymen", Toast.LENGTH_SHORT).show();
                     }

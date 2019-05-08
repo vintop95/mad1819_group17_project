@@ -36,6 +36,8 @@
     <string name="title_activity_order_details">Order Details</string>
     <string name="deliveryman_name">Rider Name</string>
     <string name="deliveryman_phone">Rider Phone</string>
+    <string name="deliveryman_id">Rider ID</string>
+    <string name="distance">Distance (Km)</string>
     <!-- Icons -->
     <string name="icon_restaurateur" translatable="false">Icon Restaurateur</string>
     <string name="icon_content" translatable="false">Icon Content</string>
