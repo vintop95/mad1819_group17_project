@@ -172,6 +172,17 @@
             card_view:layout_constraintStart_toStartOf="@+id/label_restaurant_address"
             card_view:layout_constraintTop_toBottomOf="@+id/label_restaurant_address" />
 
+        <ImageButton
+            android:id="@+id/imageButton_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:srcCompat="@drawable/ic_map_black_24dp" />
+
 
     </android.support.constraint.ConstraintLayout>
 
