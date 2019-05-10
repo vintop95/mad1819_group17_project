@@ -13,7 +13,8 @@
         android:layout_marginEnd="16dp"
         android:singleLine="true"
         android:text="@string/label_food_name"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"></TextView>
+        android:textColor="@color/textPrimary"
+        android:textSize="14sp"></TextView>
 
     <EditText
         android:id="@+id/input_field_value"
@@ -23,5 +24,6 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:singleLine="true"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"></EditText>
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:textColor="@color/textSecondary"></EditText>
 </LinearLayout>
