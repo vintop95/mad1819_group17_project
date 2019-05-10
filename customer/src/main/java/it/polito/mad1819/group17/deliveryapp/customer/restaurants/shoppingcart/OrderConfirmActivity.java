@@ -49,6 +49,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
     private EditText deliveryAddress_edit;
     private EditText deliveryHour_edit;
     private EditText txtOrderNotes_edit;
+    private TextView item_tot_price;
 
     private String restaurant_id;
     private String restaurant_name;
@@ -92,6 +93,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order_confirm);
 
         final_results = findViewById(R.id.final_tv);
+        item_tot_price = findViewById(R.id.item_tot_price);
         btnConfirmOrder = findViewById(R.id.btn_confirm_order);
         txtOrderNotes_edit = findViewById(R.id.oc_input_order_notes);
         intent = getIntent();
@@ -142,6 +144,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
                         itemquantity, CurrencyHelper.getCurrency(totalprice)
                 );
         final_results.setText(finalResultString);
+        item_tot_price.setText(CurrencyHelper.getCurrency(totalprice));
 
         lst = (ListView) findViewById(R.id.listview_items);
         OrderConfirmAdapter orderConfirmAdapter = new OrderConfirmAdapter(names,quantities,prices,this);
