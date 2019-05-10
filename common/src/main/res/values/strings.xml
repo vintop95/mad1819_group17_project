@@ -10,6 +10,7 @@
 
     <string name="sign_out_menu">Sign Out</string>
 
+    <string name="choose_deliveryman">Choose a Deliveryman</string>
 
     <!-- ////////////// -->
     <!-- Orders Strings -->
@@ -35,6 +36,8 @@
     <string name="title_activity_order_details">Order Details</string>
     <string name="deliveryman_name">Rider Name</string>
     <string name="deliveryman_phone">Rider Phone</string>
+    <string name="deliveryman_id">Rider ID</string>
+    <string name="distance">Distance (Km)</string>
     <!-- Icons -->
     <string name="icon_restaurateur" translatable="false">Icon Restaurateur</string>
     <string name="icon_content" translatable="false">Icon Content</string>
@@ -236,6 +239,9 @@
     <string name="open_now">Open Now</string>
     <string name="signed_in">Signed In!</string>
     <string name="sign_in_canceled">Sign in canceled!</string>
+
+    <string name='alert_dialog_available_deliveryman_title'>Confirm you choice</string>
+    <string name='alert_dialog_available_deliveryman_text'>Pressing OK you will try to assign the delivery to the selected deliveryman</string>
 
 
 </resources>

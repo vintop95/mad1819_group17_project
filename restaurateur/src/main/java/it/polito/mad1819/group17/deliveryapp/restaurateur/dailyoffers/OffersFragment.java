@@ -26,7 +26,7 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
  * 2. Add RecyclerView to layout (fragment_offers.xml)
  * 3. Create XML layout for item (rv_food_item.xml)
  * 4. Extend RecyclerView.Adapter (FoodAdapter)
- * 5. Extend RecyclerView.ViewHolder (FoodAdapter.FoodHolder)
+ * 5. Extend RecyclerView.AvailableDeliverymanHolder (FoodAdapter.FoodHolder)
  * 6. In Activity onCreate(), create RecyclerView with mAdapter
  *    and layout manager (OffersFragment.onViewCreated())
  */

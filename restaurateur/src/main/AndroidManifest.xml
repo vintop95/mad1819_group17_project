@@ -12,8 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".orders.AvailableDeliverymenActivity"></activity>
         <activity
-            android:name="it.polito.mad1819.group17.deliveryapp.restaurateur.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,13 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="it.polito.mad1819.group17.deliveryapp.restaurateur.profile.EditProfileActivity" />
+        <activity android:name=".profile.EditProfileActivity" />
         <activity
-            android:name="it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffers.FoodDetailsActivity"
+            android:name=".dailyoffers.FoodDetailsActivity"
             android:label="@string/title_activity_edit_food"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name="it.polito.mad1819.group17.deliveryapp.restaurateur.orders.OrderDetailsActivity"
+        <activity
+            android:name=".orders.OrderDetailsActivity"
             android:label="@string/title_activity_order_details" />
     </application>
 

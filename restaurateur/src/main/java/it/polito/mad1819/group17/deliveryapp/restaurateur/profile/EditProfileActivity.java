@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,11 +15,15 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -38,10 +44,13 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import it.polito.mad1819.group17.deliveryapp.common.Restaurateur;
@@ -65,7 +74,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText input_name;
     private EditText input_phone;
     private EditText input_mail;
-    private EditText input_address;
+    private /*EditText*/ AutoCompleteTextView input_address;
     private Spinner input_restaurant_type;
     private Spinner input_free_day;
     private TextView input_working_time_opening;
@@ -91,12 +100,34 @@ public class EditProfileActivity extends AppCompatActivity {
         input_bio = findViewById(R.id.input_bio_sign_in);
     }
 
+    /*private String normalizeAddress(String inputAddress){
+        String normalized_address;
+        Geocoder geocoder = new Geocoder(getBaseContext());
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocationName(inputAddress, 20);
+
+            for(int i = 0; i < addresses.size(); i++) { // MULTIPLE MATCHES
+
+                Address addr = addresses.get(i);
+
+                double latitude = addr.getLatitude();
+                double longitude = addr.getLongitude(); // DO SOMETHING WITH VALUES
+                Log.d("XX", ""+latitude+" "+longitude);
+
+            }
+
+        } catch (IOException e) {
+            // ignore
+        }
+    }*/
+
     private void feedViews(Restaurateur restaurateur) {
         if (restaurateur != null) {
             if (!image_changed && restaurateur.getImage_path() != "") {
                 Glide.with(image_user_photo.getContext()).load(restaurateur.getImage_path())
                         .into(image_user_photo);
-            }else{
+            } else {
                 Glide.with(image_user_photo.getContext()).clear(image_user_photo);
             }
             input_name.setText(restaurateur.getName());
@@ -104,12 +135,12 @@ public class EditProfileActivity extends AppCompatActivity {
             input_mail.setText(restaurateur.getMail());
             input_address.setText(restaurateur.getAddress());
             String restaurant_type = restaurateur.getRestaurant_type();
-            if (restaurant_type != null){
+            if (restaurant_type != null) {
                 Integer index;
                 try {
                     index = Integer.valueOf(restaurateur.getRestaurant_type());
-                }catch(NumberFormatException e){
-                    index=0;
+                } catch (NumberFormatException e) {
+                    index = 0;
                 }
 
                 input_restaurant_type.setSelection(index);
@@ -121,12 +152,12 @@ public class EditProfileActivity extends AppCompatActivity {
             }
 
             String free_day = restaurateur.getFree_day();
-            if (free_day != null){
+            if (free_day != null) {
                 Integer dayIndex;
                 try {
                     dayIndex = Integer.valueOf(restaurateur.getFree_day());
-                }catch(NumberFormatException e){
-                    dayIndex=0;
+                } catch (NumberFormatException e) {
+                    dayIndex = 0;
                 }
 
                 input_free_day.setSelection(dayIndex);
@@ -153,7 +184,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadImage(){
+    private void uploadImage() {
         Bitmap bitmap = ((BitmapDrawable) image_user_photo.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -166,18 +197,30 @@ public class EditProfileActivity extends AppCompatActivity {
         uploadTask.addOnFailureListener((@NonNull Exception exception) -> {
             Log.e("FIREBASE_LOG", "Picture Upload Fail - EditProfileActivity");
             Toast.makeText(getApplicationContext(),
-                "Picture Upload Fail - EditProfileActivity",
-                Toast.LENGTH_LONG).show();
+                    "Picture Upload Fail - EditProfileActivity",
+                    Toast.LENGTH_LONG).show();
         }).addOnSuccessListener((UploadTask.TaskSnapshot taskSnapshot) -> {
             mFirebaseStorageReference.child("profile_picture.jpg")
-                .getDownloadUrl()
-                .addOnSuccessListener((Uri uri) -> {
-                    Uri downUri = uri;
-                    Log.v("FIREBASE_LOG", "Picture Upload Success - EditProfileActivity");
-                    mRestaurateurDatabaseReference.child(mFirebaseAuth.getUid())
-                            .child("image_path").setValue(downUri.toString());
-                });
+                    .getDownloadUrl()
+                    .addOnSuccessListener((Uri uri) -> {
+                        Uri downUri = uri;
+                        Log.v("FIREBASE_LOG", "Picture Upload Success - EditProfileActivity");
+                        mRestaurateurDatabaseReference.child(mFirebaseAuth.getUid())
+                                .child("image_path").setValue(downUri.toString());
+                    });
         });
+    }
+
+    private double[] getLatitudeAndLongitudeFromLocation(String location) {
+        Geocoder geocoder = new Geocoder(getBaseContext());
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocationName(location, 1);
+            return new double[]{addresses.get(0).getLatitude(), addresses.get(0).getLongitude()};
+        } catch (
+                IOException e) {
+            return null;
+        }
     }
 
     private int saveProfile() {
@@ -277,6 +320,27 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
+    private String[] searchPossibleMatchingAddresses(String searchString) {
+        ArrayList<String> strings = new ArrayList<>();
+        Geocoder geocoder = new Geocoder(getBaseContext());
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocationName(searchString, 10);
+            for (int i = 0; i < addresses.size(); i++) {
+                /*double latitude = addr.getLatitude();
+                double longitude = addr.getLongitude();*/
+                strings.add(addresses.get(i).getAddressLine(0));
+            }
+
+            String[] strings_as_array = new String[strings.size()];
+            strings.toArray(strings_as_array);
+            return strings_as_array;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -294,6 +358,30 @@ public class EditProfileActivity extends AppCompatActivity {
         addOnFocusChangeListener(input_mail);
         addOnFocusChangeListener(input_address);
         addOnFocusChangeListener(input_bio);
+
+
+        input_address.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() >= 10) {
+                    String[] matchingAddresses = searchPossibleMatchingAddresses(s.toString());
+                    if (matchingAddresses != null) {
+                        ArrayAdapter<String> addressesAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, matchingAddresses);
+                        input_address.setAdapter(addressesAdapter);
+                    }
+                }
+            }
+        });
 
         addTimePickerOnClick(input_working_time_opening);
         addTimePickerOnClick(input_working_time_closing);

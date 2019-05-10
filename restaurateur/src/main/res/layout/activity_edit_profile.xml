@@ -313,7 +313,7 @@
                 app:layout_constraintTop_toTopOf="@+id/label_address"
                 android:src="@drawable/ic_person_pin_circle_black_24dp" />
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/input_address_sign_in"
                 style="@style/standardInputStyle.address.autofill"
                 android:layout_width="match_parent"
@@ -322,7 +322,8 @@
                 android:layout_marginLeft="64dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/label_address" />
+                app:layout_constraintTop_toBottomOf="@+id/label_address"
+                android:completionThreshold="10"/>
 
             <View
                 android:id="@+id/view_divider_address"

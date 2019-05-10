@@ -10,6 +10,7 @@
 
     <string name="sign_out_menu">Esci</string>
 
+    <string name="choose_deliveryman">Scegli un Deliveryman</string>
 
     <!-- ////////////// -->
     <!-- Orders Strings -->
@@ -35,6 +36,9 @@
     <string name="title_activity_order_details">Dettagli Ordine</string>
     <string name="deliveryman_name">Nome Rider</string>
     <string name="deliveryman_phone">Telefono Rider</string>
+    <string name="deliveryman_id">ID Rider</string>
+    <string name="distance">Distanza (Km)</string>
+
     <!-- Labels -->
     <string name="name_label">Nome:</string>
     <string name="phone_label">Telefono:</string>
@@ -205,5 +209,8 @@
     <string name="choose_category">SCEGLI LA CATEGORIA DEL RISTORANTE</string>
     <string name="signed_in">Accesso eseguito!</string>
     <string name="sign_in_canceled">Accesso annullato!</string>
+
+    <string name='alert_dialog_available_deliveryman_title'>Conferma la tua scelta</string>
+    <string name='alert_dialog_available_deliveryman_text'>Premendo OK proverai ad assegnare la consegna al deliveryman selezionat</string>
 
 </resources>
