@@ -68,7 +68,11 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
                     //clickedDeliveryRequest.setId(getSnapshots().getSnapshot(getAdapterPosition()).getKey());
                     String restaurant_addr = clickedDeliveryRequest.getRestaurant_address();
                     String customer_addr = clickedDeliveryRequest.getAddress();
+                    if(restaurant_addr==null)restaurant_addr="unknown";
+                    if(customer_addr==null)customer_addr="unknown";
                     intent = new Intent(fragment.getActivity().getApplicationContext(), LocationMapActivity.class);
+                    Log.d("AAAA",restaurant_addr);
+                    Log.d("AAAA",customer_addr);
                     intent.putExtra("restaurant_address", restaurant_addr);
                     intent.putExtra("customer_address", customer_addr);
                     fragment.getActivity().getApplicationContext().startActivity(intent);
