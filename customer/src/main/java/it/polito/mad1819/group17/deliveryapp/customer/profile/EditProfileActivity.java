@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,10 +14,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -34,7 +40,10 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import it.polito.mad1819.group17.deliveryapp.common.Customer;
@@ -58,7 +67,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText input_name;
     private EditText input_phone;
     private EditText input_mail;
-    private EditText input_address;
+    private AutoCompleteTextView input_address;
     private EditText input_bio;
 
 
@@ -218,6 +227,28 @@ public class EditProfileActivity extends AppCompatActivity {
         mFirebaseStorageReference = mFirebaseStorage.getReference().child(mFirebaseAuth.getUid())
                 .child("images");
 
+        input_address.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() >= 10) {
+                    String[] matchingAddresses = searchPossibleMatchingAddresses(s.toString());
+                    if (matchingAddresses != null) {
+                        ArrayAdapter<String> addressesAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, matchingAddresses);
+                        input_address.setAdapter(addressesAdapter);
+                    }
+                }
+            }
+        });
 
     }
 
@@ -419,4 +450,25 @@ public class EditProfileActivity extends AppCompatActivity {
                 ((EditText) v).setSelection(((EditText) v).getText().length(), 0);
         });
     }
+
+    private String[] searchPossibleMatchingAddresses(String searchString) {
+        ArrayList<String> strings = new ArrayList<>();
+        Geocoder geocoder = new Geocoder(getBaseContext());
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocationName(searchString, 10);
+            for (int i = 0; i < addresses.size(); i++) {
+                /*double latitude = addr.getLatitude();
+                double longitude = addr.getLongitude();*/
+                strings.add(addresses.get(i).getAddressLine(0));
+            }
+
+            String[] strings_as_array = new String[strings.size()];
+            strings.toArray(strings_as_array);
+            return strings_as_array;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
 }
