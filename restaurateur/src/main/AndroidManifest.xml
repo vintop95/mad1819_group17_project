@@ -31,6 +31,11 @@
         <activity
             android:name=".orders.OrderDetailsActivity"
             android:label="@string/title_activity_order_details" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB7Tku5m9p0LVYU8k8-G7RB0DQoDXjvdSE"/>
+
     </application>
 
 </manifest>

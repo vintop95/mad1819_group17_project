@@ -310,7 +310,7 @@
                 app:layout_constraintTop_toTopOf="@+id/label_address"
                 android:src="@drawable/ic_person_pin_circle_black_24dp" />
 
-            <AutoCompleteTextView
+            <EditText
                 android:id="@+id/input_address_sign_in"
                 style="@style/standardInputStyle.address.autofill"
                 android:layout_width="0dp"

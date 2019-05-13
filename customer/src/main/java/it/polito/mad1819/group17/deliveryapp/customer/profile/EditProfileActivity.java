@@ -18,9 +18,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +40,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import it.polito.mad1819.group17.deliveryapp.common.Customer;
@@ -51,6 +59,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     public static final int CAMERA_REQUEST = 0;
     public static final int GALLERY_REQUEST = 1;
+    public static final int AUTOCOMPLETE_REQUEST = 2;
 
     private Toolbar toolbar;
     private Boolean image_changed = false;
@@ -60,6 +69,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText input_mail;
     private EditText input_address;
     private EditText input_bio;
+
+    private String newAddress = null;
 
 
     private void locateViews() {
@@ -81,7 +92,7 @@ public class EditProfileActivity extends AppCompatActivity {
             if (!image_changed && customer.getImage_path() != "") {
                 Glide.with(image_user_photo.getContext()).load(customer.getImage_path())
                         .into(image_user_photo);
-            } else{
+            } else {
                 Glide.with(image_user_photo.getContext()).clear(image_user_photo);
             }
             input_name.setText(customer.getName());
@@ -96,7 +107,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadImage(){
+    private void uploadImage() {
         Bitmap bitmap = ((BitmapDrawable) image_user_photo.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -166,30 +177,44 @@ public class EditProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Bitmap bitmapUserPhoto = null;
+        if (requestCode == CAMERA_REQUEST || requestCode == GALLERY_REQUEST) {
+            Bitmap bitmapUserPhoto = null;
 
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            Bundle b = data.getExtras();
-            if (b != null) bitmapUserPhoto = (Bitmap) b.get("data");
-        } else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
-            try {
-                Uri targetUri = data.getData();
-                if (targetUri != null)
-                    bitmapUserPhoto = BitmapFactory.decodeStream(
-                            getContentResolver().openInputStream(targetUri));
+            if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+                Bundle b = data.getExtras();
+                if (b != null) bitmapUserPhoto = (Bitmap) b.get("data");
+            } else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+                try {
+                    Uri targetUri = data.getData();
+                    if (targetUri != null)
+                        bitmapUserPhoto = BitmapFactory.decodeStream(
+                                getContentResolver().openInputStream(targetUri));
 
-            } catch (FileNotFoundException e) {
-                bitmapUserPhoto = null;
-                Toast.makeText(getApplicationContext(),
-                        "FileNotFoundException: Error in setting image!",
-                        Toast.LENGTH_LONG).show();
+                } catch (FileNotFoundException e) {
+                    bitmapUserPhoto = null;
+                    Toast.makeText(getApplicationContext(),
+                            "FileNotFoundException: Error in setting image!",
+                            Toast.LENGTH_LONG).show();
+                }
             }
-        }
 
-        if (bitmapUserPhoto != null) {
-            image_changed = true;
-            image_user_photo.setImageBitmap(bitmapUserPhoto);
-            image_user_photo.setPadding(8, 8, 8, 8);
+            if (bitmapUserPhoto != null) {
+                image_changed = true;
+                image_user_photo.setImageBitmap(bitmapUserPhoto);
+                image_user_photo.setPadding(8, 8, 8, 8);
+            }
+        } else if (requestCode == AUTOCOMPLETE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                newAddress = place.getAddress();
+                input_address.setText(newAddress);
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                Toast.makeText(this, "Error in retrieving the address :(", Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Address has not been selected.", Toast.LENGTH_LONG).show();
+            }
+
+
         }
     }
 
@@ -206,9 +231,16 @@ public class EditProfileActivity extends AppCompatActivity {
 
         addOnFocusChangeListener(input_name);
         addOnFocusChangeListener(input_phone);
-        addOnFocusChangeListener(input_mail);
         addOnFocusChangeListener(input_address);
+        addOnFocusChangeListener(input_mail);
         addOnFocusChangeListener(input_bio);
+
+        Places.initialize(getApplicationContext(), "AIzaSyB7Tku5m9p0LVYU8k8-G7RB0DQoDXjvdSE");
+        input_address.setOnClickListener(v -> {
+            List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.ADDRESS);
+            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
+            startActivityForResult(intent, AUTOCOMPLETE_REQUEST);
+        });
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -245,6 +277,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Customer customer = dataSnapshot.getValue(Customer.class);
+                    if (customer != null && newAddress != null)
+                        customer.setAddress(newAddress);
                     feedViews(customer);
                 }
 

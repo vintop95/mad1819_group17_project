@@ -15,20 +15,21 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,6 +49,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +60,10 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
 public class EditProfileActivity extends AppCompatActivity {
 
+    public static final int CAMERA_REQUEST = 0;
+    public static final int GALLERY_REQUEST = 1;
+    public static final int AUTOCOMPLETE_REQUEST = 2;
+
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mRestaurateurDatabaseReference;
     private ValueEventListener mEditEventListener;
@@ -65,21 +71,20 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mFirebaseStorageReference;
 
-    public static final int CAMERA_REQUEST = 0;
-    public static final int GALLERY_REQUEST = 1;
-
     private Toolbar toolbar;
     private Boolean image_changed = false;
     private ImageView image_user_photo;
     private EditText input_name;
     private EditText input_phone;
     private EditText input_mail;
-    private /*EditText*/ AutoCompleteTextView input_address;
+    private EditText input_address;
     private Spinner input_restaurant_type;
     private Spinner input_free_day;
     private TextView input_working_time_opening;
     private TextView input_working_time_closing;
     private EditText input_bio;
+
+    private String newAddress = null;
 
 
     private void locateViews() {
@@ -100,27 +105,6 @@ public class EditProfileActivity extends AppCompatActivity {
         input_bio = findViewById(R.id.input_bio_sign_in);
     }
 
-    /*private String normalizeAddress(String inputAddress){
-        String normalized_address;
-        Geocoder geocoder = new Geocoder(getBaseContext());
-        List<Address> addresses;
-        try {
-            addresses = geocoder.getFromLocationName(inputAddress, 20);
-
-            for(int i = 0; i < addresses.size(); i++) { // MULTIPLE MATCHES
-
-                Address addr = addresses.get(i);
-
-                double latitude = addr.getLatitude();
-                double longitude = addr.getLongitude(); // DO SOMETHING WITH VALUES
-                Log.d("XX", ""+latitude+" "+longitude);
-
-            }
-
-        } catch (IOException e) {
-            // ignore
-        }
-    }*/
 
     private void feedViews(Restaurateur restaurateur) {
         if (restaurateur != null) {
@@ -295,28 +279,42 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         Bitmap bitmapUserPhoto = null;
 
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            Bundle b = data.getExtras();
-            if (b != null) bitmapUserPhoto = (Bitmap) b.get("data");
-        } else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
-            try {
-                Uri targetUri = data.getData();
-                if (targetUri != null)
-                    bitmapUserPhoto = BitmapFactory.decodeStream(
-                            getContentResolver().openInputStream(targetUri));
+        if (requestCode == CAMERA_REQUEST || requestCode == GALLERY_REQUEST) {
+            if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+                Bundle b = data.getExtras();
+                if (b != null) bitmapUserPhoto = (Bitmap) b.get("data");
+            } else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+                try {
+                    Uri targetUri = data.getData();
+                    if (targetUri != null)
+                        bitmapUserPhoto = BitmapFactory.decodeStream(
+                                getContentResolver().openInputStream(targetUri));
 
-            } catch (FileNotFoundException e) {
-                bitmapUserPhoto = null;
-                Toast.makeText(getApplicationContext(),
-                        "FileNotFoundException: Error in setting image!",
-                        Toast.LENGTH_LONG).show();
+                } catch (FileNotFoundException e) {
+                    bitmapUserPhoto = null;
+                    Toast.makeText(getApplicationContext(),
+                            "FileNotFoundException: Error in setting image!",
+                            Toast.LENGTH_LONG).show();
+                }
             }
-        }
 
-        if (bitmapUserPhoto != null) {
-            image_changed = true;
-            image_user_photo.setImageBitmap(bitmapUserPhoto);
-            image_user_photo.setPadding(8, 8, 8, 8);
+            if (bitmapUserPhoto != null) {
+                image_changed = true;
+                image_user_photo.setImageBitmap(bitmapUserPhoto);
+                image_user_photo.setPadding(8, 8, 8, 8);
+            }
+        } else if (requestCode == AUTOCOMPLETE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                newAddress = place.getAddress();
+                input_address.setText(newAddress);
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                Toast.makeText(this, "Error in retrieving the address :(", Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Address has not been selected.", Toast.LENGTH_LONG).show();
+            }
+
+
         }
     }
 
@@ -355,32 +353,15 @@ public class EditProfileActivity extends AppCompatActivity {
 
         addOnFocusChangeListener(input_name);
         addOnFocusChangeListener(input_phone);
-        addOnFocusChangeListener(input_mail);
         addOnFocusChangeListener(input_address);
+        addOnFocusChangeListener(input_mail);
         addOnFocusChangeListener(input_bio);
 
-
-        input_address.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() >= 10) {
-                    String[] matchingAddresses = searchPossibleMatchingAddresses(s.toString());
-                    if (matchingAddresses != null) {
-                        ArrayAdapter<String> addressesAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, matchingAddresses);
-                        input_address.setAdapter(addressesAdapter);
-                    }
-                }
-            }
+        Places.initialize(getApplicationContext(), "AIzaSyB7Tku5m9p0LVYU8k8-G7RB0DQoDXjvdSE");
+        input_address.setOnClickListener(v -> {
+            List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.ADDRESS);
+            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
+            startActivityForResult(intent, AUTOCOMPLETE_REQUEST);
         });
 
         addTimePickerOnClick(input_working_time_opening);
@@ -391,10 +372,8 @@ public class EditProfileActivity extends AppCompatActivity {
         mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
 
         mFirebaseStorage = FirebaseStorage.getInstance();
-        mFirebaseStorageReference = mFirebaseStorage.getReference().child(mFirebaseAuth.getUid())
-                .child("images");
-
-
+        mFirebaseStorageReference = mFirebaseStorage.getReference()
+                .child(mFirebaseAuth.getUid()).child("images");
     }
 
     @Override
@@ -402,7 +381,6 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onPause();
         detachValueEventListener(mFirebaseAuth.getUid());
         Log.v("FIREBASE_LOG", "EventListener removed onPause - EditProfileActivity");
-
     }
 
     @Override
@@ -410,7 +388,6 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onResume();
         attachValueEventListener(mFirebaseAuth.getUid());
         Log.v("FIREBASE_LOG", "EventListener added onResume - EditProfileActivity");
-
     }
 
     private void attachValueEventListener(String userId) {
@@ -421,6 +398,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Restaurateur restaurateur = dataSnapshot.getValue(Restaurateur.class);
+                    if (restaurateur != null && newAddress != null)
+                        restaurateur.setAddress(newAddress);
                     feedViews(restaurateur);
                 }
 
