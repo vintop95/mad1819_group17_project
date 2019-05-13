@@ -157,14 +157,16 @@ public class OrderDetailsActivity extends AppCompatActivity {
         return "customers/" + customerId + "/" + FIREBASE_ORDERS + "/" + orderId;
     }
 
-    private static void handleCompletionListener
+    private void handleCompletionListener
             (Context context, @Nullable DatabaseError err,
              @NonNull DatabaseReference ref, String msg) {
         if (err != null) {
             Log.e("FIREBASE_LOG", err.getMessage());
             Toast.makeText(context, err.getMessage(), Toast.LENGTH_LONG).show();
+            btn_next_state.setEnabled(true);
         } else {
             Log.d("FIREBASE_LOG", msg + " " + ref.toString());
+            adjustLayoutProgrammatically();
         }
     }
 
@@ -192,23 +194,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
         }
     }
 
-    /*private void positiveButtonAction() {
-        if (inputOrder.moveToNextState()) {
-
-            txt_state_history.setText(inputOrder.getStateHistoryToString());
-
-            if (inputOrder.getCurrentState() == Order.STATE3) {
-                btn_next_state.setTextColor(getResources().getColor(R.color.button_disabled_text));
-                btn_next_state.setEnabled(false);
-                selectDeliveryman();
-                card_deliveryman.setVisibility(View.VISIBLE);
-            } else {
-                updateOrderInFirebase(inputOrder);
-            }
-        }
-
-    }*/
     private void positiveButtonAction() {
+        btn_next_state.setEnabled(false);
         if (inputOrder.moveToNextState()) {
             txt_state_history.setText(inputOrder.getStateHistoryToString());
             updateOrderInFirebase(inputOrder);
@@ -306,6 +293,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
             case Order.STATE2:
                 card_deliveryman.setVisibility(View.GONE);
                 btn_next_state.setOnClickListener(v -> startActivityForResult(new Intent(getApplicationContext(), AvailableDeliverymenActivity.class), SELECT_DELIVERYMEN));
+                btn_next_state.setEnabled(true);
                 break;
             case Order.STATE3:
                 card_deliveryman.setVisibility(View.VISIBLE);
