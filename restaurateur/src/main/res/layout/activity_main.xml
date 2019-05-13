@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,18 +23,16 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:minHeight="?attr/actionBarSize"
-            >
+            android:minHeight="?attr/actionBarSize">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:layout_gravity="center"
-                android:textStyle="bold"
                 android:id="@+id/toolbar_title"
                 style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-                android:typeface="sans"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/app_name"
+                android:typeface="sans" />
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
