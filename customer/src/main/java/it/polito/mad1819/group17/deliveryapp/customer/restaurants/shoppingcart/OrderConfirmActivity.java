@@ -60,7 +60,7 @@ import it.polito.mad1819.group17.deliveryapp.customer.R;
 public class OrderConfirmActivity extends AppCompatActivity {
 
     private TextView final_results;
-    private AutoCompleteTextView deliveryAddress_edit;
+    private EditText deliveryAddress_edit;
     private EditText deliveryHour_edit;
     private EditText txtOrderNotes_edit;
     private TextView item_tot_price;
@@ -189,30 +189,6 @@ public class OrderConfirmActivity extends AppCompatActivity {
                 confirmOrder(v);
             }
         });
-
-        deliveryAddress_edit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() >= 10) {
-                    String[] matchingAddresses = searchPossibleMatchingAddresses(s.toString());
-                    if (matchingAddresses != null) {
-                        ArrayAdapter<String> addressesAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, matchingAddresses);
-                        deliveryAddress_edit.setAdapter(addressesAdapter);
-                    }
-                }
-            }
-        });
-
 
         showBackArrowOnToolbar();
     }

@@ -224,7 +224,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text="@string/notes"
+            android:text="@string/order_info"
             app:autoSizeTextType="uniform"
             android:gravity="end"
             app:layout_constraintBottom_toTopOf="@+id/oc_input_order_notes"
