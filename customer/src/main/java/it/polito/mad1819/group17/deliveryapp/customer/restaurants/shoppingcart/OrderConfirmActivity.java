@@ -22,6 +22,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -83,6 +89,9 @@ public class OrderConfirmActivity extends AppCompatActivity {
     private AtomicInteger countFetched = new AtomicInteger(0);
     private static int N_FIELD_TO_FETCH = 2;
 
+    private static int AUTOCOMPLETE_REQUEST = 2;
+    private String newAddress = null;
+
     private void showBackArrowOnToolbar() {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar2));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -110,7 +119,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
         initFetchHandler();
 
         customer_id = FirebaseAuth.getInstance().getUid();
-        if(TextUtils.isEmpty(customer_id)){
+        if (TextUtils.isEmpty(customer_id)) {
             throw new IllegalStateException("customer_id is NULL!!!");
         }
 
@@ -119,7 +128,8 @@ public class OrderConfirmActivity extends AppCompatActivity {
         restaurant_address = intent.getStringExtra("restaurant_address");
         restaurant_phone = intent.getStringExtra("restaurant_phone");
 
-        if (restaurant_id == null) throw new IllegalStateException("restaurant_id must not be null!");
+        if (restaurant_id == null)
+            throw new IllegalStateException("restaurant_id must not be null!");
 
         itemsMap = (HashMap<String, ShoppingItem>) intent.getSerializableExtra("itemsMap");
         retrieveCustomerInfo();
@@ -129,7 +139,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
         ArrayList<String> arrNames = new ArrayList<>();
         ArrayList<Integer> arrQuantities = new ArrayList<>();
         ArrayList<Double> arrPrices = new ArrayList<>();
-        for(ShoppingItem details: itemsMap.values()){
+        for (ShoppingItem details : itemsMap.values()) {
             arrNames.add(details.getName());
             arrQuantities.add(details.getQuantity());
             arrPrices.add(details.getPrice());
@@ -141,8 +151,8 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
         Log.d("elem_quantities", Integer.toString(quantities.length));
         Log.d("elem_names", Integer.toString(names.length));
-        itemquantity = intent.getIntExtra("items_quantity",0);
-        totalprice = intent.getDoubleExtra("items_tot_price",0);
+        itemquantity = intent.getIntExtra("items_quantity", 0);
+        totalprice = intent.getDoubleExtra("items_tot_price", 0);
 
         deliveryAddress_edit = findViewById(R.id.deliveryAddress);
         deliveryHour_edit = (EditText) findViewById(R.id.deliveryHour);
@@ -155,7 +165,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
         item_tot_price.setText(CurrencyHelper.getCurrency(totalprice));
 
         lst = (ListView) findViewById(R.id.listview_items);
-        OrderConfirmAdapter orderConfirmAdapter = new OrderConfirmAdapter(names,quantities,prices,this);
+        OrderConfirmAdapter orderConfirmAdapter = new OrderConfirmAdapter(names, quantities, prices, this);
         lst.setAdapter(orderConfirmAdapter);
 
 
@@ -166,9 +176,16 @@ public class OrderConfirmActivity extends AppCompatActivity {
         String oneHourFromNowString = simpleDateFormat.format(oneHourFromNow);
         deliveryHour_edit.setText(oneHourFromNowString);
 
-        btnConfirmOrder.setOnClickListener(new View.OnClickListener(){
+        Places.initialize(getApplicationContext(), "AIzaSyB7Tku5m9p0LVYU8k8-G7RB0DQoDXjvdSE");
+        deliveryAddress_edit.setOnClickListener(v -> {
+            List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.ADDRESS);
+            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
+            startActivityForResult(intent, AUTOCOMPLETE_REQUEST);
+        });
+
+        btnConfirmOrder.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 confirmOrder(v);
             }
         });
@@ -200,22 +217,22 @@ public class OrderConfirmActivity extends AppCompatActivity {
         showBackArrowOnToolbar();
     }
 
-    private Order getOrderToPush(){
+    private Order getOrderToPush() {
         Order ord = new Order();
         ord.setCustomer_id(customer_id);
         ord.setRestaurant_id(restaurant_id);
 
-        HashMap<String,String> state_stateTime = new HashMap<>();
+        HashMap<String, String> state_stateTime = new HashMap<>();
         SimpleDateFormat simpleDateFormat =
                 new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault());
         String current_timestamp = simpleDateFormat.format(new Date());
         String day = current_timestamp.split(" ")[0];
-        String delivery_timestamp = day+" "+deliveryHour_edit.getText().toString();
-        state_stateTime.put("state1",current_timestamp);
+        String delivery_timestamp = day + " " + deliveryHour_edit.getText().toString();
+        state_stateTime.put("state1", current_timestamp);
 
         //Filling the order:
         ord.setState_stateTime(state_stateTime);
-        ord.setSorting_field("state0_"+delivery_timestamp);
+        ord.setSorting_field("state0_" + delivery_timestamp);
         ord.setCustomer_name(name);
         ord.setCustomer_phone(phoneNumber);
         ord.setRestaurant_name(restaurant_name);
@@ -230,9 +247,9 @@ public class OrderConfirmActivity extends AppCompatActivity {
         return ord;
     }
 
-    private void confirmOrder(View v){
+    private void confirmOrder(View v) {
         // If shopping cart is empty don't send the order
-        if(itemquantity <= 0){
+        if (itemquantity <= 0) {
             Toast.makeText(getApplicationContext(),
                     getApplicationContext().getString(R.string.shopping_cart_empty),
                     Toast.LENGTH_SHORT).show();
@@ -255,20 +272,20 @@ public class OrderConfirmActivity extends AppCompatActivity {
             public Transaction.Result doTransaction(MutableData mutableData) {
 
                 // Check and update availableQty for each item
-                for(String itemId: itemsMap.keySet()){
+                for (String itemId : itemsMap.keySet()) {
                     MutableData currentQtyRef = mutableData.child(FIREBASE_DAILY_OFFERS).child(itemId).child("availableQty");
 
                     Integer availableQty = currentQtyRef.getValue(Integer.class);
                     Integer orderedQty = itemsMap.get(itemId).getQuantity();
 
                     // may be null but doTransaction will be called more than once
-                    if(availableQty == null) return Transaction.success(mutableData);
+                    if (availableQty == null) return Transaction.success(mutableData);
 
-                    if(availableQty < orderedQty){
+                    if (availableQty < orderedQty) {
                         return Transaction.abort();
-                    }else{
+                    } else {
                         int newQty = availableQty - orderedQty;
-                        if(newQty >= 0) currentQtyRef.setValue(newQty);
+                        if (newQty >= 0) currentQtyRef.setValue(newQty);
                         else return Transaction.abort();
                     }
                 }
@@ -276,11 +293,11 @@ public class OrderConfirmActivity extends AppCompatActivity {
                 MutableData ordersCountRef = mutableData.child(FIREBASE_ORDERS_COUNT);
 
                 Integer ordersCount = ordersCountRef.getValue(Integer.class);
-                if (ordersCount == null) ordersCount=0;
-                ordersCountRef.setValue(ordersCount+1);
+                if (ordersCount == null) ordersCount = 0;
+                ordersCountRef.setValue(ordersCount + 1);
 
                 // Set a field that will be used in filtering
-                if(ordersCount >= Restaurateur.VOTE_5_THRESHOLD){
+                if (ordersCount >= Restaurateur.VOTE_5_THRESHOLD) {
                     String restaurant_type = mutableData.child("restaurant_type").getValue(String.class);
                     mutableData.child(FIREBASE_FILTER_BY_VOTE).setValue(restaurant_type + "_" + "5");
                 }
@@ -296,11 +313,11 @@ public class OrderConfirmActivity extends AppCompatActivity {
                         "postTransaction:onComplete:" + databaseError);
 
                 // Push the order to get an id if quantites were reduced in a correct way
-                if(committed){
+                if (committed) {
                     pushOrderToFirebase(ord);
                     setResult(RESULT_OK);
                     finish();
-                } else{
+                } else {
                     PopupHelper.showToast(
                             OrderConfirmActivity.this.getApplicationContext(),
                             getString(R.string.error_transaction_push_order));
@@ -313,13 +330,13 @@ public class OrderConfirmActivity extends AppCompatActivity {
         });
     }
 
-    private void initFetchHandler(){
+    private void initFetchHandler() {
         pbHandler.show();
         btnConfirmOrder.setEnabled(false);
     }
 
-    private void handleFetch(){
-        if(countFetched.incrementAndGet() >= N_FIELD_TO_FETCH){
+    private void handleFetch() {
+        if (countFetched.incrementAndGet() >= N_FIELD_TO_FETCH) {
             pbHandler.hide();
             btnConfirmOrder.setEnabled(true);
             countFetched.set(0);
@@ -344,7 +361,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
     }
 
     public String getCustomerOrdersPath(@Nullable String orderId) {
-        if(TextUtils.isEmpty(customer_id)){
+        if (TextUtils.isEmpty(customer_id)) {
             throw new IllegalStateException("customer_id is NULL!!!");
         }
         String path = "customers/" + customer_id + "/" + FIREBASE_ORDERS;
@@ -354,7 +371,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
     }
 
     public DatabaseReference getCustomerOrdersRef() {
-        if(TextUtils.isEmpty(customer_id)){
+        if (TextUtils.isEmpty(customer_id)) {
             throw new IllegalStateException("customer_id is NULL!!!");
         }
 
@@ -366,16 +383,16 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
     private static void handleCompletionListener
             (Context context, @Nullable DatabaseError err,
-             @NonNull DatabaseReference ref, String msg){
-        if(err != null){
-            Log.e("FIREBASE_LOG",err.getMessage());
+             @NonNull DatabaseReference ref, String msg) {
+        if (err != null) {
+            Log.e("FIREBASE_LOG", err.getMessage());
             Toast.makeText(context, err.getMessage(), Toast.LENGTH_LONG).show();
-        }else{
+        } else {
             Log.d("FIREBASE_LOG", msg + " " + ref.toString());
         }
     }
 
-    public void pushOrderToFirebase(Order ord){
+    public void pushOrderToFirebase(Order ord) {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference newCustomerOrderRef = getCustomerOrdersRef().push();
         ord.setId(newCustomerOrderRef.getKey());
@@ -386,12 +403,12 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
         rootRef.updateChildren(insertedOrderData,
                 (@Nullable DatabaseError err, @NonNull DatabaseReference ref)
-                -> handleCompletionListener(getApplicationContext(),
+                        -> handleCompletionListener(getApplicationContext(),
                         err, ref, "Added in customer and restaurateur of ")
         );
     }
 
-    public void retrieveCustomerInfo(){
+    public void retrieveCustomerInfo() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // Name, email address, and profile photo Url
@@ -408,7 +425,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 deliveryAddress = dataSnapshot.getValue(String.class);
-                if(deliveryAddress == null) deliveryAddress = "";
+                if (deliveryAddress == null) deliveryAddress = "";
 
                 deliveryAddress_edit.setText(deliveryAddress);
 
@@ -428,7 +445,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 phoneNumber = dataSnapshot.getValue(String.class);
-                if(phoneNumber == null) phoneNumber = "";
+                if (phoneNumber == null) phoneNumber = "";
 
                 handleFetch();
                 Log.d("retrieve", phoneNumber);
@@ -444,25 +461,20 @@ public class OrderConfirmActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-    private String[] searchPossibleMatchingAddresses(String searchString) {
-        ArrayList<String> strings = new ArrayList<>();
-        Geocoder geocoder = new Geocoder(getBaseContext());
-        List<Address> addresses;
-        try {
-            addresses = geocoder.getFromLocationName(searchString, 10);
-            for (int i = 0; i < addresses.size(); i++) {
-                /*double latitude = addr.getLatitude();
-                double longitude = addr.getLongitude();*/
-                strings.add(addresses.get(i).getAddressLine(0));
+        if (requestCode == AUTOCOMPLETE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                newAddress = place.getAddress();
+                deliveryAddress_edit.setText(newAddress);
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                Toast.makeText(this, "Error in retrieving the address :(", Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Address has not been selected.", Toast.LENGTH_LONG).show();
             }
-
-            String[] strings_as_array = new String[strings.size()];
-            strings.toArray(strings_as_array);
-            return strings_as_array;
-        } catch (IOException e) {
-            return null;
         }
     }
-
 }

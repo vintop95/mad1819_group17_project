@@ -42,8 +42,9 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
 public class OrderDetailsActivity extends AppCompatActivity {
 
-    public final static int STATE_CHANGED = 1;
+    //public final static int STATE_CHANGED = 1;
     public final static int STATE_NOT_CHANGED = 0;
+    public final static int SELECT_DELIVERYMEN = 2;
 
     private Restaurateur currentRestaurateur;
 
@@ -117,6 +118,11 @@ public class OrderDetailsActivity extends AppCompatActivity {
         }
 
         txt_state_history.setText(selectedOrder.getStateHistoryToString());
+
+        if (!TextUtils.isEmpty(inputOrder.getDeliveryman_name()) && !TextUtils.isEmpty(inputOrder.getDeliveryman_phone())) {
+            txt_deliveryman_name.setText(inputOrder.getDeliveryman_name());
+            txt_deliveryman_phone.setText(Html.fromHtml("<u>" + inputOrder.getDeliveryman_phone() + "<u/>"));
+        }
     }
 
     private void showConfirmationDialog() {
@@ -151,14 +157,16 @@ public class OrderDetailsActivity extends AppCompatActivity {
         return "customers/" + customerId + "/" + FIREBASE_ORDERS + "/" + orderId;
     }
 
-    private static void handleCompletionListener
+    private void handleCompletionListener
             (Context context, @Nullable DatabaseError err,
              @NonNull DatabaseReference ref, String msg) {
         if (err != null) {
             Log.e("FIREBASE_LOG", err.getMessage());
             Toast.makeText(context, err.getMessage(), Toast.LENGTH_LONG).show();
+            btn_next_state.setEnabled(true);
         } else {
             Log.d("FIREBASE_LOG", msg + " " + ref.toString());
+            adjustLayoutProgrammatically();
         }
     }
 
@@ -187,165 +195,112 @@ public class OrderDetailsActivity extends AppCompatActivity {
     }
 
     private void positiveButtonAction() {
+        btn_next_state.setEnabled(false);
         if (inputOrder.moveToNextState()) {
-
             txt_state_history.setText(inputOrder.getStateHistoryToString());
-
-            if (inputOrder.getCurrentState() == Order.STATE3) {
-                btn_next_state.setTextColor(getResources().getColor(R.color.button_disabled_text));
-                btn_next_state.setEnabled(false);
-                selectDeliveryman();
-                card_deliveryman.setVisibility(View.VISIBLE);
-            } else {
-                updateOrderInFirebase(inputOrder);
-            }
+            updateOrderInFirebase(inputOrder);
         }
-
     }
 
     private void negativeButtonAction() {
         setResult(STATE_NOT_CHANGED);
     }
 
-    private void retrieveCurrentRestaurateur(Deliveryman selectedDeliveryman) {
-        FirebaseDatabase.getInstance().getReference().child("restaurateurs")
-                .child(FirebaseAuth.getInstance().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                currentRestaurateur = dataSnapshot.getValue(Restaurateur.class);
+    private void retrieveCurrentRestaurateurAndSendDeliveryRequest(Deliveryman selectedDeliveryman) {
+        FirebaseDatabase.getInstance().getReference()
+                .child("restaurateurs").child(FirebaseAuth.getInstance().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        currentRestaurateur = dataSnapshot.getValue(Restaurateur.class);
 
+                        // create the new delivery request
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                        String currentTimestamp = formatter.format(new Date());
+                        HashMap<String, String> state_stateTime = new HashMap<String, String>();
+                        state_stateTime.put("state1", currentTimestamp);
+                        DeliveryRequest newDeliveryRequest = new DeliveryRequest(
+                                inputOrder.getDelivery_address(),
+                                inputOrder.getCustomer_name(),
+                                inputOrder.getCustomer_phone(),
+                                "note...",
+                                "state0_" + inputOrder.getDelivery_timestamp(),
+                                inputOrder.getDelivery_timestamp(),
+                                state_stateTime,
+                                currentRestaurateur.getName(),
+                                currentRestaurateur.getPhone(),
+                                currentRestaurateur.getAddress()
+                        );
 
-                // create the new delivery request
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-                String currentTimestamp = formatter.format(new Date());
-                HashMap<String, String> state_stateTime = new HashMap<String, String>();
-                state_stateTime.put("state1", currentTimestamp);
-                DeliveryRequest newDeliveryRequest = new DeliveryRequest(
-                        inputOrder.getDelivery_address(),
-                        inputOrder.getCustomer_name(),
-                        inputOrder.getCustomer_phone(),
-                        "note...",
-                        "state0_" + inputOrder.getDelivery_timestamp(),
-                        inputOrder.getDelivery_timestamp(),
-                        state_stateTime,
-                        currentRestaurateur.getName(),
-                        currentRestaurateur.getPhone(),
-                        currentRestaurateur.getAddress()
-                );
+                        // send delivery request to the rider
+                        String newDeliveryRequestKey = FirebaseDatabase.getInstance().getReference()
+                                .child("deliverymen").child(selectedDeliveryman.getId()).child("delivery_requests")
+                                .push().getKey();
+                        FirebaseDatabase.getInstance().getReference()
+                                .child("deliverymen").child(selectedDeliveryman.getId())
+                                .child("delivery_requests").child(newDeliveryRequestKey)
+                                .setValue(newDeliveryRequest);
 
-                // send delivery request to the rider
-                String newDeliveryRequestKey = FirebaseDatabase.getInstance().getReference()
-                        .child("deliverymen").child(selectedDeliveryman.getId())
-                        .child("delivery_requests").push().getKey();
-                FirebaseDatabase.getInstance().getReference().child("deliverymen")
-                        .child(selectedDeliveryman.getId()).child("delivery_requests")
-                        .child(newDeliveryRequestKey).setValue(newDeliveryRequest);
+                        // update locally the order:
+                        // - move it to the STATE3
+                        // - add deliveryman's information
+                        inputOrder.moveToNextState();
+                        inputOrder.setDeliveryman_id(selectedDeliveryman.getId());
+                        inputOrder.setDeliveryman_name(selectedDeliveryman.getName());
+                        inputOrder.setDeliveryman_phone(selectedDeliveryman.getPhone());
 
-                // update the order with deliveryman's information
-                inputOrder.setDeliveryman_id(selectedDeliveryman.getId());
-                inputOrder.setDeliveryman_name(selectedDeliveryman.getName());
-                inputOrder.setDeliveryman_phone(selectedDeliveryman.getPhone());
-                updateOrderInFirebase(inputOrder);
+                        // update the order remotely
+                        updateOrderInFirebase(inputOrder);
 
-                // update UI
-                txt_deliveryman_name.setText(inputOrder.getDeliveryman_name());
-                txt_deliveryman_phone.setText(Html.fromHtml("<u>" + inputOrder.getDeliveryman_phone() + "<u/>"));
-            }
+                        // update UI
+                        /*txt_state_history.setText(inputOrder.getStateHistoryToString());
+                        txt_deliveryman_name.setText(inputOrder.getDeliveryman_name());
+                        txt_deliveryman_phone.setText(Html.fromHtml("<u>" + inputOrder.getDeliveryman_phone() + "<u/>"));*/
+                        feedViews(inputOrder);
+                        adjustLayoutProgrammatically();
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                    }
+                });
     }
 
-    private void selectDeliveryman() {
-
-        //choose rider from firebase
+    private void selectDeliveryman(String selectedDeliverymanId) {
         FirebaseDatabase.getInstance().getReference()
-                .child("deliverymen").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // select the deliveryman
-                int randomValue = new Random().nextInt((int) dataSnapshot.getChildrenCount());
-                //Toast.makeText(getApplicationContext(), "AAAAA: " + randomValue + " " + dataSnapshot.getChildrenCount(), Toast.LENGTH_LONG).show();
-                int i = 0;
-                Deliveryman selectedDeliveryman = null;
-                for (DataSnapshot dataSnapshotDeliveryman : dataSnapshot.getChildren()) {
-                    if (i == randomValue) {
-                        selectedDeliveryman = (Deliveryman) dataSnapshotDeliveryman.getValue(Deliveryman.class);
-                        selectedDeliveryman.setId(dataSnapshotDeliveryman.getKey());
-                        break;
+                .child("deliverymen").child(selectedDeliverymanId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Deliveryman selectedDeliveryman = dataSnapshot.getValue(Deliveryman.class);
+                        retrieveCurrentRestaurateurAndSendDeliveryRequest(selectedDeliveryman);
                     }
-                    i++;
-                }
 
-                retrieveCurrentRestaurateur(selectedDeliveryman);
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                /*
-                // create the new delivery request
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-                String currentTimestamp = formatter.format(new Date());
-                HashMap<String, String> state_stateTime = new HashMap<String, String>();
-                state_stateTime.put("state1", currentTimestamp);
-                DeliveryRequest newDeliveryRequest = new DeliveryRequest(
-                        inputOrder.getDelivery_address(),
-                        inputOrder.getCustomer_name(),
-                        inputOrder.getCustomer_phone(),
-                        "note...",
-                        "state0_" + inputOrder.getDelivery_timestamp(),
-                        inputOrder.getDelivery_timestamp(),
-                        state_stateTime,
-                        currentRestaurateur.getName(),
-                        currentRestaurateur.getPhone(),
-                        currentRestaurateur.getAddress()
-                );
-
-                // send delivery request to the rider
-                String newDeliveryRequestKey = FirebaseDatabase.getInstance().getReference()
-                        .child("deliverymen").child(selectedDeliveryman.getId())
-                        .child("delivery_requests").push().getKey();
-                FirebaseDatabase.getInstance().getReference().child("deliverymen")
-                        .child(selectedDeliveryman.getId()).child("delivery_requests")
-                        .child(newDeliveryRequestKey).setValue(newDeliveryRequest);
-
-                // update the order with deliveryman's information
-                inputOrder.setDeliveryman_id(selectedDeliveryman.getId());
-                inputOrder.setDeliveryman_name(selectedDeliveryman.getName());
-                inputOrder.setDeliveryman_phone(selectedDeliveryman.getPhone());
-                updateOrderInFirebase(inputOrder);
-
-                // update UI
-                txt_deliveryman_name.setText(inputOrder.getDeliveryman_name());
-                txt_deliveryman_phone.setText(Html.fromHtml("<u>" + inputOrder.getDeliveryman_phone() + "<u/>"));*/
-                /*txt_deliveryman_phone.setOnClickListener(v -> {
-                    String phoneNumber = ((TextView) v).getText().toString();
-                    startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));*/
-                }
-
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+                    }
+                });
     }
 
     public void adjustLayoutProgrammatically() {
-        if (inputOrder.getCurrentState() != Order.STATE3) {
-            btn_next_state.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showConfirmationDialog();
-                }
-            });
-            card_deliveryman.setVisibility(View.GONE);
-        } else {
-            card_deliveryman.setVisibility(View.VISIBLE);
-            btn_next_state.setTextColor(getResources().getColor(R.color.button_disabled_text));
-            btn_next_state.setEnabled(false);
+        switch (inputOrder.getCurrentState()) {
+            case Order.STATE1:
+                card_deliveryman.setVisibility(View.GONE);
+                btn_next_state.setOnClickListener(v -> showConfirmationDialog());
+                break;
+            case Order.STATE2:
+                card_deliveryman.setVisibility(View.GONE);
+                btn_next_state.setOnClickListener(v -> startActivityForResult(new Intent(getApplicationContext(), AvailableDeliverymenActivity.class), SELECT_DELIVERYMEN));
+                btn_next_state.setEnabled(true);
+                break;
+            case Order.STATE3:
+                card_deliveryman.setVisibility(View.VISIBLE);
+                btn_next_state.setTextColor(getResources().getColor(R.color.button_disabled_text));
+                btn_next_state.setEnabled(false);
+                break;
         }
-
         feedViews(inputOrder);
     }
 
@@ -382,6 +337,17 @@ public class OrderDetailsActivity extends AppCompatActivity {
             // we came here tapping on an order in the recycler view
             inputOrder = (Order) getIntent().getSerializableExtra("order");
             adjustLayoutProgrammatically();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        String selectedDeliverymanId = null;
+        if (requestCode == SELECT_DELIVERYMEN && resultCode == AvailableDeliverymenActivity.RESULT_OK) {
+            selectedDeliverymanId = data.getStringExtra("selected_deliveryman_id");
+            selectDeliveryman(selectedDeliverymanId);
+
         }
     }
 

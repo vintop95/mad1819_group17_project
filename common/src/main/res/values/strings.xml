@@ -10,6 +10,7 @@
 
     <string name="sign_out_menu">Sign Out</string>
 
+    <string name="choose_deliveryman">Choose a Deliveryman</string>
 
     <!-- ////////////// -->
     <!-- Orders Strings -->
@@ -17,24 +18,20 @@
 
     <!-- Order Card Strings -->
     <string name="time" translatable="false">--:--</string>
-    <string name="delivery_time">Delivery Time</string>
-    <string name="delivery_date">Delivery Date</string>
-    <string name="order_state">Order State</string>
-    <string name="order_number">Order Number</string>
-    <string name="total_items">Total Items</string>
-
-    <!-- Delivery Request -->
-    <string name="restaurant_name">Restaurant Name</string>
-    <string name="restaurant_phone">Restaurant Phone</string>
-    <string name="restaurant_address">Restaurant Address</string>
-    <string name="customer_phone">Customer Phone</string>
-    <string name="customer_name">Customer Name</string>
+    <string name="delivery_time_card">Delivery Time</string>
+    <string name="delivery_time">Delivery Time:</string>
+    <string name="delivery_date">Delivery Date:</string>
+    <string name="order_state">Order State:</string>
+    <string name="order_number">Order Number:</string>
+    <string name="total_items">Total Items:</string>
 
 
     <!-- Order Details Strings -->
     <string name="title_activity_order_details">Order Details</string>
-    <string name="deliveryman_name">Rider Name</string>
-    <string name="deliveryman_phone">Rider Phone</string>
+    <string name="deliveryman_name">Rider Name:</string>
+    <string name="deliveryman_phone">Rider Phone:</string>
+    <string name="deliveryman_id">Rider ID</string>
+    <string name="distance">Distance (Km)</string>
     <!-- Icons -->
     <string name="icon_restaurateur" translatable="false">Icon Restaurateur</string>
     <string name="icon_content" translatable="false">Icon Content</string>
@@ -46,10 +43,10 @@
     <string name="name_label">Name:</string>
     <string name="phone_label">Phone:</string>
     <string name="phone_hint">Your Phone</string>
-    <string name="delivery_address">Delivery Address</string>
-    <string name="order_content">Order Content</string>
-    <string name="order_info">Order Info</string>
-    <string name="order_history">State History</string>
+    <string name="delivery_address">Delivery Address:</string>
+    <string name="order_content">Order Content:</string>
+    <string name="order_info">Order Info:</string>
+    <string name="order_history">State History:</string>
     <string name="button_history">Next State</string>
     <!-- Alert Dialogs -->
     <string name="confirm_next_state_title">Do you want to confirm the next state?</string>
@@ -101,7 +98,6 @@
     <!-- ////////////// -->
 
     <string name="icon_delivery_request" translatable="false">Icon Delivery Request</string>
-    <string name="notes">Notes</string>
     <string name="delivery_request_id">Request ID</string>
     <string name="request_history">Request History</string>
     <string name="new_delivery_request">NEW DELIVERY REQUEST</string>
@@ -140,21 +136,22 @@
     <string name="birthday">Birthday:</string>
     <string name="bio">Short Description:</string>
     <string name="address">Address:</string>
+    <string name="address_restaurant">Restaurant Address:</string>
     <string name="address_delivery">Delivery Address:</string>
     <string name="required" translatable="false">*</string>
-    <string name="restaurant_type">Restaurant Type</string>
-    <string name="free_day">Free Day</string>
-    <string name="working_time">Working Time</string>
+    <string name="restaurant_type">Restaurant Type:</string>
+    <string name="free_day">Free Day:</string>
+    <string name="working_time">Working Time:</string>
     <string name="working_time_opening">Opening Time</string>
     <string name="working_time_closing">Closing Time</string>
     <!-- Hints -->
     <string name="hint_name">"Your name"</string>
     <string name="hint_mail">"Your email address"</string>
     <string name="hint_password">"Your password"</string>
-    <string name="hint_city">Your city</string>
-    <string name="hint_birthday">Your birthday</string>
+    <string name="hint_city">"Your city"</string>
+    <string name="hint_birthday">"Your birthday"</string>
     <string name="hint_bio">"Your description"</string>
-    <string name="hint_address">Your address</string>
+    <string name="hint_address">"Your address"</string>
     <string name="hint_phone">"Your phone"</string>
     <string name="hint_restaurant_type">Restaurant type</string>
     <string name="hint_free_day">Free Day</string>
@@ -211,7 +208,7 @@
     <string name="label_order_id">Order id</string>
     <string name="restaurant_profile">Restaurant Profile</string>
     <string name="category">CATEGORY</string>
-    <string name="choose_category">CHOOSE RESTAURANT CATEGORY</string>
+    <string name="choose_category">Choose Restaurant Category</string>
     <string name="restaurants">Restaurants</string>
     <string name="cannot_retrieve_restaurateur_info">Unable to retrieve restaurateur\'s information</string>
     <string name="added">added</string>
@@ -236,6 +233,9 @@
     <string name="open_now">Open Now</string>
     <string name="signed_in">Signed In!</string>
     <string name="sign_in_canceled">Sign in canceled!</string>
+
+    <string name='alert_dialog_available_deliveryman_title'>Confirm you choice</string>
+    <string name='alert_dialog_available_deliveryman_text'>Pressing OK you will try to assign the delivery to the selected deliveryman</string>
 
 
 </resources>

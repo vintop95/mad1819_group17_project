@@ -1,14 +1,21 @@
 package it.polito.mad1819.group17.deliveryapp.deliveryman;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
@@ -22,10 +29,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,8 +43,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
 
+import it.polito.mad1819.group17.deliveryapp.common.Deliveryman;
 import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.DeliveryRequestDetailsActivity;
@@ -47,19 +57,23 @@ import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.PrefHelper;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.ProgressBarHandler;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
 
     public final static int RC_SIGN_IN = 1;
     public final static String CHANNEL_ID = "new_delivery_request_channel_id";
+    public final static int ACCESS_FINE_LOCATION_REQUEST = 200;
     public final static String FIREBASE_APP_NAME = "deliverymen";
 
     private FirebaseDatabase mFirebaseDatabase = null;
-    private DatabaseReference mRestaurateurDatabaseReference = null;
+    private DatabaseReference mDeliverymenDatabaseRef = null;
     private DatabaseReference mDeliveryRequestsRef = null;
-    private FirebaseAuth mFirebaseAuth;
+    private DatabaseReference mDeliverymenAvailableDatabaseRef = null;
+    private FirebaseAuth mFirebaseAuth = null;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private ChildEventListener onChildAddedListener;
+    private LocationManager mLocationManager = null;
+    private LocationListener mLocationListener = null;
     private int notificationRequestCode = 0;
 
     private Toolbar toolbar;
@@ -134,8 +148,9 @@ public class MainActivity extends AppCompatActivity {
             return;
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("deliverymen");
-        mDeliveryRequestsRef = mRestaurateurDatabaseReference.child(userId).child("delivery_requests");
+        mDeliverymenDatabaseRef = mFirebaseDatabase.getReference().child("deliverymen");
+        mDeliveryRequestsRef = mDeliverymenDatabaseRef.child(userId).child("delivery_requests");
+        mDeliverymenAvailableDatabaseRef = mFirebaseDatabase.getReference().child("deliverymen_available");
 
         onChildAddedListener = mDeliveryRequestsRef
                 .addChildEventListener(new ChildEventListener() {
@@ -206,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initUtils(){
+    private void initUtils() {
         PrefHelper.setMainContext(this);
 
         // TODO: LET THE USER CHANGE THE CURRENCY FROM SETTINGS?
@@ -225,8 +240,8 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void initBottomNavigation(){
-        if(active == null) throw new IllegalStateException("'active' must be initialized");
+    private void initBottomNavigation() {
+        if (active == null) throw new IllegalStateException("'active' must be initialized");
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         mOnNavigationItemSelectedListener
@@ -291,10 +306,10 @@ public class MainActivity extends AppCompatActivity {
 //                if (key == null) key = "NONO";
 //                Log.d("SNAPSHOT NEW_SIGN_UP", key);
 
-                if(dataSnapshot.getValue() == null){
+                if (dataSnapshot.getValue() == null) {
                     Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
                     startActivity(editNewProfile);
-                    if(navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
+                    if (navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
                 }
             }
 
@@ -355,16 +370,85 @@ public class MainActivity extends AppCompatActivity {
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
             Log.v("FIREBASE_LOG", "AuthListener removed onPause - MainActivity");
         }
+        setDeliverymanUnaivable(FirebaseAuth.getInstance().getUid());
+    }
+
+    private void handleLocationUpdates() {
+        if (mFirebaseAuth.getUid() != null) {
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                mLocationListener = new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        String deliveryman_id = FirebaseAuth.getInstance().getUid();
+                        GeoFire geoFire = new GeoFire(mDeliverymenAvailableDatabaseRef);
+                        geoFire.setLocation(deliveryman_id, new GeoLocation(location.getLatitude(), location.getLongitude()),
+                                new GeoFire.CompletionListener() {
+                                    @Override
+                                    public void onComplete(String key, DatabaseError error) {
+                                        // workaround: needed to make setLocation(..) to work
+                                        Log.d("OK", "Location set to the server");
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                    }
+
+                    @Override
+                    public void onProviderEnabled(String provider) {
+                    }
+
+                    @Override
+                    public void onProviderDisabled(String provider) {
+                        Toast.makeText(getApplicationContext(), "Turn " + provider.toUpperCase() + " on !", Toast.LENGTH_LONG).show();
+                    }
+                };
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, mLocationListener);
+
+            } else
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_REQUEST);
+        }
+    }
+
+    private void setDeliverymanUnaivable(String deliveryman_id) {
+        if (mLocationManager != null) {
+            mLocationManager.removeUpdates(mLocationListener);
+            mLocationManager = null;
+        }
+        if (deliveryman_id != null) {
+            GeoFire geoFire = new GeoFire(mDeliverymenAvailableDatabaseRef);
+            geoFire.removeLocation(deliveryman_id, new GeoFire.CompletionListener() {
+                @Override
+                public void onComplete(String key, DatabaseError error) {
+                    // workaround: needed to make removeLocation(..) to work
+                }
+            });
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         setAuthStateListener();
+        handleLocationUpdates();
     }
 
     private void setAuthStateListener() {
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
         Log.v("FIREBASE_LOG", "AuthListener added - MainActivity");
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case ACCESS_FINE_LOCATION_REQUEST: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    Log.d("PERMISSION_LOG", "ACCESS_FINE_LOCATION permission granted");
+                break;
+            }
+        }
     }
 }

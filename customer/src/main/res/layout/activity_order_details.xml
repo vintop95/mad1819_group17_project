@@ -99,6 +99,7 @@
                         android:layout_marginTop="16dp"
                         android:text="@string/name_restaurant"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/textPrimary"
                         app:layout_constraintStart_toStartOf="@+id/txt_restaurant_name"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -117,7 +118,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
                         android:text="restaurant_name"
+                        android:textColor="@color/textSecondary"
                         app:layout_constraintStart_toStartOf="@+id/guideline_customer"
                         app:layout_constraintTop_toBottomOf="@+id/label_restaurant_name" />
 
@@ -125,12 +128,12 @@
                         android:id="@+id/image_restaurant_info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
                         android:contentDescription="@string/icon_restaurateur"
                         app:layout_constraintBottom_toBottomOf="@+id/txt_restaurant_name"
                         app:layout_constraintStart_toEndOf="@+id/txt_restaurant_name"
-                        app:layout_constraintTop_toBottomOf="@+id/label_restaurant_name"
+                        app:layout_constraintTop_toTopOf="@+id/txt_restaurant_name"
                         app:layout_constraintVertical_bias="0.6"
                         app:srcCompat="@drawable/ic_info_black_24dp" />
 
@@ -153,16 +156,19 @@
                         android:layout_marginTop="16dp"
                         android:text="@string/delivery_time"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        app:layout_constraintHorizontal_chainStyle="spread_inside"
-                        app:layout_constraintStart_toStartOf="@+id/label_customer_name"
+                        android:textColor="@color/textPrimary"
+                        app:layout_constraintStart_toStartOf="@+id/txt_delivery_time"
                         app:layout_constraintTop_toBottomOf="@+id/view_divider_customer" />
 
                     <TextView
                         android:id="@+id/txt_delivery_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
                         android:text="@string/delivery_time"
-                        app:layout_constraintStart_toStartOf="@+id/label_delivery_time"
+                        android:textColor="@color/textSecondary"
+                        app:layout_constraintStart_toStartOf="@+id/guideline_customer"
                         app:layout_constraintTop_toBottomOf="@+id/label_delivery_time" />
 
                     <TextView
@@ -170,15 +176,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/delivery_date"
-                        app:layout_constraintStart_toStartOf="@+id/guideline_customer_center"
+                        android:textColor="@color/textPrimary"
+                        app:layout_constraintStart_toStartOf="@+id/txt_delivery_date"
                         app:layout_constraintTop_toTopOf="@+id/label_delivery_time" />
 
                     <TextView
                         android:id="@+id/txt_delivery_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
                         android:text="@string/delivery_date"
-                        app:layout_constraintStart_toStartOf="@+id/label_delivery_date"
+                        android:textColor="@color/textSecondary"
+                        app:layout_constraintStart_toStartOf="@+id/guideline_customer_center"
                         app:layout_constraintTop_toBottomOf="@+id/label_delivery_date" />
 
                     <TextView
@@ -188,7 +198,7 @@
                         android:layout_marginTop="16dp"
                         android:text="@string/name_label"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        app:layout_constraintHorizontal_chainStyle="spread_inside"
+                        android:textColor="@color/textPrimary"
                         app:layout_constraintStart_toStartOf="@+id/txt_customer_name"
                         app:layout_constraintTop_toBottomOf="@+id/txt_delivery_time" />
 
@@ -199,10 +209,11 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
                         android:text="@string/name_label"
+                        android:textColor="@color/textSecondary"
+                        app:autoSizeTextType="uniform"
                         app:layout_constraintHorizontal_chainStyle="spread_inside"
                         app:layout_constraintStart_toStartOf="@+id/guideline_customer"
-                        app:layout_constraintTop_toBottomOf="@+id/label_customer_name"
-                        app:autoSizeTextType="uniform"/>
+                        app:layout_constraintTop_toBottomOf="@+id/label_customer_name" />
 
                     <TextView
                         android:id="@+id/label_customer_phone"
@@ -210,15 +221,19 @@
                         android:layout_height="wrap_content"
                         android:text="@string/phone_label"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        app:layout_constraintStart_toStartOf="@+id/guideline_customer_center"
+                        android:textColor="@color/textPrimary"
+                        app:layout_constraintStart_toStartOf="@+id/txt_customer_phone"
                         app:layout_constraintTop_toTopOf="@+id/label_customer_name" />
 
                     <TextView
                         android:id="@+id/txt_customer_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
                         android:text="@string/phone_hint"
-                        app:layout_constraintStart_toStartOf="@+id/label_customer_phone"
+                        android:textColor="@color/textSecondary"
+                        app:layout_constraintStart_toStartOf="@+id/guideline_customer_center"
                         app:layout_constraintTop_toBottomOf="@+id/label_customer_phone" />
 
                     <TextView
@@ -228,6 +243,7 @@
                         android:layout_marginTop="16dp"
                         android:text="@string/delivery_address"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/textPrimary"
                         app:layout_constraintStart_toStartOf="@+id/txt_delivery_address"
                         app:layout_constraintTop_toBottomOf="@+id/txt_customer_name" />
 
@@ -294,6 +310,7 @@
                         android:layout_marginTop="16dp"
                         android:text="@string/order_content"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/textPrimary"
                         app:layout_constraintStart_toStartOf="@+id/txt_order_content"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -304,11 +321,12 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:text="@string/order_content"
+                        android:textColor="@color/textSecondary"
+                        app:autoSizeTextType="uniform"
                         app:layout_constraintBottom_toTopOf="@+id/view_divider_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline_content"
-                        app:layout_constraintTop_toBottomOf="@+id/label_order_content"
-                        app:autoSizeTextType="uniform"/>
+                        app:layout_constraintTop_toBottomOf="@+id/label_order_content" />
 
                     <View
                         android:id="@+id/view_divider_content"
@@ -329,6 +347,7 @@
                         android:layout_marginTop="16dp"
                         android:text="@string/order_info"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/textPrimary"
                         app:layout_constraintStart_toStartOf="@+id/txt_order_notes"
                         app:layout_constraintTop_toBottomOf="@+id/view_divider_content" />
 
@@ -340,11 +359,12 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="16dp"
                         android:text="@string/order_info"
+                        android:textColor="@color/textSecondary"
+                        app:autoSizeTextType="uniform"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline_content"
-                        app:layout_constraintTop_toBottomOf="@+id/label_order_info"
-                        app:autoSizeTextType="uniform"/>
+                        app:layout_constraintTop_toBottomOf="@+id/label_order_info" />
 
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>
@@ -356,14 +376,14 @@
                 android:layout_height="86dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:visibility="gone"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="1dp"
                 app:cardPreventCornerOverlap="true"
                 app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/card_content"
-                android:visibility="gone">
+                app:layout_constraintTop_toBottomOf="@+id/card_content">
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
@@ -397,6 +417,7 @@
                         android:layout_marginTop="16dp"
                         android:text="@string/deliveryman_name"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/textPrimary"
                         app:layout_constraintStart_toStartOf="@+id/txt_deliveryman_name"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -407,6 +428,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
                         android:text="@string/deliveryman_name"
+                        android:textColor="@color/textSecondary"
                         app:layout_constraintHorizontal_chainStyle="spread_inside"
                         app:layout_constraintStart_toStartOf="@+id/guideline_deliveryman"
                         app:layout_constraintTop_toBottomOf="@+id/label_deliveryman_name" />
@@ -426,15 +448,19 @@
                         android:layout_height="wrap_content"
                         android:text="@string/deliveryman_phone"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        app:layout_constraintStart_toEndOf="@+id/guideline_customer_center_2"
+                        android:textColor="@color/textPrimary"
+                        app:layout_constraintStart_toStartOf="@+id/txt_deliveryman_phone"
                         app:layout_constraintTop_toTopOf="@+id/label_deliveryman_name" />
 
                     <TextView
                         android:id="@+id/txt_deliveryman_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
                         android:text="@string/deliveryman_phone"
-                        app:layout_constraintStart_toStartOf="@+id/label_deliveryman_phone"
+                        android:textColor="@color/textSecondary"
+                        app:layout_constraintStart_toStartOf="@+id/guideline_customer_center_2"
                         app:layout_constraintTop_toBottomOf="@+id/label_deliveryman_phone" />
 
                 </android.support.constraint.ConstraintLayout>
@@ -482,9 +508,12 @@
                         android:id="@+id/label_state_history"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
                         android:layout_marginTop="16dp"
                         android:text="@string/order_history"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/textPrimary"
                         app:layout_constraintStart_toStartOf="@+id/guideline_state"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -492,8 +521,8 @@
                         android:id="@+id/txt_state_history"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
                         android:layout_marginBottom="16dp"
                         android:text="@string/order_history"
                         app:autoSizeTextType="uniform"

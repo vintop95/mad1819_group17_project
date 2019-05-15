@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,6 +25,11 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,10 +45,14 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import it.polito.mad1819.group17.deliveryapp.common.Restaurateur;
@@ -49,15 +60,16 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
 public class EditProfileActivity extends AppCompatActivity {
 
+    public static final int CAMERA_REQUEST = 0;
+    public static final int GALLERY_REQUEST = 1;
+    public static final int AUTOCOMPLETE_REQUEST = 2;
+
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mRestaurateurDatabaseReference;
     private ValueEventListener mEditEventListener;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mFirebaseStorageReference;
-
-    public static final int CAMERA_REQUEST = 0;
-    public static final int GALLERY_REQUEST = 1;
 
     private Toolbar toolbar;
     private Boolean image_changed = false;
@@ -71,6 +83,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private TextView input_working_time_opening;
     private TextView input_working_time_closing;
     private EditText input_bio;
+
+    private String newAddress = null;
 
 
     private void locateViews() {
@@ -91,12 +105,13 @@ public class EditProfileActivity extends AppCompatActivity {
         input_bio = findViewById(R.id.input_bio_sign_in);
     }
 
+
     private void feedViews(Restaurateur restaurateur) {
         if (restaurateur != null) {
             if (!image_changed && restaurateur.getImage_path() != "") {
                 Glide.with(image_user_photo.getContext()).load(restaurateur.getImage_path())
                         .into(image_user_photo);
-            }else{
+            } else {
                 Glide.with(image_user_photo.getContext()).clear(image_user_photo);
             }
             input_name.setText(restaurateur.getName());
@@ -104,12 +119,12 @@ public class EditProfileActivity extends AppCompatActivity {
             input_mail.setText(restaurateur.getMail());
             input_address.setText(restaurateur.getAddress());
             String restaurant_type = restaurateur.getRestaurant_type();
-            if (restaurant_type != null){
+            if (restaurant_type != null) {
                 Integer index;
                 try {
                     index = Integer.valueOf(restaurateur.getRestaurant_type());
-                }catch(NumberFormatException e){
-                    index=0;
+                } catch (NumberFormatException e) {
+                    index = 0;
                 }
 
                 input_restaurant_type.setSelection(index);
@@ -121,12 +136,12 @@ public class EditProfileActivity extends AppCompatActivity {
             }
 
             String free_day = restaurateur.getFree_day();
-            if (free_day != null){
+            if (free_day != null) {
                 Integer dayIndex;
                 try {
                     dayIndex = Integer.valueOf(restaurateur.getFree_day());
-                }catch(NumberFormatException e){
-                    dayIndex=0;
+                } catch (NumberFormatException e) {
+                    dayIndex = 0;
                 }
 
                 input_free_day.setSelection(dayIndex);
@@ -153,7 +168,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadImage(){
+    private void uploadImage() {
         Bitmap bitmap = ((BitmapDrawable) image_user_photo.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -166,18 +181,30 @@ public class EditProfileActivity extends AppCompatActivity {
         uploadTask.addOnFailureListener((@NonNull Exception exception) -> {
             Log.e("FIREBASE_LOG", "Picture Upload Fail - EditProfileActivity");
             Toast.makeText(getApplicationContext(),
-                "Picture Upload Fail - EditProfileActivity",
-                Toast.LENGTH_LONG).show();
+                    "Picture Upload Fail - EditProfileActivity",
+                    Toast.LENGTH_LONG).show();
         }).addOnSuccessListener((UploadTask.TaskSnapshot taskSnapshot) -> {
             mFirebaseStorageReference.child("profile_picture.jpg")
-                .getDownloadUrl()
-                .addOnSuccessListener((Uri uri) -> {
-                    Uri downUri = uri;
-                    Log.v("FIREBASE_LOG", "Picture Upload Success - EditProfileActivity");
-                    mRestaurateurDatabaseReference.child(mFirebaseAuth.getUid())
-                            .child("image_path").setValue(downUri.toString());
-                });
+                    .getDownloadUrl()
+                    .addOnSuccessListener((Uri uri) -> {
+                        Uri downUri = uri;
+                        Log.v("FIREBASE_LOG", "Picture Upload Success - EditProfileActivity");
+                        mRestaurateurDatabaseReference.child(mFirebaseAuth.getUid())
+                                .child("image_path").setValue(downUri.toString());
+                    });
         });
+    }
+
+    private double[] getLatitudeAndLongitudeFromLocation(String location) {
+        Geocoder geocoder = new Geocoder(getBaseContext());
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocationName(location, 1);
+            return new double[]{addresses.get(0).getLatitude(), addresses.get(0).getLongitude()};
+        } catch (
+                IOException e) {
+            return null;
+        }
     }
 
     private int saveProfile() {
@@ -252,30 +279,65 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         Bitmap bitmapUserPhoto = null;
 
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            Bundle b = data.getExtras();
-            if (b != null) bitmapUserPhoto = (Bitmap) b.get("data");
-        } else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
-            try {
-                Uri targetUri = data.getData();
-                if (targetUri != null)
-                    bitmapUserPhoto = BitmapFactory.decodeStream(
-                            getContentResolver().openInputStream(targetUri));
+        if (requestCode == CAMERA_REQUEST || requestCode == GALLERY_REQUEST) {
+            if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+                Bundle b = data.getExtras();
+                if (b != null) bitmapUserPhoto = (Bitmap) b.get("data");
+            } else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+                try {
+                    Uri targetUri = data.getData();
+                    if (targetUri != null)
+                        bitmapUserPhoto = BitmapFactory.decodeStream(
+                                getContentResolver().openInputStream(targetUri));
 
-            } catch (FileNotFoundException e) {
-                bitmapUserPhoto = null;
-                Toast.makeText(getApplicationContext(),
-                        "FileNotFoundException: Error in setting image!",
-                        Toast.LENGTH_LONG).show();
+                } catch (FileNotFoundException e) {
+                    bitmapUserPhoto = null;
+                    Toast.makeText(getApplicationContext(),
+                            "FileNotFoundException: Error in setting image!",
+                            Toast.LENGTH_LONG).show();
+                }
             }
-        }
 
-        if (bitmapUserPhoto != null) {
-            image_changed = true;
-            image_user_photo.setImageBitmap(bitmapUserPhoto);
-            image_user_photo.setPadding(8, 8, 8, 8);
+            if (bitmapUserPhoto != null) {
+                image_changed = true;
+                image_user_photo.setImageBitmap(bitmapUserPhoto);
+                image_user_photo.setPadding(8, 8, 8, 8);
+            }
+        } else if (requestCode == AUTOCOMPLETE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                newAddress = place.getAddress();
+                input_address.setText(newAddress);
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                Toast.makeText(this, "Error in retrieving the address :(", Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Address has not been selected.", Toast.LENGTH_LONG).show();
+            }
+
+
         }
     }
+
+    private String[] searchPossibleMatchingAddresses(String searchString) {
+        ArrayList<String> strings = new ArrayList<>();
+        Geocoder geocoder = new Geocoder(getBaseContext());
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocationName(searchString, 10);
+            for (int i = 0; i < addresses.size(); i++) {
+                /*double latitude = addr.getLatitude();
+                double longitude = addr.getLongitude();*/
+                strings.add(addresses.get(i).getAddressLine(0));
+            }
+
+            String[] strings_as_array = new String[strings.size()];
+            strings.toArray(strings_as_array);
+            return strings_as_array;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -291,9 +353,16 @@ public class EditProfileActivity extends AppCompatActivity {
 
         addOnFocusChangeListener(input_name);
         addOnFocusChangeListener(input_phone);
-        addOnFocusChangeListener(input_mail);
         addOnFocusChangeListener(input_address);
+        addOnFocusChangeListener(input_mail);
         addOnFocusChangeListener(input_bio);
+
+        Places.initialize(getApplicationContext(), "AIzaSyB7Tku5m9p0LVYU8k8-G7RB0DQoDXjvdSE");
+        input_address.setOnClickListener(v -> {
+            List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.ADDRESS);
+            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
+            startActivityForResult(intent, AUTOCOMPLETE_REQUEST);
+        });
 
         addTimePickerOnClick(input_working_time_opening);
         addTimePickerOnClick(input_working_time_closing);
@@ -303,10 +372,8 @@ public class EditProfileActivity extends AppCompatActivity {
         mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
 
         mFirebaseStorage = FirebaseStorage.getInstance();
-        mFirebaseStorageReference = mFirebaseStorage.getReference().child(mFirebaseAuth.getUid())
-                .child("images");
-
-
+        mFirebaseStorageReference = mFirebaseStorage.getReference()
+                .child(mFirebaseAuth.getUid()).child("images");
     }
 
     @Override
@@ -314,7 +381,6 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onPause();
         detachValueEventListener(mFirebaseAuth.getUid());
         Log.v("FIREBASE_LOG", "EventListener removed onPause - EditProfileActivity");
-
     }
 
     @Override
@@ -322,7 +388,6 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onResume();
         attachValueEventListener(mFirebaseAuth.getUid());
         Log.v("FIREBASE_LOG", "EventListener added onResume - EditProfileActivity");
-
     }
 
     private void attachValueEventListener(String userId) {
@@ -333,6 +398,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Restaurateur restaurateur = dataSnapshot.getValue(Restaurateur.class);
+                    if (restaurateur != null && newAddress != null)
+                        restaurateur.setAddress(newAddress);
                     feedViews(restaurateur);
                 }
 

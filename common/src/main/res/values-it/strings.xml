@@ -10,38 +10,35 @@
 
     <string name="sign_out_menu">Esci</string>
 
+    <string name="choose_deliveryman">Scegli un Deliveryman</string>
 
     <!-- ////////////// -->
     <!-- Orders Strings -->
     <!-- ////////////// -->
 
     <!-- Order Card Strings -->
-    <string name="delivery_time">Orario Consegna</string>
-    <string name="delivery_date">Data Consegna</string>
-    <string name="order_state">Stato Ordine</string>
-    <string name="order_number">Numero Ordine</string>
-    <string name="total_items">Totale Articoli</string>
-
-    <!-- Delivery Request -->
-    <string name="restaurant_name">Nome Ristorante</string>
-    <string name="restaurant_phone">Telefono Ristorante</string>
-    <string name="restaurant_address">Indirizzo Ristorante</string>
-    <string name="customer_phone">Telefono Cliente</string>
-    <string name="customer_name">Nome Cliente</string>
-
+    <string name="delivery_time_card">Orario Consegna</string>
+    <string name="delivery_time">Orario Consegna:</string>
+    <string name="delivery_date">Data Consegna:</string>
+    <string name="order_state">Stato Ordine:</string>
+    <string name="order_number">Numero Ordine:</string>
+    <string name="total_items">Totale Articoli:</string>
 
 
     <!-- Order Details Strings -->
     <string name="title_activity_order_details">Dettagli Ordine</string>
-    <string name="deliveryman_name">Nome Rider</string>
-    <string name="deliveryman_phone">Telefono Rider</string>
+    <string name="deliveryman_name">Nome Rider:</string>
+    <string name="deliveryman_phone">Telefono Rider:</string>
+    <string name="deliveryman_id">ID Rider</string>
+    <string name="distance">Distanza (Km)</string>
+
     <!-- Labels -->
     <string name="name_label">Nome:</string>
     <string name="phone_label">Telefono:</string>
-    <string name="delivery_address">Indirizzo Consegna</string>
-    <string name="order_content">Contenuto Ordine</string>
-    <string name="order_info">Informazioni Ordine</string>
-    <string name="order_history">Storico Ordine</string>
+    <string name="delivery_address">Indirizzo Consegna:</string>
+    <string name="order_content">Contenuto Ordine:</string>
+    <string name="order_info">Informazioni Ordine:</string>
+    <string name="order_history">Storico Ordine:</string>
     <string name="button_history">Prossimo Stato</string>
     <!-- Hints -->
     <string name="phone_hint">Il tuo telefono</string>
@@ -87,7 +84,6 @@
     <!-- Delivery Strings -->
     <!-- ////////////// -->
 
-    <string name="notes">Note</string>
     <string name="delivery_request_id">ID Richiesta</string>
     <string name="request_history">Storico Richiesta</string>
     <string name="new_delivery_request">NUOVA RICHIESTA CONSEGNA</string>
@@ -112,20 +108,21 @@
     <string name="birthday">Data di nascita:</string>
     <string name="bio">Breve Descrizione:</string>
     <string name="address">Indirizzo:</string>
+    <string name="address_restaurant">Indirizzo Ristorante:</string>
     <string name="address_delivery">Indirizzo Consegna:</string>
     <string name="restaurant_type">Tipologia Ristorante</string>
-    <string name="free_day">Giorno di riposo</string>
-    <string name="working_time">Orario Lavorativo</string>
+    <string name="free_day">Giorno di riposo:</string>
+    <string name="working_time">Orario Lavorativo:</string>
     <string name="working_time_opening">Orario Apertura</string>
     <string name="working_time_closing">Orario Chiusura</string>
     <!-- Hints -->
     <string name="hint_name">"Il tuo nome"</string>
     <string name="hint_mail">"Il tuo indirizzo email"</string>
     <string name="hint_password">"La tua password"</string>
-    <string name="hint_city">La tua città</string>
-    <string name="hint_birthday">La tua data di nascita</string>
+    <string name="hint_city">"La tua città"</string>
+    <string name="hint_birthday">"La tua data di nascita"</string>
     <string name="hint_bio">"La tua descrizione"</string>
-    <string name="hint_address">Il tuo indirizzo</string>
+    <string name="hint_address">"Il tuo indirizzo"</string>
     <string name="hint_phone">"Il tuo telefono"</string>
     <string name="hint_restaurant_type">Tipologia Ristorante</string>
     <string name="hint_free_day">Giorno di riposo</string>
@@ -202,8 +199,11 @@
     <string name="popular">Popolari</string>
     <string name="hint_search">Cerca</string>
     <string name="open_now">Aperti ora</string>
-    <string name="choose_category">SCEGLI LA CATEGORIA DEL RISTORANTE</string>
+    <string name="choose_category">Scegli la categoria del Ristorante</string>
     <string name="signed_in">Accesso eseguito!</string>
     <string name="sign_in_canceled">Accesso annullato!</string>
+
+    <string name='alert_dialog_available_deliveryman_title'>Conferma la tua scelta</string>
+    <string name='alert_dialog_available_deliveryman_text'>Premendo OK proverai ad assegnare la consegna al deliveryman selezionat</string>
 
 </resources>
