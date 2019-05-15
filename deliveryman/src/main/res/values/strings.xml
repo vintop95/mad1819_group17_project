@@ -3,4 +3,5 @@
 
     <!-- FirebaseUI Auth -->
     <string name="fui_name_hint">Deliveryman Name</string>
+    <string name="title_activity_location_map">Map</string>
 </resources>

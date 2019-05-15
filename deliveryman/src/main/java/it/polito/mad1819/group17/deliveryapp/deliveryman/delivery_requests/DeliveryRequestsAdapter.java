@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,8 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
         TextView txt_state;
         TextView txt_restaurant_name;
         TextView txt_restaurant_address;
+        ImageButton mapButton;
+        Intent intent;
 
 
         public DeliveryRequestHolder(View itemView) {
@@ -57,7 +60,25 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
             txt_state = itemView.findViewById(R.id.txt_state);
             txt_restaurant_name = itemView.findViewById(R.id.txt_restaurant_name);
             txt_restaurant_address = itemView.findViewById(R.id.txt_restaurant_address);
+            mapButton = itemView.findViewById(R.id.imageButton_map);
+            mapButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DeliveryRequest clickedDeliveryRequest = getItem(getAdapterPosition());
+                    //clickedDeliveryRequest.setId(getSnapshots().getSnapshot(getAdapterPosition()).getKey());
+                    String restaurant_addr = clickedDeliveryRequest.getRestaurant_address();
+                    String customer_addr = clickedDeliveryRequest.getAddress();
+                    if(restaurant_addr==null)restaurant_addr="unknown";
+                    if(customer_addr==null)customer_addr="unknown";
+                    intent = new Intent(fragment.getActivity().getApplicationContext(), LocationMapActivity.class);
+                    Log.d("AAAA",restaurant_addr);
+                    Log.d("AAAA",customer_addr);
+                    intent.putExtra("restaurant_address", restaurant_addr);
+                    intent.putExtra("customer_address", customer_addr);
+                    fragment.getActivity().getApplicationContext().startActivity(intent);
 
+                }
+            });
         }
 
         @Override
@@ -92,14 +113,18 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
             case DeliveryRequest.STATE1:
                 holder.cardView.setBackgroundColor(
                         fragment.getActivity().getResources().getColor(R.color.colorState1));
+                holder.mapButton.setVisibility(View.GONE);
                 break;
             case DeliveryRequest.STATE2:
                 holder.cardView.setBackgroundColor(
                         fragment.getActivity().getResources().getColor(R.color.colorState2));
+                holder.mapButton.setVisibility(View.VISIBLE);
                 break;
             case DeliveryRequest.STATE3:
                 holder.cardView.setBackgroundColor(
                         fragment.getActivity().getResources().getColor(R.color.colorState3));
+                holder.mapButton.setVisibility(View.GONE);
+
                 break;
         }
     }

@@ -2,14 +2,20 @@ package it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -31,6 +37,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,9 +60,10 @@ import it.polito.mad1819.group17.deliveryapp.customer.R;
 public class OrderConfirmActivity extends AppCompatActivity {
 
     private TextView final_results;
-    private EditText deliveryAddress_edit;
+    private AutoCompleteTextView deliveryAddress_edit;
     private EditText deliveryHour_edit;
     private EditText txtOrderNotes_edit;
+    private TextView item_tot_price;
 
     private String restaurant_id;
     private String restaurant_name;
@@ -102,6 +110,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order_confirm);
 
         final_results = findViewById(R.id.final_tv);
+        item_tot_price = findViewById(R.id.item_tot_price);
         btnConfirmOrder = findViewById(R.id.btn_confirm_order);
         txtOrderNotes_edit = findViewById(R.id.oc_input_order_notes);
         intent = getIntent();
@@ -145,7 +154,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
         itemquantity = intent.getIntExtra("items_quantity", 0);
         totalprice = intent.getDoubleExtra("items_tot_price", 0);
 
-        deliveryAddress_edit = (EditText) findViewById(R.id.deliveryAddress);
+        deliveryAddress_edit = findViewById(R.id.deliveryAddress);
         deliveryHour_edit = (EditText) findViewById(R.id.deliveryHour);
         String finalResultString =
                 String.format(Locale.getDefault(),
@@ -153,6 +162,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
                         itemquantity, CurrencyHelper.getCurrency(totalprice)
                 );
         final_results.setText(finalResultString);
+        item_tot_price.setText(CurrencyHelper.getCurrency(totalprice));
 
         lst = (ListView) findViewById(R.id.listview_items);
         OrderConfirmAdapter orderConfirmAdapter = new OrderConfirmAdapter(names, quantities, prices, this);
@@ -179,6 +189,30 @@ public class OrderConfirmActivity extends AppCompatActivity {
                 confirmOrder(v);
             }
         });
+
+        deliveryAddress_edit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() >= 10) {
+                    String[] matchingAddresses = searchPossibleMatchingAddresses(s.toString());
+                    if (matchingAddresses != null) {
+                        ArrayAdapter<String> addressesAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, matchingAddresses);
+                        deliveryAddress_edit.setAdapter(addressesAdapter);
+                    }
+                }
+            }
+        });
+
 
         showBackArrowOnToolbar();
     }
