@@ -2,13 +2,12 @@ package it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,14 +37,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
+import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.OrderConfirmActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.ShoppingCart;
-import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
-
-import static it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantsActivity.stringToBitMap;
 
 public class DailyMenuActivity extends AppCompatActivity {
     private String restaurant_id;

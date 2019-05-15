@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,21 +22,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.firebase.ui.auth.data.model.User;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.database.DataSnapshot;
@@ -44,20 +39,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
 
+import it.polito.mad1819.group17.deliveryapp.common.utils.MadFirebaseRecyclerAdapter;
 import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
-import it.polito.mad1819.group17.deliveryapp.common.utils.MadFirebaseRecyclerAdapter;
 import it.polito.mad1819.group17.deliveryapp.common.utils.TimeHelper;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers.DailyMenuActivity;
-import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.OrderConfirmActivity;
-
-import static it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers.DailyMenuActivity.RC_ORDER_CONFIRM;
 
 public class RestaurantsActivity extends AppCompatActivity {
     private final int RC_DAILY_MENU = 0;

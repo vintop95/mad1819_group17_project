@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
-
 import com.google.firebase.database.Query;
 
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;

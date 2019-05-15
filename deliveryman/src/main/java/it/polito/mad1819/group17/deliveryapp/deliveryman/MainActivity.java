@@ -43,10 +43,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Locale;
 
-import it.polito.mad1819.group17.deliveryapp.common.Deliveryman;
 import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.DeliveryRequestDetailsActivity;
