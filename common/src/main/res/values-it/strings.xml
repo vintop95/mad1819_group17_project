@@ -79,6 +79,10 @@
     <string name="warning_title">Attenzione</string>
     <string name="discard_msg">Vuoi annullare le modifiche effettuate?</string>
 
+    <!-- Order Confirm Strings -->
+    <string name="total">Totale</string>
+    <string name="hint_money">100€</string>
+
 
     <!-- ////////////// -->
     <!-- Delivery Strings -->

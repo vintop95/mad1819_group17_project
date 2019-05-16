@@ -54,6 +54,11 @@
     <string name="positive_button">OK</string>
     <string name="negative_button">CANCEL</string>
 
+    <!-- Order Confirm Strings -->
+    <string name="total">Total</string>
+    <string name="hint_money">100€</string>
+
+
 
     <!-- ////////////// -->
     <!-- Offers Strings -->
