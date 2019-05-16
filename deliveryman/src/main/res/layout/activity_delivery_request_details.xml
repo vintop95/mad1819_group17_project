@@ -228,7 +228,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/card_customer"
+                android:id="@+id/card_restaurant"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -240,6 +240,142 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/card_delivery_request">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/guideline_customer_center2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.5"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/guideline_restaurant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="24dp"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/image_restaurant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
+                        android:contentDescription="@string/icon_restaurant"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_local_pizza_black_24dp" />
+
+                    <TextView
+                        android:id="@+id/label_restaurant_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/name_restaurant"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/textPrimary"
+                        app:layout_constraintStart_toStartOf="@+id/txt_restaurant_name"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/txt_restaurant_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/name_restaurant"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/textSecondary"
+                        app:layout_constraintStart_toStartOf="@+id/guideline_restaurant"
+                        app:layout_constraintTop_toBottomOf="@+id/label_restaurant_name" />
+
+                    <TextView
+                        android:id="@+id/label_restaurant_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/phone_restaurant"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/textPrimary"
+                        app:layout_constraintStart_toStartOf="@+id/txt_restaurant_phone"
+                        app:layout_constraintTop_toBottomOf="@+id/view_divider_restaurant" />
+
+                    <TextView
+                        android:id="@+id/txt_restaurant_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/phone_restaurant"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/textSecondary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/guideline_restaurant"
+                        app:layout_constraintTop_toBottomOf="@+id/label_restaurant_phone" />
+
+                    <View
+                        android:id="@+id/view_divider_restaurant"
+                        android:layout_width="0dp"
+                        android:layout_height="2dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@color/colorPrimary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_restaurant_address" />
+
+                    <TextView
+                        android:id="@+id/label_restaurant_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="18dp"
+                        android:layout_marginRight="18dp"
+                        android:text="@string/address_restaurant"
+                        android:textColor="@color/textPrimary"
+                        app:layout_constraintEnd_toStartOf="@+id/image_restaurant"
+                        app:layout_constraintStart_toStartOf="@+id/txt_restaurant_address"
+                        app:layout_constraintTop_toTopOf="@+id/label_restaurant_name" />
+
+                    <TextView
+                        android:id="@+id/txt_restaurant_address"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="@string/address_restaurant"
+                        android:textColor="@color/textSecondary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/guideline_customer_center2"
+                        app:layout_constraintTop_toBottomOf="@+id/label_restaurant_address" />
+
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_customer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="1dp"
+                app:cardPreventCornerOverlap="true"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/card_restaurant">
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
@@ -330,145 +466,6 @@
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>
 
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/card_restaurant"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="1dp"
-                app:cardPreventCornerOverlap="true"
-                app:cardUseCompatPadding="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/card_customer">
-
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <android.support.constraint.Guideline
-                        android:id="@+id/guideline_customer_center2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.5"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                    <android.support.constraint.Guideline
-                        android:id="@+id/guideline_restaurant"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_begin="24dp"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/image_restaurant"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginRight="16dp"
-                        android:contentDescription="@string/icon_restaurant"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_local_pizza_black_24dp" />
-
-                    <TextView
-                        android:id="@+id/label_restaurant_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/name_restaurant"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        android:textColor="@color/textPrimary"
-                        app:layout_constraintStart_toStartOf="@+id/txt_restaurant_name"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/txt_restaurant_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:text="@string/name_restaurant"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        android:textColor="@color/textSecondary"
-                        app:layout_constraintStart_toStartOf="@+id/guideline_restaurant"
-                        app:layout_constraintTop_toBottomOf="@+id/label_restaurant_name" />
-
-                    <TextView
-                        android:id="@+id/label_restaurant_phone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/phone_restaurant"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        android:textColor="@color/textPrimary"
-                        app:layout_constraintStart_toStartOf="@+id/txt_restaurant_phone"
-                        app:layout_constraintTop_toTopOf="@+id/label_restaurant_name" />
-
-                    <TextView
-                        android:id="@+id/txt_restaurant_phone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:text="@string/phone_restaurant"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        android:textColor="@color/textSecondary"
-                        app:layout_constraintStart_toStartOf="@+id/guideline_customer_center2"
-                        app:layout_constraintTop_toBottomOf="@+id/label_restaurant_phone" />
-
-                    <View
-                        android:id="@+id/view_divider_restaurant"
-                        android:layout_width="0dp"
-                        android:layout_height="2dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@color/colorPrimary"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/txt_restaurant_name" />
-
-                    <TextView
-                        android:id="@+id/label_restaurant_address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/address_restaurant"
-                        android:textColor="@color/textPrimary"
-                        app:layout_constraintStart_toStartOf="@+id/txt_restaurant_address"
-                        app:layout_constraintTop_toBottomOf="@+id/view_divider_restaurant" />
-
-                    <TextView
-                        android:id="@+id/txt_restaurant_address"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginBottom="16dp"
-                        android:text="@string/address_restaurant"
-                        android:textColor="@color/textSecondary"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/guideline_restaurant"
-                        app:layout_constraintTop_toBottomOf="@+id/label_restaurant_address" />
-
-                </android.support.constraint.ConstraintLayout>
-            </android.support.v7.widget.CardView>
-
-
-
-
-
-
             <android.support.v7.widget.CardView
                 android:id="@+id/card_state"
                 android:layout_width="match_parent"
@@ -481,7 +478,7 @@
                 app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/card_restaurant"
+                app:layout_constraintTop_toBottomOf="@+id/card_customer"
                 tools:layout_editor_absoluteY="380dp">
 
                 <android.support.constraint.ConstraintLayout
@@ -526,16 +523,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
                         android:backgroundTint="@color/colorPrimary"
                         android:text="@string/request_history"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                         android:textColor="@color/textSecondary"
                         app:autoSizeTextType="uniform"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/btn_next_state"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_chainStyle="spread_inside"
                         app:layout_constraintStart_toStartOf="@+id/guideline_state"
                         app:layout_constraintTop_toBottomOf="@+id/label_state_history" />
@@ -544,14 +539,16 @@
                         android:id="@+id/btn_next_state"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
                         android:backgroundTint="@color/colorPrimary"
                         android:text="@string/button_history"
                         android:textSize="12sp"
                         app:autoSizeTextType="uniform"
-                        app:layout_constraintBottom_toBottomOf="@+id/txt_state_history"
-                        app:layout_constraintEnd_toStartOf="@+id/image_history"
-                        app:layout_constraintTop_toTopOf="@+id/txt_state_history"
-                        app:layout_constraintVertical_bias="0.612" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_state_history" />
 
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>

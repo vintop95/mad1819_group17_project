@@ -87,6 +87,7 @@
     <string name="delivery_request_id">ID Richiesta</string>
     <string name="request_history">Storico Richiesta</string>
     <string name="new_delivery_request">NUOVA RICHIESTA CONSEGNA</string>
+    <string name="button_map">Apri Mappa</string>
 
 
     <!-- ////////////// -->

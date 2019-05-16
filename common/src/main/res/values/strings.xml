@@ -101,6 +101,7 @@
     <string name="delivery_request_id">Request ID</string>
     <string name="request_history">Request History</string>
     <string name="new_delivery_request">NEW DELIVERY REQUEST</string>
+    <string name="button_map">Open Map</string>
 
 
     <!-- ////////////// -->

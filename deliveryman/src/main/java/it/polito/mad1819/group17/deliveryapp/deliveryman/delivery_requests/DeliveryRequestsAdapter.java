@@ -3,13 +3,13 @@ package it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -34,7 +34,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
 
     /* ------------------------------------------------------------------------------------------- */
     public class DeliveryRequestHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        CardView cardView;
+        View state_background;
         TextView txt_delivery_time;
         TextView txt_delivery_date;
         TextView txt_delivery_address;
@@ -42,14 +42,15 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
         TextView txt_state;
         TextView txt_restaurant_name;
         TextView txt_restaurant_address;
-        ImageButton mapButton;
+        ImageView image_state;
+        Button mapButton;
         Intent intent;
 
 
         public DeliveryRequestHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            cardView = itemView.findViewById(R.id.card_delivery_request);
+            state_background = itemView.findViewById(R.id.view_state_background);
             txt_delivery_time = itemView.findViewById(R.id.txt_delivery_time);
             txt_delivery_date = itemView.findViewById(R.id.txt_delivery_date);
             txt_delivery_address = itemView.findViewById(R.id.txt_address);
@@ -57,6 +58,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
             txt_state = itemView.findViewById(R.id.txt_state);
             txt_restaurant_name = itemView.findViewById(R.id.txt_restaurant_name);
             txt_restaurant_address = itemView.findViewById(R.id.txt_restaurant_address);
+            image_state = itemView.findViewById(R.id.image_state);
             mapButton = itemView.findViewById(R.id.imageButton_map);
             mapButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -108,18 +110,21 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
         holder.txt_restaurant_address.setText(model.getRestaurant_address());
         switch (model.getCurrentState()) {
             case DeliveryRequest.STATE1:
-                holder.cardView.setBackgroundColor(
+                holder.state_background.setBackgroundColor(
                         fragment.getActivity().getResources().getColor(R.color.colorState1));
+                holder.image_state.setBackgroundResource(R.drawable.ic_remove_circle_black_24dp);
                 holder.mapButton.setVisibility(View.GONE);
                 break;
             case DeliveryRequest.STATE2:
-                holder.cardView.setBackgroundColor(
+                holder.state_background.setBackgroundColor(
                         fragment.getActivity().getResources().getColor(R.color.colorState2));
+                holder.image_state.setBackgroundResource(R.drawable.ic_play_circle_filled_black_24dp);
                 holder.mapButton.setVisibility(View.VISIBLE);
                 break;
             case DeliveryRequest.STATE3:
-                holder.cardView.setBackgroundColor(
+                holder.state_background.setBackgroundColor(
                         fragment.getActivity().getResources().getColor(R.color.colorState3));
+                holder.image_state.setBackgroundResource(R.drawable.ic_check_circle_black_24dp);
                 holder.mapButton.setVisibility(View.GONE);
 
                 break;
