@@ -10,7 +10,6 @@
 
     <string name="sign_out_menu">Sign Out</string>
 
-    <string name="choose_deliveryman">Choose a Deliveryman</string>
 
     <!-- ////////////// -->
     <!-- Orders Strings -->
@@ -54,12 +53,25 @@
     <string name="positive_button">OK</string>
     <string name="negative_button">CANCEL</string>
 
+    <!-- Order Confirm Strings -->
+    <string name="title_activity_confirm_order">Confirm Order</string>
+    <string name="total">Total</string>
+    <string name="hint_money">100€</string>
+
+    <!-- Restaurant Profile Strings -->
+    <string name="title_activity_restaurant_profile">Restaurant Profile</string>
+
+
 
     <!-- ////////////// -->
     <!-- Offers Strings -->
     <!-- ////////////// -->
 
+    <!-- Restaurant Strings -->
+    <string name="title_activity_restaurants">Choose Restaurant</string>
+
     <!-- Offer Card Strings -->
+    <string name="title_activity_daily_offers">Daily Offers</string>
     <string name="available">Available:</string>
     <!-- icons -->
     <string name="icon_modify" translatable="false">Icon Modify</string>
@@ -73,7 +85,7 @@
 
 
     <!-- Offer Details Strings -->
-    <string name="title_activity_edit_food">Offer details</string>
+    <string name="title_activity_edit_food">Offer Details</string>
     <string name="action_settings">Settings</string>
     <!-- Labels -->
     <string name="label_food_number">Number:</string>
@@ -97,10 +109,13 @@
     <!-- Delivery Strings -->
     <!-- ////////////// -->
 
+    <string name="title_activity_choose_deliveryman">Choose Deliveryman</string>
     <string name="icon_delivery_request" translatable="false">Icon Delivery Request</string>
     <string name="delivery_request_id">Request ID</string>
     <string name="request_history">Request History</string>
     <string name="new_delivery_request">NEW DELIVERY REQUEST</string>
+    <string name="button_map">Open Map</string>
+    <string name="button_google_map">Go to Google Maps</string>
 
 
     <!-- ////////////// -->

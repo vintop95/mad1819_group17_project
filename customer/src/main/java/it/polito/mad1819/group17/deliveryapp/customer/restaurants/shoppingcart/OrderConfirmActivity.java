@@ -86,7 +86,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
     private String newAddress = null;
 
     private void showBackArrowOnToolbar() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar2));
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar_confirm));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
