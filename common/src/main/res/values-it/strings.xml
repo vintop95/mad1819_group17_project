@@ -10,7 +10,6 @@
 
     <string name="sign_out_menu">Esci</string>
 
-    <string name="choose_deliveryman">Scegli un Deliveryman</string>
 
     <!-- ////////////// -->
     <!-- Orders Strings -->
@@ -53,7 +52,11 @@
     <!-- Offers Strings -->
     <!-- ////////////// -->
 
+    <!-- Restaurant Strings -->
+    <string name="title_activity_restaurants">Scegli Ristorante</string>
+
     <!-- Offer Card Strings -->
+    <string name="title_activity_daily_offers">Offerte Giornaliere</string>
     <string name="available">Disponibile:</string>
     <!-- Images -->
     <string name="image_food_dummy">Immagine Cibo</string>
@@ -80,18 +83,24 @@
     <string name="discard_msg">Vuoi annullare le modifiche effettuate?</string>
 
     <!-- Order Confirm Strings -->
+    <string name="title_activity_confirm_order">Conferma Ordine</string>
     <string name="total">Totale</string>
     <string name="hint_money">100€</string>
+
+    <!-- Restaurant Profile Strings -->
+    <string name="title_activity_restaurant_profile">Profile Ristorante</string>
 
 
     <!-- ////////////// -->
     <!-- Delivery Strings -->
     <!-- ////////////// -->
 
+    <string name="title_activity_choose_deliveryman">Scegli Fattorino</string>
     <string name="delivery_request_id">ID Richiesta</string>
     <string name="request_history">Storico Richiesta</string>
     <string name="new_delivery_request">NUOVA RICHIESTA CONSEGNA</string>
     <string name="button_map">Apri Mappa</string>
+    <string name="button_google_map">Vai a Google Maps</string>
 
 
     <!-- ////////////// -->

@@ -94,7 +94,7 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
     }
 
     private void showBackArrowOnToolbar() {
-        toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar_deliveryman);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

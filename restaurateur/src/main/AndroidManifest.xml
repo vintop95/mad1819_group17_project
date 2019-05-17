@@ -12,7 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".orders.AvailableDeliverymenActivity"></activity>
+        <activity
+            android:name=".orders.AvailableDeliverymenActivity"
+            android:label="@string/title_activity_choose_deliveryman">
+        </activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">

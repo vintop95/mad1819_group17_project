@@ -20,8 +20,7 @@
             android:id="@+id/toolbar_confirm"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            app:title="Confirm Order" />
+            android:background="@color/colorPrimary" />
 
     </android.support.design.widget.AppBarLayout>
 
