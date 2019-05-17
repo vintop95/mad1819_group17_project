@@ -15,8 +15,19 @@
         android:layout_height="match_parent">
 
 
-        <ImageView
+        <View
+            android:id="@+id/view_background_deliveryman"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryLight"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toStartOf="@+id/guideline"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image_deliveryman"
+            style="@style/circleUserPhotoStyle"
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_marginStart="8dp"
@@ -30,7 +41,7 @@
             card_view:srcCompat="@drawable/background_avatar" />
 
         <View
-            android:id="@+id/view"
+            android:id="@+id/view_divider_picture"
             android:layout_width="0dp"
             android:layout_height="2dp"
             android:layout_marginStart="32dp"
@@ -50,6 +61,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@string/deliveryman_id"
+            android:textColor="@color/textPrimary"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="@+id/label_deliveryman_id"
             card_view:layout_constraintTop_toBottomOf="@+id/label_deliveryman_id" />
@@ -61,10 +73,21 @@
             android:layout_marginBottom="8dp"
             android:text="@string/distance"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold"
             card_view:layout_constraintBottom_toBottomOf="@+id/txt_phone"
             card_view:layout_constraintEnd_toEndOf="@+id/label_distance"
             card_view:layout_constraintStart_toStartOf="@+id/label_distance"
             card_view:layout_constraintTop_toBottomOf="@+id/label_distance" />
+
+        <View
+            android:id="@+id/view_divider_card"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:background="@color/textSecondary"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toStartOf="@+id/guideline"
+            card_view:layout_constraintStart_toEndOf="@+id/view_background_deliveryman"
+            card_view:layout_constraintTop_toTopOf="parent" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline"
@@ -81,6 +104,7 @@
             android:layout_marginRight="8dp"
             android:text="@string/deliveryman_name"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/textPrimary"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintHorizontal_bias="0.0"
             card_view:layout_constraintStart_toStartOf="@+id/label_name"
@@ -95,6 +119,7 @@
             android:layout_marginBottom="16dp"
             android:text="@string/deliveryman_phone"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/textPrimary"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="@+id/label_phone"
@@ -109,6 +134,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/deliveryman_id"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/textSecondary"
             card_view:layout_constraintStart_toStartOf="@+id/guideline"
             card_view:layout_constraintTop_toTopOf="parent" />
 
@@ -121,7 +147,7 @@
             card_view:layout_constraintBottom_toTopOf="@+id/txt_distance"
             card_view:layout_constraintEnd_toEndOf="@+id/image_deliveryman"
             card_view:layout_constraintStart_toStartOf="@+id/image_deliveryman"
-            card_view:layout_constraintTop_toBottomOf="@+id/view" />
+            card_view:layout_constraintTop_toBottomOf="@+id/view_divider_picture" />
 
         <TextView
             android:id="@+id/label_name"
@@ -132,6 +158,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/deliveryman_name"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/textSecondary"
             card_view:layout_constraintStart_toStartOf="@+id/guideline"
             card_view:layout_constraintTop_toBottomOf="@+id/txt_deliveryman_id" />
 
@@ -144,6 +171,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/deliveryman_phone"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/textSecondary"
             card_view:layout_constraintStart_toStartOf="@+id/guideline"
             card_view:layout_constraintTop_toBottomOf="@+id/txt_name" />
 

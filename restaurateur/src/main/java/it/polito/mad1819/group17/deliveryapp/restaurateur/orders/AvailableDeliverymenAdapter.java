@@ -75,11 +75,11 @@ public class AvailableDeliverymenAdapter extends RecyclerView.Adapter<AvailableD
             new AlertDialog.Builder(context).setTitle(context.getString(R.string.alert_dialog_available_deliveryman_title))
                     .setMessage(context.getString(R.string.alert_dialog_available_deliveryman_text))
                     .setNegativeButton(context.getString(R.string.negative_button), (dialog, which) -> dialog.cancel())
-                    .setPositiveButton(context.getString(R.string.positive_button), (dialog, which) -> returnSelectedDeliveymanAndFinish())
+                    .setPositiveButton(context.getString(R.string.positive_button), (dialog, which) -> returnSelectedDeliverymanAndFinish())
                     .show();
         }
 
-        private void returnSelectedDeliveymanAndFinish() {
+        private void returnSelectedDeliverymanAndFinish() {
             ((AppCompatActivity)context).setResult(AvailableDeliverymenActivity.RESULT_OK, new Intent().putExtra("selected_deliveryman_id", selectedDeliverymanId));
             ((AppCompatActivity)context).finish();
         }
