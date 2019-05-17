@@ -74,7 +74,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText input_name;
     private EditText input_phone;
     private EditText input_mail;
-    private AutoCompleteTextView input_address;
+    private EditText input_address;
     private EditText input_bio;
 
     private String newAddress = null;
@@ -256,29 +256,6 @@ public class EditProfileActivity extends AppCompatActivity {
         mFirebaseStorage = FirebaseStorage.getInstance();
         mFirebaseStorageReference = mFirebaseStorage.getReference().child(mFirebaseAuth.getUid())
                 .child("images");
-
-        input_address.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() >= 10) {
-                    String[] matchingAddresses = searchPossibleMatchingAddresses(s.toString());
-                    if (matchingAddresses != null) {
-                        ArrayAdapter<String> addressesAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, matchingAddresses);
-                        input_address.setAdapter(addressesAdapter);
-                    }
-                }
-            }
-        });
 
     }
 

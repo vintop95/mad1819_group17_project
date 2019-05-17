@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -79,38 +80,47 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
         restaurantCoordinates = getLatitudeAndLongitudeFromLocation(restaurantAddress);
         customerCoordinates = getLatitudeAndLongitudeFromLocation(customerAddress);
 
-        Log.d("AAA", Double.toString(restaurantCoordinates[0]) + " " + Double.toString(restaurantCoordinates[1]));
-        Log.d("AAA", Double.toString(customerCoordinates[0]) + " " + Double.toString(customerCoordinates[1]));
+        try {
+            Log.d("AAA", Double.toString(restaurantCoordinates[0]) + " " + Double.toString(restaurantCoordinates[1]));
+            Log.d("AAA", Double.toString(customerCoordinates[0]) + " " + Double.toString(customerCoordinates[1]));
 
-        setContentView(R.layout.activity_location_map);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+            setContentView(R.layout.activity_location_map);
+            // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
 
-        Bitmap img = BitmapFactory.decodeResource(getResources(),R.drawable.one_px);
-        trasparent = BitmapDescriptorFactory.fromBitmap(img);
+            Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.one_px);
+            trasparent = BitmapDescriptorFactory.fromBitmap(img);
 
-        goToGoogleMaps = findViewById(R.id.goToGoogleMapsButton);
+            goToGoogleMaps = findViewById(R.id.goToGoogleMapsButton);
+        } catch (Exception e) {
+            Log.e("exception", e.getLocalizedMessage());
+            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        origin = Double.toString(restaurantCoordinates[0]) + "," + Double.toString(restaurantCoordinates[1]);
-        destination = Double.toString(customerCoordinates[0]) + "," + Double.toString(customerCoordinates[1]);
+        try {
+            origin = Double.toString(restaurantCoordinates[0]) + "," + Double.toString(restaurantCoordinates[1]);
+            destination = Double.toString(customerCoordinates[0]) + "," + Double.toString(customerCoordinates[1]);
 
-        goToGoogleMaps.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view) {
+            goToGoogleMaps.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
 
-                String url = "http://maps.google.com/maps?saddr="+origin+"&daddr="+destination;
-                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(intent);
-            }
-        });
-
-
+                    String url = "http://maps.google.com/maps?saddr=" + origin + "&daddr=" + destination;
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                }
+            });
+        } catch (Exception e) {
+            Log.e("exception", e.getLocalizedMessage());
+            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     /**
@@ -240,7 +250,10 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
         List<Address> addresses;
         try {
             addresses = geocoder.getFromLocationName(location, 1);
-            return new double[]{addresses.get(0).getLatitude(), addresses.get(0).getLongitude()};
+            if (addresses.size() != 0)
+                return new double[]{addresses.get(0).getLatitude(), addresses.get(0).getLongitude()};
+            else
+                return null;
         } catch (
                 IOException e) {
             return null;

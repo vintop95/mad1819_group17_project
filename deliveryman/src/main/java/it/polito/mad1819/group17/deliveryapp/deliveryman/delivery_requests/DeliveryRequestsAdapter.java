@@ -64,6 +64,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
                 @Override
                 public void onClick(View view) {
                     DeliveryRequest clickedDeliveryRequest = getItem(getAdapterPosition());
+                    Log.d("AAA", ""+getAdapterPosition());
                     //clickedDeliveryRequest.setId(getSnapshots().getSnapshot(getAdapterPosition()).getKey());
                     String restaurant_addr = clickedDeliveryRequest.getRestaurant_address();
                     String customer_addr = clickedDeliveryRequest.getAddress();

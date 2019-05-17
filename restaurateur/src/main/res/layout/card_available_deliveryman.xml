@@ -83,7 +83,7 @@
             android:id="@+id/view_divider_card"
             android:layout_width="1dp"
             android:layout_height="0dp"
-            android:background="@color/textSecondary"
+            android:background="@android:color/white"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toStartOf="@+id/guideline"
             card_view:layout_constraintStart_toEndOf="@+id/view_background_deliveryman"

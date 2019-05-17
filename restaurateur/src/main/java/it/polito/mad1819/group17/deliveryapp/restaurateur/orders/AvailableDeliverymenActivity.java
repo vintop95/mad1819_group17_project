@@ -33,6 +33,7 @@ import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.PrefHelper;
+import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
 public class AvailableDeliverymenActivity extends AppCompatActivity {
@@ -52,6 +53,8 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
 
     private ArrayList<AvailableDeliveryman> availableDeliverymen;
     private RecyclerView recyclerView;
+
+    private ProgressBarHandler progressBarHandler;
 
     private void initUtils() {
         PrefHelper.setMainContext(this);
@@ -112,6 +115,9 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
 
         initUtils();
 
+        progressBarHandler = new ProgressBarHandler(this);
+        progressBarHandler.show();
+
         initFirebaseStuff();
 
 
@@ -160,6 +166,7 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
 
                                     AvailableDeliverymenAdapter availableDeliverymenAdapter = new AvailableDeliverymenAdapter(availableDeliverymen, context);
                                     recyclerView.setAdapter(availableDeliverymenAdapter);
+                                    progressBarHandler.hide();
                                 }
                             }
 
