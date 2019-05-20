@@ -34,13 +34,17 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.Calendar;
+import java.util.Comparator;
+import java.util.Map;
 
+import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
 import it.polito.mad1819.group17.deliveryapp.common.utils.MadFirebaseRecyclerAdapter;
 import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
@@ -54,11 +58,13 @@ public class RestaurantsActivity extends AppCompatActivity {
     public static String FILTER_SEARCH = "filter_search";
     public static String FILTER_OPEN_NOW = "filter_open_now";
 
+    private String firebasePath = null;
     private String filterField = null, filterValue = null;
     private String category_selected;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private MadFirebaseRecyclerAdapter adapter;
+    private String userId;
 
     private SearchView input_search;
     private TextView label_subtitle;
@@ -104,6 +110,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         pbHandler = new ProgressBarHandler(this);
 
         showBackArrowOnToolbar();
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         label_subtitle = findViewById(R.id.label_subtitle);
         String[] restTypes = getResources().getStringArray(R.array.restaurant_types);
@@ -112,6 +119,16 @@ public class RestaurantsActivity extends AppCompatActivity {
             index = Integer.valueOf(category_selected);
         } catch (NumberFormatException e) {
             index = 0;
+        }
+
+        firebasePath = "restaurateurs";
+        filterField = "restaurant_type";
+        filterValue = category_selected;
+
+        // Only favourite restaurants\
+        if (index == 0) {
+            filterField = "favorites/" + userId;
+            filterValue = "true";
         }
         label_subtitle.setText(getString(R.string.restaurants) + ": " + restTypes[index]);
 
@@ -135,7 +152,12 @@ public class RestaurantsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        fetch(filterField, filterValue);
+        fetch(new Comparator<RestaurantModel>() {
+            @Override
+            public int compare(RestaurantModel lhs, RestaurantModel rhs) {
+                return lhs.name.compareTo(rhs.name);
+            }
+        });
         adapter.startListening();
     }
 
@@ -144,18 +166,19 @@ public class RestaurantsActivity extends AppCompatActivity {
         return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
     }
 
-    private void fetch(String filterField, String filterValue) {
-
-        if (TextUtils.isEmpty(filterField)) {
-            filterField = "restaurant_type";
-            filterValue = category_selected;
-        }
+    private void fetch(Comparator comparator) {
+        if (firebasePath == null) throw new IllegalStateException();
 
         pbHandler.show();
 
         DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference();
-        Query query = ref.child("restaurateurs").orderByChild(filterField).equalTo(filterValue);
+                .getReference().child(firebasePath);
+
+        Query query = ref;
+
+        if (!TextUtils.isEmpty(filterField) && !TextUtils.isEmpty(filterValue)) {
+            query = ref.orderByChild(filterField).equalTo(filterValue);
+        }
 
         FirebaseRecyclerOptions<RestaurantModel> options =
                 new FirebaseRecyclerOptions.Builder<RestaurantModel>()
@@ -173,7 +196,8 @@ public class RestaurantsActivity extends AppCompatActivity {
                                         snapshot.child("orders_count").getValue(Integer.class),
                                         snapshot.child("free_day").getValue(String.class),
                                         snapshot.child("working_time_opening").getValue(String.class),
-                                        snapshot.child("working_time_closing").getValue(String.class)
+                                        snapshot.child("working_time_closing").getValue(String.class),
+                                        (Map) snapshot.child("favorites").getValue()
                                 );
                             }
                         })
@@ -248,6 +272,25 @@ public class RestaurantsActivity extends AppCompatActivity {
                 }
             }
         };
+
+        adapter.setSortComparator(new Comparator<RestaurantModel>() {
+            @Override
+            public int compare(RestaurantModel lhs, RestaurantModel rhs) {
+//                Log.d("SORT", lhs.id + " , " + rhs.id);
+//                Log.d("SORT", lhs.price + " < " + rhs.price);
+//                Log.d("SORT", lhs.totalOrderedQty + " , " + rhs.totalOrderedQty);
+                if(lhs.orders_count > rhs.orders_count) {
+                    return -1;
+                } else if (lhs.orders_count < rhs.orders_count){
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+        if(comparator != null) {
+            adapter.setSortComparator(comparator);
+        }
         recyclerView.setAdapter(adapter);
         adapter.startListening();
     }
@@ -261,8 +304,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         public TextView avgPrice;
         public String id;
         public String phone;
-
-
+        public boolean isFavorite = false;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -284,6 +326,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                     intent.putExtra("name", name.getText());
                     intent.putExtra("address", address.getText());
                     intent.putExtra("phone", phone);
+                    intent.putExtra("isFavorite", isFavorite);
                     // Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
                     startActivityForResult(intent, RC_DAILY_MENU);
                 }
@@ -297,6 +340,9 @@ public class RestaurantsActivity extends AppCompatActivity {
             setPhoto(model.image_path);
             setId(model.key);
             setPhone(model.phone);
+            if(model.favorites != null && model.favorites.get(userId) != null) {
+                isFavorite = true;
+            }
         }
 
         private void setId(String id) {
@@ -389,6 +435,51 @@ public class RestaurantsActivity extends AppCompatActivity {
                         case 2: // Free Day
                             adapter.stopListening();
                             adapter.getFilter().filter(FILTER_OPEN_NOW);
+                            break;
+                    }
+                }
+            });
+            // create and show the alert dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+            return true;
+        }
+
+        if (item.getItemId() == R.id.btn_sort) {
+            // setup the alert builder
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.choose_sorting_field);
+            // add a list
+            String[] sortFields = {
+                    getString(R.string.name_restaurant),
+                    getString(R.string.popularity)
+            };
+            builder.setItems(sortFields, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case 0: // by name
+                            fetch(new Comparator<RestaurantModel>() {
+                                @Override
+                                public int compare(RestaurantModel lhs, RestaurantModel rhs) {
+                                    return lhs.name.compareTo(rhs.name);
+                                }
+                            });
+                            break;
+                        case 1: // by popularity
+                            fetch(new Comparator<RestaurantModel>() {
+                                @Override
+                                public int compare(RestaurantModel lhs, RestaurantModel rhs) {
+                                    if(lhs.orders_count > rhs.orders_count) {
+                                        return -1;
+                                    } else if (lhs.orders_count < rhs.orders_count){
+                                        return 1;
+                                    } else {
+                                        return 0;
+                                    }
+                                }
+                            });
                             break;
                     }
                 }

@@ -1,5 +1,8 @@
 package it.polito.mad1819.group17.deliveryapp.customer.restaurants;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RestaurantModel {
     public String key = "";
     public String address = "";
@@ -11,20 +14,23 @@ public class RestaurantModel {
     public String free_day = "";
     public String working_time_opening = "";
     public String working_time_closing = "";
+    public Map<String, String> favorites = new HashMap<>();
 
     public RestaurantModel(String address, String name, String bio,
                            String image_path,String key, String phone, Integer orders_count,
-                           String free_day, String working_time_opening, String working_time_closing) {
+                           String free_day, String working_time_opening, String working_time_closing,
+                           Map<String,String> favorites) {
         this.address = address;
         this.name = name;
         this.bio = bio;
         this.image_path = image_path;
         this.key = key;
         this.phone = phone;
-        this.orders_count = orders_count;
+        this.orders_count = orders_count == null ? 0 : orders_count;
         this.free_day = free_day;
         this.working_time_opening = working_time_opening;
         this.working_time_closing = working_time_closing;
+        this.favorites = favorites;
     }
 
     public RestaurantModel() {

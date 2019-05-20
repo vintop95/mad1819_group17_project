@@ -18,17 +18,17 @@
     <!-- Order Card Strings -->
     <string name="time" translatable="false">--:--</string>
     <string name="delivery_time_card">Delivery Time</string>
-    <string name="delivery_time">Delivery Time:</string>
-    <string name="delivery_date">Delivery Date:</string>
-    <string name="order_state">Order State:</string>
-    <string name="order_number">Order Number:</string>
-    <string name="total_items">Total Items:</string>
+    <string name="delivery_time">Delivery Time</string>
+    <string name="delivery_date">Delivery Date</string>
+    <string name="order_state">Order State</string>
+    <string name="order_number">Order Number</string>
+    <string name="total_items">Total Items</string>
 
 
     <!-- Order Details Strings -->
     <string name="title_activity_order_details">Order Details</string>
-    <string name="deliveryman_name">Rider Name:</string>
-    <string name="deliveryman_phone">Rider Phone:</string>
+    <string name="deliveryman_name">Rider Name</string>
+    <string name="deliveryman_phone">Rider Phone</string>
     <string name="deliveryman_id">Rider ID</string>
     <string name="distance">Distance (Km)</string>
     <!-- Icons -->
@@ -39,13 +39,13 @@
     <string name="icon_restaurant" translatable="false">Icon Restaurant</string>
 
     <!-- Labels -->
-    <string name="name_label">Name:</string>
-    <string name="phone_label">Phone:</string>
+    <string name="name_label">Name</string>
+    <string name="phone_label">Phone</string>
     <string name="phone_hint">Your Phone</string>
-    <string name="delivery_address">Delivery Address:</string>
-    <string name="order_content">Order Content:</string>
-    <string name="order_info">Order Info:</string>
-    <string name="order_history">State History:</string>
+    <string name="delivery_address">Delivery Address</string>
+    <string name="order_content">Order Content</string>
+    <string name="order_info">Order Info</string>
+    <string name="order_history">State History</string>
     <string name="button_history">Next State</string>
     <!-- Alert Dialogs -->
     <string name="confirm_next_state_title">Do you want to confirm the next state?</string>
@@ -72,7 +72,7 @@
 
     <!-- Offer Card Strings -->
     <string name="title_activity_daily_offers">Daily Offers</string>
-    <string name="available">Available:</string>
+    <string name="available">Available</string>
     <!-- icons -->
     <string name="icon_modify" translatable="false">Icon Modify</string>
     <string name="icon_delete" translatable="false">Icon Delete</string>
@@ -88,11 +88,11 @@
     <string name="title_activity_edit_food">Offer Details</string>
     <string name="action_settings">Settings</string>
     <!-- Labels -->
-    <string name="label_food_number">Number:</string>
-    <string name="label_food_name">Name:</string>
-    <string name="label_food_description">Description:</string>
-    <string name="label_food_price">Price:</string>
-    <string name="label_food_available_qty">Available quantity:</string>
+    <string name="label_food_number">Number</string>
+    <string name="label_food_name">Name</string>
+    <string name="label_food_description">Description</string>
+    <string name="label_food_price">Price</string>
+    <string name="label_food_available_qty">Available quantity</string>
     <!-- Hints -->
     <string name="hint_food_name">Insert food name</string>
     <string name="hint_food_description">Insert food description</string>
@@ -139,24 +139,24 @@
     <string name="icon_customer" translatable="false">Icon Customer</string>
     <!-- Labels -->
     <string name="info">Info</string>
-    <string name="name_restaurant">Restaurant Name:</string>
-    <string name="name_customer">Customer Name:</string>
-    <string name="name_deliveryman">Deliveryman Name:</string>
-    <string name="phone_restaurant">Restaurant Phone:</string>
-    <string name="phone_customer">Customer Phone:</string>
-    <string name="phone_deliveryman">Deliveryman Phone:</string>
-    <string name="mail">Email:</string>
-    <string name="password">Password:</string>
-    <string name="city">City:</string>
-    <string name="birthday">Birthday:</string>
-    <string name="bio">Short Description:</string>
-    <string name="address">Address:</string>
-    <string name="address_restaurant">Restaurant Address:</string>
-    <string name="address_delivery">Delivery Address:</string>
+    <string name="name_restaurant">Restaurant Name</string>
+    <string name="name_customer">Customer Name</string>
+    <string name="name_deliveryman">Deliveryman Name</string>
+    <string name="phone_restaurant">Restaurant Phone</string>
+    <string name="phone_customer">Customer Phone</string>
+    <string name="phone_deliveryman">Deliveryman Phone</string>
+    <string name="mail">Email</string>
+    <string name="password">Password</string>
+    <string name="city">City</string>
+    <string name="birthday">Birthday</string>
+    <string name="bio">Short Description</string>
+    <string name="address">Address</string>
+    <string name="address_restaurant">Restaurant Address</string>
+    <string name="address_delivery">Delivery Address</string>
     <string name="required" translatable="false">*</string>
-    <string name="restaurant_type">Restaurant Type:</string>
-    <string name="free_day">Free Day:</string>
-    <string name="working_time">Working Time:</string>
+    <string name="restaurant_type">Restaurant Type</string>
+    <string name="free_day">Free Day</string>
+    <string name="working_time">Working Time</string>
     <string name="working_time_opening">Opening Time</string>
     <string name="working_time_closing">Closing Time</string>
     <!-- Hints -->
@@ -182,6 +182,7 @@
     <string name="required_text">*Required</string>
     <!-- Hints -->
     <string-array name="restaurant_types">
+        <item>Favourites</item>
         <item>Pizza</item>
         <item>Hamburger</item>
         <item>Chicken</item>
@@ -251,6 +252,10 @@
 
     <string name='alert_dialog_available_deliveryman_title'>Confirm you choice</string>
     <string name='alert_dialog_available_deliveryman_text'>Pressing OK you will try to assign the delivery to the selected deliveryman</string>
+    <string name="choose_sorting_field">Choose sorting field</string>
+    <string name="popularity">Popularity</string>
+    <string name="removed_from_favorites">Removed from favorites!</string>
+    <string name="added_to_favorites">Added to favorites!</string>
 
 
 </resources>

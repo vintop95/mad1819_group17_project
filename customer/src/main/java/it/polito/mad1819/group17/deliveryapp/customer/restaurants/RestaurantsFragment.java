@@ -17,6 +17,7 @@ public class RestaurantsFragment extends Fragment {
 
     String[] categories;
     Integer[] imgid = {
+            R.drawable.favourite_heart_icon,
             R.drawable.pizza,       //pizza
             R.drawable.hamburger,    //hamburger
             R.drawable.chicken,       //chicken

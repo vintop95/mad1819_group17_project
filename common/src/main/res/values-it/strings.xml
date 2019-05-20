@@ -17,27 +17,27 @@
 
     <!-- Order Card Strings -->
     <string name="delivery_time_card">Orario Consegna</string>
-    <string name="delivery_time">Orario Consegna:</string>
-    <string name="delivery_date">Data Consegna:</string>
-    <string name="order_state">Stato Ordine:</string>
-    <string name="order_number">Numero Ordine:</string>
-    <string name="total_items">Totale Articoli:</string>
+    <string name="delivery_time">Orario Consegna</string>
+    <string name="delivery_date">Data Consegna</string>
+    <string name="order_state">Stato Ordine</string>
+    <string name="order_number">Numero Ordine</string>
+    <string name="total_items">Totale Articoli</string>
 
 
     <!-- Order Details Strings -->
     <string name="title_activity_order_details">Dettagli Ordine</string>
-    <string name="deliveryman_name">Nome Rider:</string>
-    <string name="deliveryman_phone">Telefono Rider:</string>
+    <string name="deliveryman_name">Nome Rider</string>
+    <string name="deliveryman_phone">Telefono Rider</string>
     <string name="deliveryman_id">ID Rider</string>
     <string name="distance">Distanza (Km)</string>
 
     <!-- Labels -->
-    <string name="name_label">Nome:</string>
-    <string name="phone_label">Telefono:</string>
-    <string name="delivery_address">Indirizzo Consegna:</string>
-    <string name="order_content">Contenuto Ordine:</string>
-    <string name="order_info">Informazioni Ordine:</string>
-    <string name="order_history">Storico Ordine:</string>
+    <string name="name_label">Nome</string>
+    <string name="phone_label">Telefono</string>
+    <string name="delivery_address">Indirizzo Consegna</string>
+    <string name="order_content">Contenuto Ordine</string>
+    <string name="order_info">Informazioni Ordine</string>
+    <string name="order_history">Storico Ordine</string>
     <string name="button_history">Prossimo Stato</string>
     <!-- Hints -->
     <string name="phone_hint">Il tuo telefono</string>
@@ -57,7 +57,7 @@
 
     <!-- Offer Card Strings -->
     <string name="title_activity_daily_offers">Offerte Giornaliere</string>
-    <string name="available">Disponibile:</string>
+    <string name="available">Disponibile</string>
     <!-- Images -->
     <string name="image_food_dummy">Immagine Cibo</string>
 
@@ -66,11 +66,11 @@
     <string name="title_activity_edit_food">Dettagli Offerta</string>
     <string name="action_settings">Impostazioni</string>
     <!-- Labels -->
-    <string name="label_food_number">Numero:</string>
-    <string name="label_food_name">Nome:</string>
-    <string name="label_food_description">Descrizione:</string>
-    <string name="label_food_price">Prezzo:</string>
-    <string name="label_food_available_qty">Quantità disponibile:</string>
+    <string name="label_food_number">Numero</string>
+    <string name="label_food_name">Nome</string>
+    <string name="label_food_description">Descrizione</string>
+    <string name="label_food_price">Prezzo</string>
+    <string name="label_food_available_qty">Quantità disponibile</string>
     <!-- Hints -->
     <string name="hint_food_name">Inserisci nome cibo</string>
     <string name="hint_food_description">Inserisci descrizione cibo</string>
@@ -110,23 +110,23 @@
     <!-- Show Profile Strings -->
     <!-- Labels -->
     <string name="info">Info</string>
-    <string name="name_restaurant">Nome Ristorante:</string>
-    <string name="name_customer">Nome Cliente:</string>
-    <string name="name_deliveryman">Nome Fattorino:</string>
-    <string name="phone_restaurant">Telefono Ristorante:</string>
-    <string name="phone_customer">Telefono Cliente:</string>
-    <string name="phone_deliveryman">Telefono Ristorante:</string>
-    <string name="mail">Email:</string>
-    <string name="password">Password:</string>
-    <string name="city">Città:</string>
-    <string name="birthday">Data di nascita:</string>
-    <string name="bio">Breve Descrizione:</string>
-    <string name="address">Indirizzo:</string>
-    <string name="address_restaurant">Indirizzo Ristorante:</string>
-    <string name="address_delivery">Indirizzo Consegna:</string>
+    <string name="name_restaurant">Nome Ristorante</string>
+    <string name="name_customer">Nome Cliente</string>
+    <string name="name_deliveryman">Nome Fattorino</string>
+    <string name="phone_restaurant">Telefono Ristorante</string>
+    <string name="phone_customer">Telefono Cliente</string>
+    <string name="phone_deliveryman">Telefono Ristorante</string>
+    <string name="mail">Email</string>
+    <string name="password">Password</string>
+    <string name="city">Città</string>
+    <string name="birthday">Data di nascita</string>
+    <string name="bio">Breve Descrizione</string>
+    <string name="address">Indirizzo</string>
+    <string name="address_restaurant">Indirizzo Ristorante</string>
+    <string name="address_delivery">Indirizzo Consegna</string>
     <string name="restaurant_type">Tipologia Ristorante</string>
-    <string name="free_day">Giorno di riposo:</string>
-    <string name="working_time">Orario Lavorativo:</string>
+    <string name="free_day">Giorno di riposo</string>
+    <string name="working_time">Orario Lavorativo</string>
     <string name="working_time_opening">Orario Apertura</string>
     <string name="working_time_closing">Orario Chiusura</string>
     <!-- Hints -->
@@ -151,6 +151,7 @@
     <string name="required_text">*Richiesto</string>
     <!-- Hints -->
     <string-array name="restaurant_types">
+        <item>Preferiti</item>
         <item>Pizza</item>
         <item>Hamburger</item>
         <item>Pollo</item>
@@ -219,5 +220,9 @@
 
     <string name='alert_dialog_available_deliveryman_title'>Conferma la tua scelta</string>
     <string name='alert_dialog_available_deliveryman_text'>Premendo OK proverai ad assegnare la consegna al deliveryman selezionat</string>
+    <string name="choose_sorting_field">Scegli il campo per ordinare gli oggetti</string>
+    <string name="popularity">Popolarità</string>
+    <string name="removed_from_favorites">Rimosso dai preferiti!</string>
+    <string name="added_to_favorites">Aggiunto ai preferiti!</string>
 
 </resources>

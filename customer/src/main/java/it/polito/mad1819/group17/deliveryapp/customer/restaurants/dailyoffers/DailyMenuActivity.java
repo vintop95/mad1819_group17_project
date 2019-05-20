@@ -31,14 +31,19 @@ import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.util.Comparator;
+
 import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
 import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
+import it.polito.mad1819.group17.deliveryapp.common.utils.MadFirebaseRecyclerAdapter;
+import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.OrderConfirmActivity;
@@ -53,12 +58,14 @@ public class DailyMenuActivity extends AppCompatActivity {
 
     private TextView tv;
     private FrameLayout frameLayout;
+    private ImageView btnFavorite;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
 
-    private FirebaseRecyclerAdapter adapter;
+    private MadFirebaseRecyclerAdapter adapter;
     private boolean somethingAdded;
     private ShoppingCart shoppingCart;
+    private boolean isFavorite;
 
     public static int RC_ORDER_CONFIRM = 0;
     public static int RC_RESTAURANT_DETAILS = 1;
@@ -91,6 +98,7 @@ public class DailyMenuActivity extends AppCompatActivity {
         restaurant_name = intent.getStringExtra("name");
         restaurant_address = intent.getStringExtra("address");
         restaurant_phone = intent.getStringExtra("phone");
+        isFavorite = intent.getBooleanExtra("isFavorite",false);
 
 
         frameLayout = findViewById(R.id.frame_layout_restaurant_info);
@@ -98,6 +106,22 @@ public class DailyMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openRestaurantProfile();
+            }
+        });
+
+        // Favorite mgmt
+        btnFavorite = findViewById(R.id.btn_favorite);
+        if (isFavorite) {
+            btnFavorite.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
+        }
+        btnFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFavorite) {
+                    removeFromFavorites();
+                } else {
+                    addToFavorites();
+                }
             }
         });
 
@@ -121,7 +145,48 @@ public class DailyMenuActivity extends AppCompatActivity {
         somethingAdded=false;
         showBackArrowOnToolbar();
 
-        fetch();
+        fetch(new Comparator<FoodModel>() {
+            @Override
+            public int compare(FoodModel lhs, FoodModel rhs) {
+                return lhs.name.compareTo(rhs.name);
+            }
+        });
+    }
+
+    private void addToFavorites() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference favoritesRef = rootRef
+                .child("restaurateurs")
+                .child(restaurant_id)
+                .child("favorites")
+                .child(userId);
+        favoritesRef.setValue("true");
+
+        isFavorite = true;
+        btnFavorite.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
+        PopupHelper.showToast(this,getString(R.string.added_to_favorites));
+    }
+
+    private void removeFromFavorites() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference favoritesRef = rootRef
+                .child("restaurateurs")
+                .child(restaurant_id)
+                .child("favorites")
+                .child(userId);
+        favoritesRef.removeValue();
+
+        isFavorite = false;
+        btnFavorite.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+        PopupHelper.showToast(this,getString(R.string.removed_from_favorites));
+    }
+
+    private void resetShoppingCart() {
+        shoppingCart.clear();
+        updateToolbarText(shoppingCart.getCounter());
+        somethingAdded = false;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -269,14 +334,15 @@ public class DailyMenuActivity extends AppCompatActivity {
 
     private void updateToolbarText(int i) {
         TextView counter = findViewById(R.id.shoppingcart_counter);
-        counter.setText(Integer.toString(i));
+        if (counter != null) counter.setText(Integer.toString(i));
     }
 
-    private void fetch() {
+    private void fetch(Comparator comparator) {
         DatabaseReference ref = FirebaseDatabase.getInstance()
                 .getReference();
         Log.d("ff", restaurant_id + "..." + restaurant_name);
-        Query query = ref.child("restaurateurs").child(restaurant_id).child("daily_offers");
+        Query query = ref.child("restaurateurs").child(restaurant_id).child("daily_offers")
+                .orderByChild("totalOrderedQty");
 
         FirebaseRecyclerOptions<FoodModel> options =
                 new FirebaseRecyclerOptions.Builder<FoodModel>()
@@ -286,8 +352,11 @@ public class DailyMenuActivity extends AppCompatActivity {
                             public FoodModel parseSnapshot(@NonNull DataSnapshot snapshot) {
                                 Log.d("ff", snapshot.getKey());
                                 Double priceDbl = snapshot.child("price").getValue(Double.class);
-                                String price = "0";
-                                if (priceDbl != null ) price = priceDbl.toString();
+                                Integer availableQtyInt = snapshot.child("availableQty").getValue(Integer.class);
+                                Integer totalOrderedQty = snapshot.child("totalOrderedQty").getValue(Integer.class);
+                                if (priceDbl == null) priceDbl = 0.0;
+                                if (availableQtyInt == null) availableQtyInt = 0;
+                                if (totalOrderedQty == null) totalOrderedQty = 0;
 
                                 FoodModel foodModel = new FoodModel();
                                 foodModel.id = (String) snapshot.getKey();
@@ -295,14 +364,15 @@ public class DailyMenuActivity extends AppCompatActivity {
                                 foodModel.description = snapshot.child("description").getValue(String.class);
                                 foodModel.image_path = snapshot.child("image_path").getValue(String.class);
                                 foodModel.price = priceDbl;
-                                foodModel.availableQty = snapshot.child("availableQty").getValue(Integer.class);
+                                foodModel.availableQty = availableQtyInt;
+                                foodModel.totalOrderedQty = totalOrderedQty;
 
                                 return foodModel;
                             }
                         })
                         .build();
 
-        adapter = new FirebaseRecyclerAdapter<FoodModel, ViewHolder>(options) {
+        adapter = new MadFirebaseRecyclerAdapter<FoodModel, ViewHolder>(options, false) {
 
             @Override
             public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -319,20 +389,30 @@ public class DailyMenuActivity extends AppCompatActivity {
                 holder.setData(model);
             }
 
+            @Override
+            public void onDataChanged() {
+                super.onDataChanged();
+                adapter.stopListening();
+            }
         };
+        if(comparator != null) {
+            adapter.setSortComparator(comparator);
+        }
+        adapter.startListening();
         recyclerView.setAdapter(adapter);
+        resetShoppingCart();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        adapter.startListening();
+        // adapter.startListening();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        adapter.stopListening();
+        // adapter.stopListening();
     }
 
     @Override
@@ -363,6 +443,56 @@ public class DailyMenuActivity extends AppCompatActivity {
         });
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.sort_itemmenu) {
+            // setup the alert builder
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.choose_sorting_field);
+            // add a list
+            String[] sortFields = {
+                    getString(R.string.label_food_name),
+                    getString(R.string.popularity)
+            };
+            builder.setItems(sortFields, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case 0: // by name
+                            fetch(new Comparator<FoodModel>() {
+                                @Override
+                                public int compare(FoodModel lhs, FoodModel rhs) {
+                                    return lhs.name.compareTo(rhs.name);
+                                }
+                            });
+                            break;
+                        case 1: // by popularity
+                            fetch(new Comparator<FoodModel>() {
+                                @Override
+                                public int compare(FoodModel lhs, FoodModel rhs) {
+                                    if(lhs.totalOrderedQty > rhs.totalOrderedQty) {
+                                        return -1;
+                                    } else if (lhs.totalOrderedQty < rhs.totalOrderedQty){
+                                        return 1;
+                                    } else {
+                                        return 0;
+                                    }
+                                }
+                            });
+                            break;
+                    }
+                }
+            });
+            // create and show the alert dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+            return true;
+        }
+        return false;
     }
 
     @Override
