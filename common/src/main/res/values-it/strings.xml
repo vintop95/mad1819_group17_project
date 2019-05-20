@@ -115,7 +115,7 @@
     <string name="name_deliveryman">Nome Fattorino</string>
     <string name="phone_restaurant">Telefono Ristorante</string>
     <string name="phone_customer">Telefono Cliente</string>
-    <string name="phone_deliveryman">Telefono Ristorante</string>
+    <string name="phone_deliveryman">Telefono Fattorino</string>
     <string name="mail">Email</string>
     <string name="password">Password</string>
     <string name="city">Città</string>

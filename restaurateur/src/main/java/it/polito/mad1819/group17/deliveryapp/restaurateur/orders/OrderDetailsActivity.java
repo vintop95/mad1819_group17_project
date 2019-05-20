@@ -219,6 +219,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
                         HashMap<String, String> state_stateTime = new HashMap<String, String>();
                         state_stateTime.put("state1", currentTimestamp);
                         DeliveryRequest newDeliveryRequest = new DeliveryRequest(
+                                inputOrder.getRestaurant_id(),
+                                inputOrder.getId(),
                                 inputOrder.getDelivery_address(),
                                 inputOrder.getCustomer_name(),
                                 inputOrder.getCustomer_phone(),
