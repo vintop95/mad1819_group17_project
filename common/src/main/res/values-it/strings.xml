@@ -151,6 +151,7 @@
     <string name="required_text">*Richiesto</string>
     <!-- Hints -->
     <string-array name="restaurant_types">
+        <item>Preferiti</item>
         <item>Pizza</item>
         <item>Hamburger</item>
         <item>Pollo</item>

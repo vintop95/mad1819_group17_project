@@ -34,6 +34,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -56,6 +57,7 @@ public class RestaurantsActivity extends AppCompatActivity {
     public static String FILTER_SEARCH = "filter_search";
     public static String FILTER_OPEN_NOW = "filter_open_now";
 
+    private String firebasePath = null;
     private String filterField = null, filterValue = null;
     private String category_selected;
     private RecyclerView recyclerView;
@@ -115,6 +117,17 @@ public class RestaurantsActivity extends AppCompatActivity {
         } catch (NumberFormatException e) {
             index = 0;
         }
+
+        firebasePath = "restaurateurs";
+        filterField = "restaurant_type";
+        filterValue = category_selected;
+
+        // Only favourite restaurants\
+        if (index == 0) {
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            filterField = "favourites/" + userId;
+            filterValue = "true";
+        }
         label_subtitle.setText(getString(R.string.restaurants) + ": " + restTypes[index]);
 
         input_search = findViewById(R.id.input_search);
@@ -137,7 +150,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        fetch(filterField, filterValue, new Comparator<RestaurantModel>() {
+        fetch(new Comparator<RestaurantModel>() {
             @Override
             public int compare(RestaurantModel lhs, RestaurantModel rhs) {
                 return lhs.name.compareTo(rhs.name);
@@ -151,18 +164,19 @@ public class RestaurantsActivity extends AppCompatActivity {
         return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
     }
 
-    private void fetch(String filterField, String filterValue, Comparator comparator) {
-
-        if (TextUtils.isEmpty(filterField)) {
-            filterField = "restaurant_type";
-            filterValue = category_selected;
-        }
+    private void fetch(Comparator comparator) {
+        if (firebasePath == null) throw new IllegalStateException();
 
         pbHandler.show();
 
         DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference();
-        Query query = ref.child("restaurateurs").orderByChild(filterField).equalTo(filterValue);
+                .getReference().child(firebasePath);
+
+        Query query = ref;
+
+        if (!TextUtils.isEmpty(filterField) && !TextUtils.isEmpty(filterValue)) {
+            query = ref.orderByChild(filterField).equalTo(filterValue);
+        }
 
         FirebaseRecyclerOptions<RestaurantModel> options =
                 new FirebaseRecyclerOptions.Builder<RestaurantModel>()
@@ -440,7 +454,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case 0: // by name
-                            fetch(filterField, filterValue, new Comparator<RestaurantModel>() {
+                            fetch(new Comparator<RestaurantModel>() {
                                 @Override
                                 public int compare(RestaurantModel lhs, RestaurantModel rhs) {
                                     return lhs.name.compareTo(rhs.name);
@@ -448,7 +462,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                             });
                             break;
                         case 1: // by popularity
-                            fetch(filterField, filterValue, new Comparator<RestaurantModel>() {
+                            fetch(new Comparator<RestaurantModel>() {
                                 @Override
                                 public int compare(RestaurantModel lhs, RestaurantModel rhs) {
                                     if(lhs.orders_count > rhs.orders_count) {
