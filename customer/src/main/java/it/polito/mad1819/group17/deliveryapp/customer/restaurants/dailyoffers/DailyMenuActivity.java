@@ -36,9 +36,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.util.Comparator;
+
 import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
 import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
+import it.polito.mad1819.group17.deliveryapp.common.utils.MadFirebaseRecyclerAdapter;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.OrderConfirmActivity;
@@ -56,7 +59,7 @@ public class DailyMenuActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
 
-    private FirebaseRecyclerAdapter adapter;
+    private MadFirebaseRecyclerAdapter adapter;
     private boolean somethingAdded;
     private ShoppingCart shoppingCart;
 
@@ -276,7 +279,8 @@ public class DailyMenuActivity extends AppCompatActivity {
         DatabaseReference ref = FirebaseDatabase.getInstance()
                 .getReference();
         Log.d("ff", restaurant_id + "..." + restaurant_name);
-        Query query = ref.child("restaurateurs").child(restaurant_id).child("daily_offers");
+        Query query = ref.child("restaurateurs").child(restaurant_id).child("daily_offers")
+                .orderByChild("totalOrderedQty");
 
         FirebaseRecyclerOptions<FoodModel> options =
                 new FirebaseRecyclerOptions.Builder<FoodModel>()
@@ -286,8 +290,11 @@ public class DailyMenuActivity extends AppCompatActivity {
                             public FoodModel parseSnapshot(@NonNull DataSnapshot snapshot) {
                                 Log.d("ff", snapshot.getKey());
                                 Double priceDbl = snapshot.child("price").getValue(Double.class);
-                                String price = "0";
-                                if (priceDbl != null ) price = priceDbl.toString();
+                                Integer availableQtyInt = snapshot.child("availableQty").getValue(Integer.class);
+                                Integer totalOrderedQty = snapshot.child("totalOrderedQty").getValue(Integer.class);
+                                if (priceDbl == null) priceDbl = 0.0;
+                                if (availableQtyInt == null) availableQtyInt = 0;
+                                if (totalOrderedQty == null) totalOrderedQty = 0;
 
                                 FoodModel foodModel = new FoodModel();
                                 foodModel.id = (String) snapshot.getKey();
@@ -295,14 +302,15 @@ public class DailyMenuActivity extends AppCompatActivity {
                                 foodModel.description = snapshot.child("description").getValue(String.class);
                                 foodModel.image_path = snapshot.child("image_path").getValue(String.class);
                                 foodModel.price = priceDbl;
-                                foodModel.availableQty = snapshot.child("availableQty").getValue(Integer.class);
+                                foodModel.availableQty = availableQtyInt;
+                                foodModel.totalOrderedQty = totalOrderedQty;
 
                                 return foodModel;
                             }
                         })
                         .build();
 
-        adapter = new FirebaseRecyclerAdapter<FoodModel, ViewHolder>(options) {
+        adapter = new MadFirebaseRecyclerAdapter<FoodModel, ViewHolder>(options, false) {
 
             @Override
             public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -320,6 +328,21 @@ public class DailyMenuActivity extends AppCompatActivity {
             }
 
         };
+        adapter.setSortComparator(new Comparator<FoodModel>() {
+            @Override
+            public int compare(FoodModel lhs, FoodModel rhs) {
+//                Log.d("SORT", lhs.id + " , " + rhs.id);
+//                Log.d("SORT", lhs.price + " < " + rhs.price);
+//                Log.d("SORT", lhs.totalOrderedQty + " , " + rhs.totalOrderedQty);
+                if(lhs.totalOrderedQty > rhs.totalOrderedQty) {
+                    return -1;
+                } else if (lhs.totalOrderedQty < rhs.totalOrderedQty){
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
         recyclerView.setAdapter(adapter);
     }
 

@@ -17,6 +17,8 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -35,12 +37,13 @@ import java.util.List;
  */
 public abstract class MadFirebaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> implements MadFirebaseAdapter<T>, Filterable {
-    private static final String TAG = "FirebaseRecyclerAdapter";
+    private static final String TAG = "MadFirebaseRecyclerAdapter";
 
     private final ObservableSnapshotArray<T> mSnapshots;
     private final List<T> list, backupList;
     private CustomFilter mCustomFilter;
     private boolean isFiltarable;
+    private Comparator<T> sortComparator = null;
 
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
@@ -81,6 +84,14 @@ public abstract class MadFirebaseRecyclerAdapter<T, VH extends RecyclerView.View
                                int oldIndex) {
         T model = mSnapshots.get(newIndex);
         onChildUpdate(model, type, snapshot, newIndex, oldIndex);
+    }
+
+    public void setSortComparator(Comparator<T> comparator) {
+        this.sortComparator = comparator;
+        if (sortComparator != null) {
+            Collections.sort(list, sortComparator);
+        }
+        notifyDataSetChanged();
     }
 
     protected void onChildUpdate(T model, ChangeEventType type,
@@ -136,6 +147,9 @@ public abstract class MadFirebaseRecyclerAdapter<T, VH extends RecyclerView.View
             }
         } else {
             addItem(key, t);
+        }
+        if (sortComparator != null) {
+            Collections.sort(list, sortComparator);
         }
     }
 

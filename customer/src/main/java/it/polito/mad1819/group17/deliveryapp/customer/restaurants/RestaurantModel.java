@@ -21,7 +21,7 @@ public class RestaurantModel {
         this.image_path = image_path;
         this.key = key;
         this.phone = phone;
-        this.orders_count = orders_count;
+        this.orders_count = orders_count == null ? 0 : orders_count;
         this.free_day = free_day;
         this.working_time_opening = working_time_opening;
         this.working_time_closing = working_time_closing;

@@ -9,25 +9,14 @@ import java.io.Serializable;
  */
 public class FoodModel implements Serializable{
     public String id = "";
-//    public int pos = -1; // not useful now and hard to update
     public String name = "", description = "";
     public String image_path = "";
     public double price = 0.0;
     public int availableQty = 0;
+    public int totalOrderedQty = 0;
 
     /////////////////////////////////////////////////////////////////
     public FoodModel() {}
-
-    public FoodModel(String name, String description,
-                     String image_path, double price,
-                     int availableQty) {
-//        this.pos = pos;
-        this.name = name;
-        this.description = description;
-        this.image_path = image_path;
-        this.price = price;
-        this.availableQty = availableQty;
-    }
 
     /////////////////////////////////////////////////////////
 }

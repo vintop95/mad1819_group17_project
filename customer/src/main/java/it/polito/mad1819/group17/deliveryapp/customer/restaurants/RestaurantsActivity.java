@@ -40,7 +40,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.Calendar;
+import java.util.Comparator;
 
+import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
 import it.polito.mad1819.group17.deliveryapp.common.utils.MadFirebaseRecyclerAdapter;
 import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
@@ -248,6 +250,23 @@ public class RestaurantsActivity extends AppCompatActivity {
                 }
             }
         };
+
+        adapter.setSortComparator(new Comparator<RestaurantModel>() {
+            @Override
+            public int compare(RestaurantModel lhs, RestaurantModel rhs) {
+//                Log.d("SORT", lhs.id + " , " + rhs.id);
+//                Log.d("SORT", lhs.price + " < " + rhs.price);
+//                Log.d("SORT", lhs.totalOrderedQty + " , " + rhs.totalOrderedQty);
+                if(lhs.orders_count > rhs.orders_count) {
+                    return -1;
+                } else if (lhs.orders_count < rhs.orders_count){
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+
         recyclerView.setAdapter(adapter);
         adapter.startListening();
     }
