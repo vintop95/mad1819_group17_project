@@ -137,7 +137,12 @@ public class RestaurantsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        fetch(filterField, filterValue);
+        fetch(filterField, filterValue, new Comparator<RestaurantModel>() {
+            @Override
+            public int compare(RestaurantModel lhs, RestaurantModel rhs) {
+                return lhs.name.compareTo(rhs.name);
+            }
+        });
         adapter.startListening();
     }
 
@@ -146,7 +151,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
     }
 
-    private void fetch(String filterField, String filterValue) {
+    private void fetch(String filterField, String filterValue, Comparator comparator) {
 
         if (TextUtils.isEmpty(filterField)) {
             filterField = "restaurant_type";
@@ -266,7 +271,9 @@ public class RestaurantsActivity extends AppCompatActivity {
                 }
             }
         });
-
+        if(comparator != null) {
+            adapter.setSortComparator(comparator);
+        }
         recyclerView.setAdapter(adapter);
         adapter.startListening();
     }
@@ -408,6 +415,51 @@ public class RestaurantsActivity extends AppCompatActivity {
                         case 2: // Free Day
                             adapter.stopListening();
                             adapter.getFilter().filter(FILTER_OPEN_NOW);
+                            break;
+                    }
+                }
+            });
+            // create and show the alert dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+            return true;
+        }
+
+        if (item.getItemId() == R.id.btn_sort) {
+            // setup the alert builder
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.choose_sorting_field);
+            // add a list
+            String[] sortFields = {
+                    getString(R.string.name_restaurant),
+                    getString(R.string.popularity)
+            };
+            builder.setItems(sortFields, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case 0: // by name
+                            fetch(filterField, filterValue, new Comparator<RestaurantModel>() {
+                                @Override
+                                public int compare(RestaurantModel lhs, RestaurantModel rhs) {
+                                    return lhs.name.compareTo(rhs.name);
+                                }
+                            });
+                            break;
+                        case 1: // by popularity
+                            fetch(filterField, filterValue, new Comparator<RestaurantModel>() {
+                                @Override
+                                public int compare(RestaurantModel lhs, RestaurantModel rhs) {
+                                    if(lhs.orders_count > rhs.orders_count) {
+                                        return -1;
+                                    } else if (lhs.orders_count < rhs.orders_count){
+                                        return 1;
+                                    } else {
+                                        return 0;
+                                    }
+                                }
+                            });
                             break;
                     }
                 }
