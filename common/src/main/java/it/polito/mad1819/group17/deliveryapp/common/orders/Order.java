@@ -112,10 +112,16 @@ public class Order implements Serializable {
         this.sorting_field = sorting_field;
     }
 
+    public String getDelivery_timestamp() {
+        return delivery_timestamp;
+    }
     public void setDelivery_timestamp(String delivery_timestamp) {
         this.delivery_timestamp = delivery_timestamp;
     }
 
+    public HashMap<String, ShoppingItem> getItem_itemDetails() {
+        return item_itemDetails;
+    }
     public void setItem_itemDetails(HashMap<String, ShoppingItem> item_itemDetails) {
         this.item_itemDetails = item_itemDetails;
     }
@@ -123,7 +129,6 @@ public class Order implements Serializable {
     public String getDelivery_address() {
         return delivery_address;
     }
-
     public void setDelivery_address(String delivery_address) {
         this.delivery_address = delivery_address;
     }
@@ -131,7 +136,6 @@ public class Order implements Serializable {
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -143,9 +147,28 @@ public class Order implements Serializable {
         this.notes = notes;
     }
 
-    public String getDelivery_timestamp() {
-        return delivery_timestamp;
+    public String getCustomer_name() {
+        return customer_name;
     }
+    public void setCustomer_name(String customer_name) {
+        this.customer_name = customer_name;
+    }
+
+    public String getCustomer_phone() {
+        return customer_phone;
+    }
+    public void setCustomer_phone(String customer_phone) {
+        this.customer_phone = customer_phone;
+    }
+
+    public HashMap<String, String> getState_stateTime() {
+        return state_stateTime;
+    }
+    public void setState_stateTime(HashMap<String, String> state_stateTime) {
+        this.state_stateTime = state_stateTime;
+    }
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     public String getDelivery_date() {
         return this.delivery_timestamp.split(" ")[0];
@@ -154,34 +177,6 @@ public class Order implements Serializable {
     public String getDelivery_time() {
         if(delivery_timestamp.length() <= 1) return "";
         else return this.delivery_timestamp.split(" ")[1];
-    }
-
-    public HashMap<String, String> getState_stateTime() {
-        return state_stateTime;
-    }
-
-    public void setState_stateTime(HashMap<String, String> state_stateTime) {
-        this.state_stateTime = state_stateTime;
-    }
-
-    public HashMap<String, ShoppingItem> getItem_itemDetails() {
-        return item_itemDetails;
-    }
-
-    public String getCustomer_name() {
-        return customer_name;
-    }
-
-    public void setCustomer_name(String customer_name) {
-        this.customer_name = customer_name;
-    }
-
-    public String getCustomer_phone() {
-        return customer_phone;
-    }
-
-    public void setCustomer_phone(String customer_phone) {
-        this.customer_phone = customer_phone;
     }
 
     public int getTotalItemsQuantity() {
