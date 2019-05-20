@@ -242,7 +242,9 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
                 // Check and update availableQty for each item
                 for (String itemId : itemsMap.keySet()) {
-                    MutableData currentQtyRef = mutableData.child(FIREBASE_DAILY_OFFERS).child(itemId).child("availableQty");
+                    MutableData currentItemRef = mutableData.child(FIREBASE_DAILY_OFFERS).child(itemId);
+                    MutableData currentQtyRef = currentItemRef.child("availableQty");
+                    MutableData totalOrderedQtyRef = currentItemRef.child("totalOrderedQty");
 
                     Integer availableQty = currentQtyRef.getValue(Integer.class);
                     Integer orderedQty = itemsMap.get(itemId).getQuantity();
@@ -254,7 +256,15 @@ public class OrderConfirmActivity extends AppCompatActivity {
                         return Transaction.abort();
                     } else {
                         int newQty = availableQty - orderedQty;
-                        if (newQty >= 0) currentQtyRef.setValue(newQty);
+                        if (newQty >= 0){
+                            // Update the number of items already ordered
+                            Integer totalOrderedQty = totalOrderedQtyRef.getValue(Integer.class);
+                            if (totalOrderedQty == null) totalOrderedQty = 0;
+                            totalOrderedQtyRef.setValue(totalOrderedQty + 1);
+
+                            // Update the current available quantity
+                            currentQtyRef.setValue(newQty);
+                        }
                         else return Transaction.abort();
                     }
                 }
