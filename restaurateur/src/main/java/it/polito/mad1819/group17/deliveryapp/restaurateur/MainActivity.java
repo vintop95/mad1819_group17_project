@@ -253,7 +253,8 @@ public class MainActivity extends AppCompatActivity {
 
         Order.setStateLocal(getString(R.string.state_accepted),
                 getString(R.string.state_in_preparation),
-                getString(R.string.state_delivering)
+                getString(R.string.state_delivering),
+                getString(R.string.state_delivered)
         );
 
 

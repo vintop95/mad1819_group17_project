@@ -10,10 +10,12 @@ public class Order implements Serializable {
     public final static String STATE1 = "Accepted";
     public final static String STATE2 = "In preparation";
     public final static String STATE3 = "Delivering";
+    public final static String STATE4 = "Delivered";
 
     private static String state1Local = STATE1;
     private static String state2Local = STATE2;
     private static String state3Local = STATE3;
+    private static String state4Local = STATE4;
 
     private String id = "";
     private String restaurant_id = "";
@@ -188,10 +190,11 @@ public class Order implements Serializable {
         return totOrderedItems;
     }
 
-    public static void setStateLocal(String s1, String s2, String s3){
+    public static void setStateLocal(String s1, String s2, String s3, String s4){
         state1Local = s1;
         state2Local = s2;
         state3Local = s3;
+        state4Local = s4;
     }
 
     public String getCurrentStateLocal() {
@@ -202,13 +205,17 @@ public class Order implements Serializable {
                 return state2Local;
             case STATE3:
                 return state3Local;
+            case STATE4:
+                return state4Local;
             default:
                 return null;
         }
     }
 
     public String getCurrentState() {
-        if (state_stateTime.get("state3") != null)
+        if (state_stateTime.get("state4") != null)
+            return STATE3;
+        else if (state_stateTime.get("state3") != null)
             return STATE3;
         else if (state_stateTime.get("state2") != null)
             return STATE2;
@@ -223,16 +230,25 @@ public class Order implements Serializable {
                 state_history = getState_stateTime().get("state1") + " " + state1Local;
                 state_history += "\n" + "----/--/-- --:--" + " " + state2Local;
                 state_history += "\n" + "----/--/-- --:--" + " " + state3Local;
+                state_history += "\n" + "----/--/-- --:--" + " " + state4Local;
                 break;
             case STATE2:
                 state_history = getState_stateTime().get("state1") + "  " + state1Local;
                 state_history += "\n" + getState_stateTime().get("state2") + "  " + state2Local;
                 state_history += "\n" + "----/--/-- --:--" + "  " + state3Local;
+                state_history += "\n" + "----/--/-- --:--" + " " + state4Local;
                 break;
             case STATE3:
                 state_history = getState_stateTime().get("state1") + "  " + state1Local;
                 state_history += "\n" + getState_stateTime().get("state2") + "  " + state2Local;
                 state_history += "\n" + getState_stateTime().get("state3") + "  " + state3Local;
+                state_history += "\n" + "----/--/-- --:--" + " " + state4Local;
+                break;
+            case STATE4:
+                state_history = getState_stateTime().get("state1") + "  " + state1Local;
+                state_history += "\n" + getState_stateTime().get("state2") + "  " + state2Local;
+                state_history += "\n" + getState_stateTime().get("state3") + "  " + state3Local;
+                state_history += "\n" + getState_stateTime().get("state4") + "  " + state4Local;
                 break;
         }
         return state_history;
@@ -253,6 +269,10 @@ public class Order implements Serializable {
                 this.state_stateTime.put("state3", currentTimestamp);
                 //this.sorting_field = this.sorting_field.split("_")[0] + "_state3_" + this.sorting_field.split("_")[2];
                 this.sorting_field = "state3_" + this.sorting_field.split("_")[1];
+            } else if (getCurrentState() == STATE3) {
+                this.state_stateTime.put("state4", currentTimestamp);
+                //this.sorting_field = this.sorting_field.split("_")[0] + "_state3_" + this.sorting_field.split("_")[2];
+                this.sorting_field = "state4_" + this.sorting_field.split("_")[1];
             }
             return true;
         }
