@@ -222,5 +222,7 @@
     <string name='alert_dialog_available_deliveryman_text'>Premendo OK proverai ad assegnare la consegna al deliveryman selezionat</string>
     <string name="choose_sorting_field">Scegli il campo per ordinare gli oggetti</string>
     <string name="popularity">Popolarità</string>
+    <string name="removed_from_favorites">Rimosso dai preferiti!</string>
+    <string name="added_to_favorites">Aggiunto ai preferiti!</string>
 
 </resources>

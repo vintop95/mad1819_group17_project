@@ -31,6 +31,7 @@ import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -42,6 +43,7 @@ import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
 import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.MadFirebaseRecyclerAdapter;
+import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart.OrderConfirmActivity;
@@ -56,12 +58,14 @@ public class DailyMenuActivity extends AppCompatActivity {
 
     private TextView tv;
     private FrameLayout frameLayout;
+    private ImageView btnFavorite;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
 
     private MadFirebaseRecyclerAdapter adapter;
     private boolean somethingAdded;
     private ShoppingCart shoppingCart;
+    private boolean isFavorite;
 
     public static int RC_ORDER_CONFIRM = 0;
     public static int RC_RESTAURANT_DETAILS = 1;
@@ -94,6 +98,7 @@ public class DailyMenuActivity extends AppCompatActivity {
         restaurant_name = intent.getStringExtra("name");
         restaurant_address = intent.getStringExtra("address");
         restaurant_phone = intent.getStringExtra("phone");
+        isFavorite = intent.getBooleanExtra("isFavorite",false);
 
 
         frameLayout = findViewById(R.id.frame_layout_restaurant_info);
@@ -101,6 +106,22 @@ public class DailyMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openRestaurantProfile();
+            }
+        });
+
+        // Favorite mgmt
+        btnFavorite = findViewById(R.id.btn_favorite);
+        if (isFavorite) {
+            btnFavorite.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
+        }
+        btnFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFavorite) {
+                    removeFromFavorites();
+                } else {
+                    addToFavorites();
+                }
             }
         });
 
@@ -130,6 +151,36 @@ public class DailyMenuActivity extends AppCompatActivity {
                 return lhs.name.compareTo(rhs.name);
             }
         });
+    }
+
+    private void addToFavorites() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference favoritesRef = rootRef
+                .child("restaurateurs")
+                .child(restaurant_id)
+                .child("favorites")
+                .child(userId);
+        favoritesRef.setValue("true");
+
+        isFavorite = true;
+        btnFavorite.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
+        PopupHelper.showToast(this,getString(R.string.added_to_favorites));
+    }
+
+    private void removeFromFavorites() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference favoritesRef = rootRef
+                .child("restaurateurs")
+                .child(restaurant_id)
+                .child("favorites")
+                .child(userId);
+        favoritesRef.removeValue();
+
+        isFavorite = false;
+        btnFavorite.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+        PopupHelper.showToast(this,getString(R.string.removed_from_favorites));
     }
 
     private void resetShoppingCart() {

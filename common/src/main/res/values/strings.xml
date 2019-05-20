@@ -254,6 +254,8 @@
     <string name='alert_dialog_available_deliveryman_text'>Pressing OK you will try to assign the delivery to the selected deliveryman</string>
     <string name="choose_sorting_field">Choose sorting field</string>
     <string name="popularity">Popularity</string>
+    <string name="removed_from_favorites">Removed from favorites!</string>
+    <string name="added_to_favorites">Added to favorites!</string>
 
 
 </resources>

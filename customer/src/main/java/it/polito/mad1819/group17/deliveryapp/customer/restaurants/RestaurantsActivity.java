@@ -42,6 +42,7 @@ import com.google.firebase.database.Query;
 
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Map;
 
 import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
 import it.polito.mad1819.group17.deliveryapp.common.utils.MadFirebaseRecyclerAdapter;
@@ -63,6 +64,7 @@ public class RestaurantsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private MadFirebaseRecyclerAdapter adapter;
+    private String userId;
 
     private SearchView input_search;
     private TextView label_subtitle;
@@ -108,6 +110,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         pbHandler = new ProgressBarHandler(this);
 
         showBackArrowOnToolbar();
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         label_subtitle = findViewById(R.id.label_subtitle);
         String[] restTypes = getResources().getStringArray(R.array.restaurant_types);
@@ -124,8 +127,7 @@ public class RestaurantsActivity extends AppCompatActivity {
 
         // Only favourite restaurants\
         if (index == 0) {
-            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            filterField = "favourites/" + userId;
+            filterField = "favorites/" + userId;
             filterValue = "true";
         }
         label_subtitle.setText(getString(R.string.restaurants) + ": " + restTypes[index]);
@@ -194,7 +196,8 @@ public class RestaurantsActivity extends AppCompatActivity {
                                         snapshot.child("orders_count").getValue(Integer.class),
                                         snapshot.child("free_day").getValue(String.class),
                                         snapshot.child("working_time_opening").getValue(String.class),
-                                        snapshot.child("working_time_closing").getValue(String.class)
+                                        snapshot.child("working_time_closing").getValue(String.class),
+                                        (Map) snapshot.child("favorites").getValue()
                                 );
                             }
                         })
@@ -301,8 +304,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         public TextView avgPrice;
         public String id;
         public String phone;
-
-
+        public boolean isFavorite = false;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -324,6 +326,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                     intent.putExtra("name", name.getText());
                     intent.putExtra("address", address.getText());
                     intent.putExtra("phone", phone);
+                    intent.putExtra("isFavorite", isFavorite);
                     // Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
                     startActivityForResult(intent, RC_DAILY_MENU);
                 }
@@ -337,6 +340,9 @@ public class RestaurantsActivity extends AppCompatActivity {
             setPhoto(model.image_path);
             setId(model.key);
             setPhone(model.phone);
+            if(model.favorites != null && model.favorites.get(userId) != null) {
+                isFavorite = true;
+            }
         }
 
         private void setId(String id) {
