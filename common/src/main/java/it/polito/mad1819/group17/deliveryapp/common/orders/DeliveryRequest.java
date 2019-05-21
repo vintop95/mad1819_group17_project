@@ -1,13 +1,19 @@
 package it.polito.mad1819.group17.deliveryapp.common.orders;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.util.Log;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import static java.lang.Double.valueOf;
 
-public class DeliveryRequest implements Serializable {
+public class DeliveryRequest implements Serializable  {
 
     public final static String STATE1 = "Assigned";
     public final static String STATE2 = "Accepted";
@@ -34,7 +40,6 @@ public class DeliveryRequest implements Serializable {
     private String restaurant_address;
 
 
-
     public DeliveryRequest() {
 
     }
@@ -56,6 +61,8 @@ public class DeliveryRequest implements Serializable {
         this.restaurant_name = restaurant_name;
         this.restaurant_phone = restaurant_phone;
         this.restaurant_address = restaurant_address;
+
+
     }
 
     public String getRestaurant_id() {
@@ -69,6 +76,7 @@ public class DeliveryRequest implements Serializable {
     public String getOrder_id() {
         return order_id;
     }
+
     public void setOrder_id(String order_id) {
         this.order_id = order_id;
     }
@@ -177,7 +185,7 @@ public class DeliveryRequest implements Serializable {
         return timestamp.split(" ")[0];
     }
 
-    public static void setStateLocal(String s1, String s2, String s3){
+    public static void setStateLocal(String s1, String s2, String s3) {
         state1Local = s1;
         state2Local = s2;
         state3Local = s3;
@@ -244,4 +252,61 @@ public class DeliveryRequest implements Serializable {
 
         }
     }
+
+
+    public Double computeDistance(Context context){
+
+        double[] latlngRestaurant, latlngConsumer;
+        Geocoder geocoder = new Geocoder(context);
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocationName(restaurant_address, 1);
+            if (addresses.size() != 0)
+                latlngRestaurant = new double[]{addresses.get(0).getLatitude(), addresses.get(0).getLongitude()};
+            else
+                return null;
+        } catch (
+                IOException e) {
+            return null;
+        }
+
+        Log.d("computeDistance","Rest: "+latlngRestaurant[0]+","+latlngRestaurant[1]);
+        try {
+            addresses = geocoder.getFromLocationName(address, 1);
+            if (addresses.size() != 0)
+                latlngConsumer = new double[]{addresses.get(0).getLatitude(), addresses.get(0).getLongitude()};
+            else
+                return null;
+        } catch (
+                IOException e) {
+            return null;
+        }
+        Log.d("computeDistance","Rest: "+latlngConsumer[0]+","+latlngConsumer[1]);
+
+
+        double distance, approxdistance;
+        distance = 0.0;
+        approxdistance = 0.0;
+        String origin,destination;
+        origin = Double.toString(latlngRestaurant[0]) + "," + Double.toString(latlngRestaurant[1]);
+        destination = Double.toString(latlngConsumer[0]) + "," + Double.toString(latlngConsumer[1]);
+
+        approxdistance = Math.abs(latlngRestaurant[0]-latlngConsumer[0]) + Math.abs(latlngRestaurant[0]-latlngConsumer[0]);
+
+        /*DirectionsResult result;
+
+        // distance between latitudes and longitudes
+        try {
+            result = DirectionsApi.newRequest(context)
+                    .origin(origin)
+                    .destination(destination).await();
+            distance = valueOf(result.routes[0].legs[0].distance.value);
+        } catch (Exception e){
+            Log.e("exception","Deliveryrequest.getDistance: "+e.getLocalizedMessage());
+        }
+        return distance;
+    */
+        return approxdistance;
+    }
 }
+
