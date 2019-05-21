@@ -78,6 +78,10 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
                 holder.state_background.setBackgroundColor(
                         fragment.getActivity().getResources().getColor(R.color.colorState3));
                 break;
+            case Order.STATE4:
+                holder.state_background.setBackgroundColor(
+                        fragment.getActivity().getResources().getColor(R.color.colorState4));
+                break;
         }
     }
 

@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.firebase.geofire.GeoFire;
@@ -131,7 +132,6 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
                         //Log.d("RESTAURANT_COORDINATES", restaurantLatitude + "_" + restaurantLongitude);
 
                         availableDeliverymen = new ArrayList<AvailableDeliveryman>();
-
 
                         GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(restaurantLatitude, restaurantLongitude), RADIUS_KM);
                         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {

@@ -154,9 +154,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+                        Log.d("AAA", "AAA");
                         DeliveryRequest newDeliveryRequest = dataSnapshot.getValue(DeliveryRequest.class);
                         newDeliveryRequest.setId(dataSnapshot.getKey());
                         if (newDeliveryRequest.getNotified().equals("no")) {
+                            Log.d("AAA", "AAA");
                             sendNotification(newDeliveryRequest.getId(), newDeliveryRequest.getTimestamp());
                             mDeliveryRequestsRef.child(newDeliveryRequest.getId()).child("notified").setValue("yes");
                         }

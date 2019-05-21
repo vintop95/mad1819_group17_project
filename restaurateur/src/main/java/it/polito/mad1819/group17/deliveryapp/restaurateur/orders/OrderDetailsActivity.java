@@ -221,10 +221,11 @@ public class OrderDetailsActivity extends AppCompatActivity {
                         DeliveryRequest newDeliveryRequest = new DeliveryRequest(
                                 inputOrder.getRestaurant_id(),
                                 inputOrder.getId(),
+                                inputOrder.getCustomer_id(),
                                 inputOrder.getDelivery_address(),
                                 inputOrder.getCustomer_name(),
                                 inputOrder.getCustomer_phone(),
-                                "note...",
+                                inputOrder.getNotes(),
                                 "state0_" + inputOrder.getDelivery_timestamp(),
                                 inputOrder.getDelivery_timestamp(),
                                 state_stateTime,
