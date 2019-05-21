@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -327,6 +328,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                     intent.putExtra("address", address.getText());
                     intent.putExtra("phone", phone);
                     intent.putExtra("isFavorite", isFavorite);
+
                     // Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
                     startActivityForResult(intent, RC_DAILY_MENU);
                 }

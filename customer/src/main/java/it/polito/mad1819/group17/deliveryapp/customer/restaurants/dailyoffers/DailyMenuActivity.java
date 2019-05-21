@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,7 +83,7 @@ public class DailyMenuActivity extends AppCompatActivity {
         return true;
     }
 
-    private void openRestaurantProfile(){
+    private void openRestaurantProfile() {
         Intent intent = new Intent(DailyMenuActivity.this, RestaurantProfileActivity.class);
         intent.putExtra("restaurant_id", restaurant_id);
         startActivityForResult(intent, RC_RESTAURANT_DETAILS);
@@ -98,7 +99,7 @@ public class DailyMenuActivity extends AppCompatActivity {
         restaurant_name = intent.getStringExtra("name");
         restaurant_address = intent.getStringExtra("address");
         restaurant_phone = intent.getStringExtra("phone");
-        isFavorite = intent.getBooleanExtra("isFavorite",false);
+        isFavorite = intent.getBooleanExtra("isFavorite", false);
 
 
         frameLayout = findViewById(R.id.frame_layout_restaurant_info);
@@ -142,7 +143,7 @@ public class DailyMenuActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        somethingAdded=false;
+        somethingAdded = false;
         showBackArrowOnToolbar();
 
         fetch(new Comparator<FoodModel>() {
@@ -165,7 +166,7 @@ public class DailyMenuActivity extends AppCompatActivity {
 
         isFavorite = true;
         btnFavorite.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
-        PopupHelper.showToast(this,getString(R.string.added_to_favorites));
+        PopupHelper.showToast(this, getString(R.string.added_to_favorites));
     }
 
     private void removeFromFavorites() {
@@ -180,7 +181,7 @@ public class DailyMenuActivity extends AppCompatActivity {
 
         isFavorite = false;
         btnFavorite.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
-        PopupHelper.showToast(this,getString(R.string.removed_from_favorites));
+        PopupHelper.showToast(this, getString(R.string.removed_from_favorites));
     }
 
     private void resetShoppingCart() {
@@ -198,6 +199,7 @@ public class DailyMenuActivity extends AppCompatActivity {
         public ImageView photo;
         public TextView orderedQty;
         public TextView availableQty;
+        public RatingBar rb_mean_rate;
 
         public String id;
         public double priceDouble;
@@ -213,10 +215,11 @@ public class DailyMenuActivity extends AppCompatActivity {
             subtractButton = itemView.findViewById(R.id.if_subtract_button);
             availableQty = itemView.findViewById(R.id.if_available_qty);
             orderedQty = itemView.findViewById(R.id.if_ordered_qty);
+            rb_mean_rate = itemView.findViewById(R.id.rb_mean_rate);
             setOrderedQty(countAdded);
         }
 
-        public void setData(FoodModel model){
+        public void setData(FoodModel model) {
             this.id = model.id;
             setDesc(model.description);
             setPhoto(model.image_path);
@@ -224,7 +227,13 @@ public class DailyMenuActivity extends AppCompatActivity {
             setPrice(model.price);
             setAvailableQty(model.availableQty);
 
-            while(countAdded > model.availableQty && removeItemFromCart());
+            if (model.number_of_rates == null || model.total_rate == null)
+                rb_mean_rate.setVisibility(View.GONE);
+            else
+                rb_mean_rate.setRating(model.total_rate / model.number_of_rates);
+
+
+            while (countAdded > model.availableQty && removeItemFromCart()) ;
             if (countAdded < getAvailableQty()) addButton.setVisibility(View.VISIBLE);
             if (countAdded > 0) subtractButton.setVisibility(View.VISIBLE);
 
@@ -244,29 +253,29 @@ public class DailyMenuActivity extends AppCompatActivity {
         }
 
         // false if trying to add more than possible
-        private boolean addItemInCart(){
-            if(countAdded >= getAvailableQty()){
+        private boolean addItemInCart() {
+            if (countAdded >= getAvailableQty()) {
                 return false;
             }
 
-            shoppingCart.add(new ShoppingItem(id, title.getText().toString(),priceDouble,1));
+            shoppingCart.add(new ShoppingItem(id, title.getText().toString(), priceDouble, 1));
             countAdded++;
             setOrderedQty(countAdded);
             if (countAdded > 0) subtractButton.setVisibility(View.VISIBLE);
             if (countAdded >= getAvailableQty()) addButton.setVisibility(View.INVISIBLE);
 
             updateToolbarText(shoppingCart.getCounter());
-            somethingAdded=true;
+            somethingAdded = true;
             return true;
         }
 
         // false if trying to remove more than possible
-        private boolean removeItemFromCart(){
-            if(countAdded <= 0){
+        private boolean removeItemFromCart() {
+            if (countAdded <= 0) {
                 return false;
             }
 
-            shoppingCart.remove(new ShoppingItem(id, title.getText().toString(),priceDouble,1));
+            shoppingCart.remove(new ShoppingItem(id, title.getText().toString(), priceDouble, 1));
             countAdded--;
             setOrderedQty(countAdded);
             if (countAdded < getAvailableQty()) addButton.setVisibility(View.VISIBLE);
@@ -276,20 +285,20 @@ public class DailyMenuActivity extends AppCompatActivity {
             return true;
         }
 
-        private Integer getAvailableQty(){
+        private Integer getAvailableQty() {
             return Integer.parseInt(availableQty.getText().toString());
         }
 
         private void setAvailableQty(Integer availableQty) {
             String avQty = "0";
-            if(availableQty != null) avQty = availableQty.toString();
+            if (availableQty != null) avQty = availableQty.toString();
             this.availableQty.setText(avQty);
         }
 
         private void setOrderedQty(Integer orderedQty) {
             // confronta orderedQty e countadded
             String ordQty = "0";
-            if(orderedQty != null) ordQty = orderedQty.toString();
+            if (orderedQty != null) ordQty = orderedQty.toString();
             this.orderedQty.setText("(" + ordQty + ")");
         }
 
@@ -301,7 +310,7 @@ public class DailyMenuActivity extends AppCompatActivity {
             this.desc.setText(desc);
         }
 
-        private void setPrice(double price){
+        private void setPrice(double price) {
             this.priceDouble = price;
             this.priceFormatted.setText(CurrencyHelper.getCurrency(priceDouble));
         }
@@ -326,7 +335,7 @@ public class DailyMenuActivity extends AppCompatActivity {
                                 return false; // leave false
                             }
                         }).into(photo);
-            }else{
+            } else {
                 Glide.with(photo.getContext()).clear(photo);
             }
         }
@@ -366,6 +375,8 @@ public class DailyMenuActivity extends AppCompatActivity {
                                 foodModel.price = priceDbl;
                                 foodModel.availableQty = availableQtyInt;
                                 foodModel.totalOrderedQty = totalOrderedQty;
+                                foodModel.total_rate = snapshot.child("total_rate").getValue(Float.class);
+                                foodModel.number_of_rates = snapshot.child("number_of_rates").getValue(Integer.class);
 
                                 return foodModel;
                             }
@@ -395,7 +406,7 @@ public class DailyMenuActivity extends AppCompatActivity {
                 adapter.stopListening();
             }
         };
-        if(comparator != null) {
+        if (comparator != null) {
             adapter.setSortComparator(comparator);
         }
         adapter.startListening();
@@ -417,7 +428,7 @@ public class DailyMenuActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_daily_menu,menu);
+        getMenuInflater().inflate(R.menu.menu_daily_menu, menu);
         final Menu m = menu;
         final MenuItem menuItem = m.findItem(R.id.shoppingcart_itemmenu);
         menuItem.getActionView().setOnClickListener(new View.OnClickListener() {
@@ -425,14 +436,14 @@ public class DailyMenuActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (shoppingCart.getCounter() > 0) {
                     Intent intent = new Intent(DailyMenuActivity.this, OrderConfirmActivity.class);
-                    Log.d("pedro",Integer.toString(shoppingCart.getItemsMap().size()));
+                    Log.d("pedro", Integer.toString(shoppingCart.getItemsMap().size()));
                     intent.putExtra("restaurant_id", restaurant_id);
                     intent.putExtra("restaurant_name", restaurant_name);
                     intent.putExtra("restaurant_address", restaurant_address);
                     intent.putExtra("restaurant_phone", restaurant_phone);
-                    intent.putExtra("itemsMap",shoppingCart.getItemsMap());
-                    intent.putExtra("items_quantity",shoppingCart.getCounter());
-                    intent.putExtra("items_tot_price",shoppingCart.getTotal_price());
+                    intent.putExtra("itemsMap", shoppingCart.getItemsMap());
+                    intent.putExtra("items_quantity", shoppingCart.getCounter());
+                    intent.putExtra("items_tot_price", shoppingCart.getTotal_price());
                     startActivityForResult(intent, RC_ORDER_CONFIRM);
                 } else {
                     Toast.makeText(getApplicationContext(),
@@ -473,9 +484,9 @@ public class DailyMenuActivity extends AppCompatActivity {
                             fetch(new Comparator<FoodModel>() {
                                 @Override
                                 public int compare(FoodModel lhs, FoodModel rhs) {
-                                    if(lhs.totalOrderedQty > rhs.totalOrderedQty) {
+                                    if (lhs.totalOrderedQty > rhs.totalOrderedQty) {
                                         return -1;
-                                    } else if (lhs.totalOrderedQty < rhs.totalOrderedQty){
+                                    } else if (lhs.totalOrderedQty < rhs.totalOrderedQty) {
                                         return 1;
                                     } else {
                                         return 0;
@@ -508,7 +519,7 @@ public class DailyMenuActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(somethingAdded) {
+        if (somethingAdded) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.shopping_cart_exit_warning));
             builder.setPositiveButton(this.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
@@ -527,7 +538,6 @@ public class DailyMenuActivity extends AppCompatActivity {
 
             AlertDialog alert = builder.create();
             alert.show();
-        }
-        else super.onBackPressed();
+        } else super.onBackPressed();
     }
 }

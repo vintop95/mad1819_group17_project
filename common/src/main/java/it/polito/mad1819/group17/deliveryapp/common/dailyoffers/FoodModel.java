@@ -14,6 +14,8 @@ public class FoodModel implements Serializable{
     public double price = 0.0;
     public int availableQty = 0;
     public int totalOrderedQty = 0;
+    public Float total_rate;
+    public Integer number_of_rates;
 
     /////////////////////////////////////////////////////////////////
     public FoodModel() {}

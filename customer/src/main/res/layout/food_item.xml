@@ -24,7 +24,7 @@
             android:layout_margin="8dp"
             android:contentDescription="description"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/rb_mean_rate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -147,6 +147,21 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_add_circle_yellow_24dp" />
         </LinearLayout>
+
+        <RatingBar
+            android:id="@+id/rb_mean_rate"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:isIndicator="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/if_photo"
+            app:layout_constraintStart_toStartOf="@+id/if_photo" />
 
     </android.support.constraint.ConstraintLayout>
 
