@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -66,7 +67,6 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
         holder.txt_restaurant_name.setText(model.getRestaurant_name());
         holder.txt_total_items.setText("" + model.getTotalItemsQuantity());
         holder.txt_order_state.setText(model.getCurrentStateLocal());
-        Log.d("STATE", model.toString());
         switch (model.getCurrentState()) {
             case Order.STATE1:
                 holder.state_background.setBackgroundColor(fragment.getActivity().getResources().getColor(R.color.colorState1));
