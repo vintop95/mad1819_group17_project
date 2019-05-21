@@ -39,6 +39,7 @@ public class Order implements Serializable {
     private String sorting_field = "";
     private String notified = "no";
     private String rate_notified = "no";
+    private String rated = "no";
 
     public Order() {
 
@@ -82,6 +83,14 @@ public class Order implements Serializable {
 
     public void setRestaurant_address(String restaurant_address) {
         this.restaurant_address = restaurant_address;
+    }
+
+    public String getRated() {
+        return rated;
+    }
+
+    public void setRated(String rated) {
+        this.rated = rated;
     }
 
     public String getDeliveryman_id() {
