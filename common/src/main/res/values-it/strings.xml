@@ -225,4 +225,17 @@
     <string name="removed_from_favorites">Rimosso dai preferiti!</string>
     <string name="added_to_favorites">Aggiunto ai preferiti!</string>
 
+    <string name="restaurant_rate">Restaurant rate</string>
+    <string name="service_rate">Service rate</string>
+    <string name="food_rate">Food rate</string>
+    <string name="comment">Give us a comment</string>
+    <string name="comment_hint">Scrivi un commento</string>
+    <string name="btn_rates">INVIA FEEDBACK</string>
+
+    <string name="rate_title_notification">La tua opinione è importante!</string>
+    <string name="rate_content_notification">Dai un giudizio al tuo ultimo ordine.</string>
+    <string name="feedback_sent">Feedback inviato</string>
+    <string name="feedback_empty_fields">Avviso: dai qualche informazione!</string>
+    <string name="feedback_error">Errore: impossibile ritrovare l\'ordine!</string>
+
 </resources>

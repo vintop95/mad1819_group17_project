@@ -4,7 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,14 +15,21 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.maps.model.DirectionsLeg;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
+import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.R;
 
 public class DeliveryRequestDetailsActivity extends AppCompatActivity {
@@ -94,22 +103,38 @@ public class DeliveryRequestDetailsActivity extends AppCompatActivity {
     private void positiveButtonAction() {
         if (inputDeliveryRequest.moveToNextState()) {
             txt_state_history.setText(inputDeliveryRequest.getStateHistoryToString());
-            Log.d("XX", inputDeliveryRequest.getStateHistoryToString());
+            //Log.d("XX", inputDeliveryRequest.getStateHistoryToString());
 
             if (inputDeliveryRequest.getCurrentState().equals(inputDeliveryRequest.STATE3)) {
                 btn_next_state.setTextColor(getResources().getColor(R.color.button_disabled_text));
                 btn_next_state.setEnabled(false);
             }
             FirebaseDatabase.getInstance().getReference()
-                    .child("deliverymen")
-                    .child(FirebaseAuth.getInstance().getUid())
-                    .child("delivery_requests")
-                    .child(inputDeliveryRequest.getId())
-                    .child("state_stateTime")
-                    .setValue(inputDeliveryRequest.getState_stateTime());
+                    .child("deliverymen").child(FirebaseAuth.getInstance().getUid())
+                    .child("delivery_requests").child(inputDeliveryRequest.getId()).child("state_stateTime")
+                    .setValue(inputDeliveryRequest.getState_stateTime(),
+                            (databaseError, databaseReference) -> {
+                                if (databaseError == null) {
+                                    updateOrderToFirebase(inputDeliveryRequest);
+                                }
+                            });
         }
 
     }
+
+    private void updateOrderToFirebase(DeliveryRequest inputDeliveryRequest) {
+        String customerOrderPath = "customers/" + inputDeliveryRequest.getCustomer_id() + "/orders/" + inputDeliveryRequest.getOrder_id();
+        String restaurateurOrderPath = "restaurateurs/" + inputDeliveryRequest.getRestaurant_id() + "/orders/" + inputDeliveryRequest.getOrder_id();
+
+        Map<String, Object> updatesMap = new HashMap<>();
+        updatesMap.put(customerOrderPath + "/state_stateTime/state4", inputDeliveryRequest.getState_stateTime().get("state3"));
+        updatesMap.put(restaurateurOrderPath + "/sorting_field", "state4_" + inputDeliveryRequest.getTimestamp());
+        updatesMap.put(restaurateurOrderPath + "/state_stateTime/state4", inputDeliveryRequest.getState_stateTime().get("state3"));
+        updatesMap.put(customerOrderPath + "/sorting_field", "state4_" + inputDeliveryRequest.getTimestamp());
+
+        FirebaseDatabase.getInstance().getReference().updateChildren(updatesMap);
+    }
+
 
     private void showBackArrowOnToolbar() {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
@@ -123,7 +148,7 @@ public class DeliveryRequestDetailsActivity extends AppCompatActivity {
         return true;
     }
 
-    private void setActionDialIntents(){
+    private void setActionDialIntents() {
         txt_customer_phone.setOnClickListener(v -> {
             String phoneNumber = ((TextView) v).getText().toString();
             startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));

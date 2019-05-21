@@ -9,7 +9,8 @@
 
     <color name="colorState1">#ff4d4d</color>
     <color name="colorState2">#ffaf40</color>
-    <color name="colorState3">#3ae374</color>
+    <color name="colorState3">#0ab6ff</color>
+    <color name="colorState4">#3ae374</color>
 
     <color name="button_disabled_text">#808080</color>
 

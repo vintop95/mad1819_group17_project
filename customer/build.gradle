@@ -4,7 +4,6 @@ android {
     compileSdkVersion 28
 
 
-
     defaultConfig {
         applicationId "it.polito.mad1819.group17.deliveryapp.customer"
         minSdkVersion 16

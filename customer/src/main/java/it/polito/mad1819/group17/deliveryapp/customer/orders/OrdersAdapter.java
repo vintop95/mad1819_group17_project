@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,19 +66,19 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
         holder.txt_restaurant_name.setText(model.getRestaurant_name());
         holder.txt_total_items.setText("" + model.getTotalItemsQuantity());
         holder.txt_order_state.setText(model.getCurrentStateLocal());
+        Log.d("STATE", model.toString());
         switch (model.getCurrentState()) {
             case Order.STATE1:
-                holder.state_background.setBackgroundColor(
-                        fragment.getActivity().getResources().getColor(R.color.colorState1));
+                holder.state_background.setBackgroundColor(fragment.getActivity().getResources().getColor(R.color.colorState1));
                 break;
             case Order.STATE2:
-                holder.state_background.setBackgroundColor(
-                        fragment.getActivity().getResources().getColor(R.color.colorState2));
+                holder.state_background.setBackgroundColor(fragment.getActivity().getResources().getColor(R.color.colorState2));
                 break;
             case Order.STATE3:
-                holder.state_background.setBackgroundColor(
-                        fragment.getActivity().getResources().getColor(R.color.colorState3));
+                holder.state_background.setBackgroundColor(fragment.getActivity().getResources().getColor(R.color.colorState3));
                 break;
+            case Order.STATE4:
+                holder.state_background.setBackgroundColor(fragment.getResources().getColor(R.color.colorState4));
         }
     }
 
@@ -95,12 +96,12 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
         // to hide a loading spinner or check for the "no documents" state and update your UI.
         // ...
         super.onDataChanged();
-        if(fragment instanceof OrdersFragment) {
+        if (fragment instanceof OrdersFragment) {
             ((OrdersFragment) fragment).progressBarHandler.hide();
         }
     }
 
-    public static Order getOrderById(String id){
+    public static Order getOrderById(String id) {
         return null;
     }
 }

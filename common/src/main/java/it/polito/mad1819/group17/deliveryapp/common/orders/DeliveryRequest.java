@@ -20,6 +20,7 @@ public class DeliveryRequest implements Serializable {
     private String id;
     private String restaurant_id;
     private String order_id;
+    private String customer_id;
 
     private String address;
     private String customer_name;
@@ -39,13 +40,14 @@ public class DeliveryRequest implements Serializable {
 
     }
 
-    public DeliveryRequest(String restaurant_id, String order_id, String address,
-                           String customer_name, String customer_phone,
+    public DeliveryRequest(String restaurant_id, String order_id, String customer_id,
+                           String address, String customer_name, String customer_phone,
                            String notes, String sorting_field, String timestamp,
                            HashMap<String, String> state_stateTime, String restaurant_name,
                            String restaurant_phone, String restaurant_address) {
         this.restaurant_id = restaurant_id;
         this.order_id = order_id;
+        this.customer_id=customer_id;
         this.address = address;
         this.customer_name = customer_name;
         this.customer_phone = customer_phone;
@@ -119,6 +121,14 @@ public class DeliveryRequest implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getCustomer_id() {
+        return customer_id;
+    }
+
+    public void setCustomer_id(String customer_id) {
+        this.customer_id = customer_id;
     }
 
     public String getCustomer_name() {

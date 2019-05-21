@@ -124,7 +124,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
                 break;
             case DeliveryRequest.STATE3:
                 holder.state_background.setBackgroundColor(
-                        fragment.getActivity().getResources().getColor(R.color.colorState3));
+                        fragment.getActivity().getResources().getColor(R.color.colorState4));
                 holder.image_state.setBackgroundResource(R.drawable.ic_check_circle_black_24dp);
                 holder.mapButton.setVisibility(View.GONE);
 
