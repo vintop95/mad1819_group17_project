@@ -38,6 +38,7 @@ public class Order implements Serializable {
     private String deliveryman_phone = "";
     private String sorting_field = "";
     private String notified = "no";
+    private String rate_notified = "no";
 
     public Order() {
 
@@ -118,6 +119,14 @@ public class Order implements Serializable {
 
     public String getSorting_field() {
         return sorting_field;
+    }
+
+    public String getRate_notified() {
+        return rate_notified;
+    }
+
+    public void setRate_notified(String rate_notified) {
+        this.rate_notified = rate_notified;
     }
 
     public void setSorting_field(String sorting_field) {

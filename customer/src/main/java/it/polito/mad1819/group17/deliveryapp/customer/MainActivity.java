@@ -1,12 +1,18 @@
 package it.polito.mad1819.group17.deliveryapp.customer;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -48,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mCustomerOrdersRef = null;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+
+    private int notificationRequestCode = 0;
 
     Fragment restaurantsFragment = new RestaurantsFragment();
     Fragment ordersFragment = new OrdersFragment();
@@ -96,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
         fm.beginTransaction().attach(active).commit();
     }
 
-    private void initBottomNavigation(){
-        if(active == null) throw new IllegalStateException("'active' must be initialized");
+    private void initBottomNavigation() {
+        if (active == null) throw new IllegalStateException("'active' must be initialized");
 
         navigation = findViewById(R.id.navigation);
         mOnNavigationItemSelectedListener
@@ -132,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         navigation.setSelectedItemId(navSelected);
     }
 
-    private void initFirebaseAuth(){
+    private void initFirebaseAuth() {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mAuthStateListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -154,14 +162,14 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-    private void initFirebaseDb(String userId){
+    private void initFirebaseDb(String userId) {
         if (TextUtils.isEmpty(userId)) {
             throw new IllegalStateException("Log in with FirebaseAuth first");
         }
 
         progressBarHandler.hide();
 
-        if(mCustomerOrdersRef != null)
+        if (mCustomerOrdersRef != null)
             return;
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -169,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         mCustomerOrdersRef = mCustomerDatabaseReference.child(userId).child("orders");
     }
 
-    private void initUtils(){
+    private void initUtils() {
         PrefHelper.setMainContext(this);
 
         // TODO: LET THE USER CHANGE THE CURRENCY FROM SETTINGS?
@@ -211,6 +219,9 @@ public class MainActivity extends AppCompatActivity {
 
         instantiateFragments(savedInstanceState);
         initBottomNavigation();
+
+        createNotificationChannel();
+        fetchDeliveredOrdersWithoutRate();
     }
 
     // Check if user exists in the db even if it's authenticated because
@@ -225,10 +236,10 @@ public class MainActivity extends AppCompatActivity {
 //                if (key == null) key = "NONO";
 //                Log.d("SNAPSHOT NEW_SIGN_UP", key);
 
-                if(dataSnapshot.getValue() == null){
+                if (dataSnapshot.getValue() == null) {
                     Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
                     startActivity(editNewProfile);
-                    if(navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
+                    if (navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
                 }
             }
 
@@ -298,8 +309,73 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setAuthStateListener(){
+    private void setAuthStateListener() {
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
         Log.v("FIREBASE_LOG", "AuthListener added - MainActivity");
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "rate_channel";
+            String description = "rate_channel_description";
+
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("rate_channel_id", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    public void sendNotification(String order_id) {
+        Intent intent = new Intent(this, RateActivity.class)
+                .putExtra("id", order_id)
+                .setAction(Long.toString(System.currentTimeMillis()));
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "new_order_channel_id");
+        builder.setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                .setContentTitle(getResources().getString(R.string.rate_title_notification).toUpperCase())
+                .setContentText(getString(R.string.rate_content_notification))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        notificationManagerCompat.notify(notificationRequestCode++, builder.build());
+    }
+
+    private void fetchDeliveredOrdersWithoutRate() {
+        FirebaseDatabase.getInstance().getReference().child("customers").child(FirebaseAuth.getInstance().getUid()).child("orders")
+                .orderByChild("rate_notified").equalTo("no").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null) {
+                    for (DataSnapshot orderDataSnapshot : dataSnapshot.getChildren()) {
+                        Order order = orderDataSnapshot.getValue(Order.class);
+                        if (order.getCurrentState() == Order.STATE4){
+                            FirebaseDatabase.getInstance().getReference()
+                                    .child("customers")
+                                    .child(FirebaseAuth.getInstance().getUid())
+                                    .child("orders")
+                                    .child(order.getId())
+                                    .child("rate_notified").setValue("yes");
+                            sendNotification(order.getId());
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

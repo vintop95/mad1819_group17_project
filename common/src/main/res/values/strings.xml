@@ -257,5 +257,19 @@
     <string name="removed_from_favorites">Removed from favorites!</string>
     <string name="added_to_favorites">Added to favorites!</string>
 
+    <string name="restaurant_rate">Restaurant rate</string>
+    <string name="service_rate">Service rate</string>
+    <string name="food_rate">Food rate</string>
+    <string name="comment">Give us a comment</string>
+    <string name="comment_hint">Enter a comment</string>
+    <string name="btn_rates">SEND FEEDBACK</string>
+
+    <string name="rate_title_notification">Your opinion is important!</string>
+    <string name="rate_content_notification">Give a feedback about your last order.</string>
+    <string name="feedback_sent">Feedback sent</string>
+    <string name="feedback_empty_fields">Warning: enter some information!</string>
+    <string name="feedback_error">Error: unable to retrieve the order!</string>
+
+
 
 </resources>
