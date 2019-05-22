@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -24,13 +28,13 @@ import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
+import it.polito.mad1819.group17.deliveryapp.customer.RateActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantProfileActivity;
-import it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers.DailyMenuActivity;
 
 public class OrderDetailsActivity extends AppCompatActivity {
 
-    public final static int STATE_CHANGED = 1;
-    public final static int STATE_NOT_CHANGED = 0;
+    public final static int RATE_NOT_SENT = -1;
+    public final static int RATE_REQUEST = 0;
 
     private TextView txt_restaurant_name;
     private TextView txt_delivery_time;
@@ -49,6 +53,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
     private ImageView image_restaurant_info;
 
     private Order inputOrder;
+
+    private Menu menu;
 
     private void showBackArrowOnToolbar() {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
@@ -90,7 +96,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
             ShoppingItem shoppingItem = selectedOrder.getItem_itemDetails().get(item);
             order_content += "x" + shoppingItem.getQuantity()
                     + " " + shoppingItem.getName()
-                    + " - " + CurrencyHelper.getCurrency(shoppingItem.getPrice()*shoppingItem.getQuantity());
+                    + " - " + CurrencyHelper.getCurrency(shoppingItem.getPrice() * shoppingItem.getQuantity());
         }
         txt_order_content.setText(order_content);
 
@@ -118,7 +124,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         feedViews(inputOrder);
     }
 
-    private void openRestaurantProfile(){
+    private void openRestaurantProfile() {
         Intent intent = new Intent(OrderDetailsActivity.this, RestaurantProfileActivity.class);
         intent.putExtra("restaurant_id", inputOrder.getRestaurant_id());
         startActivity(intent);
@@ -161,6 +167,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
             inputOrder = (Order) getIntent().getSerializableExtra("order");
             adjustLayoutProgrammatically();
         }
+
     }
 
     @Override
@@ -169,5 +176,32 @@ public class OrderDetailsActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_order_details, menu);
+        this.menu = menu;
+        if (inputOrder.getRated().equals("no") && inputOrder.getCurrentState().equals(Order.STATE4))
+            menu.findItem(R.id.rate_itemmenu).setVisible(true);
+        Log.d("AA", "onCreateOptionMenu");
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.rate_itemmenu) {
+            startActivityForResult(new Intent(this, RateActivity.class).putExtra("id", inputOrder.getId()), RATE_REQUEST);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d("AA", requestCode + " " + resultCode);
+        if (requestCode == RATE_REQUEST && resultCode != RATE_NOT_SENT)
+            menu.findItem(R.id.rate_itemmenu).setVisible(false);
+        Log.d("AA", "onActivityResult");
+    }
 }
