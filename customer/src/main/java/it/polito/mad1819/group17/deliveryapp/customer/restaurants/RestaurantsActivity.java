@@ -37,9 +37,11 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 import java.util.Comparator;
@@ -240,7 +242,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                     Integer freeDay;
                     try {
                         freeDay = Integer.valueOf(model.free_day);
-                    } catch(NumberFormatException e) {
+                    } catch (NumberFormatException e) {
                         freeDay = 0;
                     }
 
@@ -264,7 +266,7 @@ public class RestaurantsActivity extends AppCompatActivity {
 //                        Log.d("closingTime", closingTime);
 
                         if (currentTime.compareTo(openingTime) > 0 &&
-                                currentTime.compareTo(closingTime) < 0){
+                                currentTime.compareTo(closingTime) < 0) {
                             return true;
                         } else return false;
                     } else return false;
@@ -280,16 +282,16 @@ public class RestaurantsActivity extends AppCompatActivity {
 //                Log.d("SORT", lhs.id + " , " + rhs.id);
 //                Log.d("SORT", lhs.price + " < " + rhs.price);
 //                Log.d("SORT", lhs.totalOrderedQty + " , " + rhs.totalOrderedQty);
-                if(lhs.orders_count > rhs.orders_count) {
+                if (lhs.orders_count > rhs.orders_count) {
                     return -1;
-                } else if (lhs.orders_count < rhs.orders_count){
+                } else if (lhs.orders_count < rhs.orders_count) {
                     return 1;
                 } else {
                     return 0;
                 }
             }
         });
-        if(comparator != null) {
+        if (comparator != null) {
             adapter.setSortComparator(comparator);
         }
         recyclerView.setAdapter(adapter);
@@ -306,6 +308,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         public String id;
         public String phone;
         public boolean isFavorite = false;
+        public RatingBar rb_mean_rate_restaurant;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -315,6 +318,7 @@ public class RestaurantsActivity extends AppCompatActivity {
             photo = itemView.findViewById(R.id.restaurant_image);
             address = itemView.findViewById(R.id.restaurant_address);
             avgPrice = itemView.findViewById(R.id.restaurant_avgprice);
+            rb_mean_rate_restaurant = itemView.findViewById(R.id.rb_mean_rate_restaurant);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -342,9 +346,43 @@ public class RestaurantsActivity extends AppCompatActivity {
             setPhoto(model.image_path);
             setId(model.key);
             setPhone(model.phone);
-            if(model.favorites != null && model.favorites.get(userId) != null) {
+            if (model.favorites != null && model.favorites.get(userId) != null) {
                 isFavorite = true;
             }
+
+            // compute the general rate for the restaurant and set the rating bar accordingly
+            FirebaseDatabase.getInstance().getReference()
+                    .child("restaurant_rates").child(model.key)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            int number_of_restaurant_rates = 0;
+                            int number_of_service_rates = 0;
+                            float total_restaurant_rate = 0;
+                            float total_service_rate = 0;
+
+                            for (DataSnapshot ratesDataSnapshot : dataSnapshot.getChildren()) {
+                                if (ratesDataSnapshot.child("restaurant_rate").getValue(Float.class) != null) {
+                                    total_restaurant_rate += ratesDataSnapshot.child("restaurant_rate").getValue(Float.class);
+                                    number_of_restaurant_rates++;
+                                }
+                                if (ratesDataSnapshot.child("service_rate").getValue(Float.class) != null) {
+                                    total_service_rate += ratesDataSnapshot.child("service_rate").getValue(Float.class);
+                                    number_of_service_rates++;
+                                }
+                            }
+
+                            if (total_restaurant_rate != 0 || total_service_rate != 0)
+                                rb_mean_rate_restaurant.setRating((total_restaurant_rate / number_of_restaurant_rates + total_service_rate / number_of_service_rates) / 2);
+                            else
+                                rb_mean_rate_restaurant.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
         }
 
         private void setId(String id) {
@@ -379,7 +417,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                                 return false; // leave false
                             }
                         }).into(photo);
-            }else{
+            } else {
                 Glide.with(photo.getContext()).clear(photo);
             }
         }
@@ -473,9 +511,9 @@ public class RestaurantsActivity extends AppCompatActivity {
                             fetch(new Comparator<RestaurantModel>() {
                                 @Override
                                 public int compare(RestaurantModel lhs, RestaurantModel rhs) {
-                                    if(lhs.orders_count > rhs.orders_count) {
+                                    if (lhs.orders_count > rhs.orders_count) {
                                         return -1;
-                                    } else if (lhs.orders_count < rhs.orders_count){
+                                    } else if (lhs.orders_count < rhs.orders_count) {
                                         return 1;
                                     } else {
                                         return 0;
