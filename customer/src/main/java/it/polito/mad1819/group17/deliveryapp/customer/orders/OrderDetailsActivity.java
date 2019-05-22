@@ -182,7 +182,6 @@ public class OrderDetailsActivity extends AppCompatActivity {
         this.menu = menu;
         if (inputOrder.getRated().equals("no") && inputOrder.getCurrentState().equals(Order.STATE4))
             menu.findItem(R.id.rate_itemmenu).setVisible(true);
-        Log.d("AA", "onCreateOptionMenu");
         return true;
     }
 
@@ -198,10 +197,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        Log.d("AA", requestCode + " " + resultCode);
         if (requestCode == RATE_REQUEST && resultCode != RATE_NOT_SENT)
             menu.findItem(R.id.rate_itemmenu).setVisible(false);
-        Log.d("AA", "onActivityResult");
     }
 }
