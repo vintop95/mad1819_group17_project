@@ -24,6 +24,7 @@ import java.util.HashMap;
 
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
+import it.polito.mad1819.group17.deliveryapp.customer.orders.OrderDetailsActivity;
 
 public class RateActivity extends AppCompatActivity {
 
@@ -137,13 +138,23 @@ public class RateActivity extends AppCompatActivity {
                     }
                 });
 
-            } else
+            } else {
+                setResult(OrderDetailsActivity.RATE_NOT_SENT);
                 Toast.makeText(this, getString(R.string.feedback_empty_fields), Toast.LENGTH_SHORT).show();
+            }
 
-        } else
+        } else {
+            setResult(OrderDetailsActivity.RATE_NOT_SENT);
             Toast.makeText(this, getString(R.string.feedback_error), Toast.LENGTH_SHORT).show();
+        }
 
         finish();
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        setResult(OrderDetailsActivity.RATE_NOT_SENT);
+        finish();
+    }
 }
