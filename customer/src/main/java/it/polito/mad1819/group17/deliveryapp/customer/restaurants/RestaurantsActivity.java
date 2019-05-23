@@ -3,8 +3,6 @@ package it.polito.mad1819.group17.deliveryapp.customer.restaurants;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,7 +13,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -47,7 +43,6 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Map;
 
-import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
 import it.polito.mad1819.group17.deliveryapp.common.utils.MadFirebaseRecyclerAdapter;
 import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
@@ -162,11 +157,7 @@ public class RestaurantsActivity extends AppCompatActivity {
             }
         });
         adapter.startListening();
-    }
 
-    public static Bitmap stringToBitMap(String encodedString) throws IllegalArgumentException {
-        byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
     }
 
     private void fetch(Comparator comparator) {
@@ -299,7 +290,6 @@ public class RestaurantsActivity extends AppCompatActivity {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        public LinearLayout root;
         public TextView name;
         public TextView bio;
         public ImageView photo;
@@ -312,7 +302,6 @@ public class RestaurantsActivity extends AppCompatActivity {
 
         public ViewHolder(View itemView) {
             super(itemView);
-            root = itemView.findViewById(R.id.restaurant_root_layout);
             name = itemView.findViewById(R.id.restaurant_name);
             bio = itemView.findViewById(R.id.restaurant_bio);
             photo = itemView.findViewById(R.id.restaurant_image);
@@ -418,7 +407,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                             }
                         }).into(photo);
             } else {
-                Glide.with(photo.getContext()).clear(photo);
+                Glide.with(photo.getContext()).load(getResources().getIdentifier("logo1", "drawable", getPackageName())).fitCenter().into(photo);
             }
         }
 
@@ -429,6 +418,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         private void setPhone(String phone) {
             this.phone = phone;
         }
+
     }
 
     @Override
@@ -532,4 +522,5 @@ public class RestaurantsActivity extends AppCompatActivity {
         }
         return false;
     }
+
 }

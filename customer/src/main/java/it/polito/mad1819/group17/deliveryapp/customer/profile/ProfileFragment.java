@@ -100,14 +100,13 @@ public class ProfileFragment extends Fragment {
         progressBarHandler = new ProgressBarHandler(getContext());
         setHasOptionsMenu(true);
         locateViews(view);
-        progressBarHandler.show();
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
+        progressBarHandler.show();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mCustomerDatabaseReference = mFirebaseDatabase.getReference().child("customers");
@@ -142,9 +141,6 @@ public class ProfileFragment extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Customer customer = dataSnapshot.getValue(Customer.class);
                     feedViews(customer);
-
-                    // already done for the image (it loads slower)
-                    // progressBarHandler.hide();
                 }
 
                 @Override
