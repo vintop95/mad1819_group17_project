@@ -1,12 +1,16 @@
 package it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +29,7 @@ public class DeliveryRequestsFragment extends Fragment {
     private DeliveryRequestsAdapter mAdapter;
     private RecyclerView recyclerView;
     private ProgressBarHandler progressBarHandler;
+    private CardView button_stats;
 
     public DeliveryRequestsFragment() {
         // Required empty public constructor
@@ -35,7 +40,17 @@ public class DeliveryRequestsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_delivery_requests, container, false);
         recyclerView=view.findViewById(R.id.rv_delivery_requests);
+
         progressBarHandler = new ProgressBarHandler(getContext());
+
+        button_stats = view.findViewById(R.id.statsButton);
+        button_stats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), StatsActivity.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 
@@ -73,4 +88,6 @@ public class DeliveryRequestsFragment extends Fragment {
         if (FirebaseAuth.getInstance().getUid() != null)
             mAdapter.stopListening();
     }
+
+
 }

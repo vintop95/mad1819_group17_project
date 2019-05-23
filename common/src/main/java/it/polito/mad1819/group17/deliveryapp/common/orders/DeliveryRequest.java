@@ -38,6 +38,7 @@ public class DeliveryRequest implements Serializable  {
     private String restaurant_name;
     private String restaurant_phone;
     private String restaurant_address;
+    private String distance = "unknown";
 
 
     public DeliveryRequest() {
@@ -63,6 +64,36 @@ public class DeliveryRequest implements Serializable  {
         this.restaurant_address = restaurant_address;
 
 
+    }
+
+    public DeliveryRequest(Context context, String restaurant_id, String order_id, String address,
+                           String customer_name, String customer_phone,
+                           String notes, String sorting_field, String timestamp,
+                           HashMap<String, String> state_stateTime, String restaurant_name,
+                           String restaurant_phone, String restaurant_address) {
+        this.restaurant_id = restaurant_id;
+        this.order_id = order_id;
+        this.address = address;
+        this.customer_name = customer_name;
+        this.customer_phone = customer_phone;
+        this.notes = notes;
+        this.sorting_field = sorting_field;
+        this.timestamp = timestamp;
+        this.state_stateTime = state_stateTime;
+        this.restaurant_name = restaurant_name;
+        this.restaurant_phone = restaurant_phone;
+        this.restaurant_address = restaurant_address;
+        this.distance=Double.toString(computeDistance(context));
+
+
+    }
+
+    public void setDistanceFromContext(Context context){
+        this.distance=Double.toString(computeDistance(context));
+    }
+
+    public String getDistance(){
+        return this.distance;
     }
 
     public String getRestaurant_id() {
@@ -284,17 +315,16 @@ public class DeliveryRequest implements Serializable  {
         Log.d("computeDistance","Rest: "+latlngConsumer[0]+","+latlngConsumer[1]);
 
 
-        double distance, approxdistance;
-        distance = 0.0;
+        double approxdistance;
         approxdistance = 0.0;
-        String origin,destination;
-        origin = Double.toString(latlngRestaurant[0]) + "," + Double.toString(latlngRestaurant[1]);
-        destination = Double.toString(latlngConsumer[0]) + "," + Double.toString(latlngConsumer[1]);
-
         approxdistance = Math.abs(latlngRestaurant[0]-latlngConsumer[0]) + Math.abs(latlngRestaurant[0]-latlngConsumer[0]);
 
         /*DirectionsResult result;
-
+        double distance,
+        distance = 0.0;
+        String origin,destination;
+        origin = Double.toString(latlngRestaurant[0]) + "," + Double.toString(latlngRestaurant[1]);
+        destination = Double.toString(latlngConsumer[0]) + "," + Double.toString(latlngConsumer[1]);
         // distance between latitudes and longitudes
         try {
             result = DirectionsApi.newRequest(context)

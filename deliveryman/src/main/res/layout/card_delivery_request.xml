@@ -254,8 +254,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
-            card_view:layout_constraintTop_toBottomOf="@+id/txt_delivery_date"
-            tools:layout_editor_absoluteX="67dp" />
+            card_view:layout_constraintEnd_toEndOf="@+id/txt_delivery_date"
+            card_view:layout_constraintStart_toStartOf="@+id/txt_delivery_date"
+            card_view:layout_constraintTop_toBottomOf="@+id/txt_delivery_date" />
 
 
     </android.support.constraint.ConstraintLayout>

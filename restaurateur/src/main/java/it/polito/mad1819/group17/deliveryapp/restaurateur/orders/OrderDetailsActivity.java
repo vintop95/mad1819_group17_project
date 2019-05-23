@@ -232,6 +232,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
                                 currentRestaurateur.getPhone(),
                                 currentRestaurateur.getAddress()
                         );
+                        newDeliveryRequest.setDistanceFromContext(getApplicationContext());
 
                         // send delivery request to the rider
                         String newDeliveryRequestKey = FirebaseDatabase.getInstance().getReference()

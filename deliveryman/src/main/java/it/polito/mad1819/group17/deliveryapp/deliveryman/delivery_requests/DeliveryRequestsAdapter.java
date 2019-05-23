@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
+import java.text.DecimalFormat;
+
 import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.R;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.ProgressBarHandler;
@@ -111,11 +113,19 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
         holder.txt_delivery_date.setText(model.getDelivery_date());
 
         //Add DISTANCE
-        double distance = model.computeDistance(fragment.getActivity().getApplicationContext());
+        double distance = 0;
+        try{
+             distance = Double.valueOf(model.getDistance());
+             Log.d("AAAAAAAA","daje:"+distance);
+        } catch (Exception e){
+            Log.e("exception",e.getLocalizedMessage());
+             distance = model.computeDistance(fragment.getActivity().getApplicationContext());
+        }
+
         distance = distance * 100;
-        int printableDistance = (int) distance;
-        Log.d("computeDistance", "done:"+distance);
-        holder.routeDistance.setText("Distance: "+printableDistance);
+        DecimalFormat df = new DecimalFormat("#");
+        Log.d("computeDistance", "done:"+distance + ","+ df.format(distance));
+        holder.routeDistance.setText("≈ "+df.format(distance)+" km");
 
 
         holder.txt_state.setText(model.getCurrentStateLocal());
