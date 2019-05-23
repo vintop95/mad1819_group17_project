@@ -3,6 +3,7 @@ package it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -54,6 +55,7 @@ public class StatsActivity extends AppCompatActivity {
 
 
         retrieveKms();
+        showBackArrowOnToolbar();
     }
 
     @Override
@@ -142,5 +144,17 @@ public class StatsActivity extends AppCompatActivity {
         else
             return STATE1;
     }*/
+
+    private void showBackArrowOnToolbar() {
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar_stats));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 
 }
