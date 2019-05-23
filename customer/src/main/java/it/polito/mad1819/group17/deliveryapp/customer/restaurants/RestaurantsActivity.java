@@ -465,7 +465,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case 0://no filter
-                            adapter.startListening();
+                            adapter.stopListening();
                             adapter.getFilter().filter("");
                             break;
                         case 1: // popular
