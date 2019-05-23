@@ -70,6 +70,7 @@ public class RestaurantsActivity extends AppCompatActivity {
     private Intent intent;
     private ProgressBarHandler pbHandler;
 
+
     private void showBackArrowOnToolbar() {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -191,8 +192,11 @@ public class RestaurantsActivity extends AppCompatActivity {
                                         snapshot.child("free_day").getValue(String.class),
                                         snapshot.child("working_time_opening").getValue(String.class),
                                         snapshot.child("working_time_closing").getValue(String.class),
-                                        (Map) snapshot.child("favorites").getValue()
-                                );
+                                        (Map) snapshot.child("favorites").getValue(),
+                                        snapshot.child("number_of_restaurant_rates").getValue(Integer.class),
+                                        snapshot.child("total_restaurant_rate").getValue(Float.class),
+                                        snapshot.child("number_of_service_rates").getValue(Integer.class),
+                                        snapshot.child("total_service_rate").getValue(Float.class));
                             }
                         })
                         .build();
@@ -299,6 +303,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         public String phone;
         public boolean isFavorite = false;
         public RatingBar rb_mean_rate_restaurant;
+        public Float overallRate;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -321,6 +326,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                     intent.putExtra("address", address.getText());
                     intent.putExtra("phone", phone);
                     intent.putExtra("isFavorite", isFavorite);
+                    intent.putExtra("overallRate",overallRate);
 
                     // Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
                     startActivityForResult(intent, RC_DAILY_MENU);
@@ -339,39 +345,20 @@ public class RestaurantsActivity extends AppCompatActivity {
                 isFavorite = true;
             }
 
-            // compute the general rate for the restaurant and set the rating bar accordingly
-            FirebaseDatabase.getInstance().getReference()
-                    .child("restaurant_rates").child(model.key)
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            int number_of_restaurant_rates = 0;
-                            int number_of_service_rates = 0;
-                            float total_restaurant_rate = 0;
-                            float total_service_rate = 0;
+            // compue overall rate of the restaurant (mean value between mean rstaurant rate and mena service rate)
+            overallRate = new Float(0);
+            if (model.total_restaurant_rate != null && model.total_service_rate != null)
+                overallRate = (model.total_restaurant_rate / model.number_of_restaurant_rates + model.total_service_rate / model.number_of_service_rates) / 2;
+            else if (model.total_restaurant_rate != null && model.total_service_rate == null)
+                overallRate = model.total_restaurant_rate / model.number_of_restaurant_rates;
+            else if (model.total_restaurant_rate == null && model.total_service_rate != null)
+                overallRate = model.total_service_rate / model.number_of_service_rates;
+            rb_mean_rate_restaurant.setRating(overallRate);
+            if (overallRate > 0)
+                rb_mean_rate_restaurant.setVisibility(View.VISIBLE);
+            else
+                rb_mean_rate_restaurant.setVisibility(View.GONE);
 
-                            for (DataSnapshot ratesDataSnapshot : dataSnapshot.getChildren()) {
-                                if (ratesDataSnapshot.child("restaurant_rate").getValue(Float.class) != null) {
-                                    total_restaurant_rate += ratesDataSnapshot.child("restaurant_rate").getValue(Float.class);
-                                    number_of_restaurant_rates++;
-                                }
-                                if (ratesDataSnapshot.child("service_rate").getValue(Float.class) != null) {
-                                    total_service_rate += ratesDataSnapshot.child("service_rate").getValue(Float.class);
-                                    number_of_service_rates++;
-                                }
-                            }
-
-                            if (total_restaurant_rate != 0 || total_service_rate != 0)
-                                rb_mean_rate_restaurant.setRating((total_restaurant_rate / number_of_restaurant_rates + total_service_rate / number_of_service_rates) / 2);
-                            else
-                                rb_mean_rate_restaurant.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
         }
 
         private void setId(String id) {

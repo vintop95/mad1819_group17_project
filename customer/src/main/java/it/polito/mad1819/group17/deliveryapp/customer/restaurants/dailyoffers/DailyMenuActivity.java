@@ -63,6 +63,9 @@ public class DailyMenuActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
 
+    private RatingBar rb_mean_rate_daily_menu;
+    private Float overallRate;
+
     private MadFirebaseRecyclerAdapter adapter;
     private boolean somethingAdded;
     private ShoppingCart shoppingCart;
@@ -93,6 +96,7 @@ public class DailyMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_menu);
+
         intent = getIntent();
 
         restaurant_id = intent.getStringExtra("id");
@@ -100,6 +104,14 @@ public class DailyMenuActivity extends AppCompatActivity {
         restaurant_address = intent.getStringExtra("address");
         restaurant_phone = intent.getStringExtra("phone");
         isFavorite = intent.getBooleanExtra("isFavorite", false);
+
+        rb_mean_rate_daily_menu = findViewById(R.id.rb_mean_rate_daily_menu);
+        overallRate = intent.getFloatExtra("overallRate", new Float(0));
+        if (overallRate > 0) {
+            rb_mean_rate_daily_menu.setRating(overallRate);
+            rb_mean_rate_daily_menu.setVisibility(View.VISIBLE);
+        } else
+            rb_mean_rate_daily_menu.setVisibility(View.GONE);
 
 
         frameLayout = findViewById(R.id.frame_layout_restaurant_info);

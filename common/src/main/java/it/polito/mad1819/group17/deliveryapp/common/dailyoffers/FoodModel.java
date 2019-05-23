@@ -7,7 +7,7 @@ import java.io.Serializable;
  * https://firebase.google.com/docs/database/android/read-and-write
  * https://www.learnhowtoprogram.com/android/data-persistence/firebase-writing-pojos
  */
-public class FoodModel implements Serializable{
+public class FoodModel implements Serializable {
     public String id = "";
     public String name = "", description = "";
     public String image_path = "";
@@ -18,7 +18,9 @@ public class FoodModel implements Serializable{
     public Integer number_of_rates;
 
     /////////////////////////////////////////////////////////////////
-    public FoodModel() {}
+    public FoodModel() {
+    }
 
     /////////////////////////////////////////////////////////
+
 }
