@@ -107,9 +107,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         app:layout_constraintBottom_toTopOf="@id/view_divider_customer"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/txt_restaurant_name"
@@ -255,11 +255,11 @@
                         android:layout_marginBottom="16dp"
                         android:singleLine="false"
                         android:text="@string/delivery_address"
+                        app:autoSizeTextType="uniform"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline_customer"
-                        app:layout_constraintTop_toBottomOf="@+id/label_delivery_address"
-                        app:autoSizeTextType="uniform"/>
+                        app:layout_constraintTop_toBottomOf="@+id/label_delivery_address" />
                 </android.support.constraint.ConstraintLayout>
 
             </android.support.v7.widget.CardView>
@@ -298,9 +298,9 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginRight="16dp"
                         android:contentDescription="@string/icon_content"
-                        app:srcCompat="@drawable/ic_assignment_turned_in_black_24dp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_assignment_turned_in_black_24dp" />
 
                     <TextView
                         android:id="@+id/label_order_content"
@@ -532,6 +532,122 @@
                         app:layout_constraintTop_toBottomOf="@+id/label_state_history"
                         app:layout_constraintVertical_bias="0.0" />
 
+
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_rate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:visibility="gone"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="1dp"
+                app:cardPreventCornerOverlap="true"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/card_state">
+
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/guideline_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="14dp" />
+
+                    <ImageView
+                        android:id="@+id/image_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
+                        android:contentDescription="@string/icon_rate"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_outline_star_rate_black_18px" />
+
+                    <TextView
+                        android:id="@+id/label_comment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/order_rate"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/textPrimary"
+                        app:layout_constraintStart_toStartOf="@+id/guideline_rate"
+                        app:layout_constraintTop_toBottomOf="@+id/rb_restaurant" />
+
+                    <TextView
+                        android:id="@+id/txt_comment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/order_rate"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_chainStyle="spread_inside"
+                        app:layout_constraintStart_toStartOf="@+id/label_comment"
+                        app:layout_constraintTop_toBottomOf="@+id/label_comment"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/label_restaurant_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/restaurant_rate"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:textColor="@color/textPrimary"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintStart_toStartOf="@+id/guideline_rate"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <RatingBar
+                        android:id="@+id/rb_restaurant"
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:isIndicator="true"
+                        app:layout_constraintStart_toStartOf="@+id/label_restaurant_rate"
+                        app:layout_constraintTop_toBottomOf="@+id/label_restaurant_rate" />
+
+                    <TextView
+                        android:id="@+id/label_service_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="48dp"
+                        android:layout_marginLeft="48dp"
+                        android:text="@string/service_rate"
+                        android:textColor="@color/textPrimary"
+                        app:layout_constraintStart_toEndOf="@+id/label_restaurant_rate"
+                        app:layout_constraintTop_toTopOf="@+id/label_restaurant_rate" />
+
+                    <RatingBar
+                        android:id="@+id/rb_service"
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:isIndicator="true"
+                        app:layout_constraintStart_toStartOf="@+id/label_service_rate"
+                        app:layout_constraintTop_toBottomOf="@+id/label_service_rate" />
 
 
                 </android.support.constraint.ConstraintLayout>

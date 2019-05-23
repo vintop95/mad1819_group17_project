@@ -23,6 +23,7 @@
     <string name="order_state">Order State</string>
     <string name="order_number">Order Number</string>
     <string name="total_items">Total Items</string>
+    <string name="order_rate">Your Opinion</string>
 
 
     <!-- Order Details Strings -->
@@ -141,6 +142,7 @@
     <string name="icon_working_time" translatable="false">Working Time Icon</string>
     <string name="icon_bio" translatable="false">Description Icon</string>
     <string name="icon_customer" translatable="false">Icon Customer</string>
+    <string name="icon_rate" translatable="false">Icon Rate</string>
     <!-- Labels -->
     <string name="info">Info</string>
     <string name="name_restaurant">Restaurant Name</string>

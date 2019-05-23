@@ -10,12 +10,12 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
+import it.polito.mad1819.group17.deliveryapp.common.orders.Rate;
 import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
@@ -33,6 +34,7 @@ import it.polito.mad1819.group17.deliveryapp.customer.restaurants.RestaurantProf
 
 public class OrderDetailsActivity extends AppCompatActivity {
 
+    public final static int RATE_SENT = 1;
     public final static int RATE_NOT_SENT = -1;
     public final static int RATE_REQUEST = 0;
 
@@ -56,6 +58,11 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
     private Menu menu;
 
+    private CardView card_rate;
+    private RatingBar rb_restaurant;
+    private RatingBar rb_service;
+    private TextView txt_comment;
+
     private void showBackArrowOnToolbar() {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,6 +84,11 @@ public class OrderDetailsActivity extends AppCompatActivity {
         txt_customer_phone = findViewById(R.id.txt_customer_phone);
         image_restaurant_info = findViewById(R.id.image_restaurant_info);
         frame_layout = findViewById(R.id.frame_layout_restaurant_info);
+        card_rate = findViewById(R.id.card_rate);
+        rb_restaurant = findViewById(R.id.rb_restaurant);
+        rb_service = findViewById(R.id.rb_service);
+        txt_comment = findViewById(R.id.txt_comment);
+
     }
 
     private void feedViews(Order selectedOrder) {
@@ -111,6 +123,13 @@ public class OrderDetailsActivity extends AppCompatActivity {
         }
 
         txt_state_history.setText(selectedOrder.getStateHistoryToString());
+
+        if (inputOrder.getRestaurant_rate() != null)
+            rb_restaurant.setRating(inputOrder.getRestaurant_rate());
+        if (inputOrder.getService_rate() != null)
+            rb_service.setRating(inputOrder.getService_rate());
+        if (!TextUtils.isEmpty(inputOrder.getComment()))
+            txt_comment.setText(inputOrder.getComment());
     }
 
 
@@ -120,6 +139,12 @@ public class OrderDetailsActivity extends AppCompatActivity {
         } else {
             card_deliveryman.setVisibility(View.VISIBLE);
         }
+
+        Rate rate = new Rate(FirebaseAuth.getInstance().getUid(), inputOrder.getRestaurant_rate(), inputOrder.getService_rate(), inputOrder.getComment());
+        if (rate.isEmpty() || inputOrder.getRated().equals("no"))
+            card_rate.setVisibility(View.GONE);
+        else
+            card_rate.setVisibility(View.VISIBLE);
 
         feedViews(inputOrder);
     }
@@ -149,7 +174,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
         if (!TextUtils.isEmpty(getIntent().getStringExtra("id"))) {
             // we came here due to a tap on the notification so let us read the (updated) order from firebase
-            FirebaseDatabase.getInstance().getReference("/restaurateurs/" + FirebaseAuth.getInstance().getUid() + "/orders/" + getIntent().getStringExtra("id"))
+            FirebaseDatabase.getInstance().getReference("/customers/" + FirebaseAuth.getInstance().getUid() + "/orders/" + getIntent().getStringExtra("id"))
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -197,7 +222,18 @@ public class OrderDetailsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RATE_REQUEST && resultCode != RATE_NOT_SENT)
+        if (requestCode == RATE_REQUEST && resultCode != RATE_NOT_SENT) {
             menu.findItem(R.id.rate_itemmenu).setVisible(false);
+            Rate rate = (Rate) data.getSerializableExtra("rate");
+            if (rate != null) {
+                card_rate.setVisibility(View.VISIBLE);
+                if (rate.getRestaurant_rate() != null)
+                    rb_restaurant.setRating(rate.getRestaurant_rate());
+                if (rate.getService_rate() != null)
+                    rb_service.setRating(rate.getService_rate());
+                if (!TextUtils.isEmpty(rate.getComment()))
+                    txt_comment.setText(rate.getComment());
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package it.polito.mad1819.group17.deliveryapp.customer;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 
 import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
+import it.polito.mad1819.group17.deliveryapp.common.orders.Rate;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.customer.orders.OrderDetailsActivity;
 
@@ -88,12 +90,15 @@ public class RateActivity extends AppCompatActivity {
             String dailyOffersPath = "/restaurateurs/" + inputOrder.getRestaurant_id() + "/daily_offers/";
 
             HashMap<String, Object> ratesMap = new HashMap<>();
-            if (rb_restaurant.getRating() != 0)
-                ratesMap.put(restaurantRatePath + "/restaurant_rate", rb_restaurant.getRating());
-            if (rb_service.getRating() != 0)
-                ratesMap.put(restaurantRatePath + "/service_rate", rb_service.getRating());
-            if (!TextUtils.isEmpty(input_comment.getText().toString()))
-                ratesMap.put(restaurantRatePath + "/comment", input_comment.getText().toString());
+            Rate rate = new Rate(FirebaseAuth.getInstance().getUid(), rb_restaurant.getRating(), rb_service.getRating(), input_comment.getText().toString());
+            if (!rate.isEmpty()) {
+                ratesMap.put(restaurantRatePath, rate);
+                ratesMap.put(customerOrderPath + "/restaurant_rate", rate.getRestaurant_rate());
+                ratesMap.put(customerOrderPath + "/service_rate", rate.getService_rate());
+                ratesMap.put(customerOrderPath + "/comment", rate.getComment());
+                setResult(OrderDetailsActivity.RATE_SENT, new Intent().putExtra("rate", rate));
+            }
+
 
             if (!ratesMap.isEmpty()) {
                 ratesMap.put(restaurateurOrderPath + "/rated", "yes");
