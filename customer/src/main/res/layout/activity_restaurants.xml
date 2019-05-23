@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_restaurants_view_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".restaurants.RestaurantsActivity"
+    android:fitsSystemWindows="true"
     android:focusableInTouchMode="true"
-    android:fitsSystemWindows="true">
+    tools:context=".restaurants.RestaurantsActivity">
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="10"
-            android:orientation="vertical">
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
@@ -32,34 +27,52 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <TextView
-                android:id="@+id/label_subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.7"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:text="@string/restaurants"
-                android:gravity="center"/>
+    <TextView
+        android:id="@+id/label_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="0.7"
+        android:gravity="center"
+        android:text="@string/restaurants"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
-        <SearchView
-            android:id="@+id/input_search"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:iconifiedByDefault="false"
-            android:queryHint="@string/hint_search"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="0.7"
-            app:defaultQueryHint="@string/hint_search"
-            app:iconifiedByDefault="false"
-            app:queryHint="@string/hint_search" />
+    <SearchView
+        android:id="@+id/input_search"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_weight="0.7"
+        android:iconifiedByDefault="false"
+        android:queryHint="@string/hint_search"
+        app:defaultQueryHint="@string/hint_search"
+        app:iconifiedByDefault="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_subtitle"
+        app:queryHint="@string/hint_search" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/restaurant_list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="8.6"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/restaurant_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="8.6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_search" />
 
-        </LinearLayout>
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>

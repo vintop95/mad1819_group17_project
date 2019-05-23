@@ -83,6 +83,10 @@
     <!-- Images -->
     <string name="image_food_dummy">Food Picture</string>
 
+    <!-- Food Item Card -->
+    <string name="icon_add_food" translatable="false">Icon Add</string>
+    <string name="icon_remove_food" translatable="false">Icon Remove</string>
+
 
     <!-- Offer Details Strings -->
     <string name="title_activity_edit_food">Offer Details</string>

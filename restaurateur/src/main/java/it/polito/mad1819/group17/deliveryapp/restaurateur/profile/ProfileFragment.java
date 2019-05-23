@@ -127,14 +127,13 @@ public class ProfileFragment extends Fragment {
         progressBarHandler = new ProgressBarHandler(getContext());
         setHasOptionsMenu(true);
         locateViews(view);
-        progressBarHandler.show();
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
+        progressBarHandler.show();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
