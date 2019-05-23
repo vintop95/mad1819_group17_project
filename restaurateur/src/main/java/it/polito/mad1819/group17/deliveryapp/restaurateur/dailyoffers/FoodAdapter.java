@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +34,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
 
     private OffersFragment mOffersFragment;
 
-    public FoodAdapter(OffersFragment of, FirebaseRecyclerOptions<FoodModel> options){
+    public FoodAdapter(OffersFragment of, FirebaseRecyclerOptions<FoodModel> options) {
         super(options);
         mOffersFragment = of;
     }
@@ -85,10 +86,11 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
     public class FoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView itemPhoto, itemImgModify, itemImgDelete;
         TextView itemName, itemPlace, itemPrice, itemAvailableQty;
-//        int pos;
+        RatingBar rb_mean_rate;
+        //        int pos;
         FoodModel currentFoodItem;
 
-        public FoodHolder(@NonNull View itemView){
+        public FoodHolder(@NonNull View itemView) {
             super(itemView);
             // Parameters of rv_food_item-layout
             itemPhoto = itemView.findViewById(R.id.img_food_photo);
@@ -98,10 +100,11 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
             itemAvailableQty = itemView.findViewById(R.id.txt_food_available_qty);
             itemImgModify = itemView.findViewById(R.id.img_food_modify);
             itemImgDelete = itemView.findViewById(R.id.img_food_delete);
+            rb_mean_rate = itemView.findViewById(R.id.rb_mean_rate);
             // Log.d(TAG, "Holder " + itemName.getText().toString() + " created");
         }
 
-        public void setData(FoodModel currentFoodItem, int pos){
+        public void setData(FoodModel currentFoodItem, int pos) {
 
             // Load image
             if (!TextUtils.isEmpty(currentFoodItem.image_path)) {
@@ -123,7 +126,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
                                 return false; // leave false
                             }
                         }).into(itemPhoto);
-            }else{
+            } else {
                 Glide.with(itemPhoto.getContext()).clear(itemPhoto);
             }
 
@@ -133,13 +136,18 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
             itemAvailableQty.setText(
                     String.format(Locale.getDefault(), "%d", currentFoodItem.availableQty));
 //            this.pos = pos;
+            if (currentFoodItem.total_rate != null && currentFoodItem.number_of_rates != null)
+                rb_mean_rate.setRating(currentFoodItem.total_rate / currentFoodItem.number_of_rates);
+            else
+                rb_mean_rate.setVisibility(View.GONE);
             this.currentFoodItem = currentFoodItem;
+
         }
 
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()){
+            switch (v.getId()) {
                 case R.id.img_food_modify:
                     v.setEnabled(false);
                     mOffersFragment.openFoodDetailsActivityModify(currentFoodItem, v);
@@ -151,12 +159,12 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
         }
 
 
-        public void setListeners(){
+        public void setListeners() {
             itemImgModify.setOnClickListener(FoodHolder.this);
             itemImgDelete.setOnClickListener(FoodHolder.this);
         }
 
-        public void deleteItem(FoodModel food){
+        public void deleteItem(FoodModel food) {
             FoodModelRestaurateurUtil.removeFromFirebase(mOffersFragment.getContext(), food);
             Log.d(TAG, "Item " + food.id + " removed");
         }
