@@ -351,31 +351,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchDeliveredOrdersWithoutRate() {
-        FirebaseDatabase.getInstance().getReference().child("customers").child(FirebaseAuth.getInstance().getUid()).child("orders")
-                .orderByChild("rate_notified").equalTo("no").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null) {
-                    for (DataSnapshot orderDataSnapshot : dataSnapshot.getChildren()) {
-                        Order order = orderDataSnapshot.getValue(Order.class);
-                        if (order.getCurrentState() == Order.STATE4){
-                            FirebaseDatabase.getInstance().getReference()
-                                    .child("customers")
-                                    .child(FirebaseAuth.getInstance().getUid())
-                                    .child("orders")
-                                    .child(order.getId())
-                                    .child("rate_notified").setValue("yes");
-                            sendNotification(order.getId());
+        if (FirebaseAuth.getInstance().getUid() != null) {
+            FirebaseDatabase.getInstance().getReference().child("customers").child(FirebaseAuth.getInstance().getUid()).child("orders")
+                    .orderByChild("rate_notified").equalTo("no").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot != null) {
+                        for (DataSnapshot orderDataSnapshot : dataSnapshot.getChildren()) {
+                            Order order = orderDataSnapshot.getValue(Order.class);
+                            if (order.getCurrentState() == Order.STATE4) {
+                                FirebaseDatabase.getInstance().getReference()
+                                        .child("customers")
+                                        .child(FirebaseAuth.getInstance().getUid())
+                                        .child("orders")
+                                        .child(order.getId())
+                                        .child("rate_notified").setValue("yes");
+                                sendNotification(order.getId());
+                            }
                         }
+
                     }
 
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
     }
+
 }

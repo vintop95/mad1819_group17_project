@@ -41,6 +41,10 @@ public class Order implements Serializable {
     private String rate_notified = "no";
     private String rated = "no";
 
+    private Float restaurant_rate = null;
+    private Float service_rate = null;
+    private String comment = null;
+
     public Order() {
 
     }
@@ -75,6 +79,30 @@ public class Order implements Serializable {
 
     public void setRestaurant_phone(String restaurant_phone) {
         this.restaurant_phone = restaurant_phone;
+    }
+
+    public Float getRestaurant_rate() {
+        return restaurant_rate;
+    }
+
+    public void setRestaurant_rate(Float restaurant_rate) {
+        this.restaurant_rate = restaurant_rate;
+    }
+
+    public Float getService_rate() {
+        return service_rate;
+    }
+
+    public void setService_rate(Float service_rate) {
+        this.service_rate = service_rate;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public String getRestaurant_address() {
