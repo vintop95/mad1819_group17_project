@@ -21,6 +21,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -68,6 +69,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
     private ImageView img_food_photo;
     private FloatingActionButton btn_change_img;
     private FloatingActionButton btn_save;
+    private RatingBar rb_mean_rate_details;
 
     private void locateViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -80,6 +82,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         mFoodForm.setLayoutManager(new LinearLayoutManager(this));
 
         img_food_photo = findViewById(R.id.img_food_photo);
+        rb_mean_rate_details = findViewById(R.id.rb_mean_rate_details);
 
         btn_save = findViewById(R.id.btn_save);
         btn_save.setOnClickListener(new View.OnClickListener() {
@@ -107,13 +110,18 @@ public class FoodDetailsActivity extends AppCompatActivity {
     }
 
     private void feedViews(FoodModel selFood) {
-        if(mFields.isEmpty()) {
+        if (mFields.isEmpty()) {
 //            mFields.add(0, new ListItem(LABEL_FOOD_NUMBER, "" + selFood.pos));
             mFields.add(new ListItem(LABEL_FOOD_NAME, selFood.name));
             mFields.add(new ListItem(LABEL_FOOD_DESCRIPTION, selFood.description));
             mFields.add(new ListItem(LABEL_FOOD_PRICE, Double.toString(selFood.price)));
             mFields.add(new ListItem(LABEL_FOOD_AVAILABLE_QTY, Integer.toString(selFood.availableQty)));
         }
+
+        if (selFood.number_of_rates != null && selFood.total_rate != null)
+            rb_mean_rate_details.setRating(selFood.total_rate / selFood.number_of_rates);
+        else
+            rb_mean_rate_details.setVisibility(View.GONE);
 
         // Load image
         if (!TextUtils.isEmpty(selFood.image_path)) {
@@ -135,7 +143,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
                             return false; // leave false
                         }
                     }).into(img_food_photo);
-        }else{
+        } else {
             Glide.with(img_food_photo.getContext()).clear(img_food_photo);
         }
     }
@@ -152,9 +160,9 @@ public class FoodDetailsActivity extends AppCompatActivity {
 //                .setAction("Action", null).show();
 
         Bundle b = getIntent().getExtras();
-        if(b != null){
+        if (b != null) {
             Bundle b2 = b.getBundle("args");
-            if(b2 != null){
+            if (b2 != null) {
                 mFoodLoaded = (FoodModel) b2.getSerializable("food");
 //                pos = b2.getInt("pos");
             }
@@ -171,8 +179,8 @@ public class FoodDetailsActivity extends AppCompatActivity {
         mFoodForm.setAdapter(mFormAdapter);
     }
 
-    private void uploadImage(Context context, ImageView img_food_photo, FoodModel foodLoaded){
-        if(img_food_photo.getDrawable() == null) return;
+    private void uploadImage(Context context, ImageView img_food_photo, FoodModel foodLoaded) {
+        if (img_food_photo.getDrawable() == null) return;
 
         Bitmap bitmap = ((BitmapDrawable) img_food_photo.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -212,8 +220,8 @@ public class FoodDetailsActivity extends AppCompatActivity {
 //        food.pos = pos;
         food.id = mFoodLoaded.id;
 
-        for(ListItem field: mFields){
-            switch(field.fieldNameRes){
+        for (ListItem field : mFields) {
+            switch (field.fieldNameRes) {
                 case LABEL_FOOD_NAME:
                     food.name = field.fieldValue;
                     break;
@@ -230,9 +238,9 @@ public class FoodDetailsActivity extends AppCompatActivity {
         }
 
         // GET PHOTO FROM IMAGEVIEW
-        if(TextUtils.isEmpty(food.id)){
+        if (TextUtils.isEmpty(food.id)) {
 
-        }else{
+        } else {
             uploadImage(getApplicationContext(), img_food_photo, mFoodLoaded);
         }
 
