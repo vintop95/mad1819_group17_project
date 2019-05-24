@@ -36,6 +36,7 @@ public class StatsFragment extends Fragment {
     private double km_accepted;
     private double km_delivered;
     private double km_assigned;
+    private double pb_accepted;
 
     private TextView km_acceptedTv;
     private TextView km_deliveredTv;
@@ -83,17 +84,20 @@ public class StatsFragment extends Fragment {
         count = 0;
         df = new DecimalFormat("#.###");
 
+        retrieveKms();
+
     }
 
     public void onStart() {
         super.onStart();
 
         progressBarHandler.show();
-        retrieveKms();
+        updateStats();
         updateChart();
         progressBarHandler.hide();
 
     }
+
 
 
     @Override
@@ -103,6 +107,7 @@ public class StatsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_stats, container, false);
         progressBarHandler = new ProgressBarHandler(getContext());
         locateViews(view);
+
         return view;
 
     }
@@ -148,24 +153,25 @@ public class StatsFragment extends Fragment {
                     switch (state) {
                         case DeliveryRequest.STATE1:
                             //ASSIGNED (red)
-                            km_assigned +=  100*Double.valueOf(ds.child("distance").getValue(String.class));
+                            km_assigned +=  Double.valueOf(ds.child("distance").getValue(String.class))/1000;//FROM METERS TO KILOMETERS
                             Log.d("VALUESSS","assigned,"+km_assigned);
 
                             break;
                         case DeliveryRequest.STATE2:
                             //ACCEPTED (yellow)
-                            km_accepted +=  100*Double.valueOf(ds.child("distance").getValue(String.class));
+                            km_accepted +=  Double.valueOf(ds.child("distance").getValue(String.class))/1000;//FROM METERS TO KILOMETERS
                             Log.d("VALUESSS","accepted"+km_accepted);
 
                             break;
                         case DeliveryRequest.STATE3:
                             //DELIVERED (green)
-                            km_delivered +=  100*Double.valueOf(ds.child("distance").getValue(String.class));
+                            km_delivered +=  Double.valueOf(ds.child("distance").getValue(String.class))/1000;//FROM METERS TO KILOMETERS
                             Log.d("VALUESSS","delivered"+km_delivered);
                             break;
                     }
-                    updateChart();
                 }
+                pb_accepted = km_accepted / (km_delivered+km_assigned+km_accepted);
+
             }
 
             @Override
@@ -177,23 +183,34 @@ public class StatsFragment extends Fragment {
     }
 
 
-    public void updateChart(){
+    public void updateStats(){
 
-        Log.d("Valuesss",""+count+":"+km_delivered+","+km_accepted+","+km_assigned);
         // Update the text in a center of the chart:
 
         numberOfCals.setText(df.format(km_delivered) + "km / " + df.format(km_delivered+km_accepted+km_assigned)+"km");
 
         // Calculate the slice size and update the pie chart:
-        double d =  km_accepted / (km_accepted+km_delivered+km_assigned);
-        int progress = (int) (d * 100);
-        pieChart.setProgress(progress);
 
         //Update stats:
-        km_acceptedTv.setText(df.format(km_accepted)+"km");
-        km_deliveredTv.setText(df.format(km_delivered)+"km");
-        km_assignedTv.setText(df.format(km_assigned)+"km");
+        km_acceptedTv.setText(df.format(km_accepted)+" km");
+        km_deliveredTv.setText(df.format(km_delivered)+" km");
+        km_assignedTv.setText(df.format(km_assigned)+" km");
         counter.setText(""+count);
 
+    }
+
+    public void updateChart(){
+        double base = km_delivered+km_assigned+km_accepted;
+        pb_accepted = km_delivered / base;
+        Log.d("double_kms",""+km_accepted+","+km_assigned+","+km_delivered);
+        Log.d("double_base",""+base);
+        Log.d("double_d",""+ pb_accepted);
+        int progress = 0;
+        progress = (int) (pb_accepted * 100);
+        Log.d("progress",""+progress);
+        synchronized (this) {
+            pieChart.setProgress(0);
+            pieChart.setProgress(progress);
+        };
     }
 }

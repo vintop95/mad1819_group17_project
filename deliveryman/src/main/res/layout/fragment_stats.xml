@@ -108,7 +108,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
             <TextView
-                android:text="Remaining Kilometers"
+                android:text="@string/remaining_kilometers"
                 android:layout_margin="10dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
@@ -138,7 +138,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
             <TextView
-                android:text="Kms in attendence of acceptation"
+                android:text="@string/kms_in_attendence"
                 android:layout_margin="10dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
@@ -169,7 +169,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
             <TextView
-                android:text="Number of requests"
+                android:text="@string/number_of_requests"
                 android:layout_margin="10dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"

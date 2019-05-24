@@ -5,12 +5,20 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
 
+import com.google.maps.DirectionsApi;
+import com.google.maps.GeoApiContext;
+import com.google.maps.model.DirectionsResult;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import it.polito.mad1819.group17.deliveryapp.common.R;
+
+import static android.provider.Settings.System.getString;
 import static java.lang.Double.valueOf;
 
 public class DeliveryRequest implements Serializable  {
@@ -317,26 +325,27 @@ public class DeliveryRequest implements Serializable  {
 
         double approxdistance;
         approxdistance = 0.0;
-        approxdistance = Math.abs(latlngRestaurant[0]-latlngConsumer[0]) + Math.abs(latlngRestaurant[0]-latlngConsumer[0]);
+        double distance;
+        approxdistance = 110.574 * Math.abs(latlngRestaurant[0]-latlngConsumer[0]) + Math.abs(latlngRestaurant[0]-latlngConsumer[0]);
 
-        /*DirectionsResult result;
-        double distance,
-        distance = 0.0;
-        String origin,destination;
-        origin = Double.toString(latlngRestaurant[0]) + "," + Double.toString(latlngRestaurant[1]);
-        destination = Double.toString(latlngConsumer[0]) + "," + Double.toString(latlngConsumer[1]);
-        // distance between latitudes and longitudes
+
         try {
-            result = DirectionsApi.newRequest(context)
+            GeoApiContext geoApiContext =new GeoApiContext.Builder().apiKey("AIzaSyB7Tku5m9p0LVYU8k8-G7RB0DQoDXjvdSE").build();
+            DirectionsResult result;
+            distance = 0.0;
+            String origin,destination;
+            origin = Double.toString(latlngRestaurant[0]) + "," + Double.toString(latlngRestaurant[1]);
+            destination = Double.toString(latlngConsumer[0]) + "," + Double.toString(latlngConsumer[1]);
+            // distance between latitudes and longitudes
+            result = DirectionsApi.newRequest(geoApiContext)
                     .origin(origin)
                     .destination(destination).await();
-            distance = valueOf(result.routes[0].legs[0].distance.value);
+            distance = valueOf(result.routes[0].legs[0].distance.inMeters);
         } catch (Exception e){
             Log.e("exception","Deliveryrequest.getDistance: "+e.getLocalizedMessage());
+            distance = approxdistance;
         }
         return distance;
-    */
-        return approxdistance;
     }
 }
 

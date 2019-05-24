@@ -122,7 +122,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
              distance = model.computeDistance(fragment.getActivity().getApplicationContext());
         }
 
-        distance = distance * 100;
+        distance = distance / 1000; //FROM METERS TO KILOMETERS
         DecimalFormat df = new DecimalFormat("#");
         Log.d("computeDistance", "done:"+distance + ","+ df.format(distance));
         holder.routeDistance.setText("≈ "+df.format(distance)+" km");

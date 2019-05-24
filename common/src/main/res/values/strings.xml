@@ -258,4 +258,7 @@
     <string name="added_to_favorites">Added to favorites!</string>
 
 
+    <!-- Google API key -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyB7Tku5m9p0LVYU8k8-G7RB0DQoDXjvdSE</string>
+
 </resources>
