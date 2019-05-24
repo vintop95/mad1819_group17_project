@@ -29,7 +29,7 @@ public class DeliveryRequestsFragment extends Fragment {
     private DeliveryRequestsAdapter mAdapter;
     private RecyclerView recyclerView;
     private ProgressBarHandler progressBarHandler;
-    private CardView button_stats;
+    //private CardView button_stats;
 
     public DeliveryRequestsFragment() {
         // Required empty public constructor
@@ -43,14 +43,14 @@ public class DeliveryRequestsFragment extends Fragment {
 
         progressBarHandler = new ProgressBarHandler(getContext());
 
-        button_stats = view.findViewById(R.id.statsButton);
+        /*button_stats = view.findViewById(R.id.statsButton);
         button_stats.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), StatsActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
         return view;
     }
 

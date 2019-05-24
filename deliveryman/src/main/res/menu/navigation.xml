@@ -2,9 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/navigation_stats"
+        android:icon="@drawable/ic_transfer_within_a_station_black_24dp"
+        android:title="@string/title_stats" />
+
+    <item
         android:id="@+id/navigation_delivery_requests"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/title_delivery_requests" />
+
 
     <item
         android:id="@+id/navigation_profile"
