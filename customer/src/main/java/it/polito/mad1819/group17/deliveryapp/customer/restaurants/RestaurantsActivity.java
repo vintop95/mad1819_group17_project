@@ -305,6 +305,10 @@ public class RestaurantsActivity extends AppCompatActivity {
         public RatingBar rb_mean_rate_restaurant;
         public Float overallRate;
 
+        public String free_day;
+        public String opening_time;
+        public String closing_time;
+
         public ViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.restaurant_name);
@@ -326,7 +330,10 @@ public class RestaurantsActivity extends AppCompatActivity {
                     intent.putExtra("address", address.getText());
                     intent.putExtra("phone", phone);
                     intent.putExtra("isFavorite", isFavorite);
-                    intent.putExtra("overallRate",overallRate);
+                    intent.putExtra("overallRate", overallRate);
+                    intent.putExtra("free_day", free_day);
+                    intent.putExtra("opening_time", opening_time);
+                    intent.putExtra("closing_time", closing_time);
 
                     // Toast.makeText(v.getContext(), name.getText(),Toast.LENGTH_SHORT).show();
                     startActivityForResult(intent, RC_DAILY_MENU);
@@ -344,6 +351,10 @@ public class RestaurantsActivity extends AppCompatActivity {
             if (model.favorites != null && model.favorites.get(userId) != null) {
                 isFavorite = true;
             }
+            free_day = model.free_day;
+            opening_time = model.working_time_opening;
+            closing_time = model.working_time_closing;
+
 
             // compue overall rate of the restaurant (mean value between mean rstaurant rate and mena service rate)
             overallRate = new Float(0);

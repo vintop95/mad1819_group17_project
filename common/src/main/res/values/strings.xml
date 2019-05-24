@@ -276,6 +276,10 @@
     <string name="feedback_empty_fields">Warning: enter some information!</string>
     <string name="feedback_error">Error: unable to retrieve the order!</string>
 
+    <string name="restaurant_closed">ATTENTION: the restaurant is closed at the choosen date and time!</string>
+    <string name="invalid_delivery_timestamp">ERROR: delivery date and time refer to the past!</string>
+    <string name="empty_delivery_timestamp">ERROR: delivery date or time are not defined!</string>
+
 
 
 </resources>

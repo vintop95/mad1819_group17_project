@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -213,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 .setContentTitle(getResources().getString(R.string.new_delivery_request))
                 .setContentText(delivery_timestamp)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 

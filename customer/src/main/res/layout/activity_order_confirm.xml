@@ -144,6 +144,36 @@
                 app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
             <TextView
+                android:id="@+id/oc_label_delivery_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:gravity="end"
+                android:text="@string/delivery_date"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toBottomOf="@+id/deliveryDate"
+                app:layout_constraintEnd_toStartOf="@+id/deliveryDate"
+                app:layout_constraintTop_toTopOf="@+id/deliveryDate" />
+
+            <EditText
+                android:id="@+id/deliveryDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:ems="10"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/deliveryAddress"
+                app:layout_constraintTop_toBottomOf="@+id/deliveryAddress" />
+
+
+            <TextView
                 android:id="@+id/oc_label_delivery_hour"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -162,12 +192,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
                 android:layout_marginRight="24dp"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:ems="10"
-                android:inputType="time"
+                android:inputType="text"
                 android:textColor="@color/textPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/deliveryAddress"
-                app:layout_constraintTop_toBottomOf="@+id/deliveryAddress" />
+                app:layout_constraintStart_toStartOf="@+id/deliveryDate"
+                app:layout_constraintTop_toBottomOf="@+id/deliveryDate" />
 
             <TextView
                 android:id="@+id/oc_label_order_notes"

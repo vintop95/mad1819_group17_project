@@ -70,6 +70,9 @@ public class DailyMenuActivity extends AppCompatActivity {
     private boolean somethingAdded;
     private ShoppingCart shoppingCart;
     private boolean isFavorite;
+    private String free_day;
+    private String opening_time;
+    private String closing_time;
 
     public static int RC_ORDER_CONFIRM = 0;
     public static int RC_RESTAURANT_DETAILS = 1;
@@ -104,6 +107,10 @@ public class DailyMenuActivity extends AppCompatActivity {
         restaurant_address = intent.getStringExtra("address");
         restaurant_phone = intent.getStringExtra("phone");
         isFavorite = intent.getBooleanExtra("isFavorite", false);
+        free_day = intent.getStringExtra("free_day");
+        opening_time = intent.getStringExtra("opening_time");
+        closing_time = intent.getStringExtra("closing_time");
+
 
         rb_mean_rate_daily_menu = findViewById(R.id.rb_mean_rate_daily_menu);
         overallRate = intent.getFloatExtra("overallRate", new Float(0));
@@ -456,6 +463,9 @@ public class DailyMenuActivity extends AppCompatActivity {
                     intent.putExtra("itemsMap", shoppingCart.getItemsMap());
                     intent.putExtra("items_quantity", shoppingCart.getCounter());
                     intent.putExtra("items_tot_price", shoppingCart.getTotal_price());
+                    intent.putExtra("free_day", free_day);
+                    intent.putExtra("opening_time", opening_time);
+                    intent.putExtra("closing_time", closing_time);
                     startActivityForResult(intent, RC_ORDER_CONFIRM);
                 } else {
                     Toast.makeText(getApplicationContext(),

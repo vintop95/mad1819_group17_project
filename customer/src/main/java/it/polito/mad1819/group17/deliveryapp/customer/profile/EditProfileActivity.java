@@ -459,25 +459,4 @@ public class EditProfileActivity extends AppCompatActivity {
                 ((EditText) v).setSelection(((EditText) v).getText().length(), 0);
         });
     }
-
-    private String[] searchPossibleMatchingAddresses(String searchString) {
-        ArrayList<String> strings = new ArrayList<>();
-        Geocoder geocoder = new Geocoder(getBaseContext());
-        List<Address> addresses;
-        try {
-            addresses = geocoder.getFromLocationName(searchString, 10);
-            for (int i = 0; i < addresses.size(); i++) {
-                /*double latitude = addr.getLatitude();
-                double longitude = addr.getLongitude();*/
-                strings.add(addresses.get(i).getAddressLine(0));
-            }
-
-            String[] strings_as_array = new String[strings.size()];
-            strings.toArray(strings_as_array);
-            return strings_as_array;
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
 }
