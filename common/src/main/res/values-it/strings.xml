@@ -239,4 +239,8 @@
     <string name="feedback_empty_fields">Avviso: dai qualche informazione!</string>
     <string name="feedback_error">Errore: impossibile ritrovare l\'ordine!</string>
 
+    <string name="restaurant_closed">ATTENZIONE: il ristorante è chiuso all\'ora e data scelti!</string>
+    <string name="invalid_delivery_timestamp">ERRORE: data e ora per la consegna riferiscono al passato!</string>
+    <string name="empty_delivery_timestamp">ERROR: data e ora di consegna non sono definite!</string>
+
 </resources>

@@ -1,5 +1,7 @@
 package it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,6 +34,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,6 +58,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
     private TextView final_results;
     private EditText deliveryAddress_edit;
+    private EditText deliveryDate_edit;
     private EditText deliveryHour_edit;
     private EditText txtOrderNotes_edit;
     private TextView item_tot_price;
@@ -63,6 +68,9 @@ public class OrderConfirmActivity extends AppCompatActivity {
     private String restaurant_address;
     private String restaurant_phone;
     private String customer_id;
+    private String free_day;
+    private String opening_time;
+    private String closing_time;
 
     private Intent intent;
     private Double totalprice;
@@ -120,6 +128,9 @@ public class OrderConfirmActivity extends AppCompatActivity {
         restaurant_name = intent.getStringExtra("restaurant_name");
         restaurant_address = intent.getStringExtra("restaurant_address");
         restaurant_phone = intent.getStringExtra("restaurant_phone");
+        free_day = intent.getStringExtra("free_day");
+        opening_time = intent.getStringExtra("opening_time");
+        closing_time = intent.getStringExtra("closing_time");
 
         if (restaurant_id == null)
             throw new IllegalStateException("restaurant_id must not be null!");
@@ -149,6 +160,9 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
         deliveryAddress_edit = findViewById(R.id.deliveryAddress);
         deliveryHour_edit = (EditText) findViewById(R.id.deliveryHour);
+        addTimePickerOnClick(deliveryHour_edit);
+        deliveryDate_edit = findViewById(R.id.deliveryDate);
+        addDatePickerOnClick(deliveryDate_edit);
         String finalResultString =
                 String.format(Locale.getDefault(),
                         getApplicationContext().getString(R.string.buying_elements_summary),
@@ -186,6 +200,57 @@ public class OrderConfirmActivity extends AppCompatActivity {
         showBackArrowOnToolbar();
     }
 
+
+    private void addTimePickerOnClick(View view) {
+        view.setOnClickListener(v ->
+        {
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                    (view1, hourOfDay, minute) -> {
+                        String timestamp = "";
+
+                        if (hourOfDay < 10)
+                            timestamp += "0";
+                        timestamp += hourOfDay + ":";
+
+                        if (minute < 10)
+                            timestamp += "0";
+                        timestamp += minute;
+
+                        ((TextView) view).setText(timestamp);
+                    },
+                    0,
+                    0,
+                    false);
+            timePickerDialog.show();
+        });
+    }
+
+    private void addDatePickerOnClick(View view) {
+        view.setOnClickListener(v ->
+        {
+            Calendar calendar = Calendar.getInstance();
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    month++;
+                    String month_string;
+                    String day_string;
+                    if (month < 10)
+                        month_string = "0" + month;
+                    else
+                        month_string = "" + month;
+                    if (dayOfMonth < 10)
+                        day_string = "0" + dayOfMonth;
+                    else
+                        day_string = "" + dayOfMonth;
+                    deliveryDate_edit.setText(year + "/" + month_string + "/" + day_string);
+                }
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            datePickerDialog.show();
+        });
+    }
+
+
     private Order getOrderToPush() {
         Order ord = new Order();
         ord.setCustomer_id(customer_id);
@@ -195,8 +260,9 @@ public class OrderConfirmActivity extends AppCompatActivity {
         SimpleDateFormat simpleDateFormat =
                 new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault());
         String current_timestamp = simpleDateFormat.format(new Date());
-        String day = current_timestamp.split(" ")[0];
-        String delivery_timestamp = day + " " + deliveryHour_edit.getText().toString();
+        /*String day = current_timestamp.split(" ")[0];
+        String delivery_timestamp = day + " " + deliveryHour_edit.getText().toString();*/
+        String delivery_timestamp = deliveryDate_edit.getText().toString() + " " + deliveryHour_edit.getText();
         state_stateTime.put("state1", current_timestamp);
 
         //Filling the order:
@@ -222,6 +288,17 @@ public class OrderConfirmActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),
                     getApplicationContext().getString(R.string.shopping_cart_empty),
                     Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(deliveryHour_edit.getText().toString()) || TextUtils.isEmpty(deliveryDate_edit.getText().toString())) {
+            Toast.makeText(getApplicationContext(),
+                    getApplicationContext().getString(R.string.empty_delivery_timestamp),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (restaurantClosed(free_day, opening_time, closing_time, deliveryDate_edit.getText().toString() + " " + deliveryHour_edit.getText().toString())) {
             return;
         }
 
@@ -256,7 +333,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
                         return Transaction.abort();
                     } else {
                         int newQty = availableQty - orderedQty;
-                        if (newQty >= 0){
+                        if (newQty >= 0) {
                             // Update the number of items already ordered
                             Integer totalOrderedQty = totalOrderedQtyRef.getValue(Integer.class);
                             if (totalOrderedQty == null) totalOrderedQty = 0;
@@ -264,8 +341,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
                             // Update the current available quantity
                             currentQtyRef.setValue(newQty);
-                        }
-                        else return Transaction.abort();
+                        } else return Transaction.abort();
                     }
                 }
 
@@ -454,6 +530,42 @@ public class OrderConfirmActivity extends AppCompatActivity {
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Address has not been selected.", Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    private boolean restaurantClosed(String free_day, String opening_time, String closing_time, String delivery_timestamp) {
+        // first of all check that the delivery timestamp is not in the past
+        String current_timestamp = new SimpleDateFormat("yyyy/MM/dd HH:mm").format(new Date());
+
+        if (current_timestamp.compareTo(delivery_timestamp) > 0) {
+            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.invalid_delivery_timestamp), Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        String delivery_date = delivery_timestamp.split(" ")[0];
+        String delivery_time = delivery_timestamp.split(" ")[1];
+
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(new SimpleDateFormat("yyyy/mm/dd").parse(delivery_date));
+            // check that free day (of week) and delivery day (of week) are the same
+            if (Integer.parseInt(free_day) == calendar.get(Calendar.DAY_OF_WEEK)) {
+                Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.restaurant_closed), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            // if we get here than the delivery day is not the free day of the restaurant
+            // given that, check that opening_time < delivery time < closing_time
+            if (delivery_time.compareTo(opening_time) > 0 && delivery_time.compareTo(closing_time) < 0)
+                return false; // restaurant open
+            else {
+                Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.restaurant_closed), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.restaurant_closed), Toast.LENGTH_SHORT).show();
+            return true;
         }
     }
 }
