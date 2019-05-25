@@ -379,7 +379,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mOrdersRef.removeEventListener(onChildAddedListener);
+        if (mOrdersRef != null)
+            mOrdersRef.removeEventListener(onChildAddedListener);
     }
 
     private void setAuthStateListener(){

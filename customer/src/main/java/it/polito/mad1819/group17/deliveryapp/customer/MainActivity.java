@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBarHandler progressBarHandler;
     private BottomNavigationView navigation;
 
+    private Boolean firstAccess = true;
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -203,13 +205,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         progressBarHandler = new ProgressBarHandler(this);
-        // progressBarHandler.show();
 
         initFirebaseAuth();
-
-        // DONE IN SIGN IN CALLBACK because it needs a reference to the user
-        // that could not exist
-        // initFirebaseDb();
 
         // Init toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -220,6 +217,11 @@ public class MainActivity extends AppCompatActivity {
 
         instantiateFragments(savedInstanceState);
         initBottomNavigation();
+
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        if (user != null && firstAccess) {
+            checkNewSignUp(user.getUid(), FIREBASE_APP_NAME);
+        }
 
         createNotificationChannel();
         fetchDeliveredOrdersWithoutRate();
@@ -239,9 +241,13 @@ public class MainActivity extends AppCompatActivity {
 
                 if (dataSnapshot.getValue() == null) {
                     Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
+                    editNewProfile.putExtra("firstAccess", firstAccess);
                     startActivity(editNewProfile);
                     if (navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
+                    Toast.makeText(MainActivity.this, "Please, complete your profile first!", Toast.LENGTH_LONG).show();
                 }
+                else
+                    firstAccess = false;
             }
 
             @Override

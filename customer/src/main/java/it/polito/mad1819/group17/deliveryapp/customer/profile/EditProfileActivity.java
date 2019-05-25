@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
@@ -78,6 +79,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText input_bio;
 
     private String newAddress = null;
+
+    private Intent intent;
+    private Boolean firstAccess;
 
 
     private void locateViews() {
@@ -309,8 +313,15 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void showBackArrowOnToolbar() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        intent = getIntent();
+        firstAccess = intent.getBooleanExtra("firstAccess", false);
+        if (firstAccess) {
+        }
+        else {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
     }
 
     @Override
@@ -374,7 +385,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        confirmOnBackPressed();
+        if (firstAccess) {
+            AuthUI.getInstance().signOut(this);
+            finish();
+        }
+        else
+            confirmOnBackPressed();
     }
 
     // TODO: update dataChange using data from Firebase
