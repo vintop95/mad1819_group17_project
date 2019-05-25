@@ -1,14 +1,15 @@
 package it.polito.mad1819.group17.deliveryapp.customer.orders;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RatingBar;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -21,10 +22,13 @@ import it.polito.mad1819.group17.deliveryapp.customer.R;
 public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.OrderHolder> {
 
     private Fragment fragment;
+    private RecyclerView recyclerView;
+    private int animationFlag = 0;
 
-    public OrdersAdapter(FirebaseRecyclerOptions<Order> options, Fragment fragment) {
+    public OrdersAdapter(FirebaseRecyclerOptions<Order> options, Fragment fragment, RecyclerView recyclerView) {
         super(options);
         this.fragment = fragment;
+        this.recyclerView = recyclerView;
     }
 
     /* ------------------------------------------------------------------------------------- */
@@ -80,6 +84,8 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
             case Order.STATE4:
                 holder.state_background.setBackgroundColor(fragment.getResources().getColor(R.color.colorState4));
         }
+        if (animationFlag == 0)
+            runLayoutAnimation(recyclerView, 0);
     }
 
 
@@ -103,5 +109,17 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
 
     public static Order getOrderById(String id) {
         return null;
+    }
+
+    private void runLayoutAnimation(final RecyclerView recyclerView, int type) {
+        final Context context = recyclerView.getContext();
+        LayoutAnimationController controller = null;
+
+        if (type == 0)
+            controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_slide_down);
+
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.scheduleLayoutAnimation();
+        animationFlag = 1;
     }
 }

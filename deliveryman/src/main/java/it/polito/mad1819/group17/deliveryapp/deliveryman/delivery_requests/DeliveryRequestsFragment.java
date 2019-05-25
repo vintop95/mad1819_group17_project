@@ -59,7 +59,7 @@ public class DeliveryRequestsFragment extends Fragment {
                     .build();
 
             mAdapter = new DeliveryRequestsAdapter(options, getFragmentManager()
-                    .findFragmentByTag(DeliveryRequestsFragment.class.getName()),progressBarHandler);
+                    .findFragmentByTag(DeliveryRequestsFragment.class.getName()),progressBarHandler, recyclerView);
             recyclerView.setHasFixedSize(false);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(mAdapter);

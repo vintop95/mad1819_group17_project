@@ -33,12 +33,29 @@
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:layout_weight="0.7"
+        android:fontFamily="sans-serif-thin"
         android:gravity="center"
         android:text="@string/restaurants"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+        android:textColor="@color/textPrimary"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+    <View
+        android:id="@+id/divider_restaurants"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="@+id/label_subtitle"
+        app:layout_constraintStart_toStartOf="@+id/label_subtitle"
+        app:layout_constraintTop_toBottomOf="@+id/label_subtitle" />
 
     <SearchView
         android:id="@+id/input_search"
@@ -56,7 +73,7 @@
         app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/label_subtitle"
+        app:layout_constraintTop_toBottomOf="@+id/divider_restaurants"
         app:queryHint="@string/hint_search" />
 
     <android.support.v7.widget.RecyclerView
@@ -69,7 +86,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_weight="8.6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

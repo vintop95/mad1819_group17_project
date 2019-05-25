@@ -1,5 +1,6 @@
 package it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,12 +26,15 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
 
     private Fragment fragment;
     private ProgressBarHandler pbHandler;
+    private RecyclerView recyclerView;
+    private int animationFlag = 0;
 
     public DeliveryRequestsAdapter(FirebaseRecyclerOptions<DeliveryRequest> options,
-                                   Fragment fragment, ProgressBarHandler pbHandler) {
+                                   Fragment fragment, ProgressBarHandler pbHandler, RecyclerView recyclerView) {
         super(options);
         this.fragment = fragment;
         this.pbHandler = pbHandler;
+        this.recyclerView = recyclerView;
     }
 
 
@@ -130,6 +136,8 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
 
                 break;
         }
+        if (animationFlag == 0)
+            runLayoutAnimation(recyclerView, 0);
     }
 
 
@@ -144,4 +152,15 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
         return null;
     }
 
+    private void runLayoutAnimation(final RecyclerView recyclerView, int type) {
+        final Context context = recyclerView.getContext();
+        LayoutAnimationController controller = null;
+
+        if (type == 0)
+            controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_slide_down);
+
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.scheduleLayoutAnimation();
+        animationFlag = 1;
+    }
 }

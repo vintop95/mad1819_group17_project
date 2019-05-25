@@ -165,7 +165,7 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
                                 /*for (AvailableDeliveryman p : availableDeliverymen)
                                     Log.d("AFTER_SORT", p.toString());*/
 
-                                    AvailableDeliverymenAdapter availableDeliverymenAdapter = new AvailableDeliverymenAdapter(availableDeliverymen, context);
+                                    AvailableDeliverymenAdapter availableDeliverymenAdapter = new AvailableDeliverymenAdapter(availableDeliverymen, context, recyclerView);
                                     recyclerView.setAdapter(availableDeliverymenAdapter);
                                     progressBarHandler.hide();
                                 }

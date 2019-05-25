@@ -1,5 +1,6 @@
 package it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -18,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -29,7 +32,6 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,9 +57,13 @@ public class DailyMenuActivity extends AppCompatActivity {
     private String restaurant_name;
     private String restaurant_address;
     private String restaurant_phone;
+    private String restaurant_bio;
+    private String photo_intent;
+    private ImageView resturant_background;
     private Intent intent;
 
     private TextView tv;
+    private TextView tb;
     private FrameLayout frameLayout;
     private ImageView btnFavorite;
     private RecyclerView recyclerView;
@@ -73,6 +79,8 @@ public class DailyMenuActivity extends AppCompatActivity {
     private String free_day;
     private String opening_time;
     private String closing_time;
+
+    private int animationFlag = 0;
 
     public static int RC_ORDER_CONFIRM = 0;
     public static int RC_RESTAURANT_DETAILS = 1;
@@ -106,19 +114,23 @@ public class DailyMenuActivity extends AppCompatActivity {
         restaurant_name = intent.getStringExtra("name");
         restaurant_address = intent.getStringExtra("address");
         restaurant_phone = intent.getStringExtra("phone");
+        restaurant_bio = intent.getStringExtra("bio");
         isFavorite = intent.getBooleanExtra("isFavorite", false);
         free_day = intent.getStringExtra("free_day");
         opening_time = intent.getStringExtra("opening_time");
         closing_time = intent.getStringExtra("closing_time");
 
 
+        photo_intent = intent.getStringExtra("photo");
+        resturant_background = findViewById(R.id.restaurant_image);
+        setPhoto(photo_intent, resturant_background, true);
+
         rb_mean_rate_daily_menu = findViewById(R.id.rb_mean_rate_daily_menu);
         overallRate = intent.getFloatExtra("overallRate", new Float(0));
         if (overallRate > 0) {
             rb_mean_rate_daily_menu.setRating(overallRate);
-            rb_mean_rate_daily_menu.setVisibility(View.VISIBLE);
         } else
-            rb_mean_rate_daily_menu.setVisibility(View.GONE);
+            rb_mean_rate_daily_menu.setRating(0);
 
 
         frameLayout = findViewById(R.id.frame_layout_restaurant_info);
@@ -153,6 +165,9 @@ public class DailyMenuActivity extends AppCompatActivity {
                 openRestaurantProfile();
             }
         });
+
+        tb = findViewById(R.id.txt_bio);
+        tb.setText(restaurant_bio);
 
         shoppingCart = new ShoppingCart();
 
@@ -241,13 +256,13 @@ public class DailyMenuActivity extends AppCompatActivity {
         public void setData(FoodModel model) {
             this.id = model.id;
             setDesc(model.description);
-            setPhoto(model.image_path);
+            setPhoto(model.image_path, photo, false);
             setTitle(model.name);
             setPrice(model.price);
             setAvailableQty(model.availableQty);
 
             if (model.number_of_rates == null || model.total_rate == null)
-                rb_mean_rate.setVisibility(View.GONE);
+                rb_mean_rate.setRating(0);
             else
                 rb_mean_rate.setRating(model.total_rate / model.number_of_rates);
 
@@ -334,29 +349,33 @@ public class DailyMenuActivity extends AppCompatActivity {
             this.priceFormatted.setText(CurrencyHelper.getCurrency(priceDouble));
         }
 
-        private void setPhoto(String image_path) {
-            if (!TextUtils.isEmpty(image_path)) {
-                Glide.with(photo.getContext())
-                        .load(image_path)
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                                        Target<Drawable> target, boolean isFirstResource) {
-                                Log.e("ProfileFragment", "Image load failed");
-                                return false; // leave false
-                            }
+    }
 
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model,
-                                                           Target<Drawable> target, DataSource dataSource,
-                                                           boolean isFirstResource) {
-                                Log.v("ProfileFragment", "Image load OK");
-                                return false; // leave false
-                            }
-                        }).into(photo);
-            } else {
-                Glide.with(photo.getContext()).clear(photo);
-            }
+    private void setPhoto(String image_path, ImageView selected_photo, Boolean isBackground) {
+        if (!TextUtils.isEmpty(image_path)) {
+            Glide.with(selected_photo.getContext())
+                    .load(image_path)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                    Target<Drawable> target, boolean isFirstResource) {
+                            Log.e("GlideLog", "Image load failed");
+                            return false; // leave false
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model,
+                                                       Target<Drawable> target, DataSource dataSource,
+                                                       boolean isFirstResource) {
+                            Log.v("GlideLog", "Image load OK");
+                            return false; // leave false
+                        }
+                    }).into(selected_photo);
+        } else {
+            if (isBackground)
+                Glide.with(selected_photo.getContext()).load(getResources().getIdentifier("logo1", "drawable", getPackageName())).fitCenter().into(selected_photo);
+            else
+                Glide.with(selected_photo.getContext()).clear(selected_photo);
         }
     }
 
@@ -417,6 +436,8 @@ public class DailyMenuActivity extends AppCompatActivity {
             protected void onBindViewHolder(ViewHolder holder, final int position, FoodModel model) {
                 Log.d("fff", model.description + "," + model.name + "," + model.price + "," + model.id);
                 holder.setData(model);
+                if (animationFlag == 0)
+                    runLayoutAnimation(recyclerView, 0);
             }
 
             @Override
@@ -561,5 +582,17 @@ public class DailyMenuActivity extends AppCompatActivity {
             AlertDialog alert = builder.create();
             alert.show();
         } else super.onBackPressed();
+    }
+
+    private void runLayoutAnimation(final RecyclerView recyclerView, int type) {
+        final Context context = recyclerView.getContext();
+        LayoutAnimationController controller = null;
+
+        if (type == 0)
+            controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_slide_down);
+
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.scheduleLayoutAnimation();
+        animationFlag = 1;
     }
 }
