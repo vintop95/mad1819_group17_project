@@ -138,7 +138,7 @@ public class OffersFragment extends Fragment {
                         .setQuery(query, FoodModel.class)
                         .build();
 
-        mAdapter = new FoodAdapter(this, options);
+        mAdapter = new FoodAdapter(this, options, recyclerView);
         recyclerView.setAdapter(mAdapter);
         mAdapter.startListening();
     }

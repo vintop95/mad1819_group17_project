@@ -77,6 +77,9 @@
     <!-- icons -->
     <string name="icon_modify" translatable="false">Icon Modify</string>
     <string name="icon_delete" translatable="false">Icon Delete</string>
+    <string name="icon_rating" translatable="false">Icon Rating</string>
+    <string name="icon_location" translatable="false">Icon Location</string>
+    <string name="icon_favorite" translatable="false">Icon Favorite</string>
     <!-- Labels -->
     <string name="label_food_dummy" translatable="false">Food Name</string>
     <string name="label_quantity_dummy" translatable="false">15</string>

@@ -19,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.SearchView;
@@ -33,11 +35,9 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 import java.util.Comparator;
@@ -69,6 +69,7 @@ public class RestaurantsActivity extends AppCompatActivity {
 
     private Intent intent;
     private ProgressBarHandler pbHandler;
+    private int animationFlag = 0;
 
 
     private void showBackArrowOnToolbar() {
@@ -158,7 +159,6 @@ public class RestaurantsActivity extends AppCompatActivity {
             }
         });
         adapter.startListening();
-
     }
 
     private void fetch(Comparator comparator) {
@@ -215,6 +215,8 @@ public class RestaurantsActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(ViewHolder holder, final int position, RestaurantModel model) {
                 holder.setData(model);
+                if (animationFlag == 0)
+                    runLayoutAnimation(recyclerView, 0);
             }
 
             @Override
@@ -301,6 +303,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         public TextView avgPrice;
         public String id;
         public String phone;
+        public String image_path;
         public boolean isFavorite = false;
         public RatingBar rb_mean_rate_restaurant;
         public Float overallRate;
@@ -329,6 +332,8 @@ public class RestaurantsActivity extends AppCompatActivity {
                     intent.putExtra("name", name.getText());
                     intent.putExtra("address", address.getText());
                     intent.putExtra("phone", phone);
+                    intent.putExtra("bio", bio.getText());
+                    intent.putExtra("photo", image_path);
                     intent.putExtra("isFavorite", isFavorite);
                     intent.putExtra("overallRate", overallRate);
                     intent.putExtra("free_day", free_day);
@@ -356,7 +361,7 @@ public class RestaurantsActivity extends AppCompatActivity {
             closing_time = model.working_time_closing;
 
 
-            // compue overall rate of the restaurant (mean value between mean rstaurant rate and mena service rate)
+            // compute overall rate of the restaurant (mean value between mean restaurant rate and service rate)
             overallRate = new Float(0);
             if (model.total_restaurant_rate != null && model.total_service_rate != null)
                 overallRate = (model.total_restaurant_rate / model.number_of_restaurant_rates + model.total_service_rate / model.number_of_service_rates) / 2;
@@ -365,11 +370,6 @@ public class RestaurantsActivity extends AppCompatActivity {
             else if (model.total_restaurant_rate == null && model.total_service_rate != null)
                 overallRate = model.total_service_rate / model.number_of_service_rates;
             rb_mean_rate_restaurant.setRating(overallRate);
-            if (overallRate > 0)
-                rb_mean_rate_restaurant.setVisibility(View.VISIBLE);
-            else
-                rb_mean_rate_restaurant.setVisibility(View.GONE);
-
         }
 
         private void setId(String id) {
@@ -392,7 +392,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                             @Override
                             public boolean onLoadFailed(@Nullable GlideException e, Object model,
                                                         Target<Drawable> target, boolean isFirstResource) {
-                                Log.e("ProfileFragment", "Image load failed");
+                                Log.e("GlideLog", "Image load failed");
                                 return false; // leave false
                             }
 
@@ -400,17 +400,18 @@ public class RestaurantsActivity extends AppCompatActivity {
                             public boolean onResourceReady(Drawable resource, Object model,
                                                            Target<Drawable> target, DataSource dataSource,
                                                            boolean isFirstResource) {
-                                // Log.v("ProfileFragment", "Image load OK");
                                 return false; // leave false
                             }
                         }).into(photo);
             } else {
                 Glide.with(photo.getContext()).load(getResources().getIdentifier("logo1", "drawable", getPackageName())).fitCenter().into(photo);
             }
+            this.image_path = image_path;
         }
 
         private void setAddress(String address) {
-            this.address.setText(address);
+            String address_short = address.split(",", 2)[0];
+            this.address.setText(address_short);
         }
 
         private void setPhone(String phone) {
@@ -519,6 +520,18 @@ public class RestaurantsActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    private void runLayoutAnimation(final RecyclerView recyclerView, int type) {
+        final Context context = recyclerView.getContext();
+        LayoutAnimationController controller = null;
+
+        if (type == 0)
+            controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_slide_up);
+
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.scheduleLayoutAnimation();
+        animationFlag = 1;
     }
 
 }

@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,10 +43,13 @@ public class AvailableDeliverymenAdapter extends RecyclerView.Adapter<AvailableD
 
     private ArrayList<AvailableDeliveryman> availableDeliverymen;
     private Context context;
+    private RecyclerView recyclerView;
+    private int animationFlag = 0;
 
-    public AvailableDeliverymenAdapter(ArrayList<AvailableDeliveryman> availableDeliverymen, Context context) {
+    public AvailableDeliverymenAdapter(ArrayList<AvailableDeliveryman> availableDeliverymen, Context context, RecyclerView recyclerView) {
         this.availableDeliverymen = new ArrayList<AvailableDeliveryman>(availableDeliverymen);
         this.context = context;
+        this.recyclerView = recyclerView;
     }
 
     /* ------------------------------------------------------------------------------------------------------------- */
@@ -144,6 +149,8 @@ public class AvailableDeliverymenAdapter extends RecyclerView.Adapter<AvailableD
 
                     }
                 });
+        if (animationFlag == 0)
+            runLayoutAnimation(recyclerView, 0);
     }
 
     @Override
@@ -151,5 +158,15 @@ public class AvailableDeliverymenAdapter extends RecyclerView.Adapter<AvailableD
         return availableDeliverymen.size();
     }
 
+    private void runLayoutAnimation(final RecyclerView recyclerView, int type) {
+        final Context context = recyclerView.getContext();
+        LayoutAnimationController controller = null;
 
+        if (type == 0)
+            controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_slide_down);
+
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.scheduleLayoutAnimation();
+        animationFlag = 1;
+    }
 }

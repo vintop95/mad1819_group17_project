@@ -121,7 +121,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         if (selFood.number_of_rates != null && selFood.total_rate != null)
             rb_mean_rate_details.setRating(selFood.total_rate / selFood.number_of_rates);
         else
-            rb_mean_rate_details.setVisibility(View.GONE);
+            rb_mean_rate_details.setRating(0);
 
         // Load image
         if (!TextUtils.isEmpty(selFood.image_path)) {
@@ -131,7 +131,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model,
                                                     Target<Drawable> target, boolean isFirstResource) {
-                            Log.e("ProfileFragment", "Image load failed");
+                            Log.e("GlideLog", "Image load failed");
                             return false; // leave false
                         }
 
@@ -139,7 +139,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
                         public boolean onResourceReady(Drawable resource, Object model,
                                                        Target<Drawable> target, DataSource dataSource,
                                                        boolean isFirstResource) {
-                            Log.v("ProfileFragment", "Image load OK");
+                            Log.v("GlideLog", "Image load OK");
                             return false; // leave false
                         }
                     }).into(img_food_photo);

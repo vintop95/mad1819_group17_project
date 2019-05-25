@@ -9,4 +9,7 @@
 
     <item type="integer" name="max_view_length_bio">200</item>
 
+    <item type="integer" name="anim_duration_medium">300</item>
+    <item type="integer" name="anim_duration_long">500</item>
+
 </resources>

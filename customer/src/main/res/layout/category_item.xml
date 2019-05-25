@@ -20,6 +20,7 @@
         android:layout_height="100dp"
         android:background="@android:color/white"
         android:scaleType="centerCrop"
+        android:contentDescription="@string/image_background"
         android:src="@drawable/pizza" />
 
     <android.support.constraint.ConstraintLayout
@@ -41,11 +42,12 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
+                android:fontFamily="sans-serif-thin"
                 android:gravity="center"
-                android:text="Pizza"
+                android:text="@string/category"
                 android:textAllCaps="true"
                 android:textColor="@android:color/white"
-                android:textSize="29dp"
+                android:textSize="29sp"
                 android:textStyle="bold" />
         </android.support.v7.widget.CardView>
 

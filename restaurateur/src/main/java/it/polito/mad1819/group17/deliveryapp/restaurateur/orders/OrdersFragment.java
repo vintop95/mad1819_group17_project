@@ -53,7 +53,7 @@ public class OrdersFragment extends Fragment {
                     .setQuery(query, Order.class)
                     .build();
 
-            mAdapter = new OrdersAdapter(options, getFragmentManager().findFragmentByTag(OrdersFragment.class.getName()));
+            mAdapter = new OrdersAdapter(options, getFragmentManager().findFragmentByTag(OrdersFragment.class.getName()), recyclerView);
             recyclerView.setHasFixedSize(false);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(mAdapter);

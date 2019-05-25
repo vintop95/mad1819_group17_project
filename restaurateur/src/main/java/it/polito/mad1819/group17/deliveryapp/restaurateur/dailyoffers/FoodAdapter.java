@@ -1,5 +1,6 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffers;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -33,10 +36,13 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
     private static final String TAG = FoodAdapter.class.getName();
 
     private OffersFragment mOffersFragment;
+    private RecyclerView recyclerView;
+    private int animationFlag = 0;
 
-    public FoodAdapter(OffersFragment of, FirebaseRecyclerOptions<FoodModel> options) {
+    public FoodAdapter(OffersFragment of, FirebaseRecyclerOptions<FoodModel> options, RecyclerView recyclerView) {
         super(options);
         mOffersFragment = of;
+        this.recyclerView = recyclerView;
     }
 
     // PHASE 1 OF PROTOCOL: build FoodHolder (AvailableDeliverymanHolder)
@@ -56,6 +62,8 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
 
         holder.setData(model, pos);
         holder.setListeners();
+        if (animationFlag == 0)
+            runLayoutAnimation(recyclerView, 0);
     }
 
     @Override
@@ -139,7 +147,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
             if (currentFoodItem.total_rate != null && currentFoodItem.number_of_rates != null)
                 rb_mean_rate.setRating(currentFoodItem.total_rate / currentFoodItem.number_of_rates);
             else
-                rb_mean_rate.setVisibility(View.GONE);
+                rb_mean_rate.setRating(0);
             this.currentFoodItem = currentFoodItem;
 
         }
@@ -168,6 +176,17 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
             FoodModelRestaurateurUtil.removeFromFirebase(mOffersFragment.getContext(), food);
             Log.d(TAG, "Item " + food.id + " removed");
         }
+    }
+    private void runLayoutAnimation(final RecyclerView recyclerView, int type) {
+        final Context context = recyclerView.getContext();
+        LayoutAnimationController controller = null;
+
+        if (type == 0)
+            controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_slide_up);
+
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.scheduleLayoutAnimation();
+        animationFlag = 1;
     }
 }
 
