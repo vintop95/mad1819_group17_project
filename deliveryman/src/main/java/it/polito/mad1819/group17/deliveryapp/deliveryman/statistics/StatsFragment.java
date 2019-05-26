@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -140,7 +141,8 @@ public class StatsFragment extends Fragment {
             public void onRefresh() {
                 updateStats();
                 updateChart();
-                pullToRefresh.setRefreshing(false);
+                retrieveKms(true);
+                //pullToRefresh.setRefreshing(false);
             }
         });
     }
@@ -160,66 +162,75 @@ public class StatsFragment extends Fragment {
 
     public void retrieveKms(boolean isRefreshing){
 
-        DatabaseReference reference = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("deliverymen")
-                .child(FirebaseAuth.getInstance().getUid())
-                .child("delivery_requests");
+        try {
+            DatabaseReference reference = FirebaseDatabase.getInstance()
+                    .getReference()
+                    .child("deliverymen")
+                    .child(FirebaseAuth.getInstance().getUid())
+                    .child("delivery_requests");
 
 
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                km_accepted =0;
-                km_delivered = 0;
-                km_assigned = 0;
-                count = 0;
-                count_assigned=0;
-                count_accepted=0;
-                count_delivered=0;
-                pb_accepted=0;
+                    km_accepted = 0;
+                    km_delivered = 0;
+                    km_assigned = 0;
+                    count = 0;
+                    count_assigned = 0;
+                    count_accepted = 0;
+                    count_delivered = 0;
+                    pb_accepted = 0;
 
 
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
-                    count += 1;
-                    String state = DeliveryRequest.STATE1;
-                    if(ds.child("state_stateTime").child("state3").getValue(String.class)!=null)
-                        state = DeliveryRequest.STATE3;
-                    else if(ds.child("state_stateTime").child("state2").getValue(String.class)!=null)
-                        state = DeliveryRequest.STATE2;
+                        count += 1;
+                        String state = DeliveryRequest.STATE1;
+                        if (ds.child("state_stateTime").child("state3").getValue(String.class) != null)
+                            state = DeliveryRequest.STATE3;
+                        else if (ds.child("state_stateTime").child("state2").getValue(String.class) != null)
+                            state = DeliveryRequest.STATE2;
 
-                    switch (state) {
-                        case DeliveryRequest.STATE1:
-                            //ASSIGNED (red)
-                            km_assigned +=  Double.valueOf(ds.child("distance").getValue(String.class))/1000;//FROM METERS TO KILOMETERS
-                            count_assigned+=1;
+                        if (ds.child("distance").getValue(String.class) != null) {
+                            switch (state) {
+                                case DeliveryRequest.STATE1:
+                                    //ASSIGNED (red)
+                                    km_assigned += Double.valueOf(ds.child("distance").getValue(String.class)) / 1000;//FROM METERS TO KILOMETERS
+                                    count_assigned += 1;
 
-                            break;
-                        case DeliveryRequest.STATE2:
-                            //ACCEPTED (yellow)
-                            km_accepted +=  Double.valueOf(ds.child("distance").getValue(String.class))/1000;//FROM METERS TO KILOMETERS
-                            count_accepted +=1;
+                                    break;
+                                case DeliveryRequest.STATE2:
+                                    //ACCEPTED (yellow)
+                                    km_accepted += Double.valueOf(ds.child("distance").getValue(String.class)) / 1000;//FROM METERS TO KILOMETERS
+                                    count_accepted += 1;
 
-                            break;
-                        case DeliveryRequest.STATE3:
-                            //DELIVERED (green)
-                            km_delivered +=  Double.valueOf(ds.child("distance").getValue(String.class))/1000;//FROM METERS TO KILOMETERS
-                            count_delivered +=1;
-                            break;
+                                    break;
+                                case DeliveryRequest.STATE3:
+                                    //DELIVERED (green)
+                                    km_delivered += Double.valueOf(ds.child("distance").getValue(String.class)) / 1000;//FROM METERS TO KILOMETERS
+                                    count_delivered += 1;
+                                    break;
+                            }
+                        }
                     }
+                    pb_accepted = km_accepted / (km_delivered + km_assigned + km_accepted);
+
                 }
-                pb_accepted = km_accepted / (km_delivered+km_assigned+km_accepted);
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+            if (isRefreshing) pullToRefresh.setRefreshing(false);
+        }catch (Exception e){
+            Log.e("exception",e.getLocalizedMessage());
+            Toast.makeText(getActivity(),e.getLocalizedMessage(),
+                    Toast.LENGTH_LONG).show();
 
-            }
-        });
-        if(isRefreshing) pullToRefresh.setRefreshing(false);
+        }
     }
 
 
