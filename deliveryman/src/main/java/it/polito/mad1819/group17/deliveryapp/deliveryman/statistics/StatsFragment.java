@@ -89,6 +89,20 @@ public class StatsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        km_accepted =0;
+        km_delivered = 0;
+        km_assigned = 0;
+        count = 0;
+        count_assigned=0;
+        count_accepted=0;
+        count_delivered=0;
+        pb_accepted=0;
+        df = new DecimalFormat("#.###");
+
+        retrieveKms(false);
+
+
     }
 
     public void onStart() {
@@ -110,18 +124,7 @@ public class StatsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_stats, container, false);
         progressBarHandler = new ProgressBarHandler(getContext());
 
-        km_accepted =0;
-        km_delivered = 0;
-        km_assigned = 0;
-        count = 0;
-        int count_assigned=0;
-        int count_delivered=0;
-        int count_accepted=0;
-        df = new DecimalFormat("#.###");
-
         locateViews(view);
-
-        retrieveKms(false);
 
         return view;
 
@@ -164,14 +167,19 @@ public class StatsFragment extends Fragment {
                 .child("delivery_requests");
 
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                /*km_accepted =0;
+                km_accepted =0;
                 km_delivered = 0;
                 km_assigned = 0;
-                count = 0;*/
+                count = 0;
+                count_assigned=0;
+                count_accepted=0;
+                count_delivered=0;
+                pb_accepted=0;
+
 
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
 
@@ -204,8 +212,6 @@ public class StatsFragment extends Fragment {
                 }
                 pb_accepted = km_accepted / (km_delivered+km_assigned+km_accepted);
 
-                updateStats();
-                updateChart();
             }
 
             @Override
