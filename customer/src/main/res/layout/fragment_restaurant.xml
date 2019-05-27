@@ -19,6 +19,7 @@
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:autoSizeTextType="uniform"
+            android:visibility="gone"
             android:fontFamily="sans-serif-thin"
             android:gravity="center"
             android:paddingStart="8dp"
@@ -31,7 +32,7 @@
             android:id="@+id/list_view_category"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="9"
+            android:layout_weight="10"
             android:divider="@null"
             android:dividerHeight="0dp" />
     </LinearLayout>
