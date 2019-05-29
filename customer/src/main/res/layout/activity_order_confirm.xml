@@ -37,10 +37,10 @@
             android:layout_height="match_parent"
             tools:context=".restaurants.shoppingcart.OrderConfirmActivity">
 
-            <ListView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/listview_items"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="wrap_content"
                 android:background="#FFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

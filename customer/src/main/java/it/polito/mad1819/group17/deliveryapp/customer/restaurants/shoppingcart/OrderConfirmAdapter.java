@@ -1,62 +1,77 @@
 package it.polito.mad1819.group17.deliveryapp.customer.restaurants.shoppingcart;
 
-import android.app.Activity;
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
+import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
 
-public class OrderConfirmAdapter extends ArrayAdapter<String> {
-    private String[] names;
-    private Integer[] quantities;
-    private Double[] prices;
-    private Activity context;
+public class OrderConfirmAdapter extends RecyclerView.Adapter<OrderConfirmAdapter.OrderConfirmHolder> {
 
+    private ArrayList<ShoppingItem> shoppingItem;
+    private Context context;
+    private RecyclerView recyclerView;
+    private int animationFlag = 0;
 
-    public OrderConfirmAdapter(String[] names, Integer[] quantities, Double[] prices, Activity context) {
-        super(context,R.layout.order_confirm_item,names);
-        this.names = names;
-        this.quantities = quantities;
-        this.prices = prices;
+    public OrderConfirmAdapter(ArrayList<ShoppingItem> shoppingItem, Context context, RecyclerView recyclerView) {
+        this.shoppingItem = new ArrayList<ShoppingItem>(shoppingItem);
         this.context = context;
+        this.recyclerView = recyclerView;
     }
 
-    class ViewHolder {
-        TextView name_tv;
-        TextView quantity_tv;
-        TextView price_tv;
+    /* ------------------------------------------------------------------------------------------------------------- */
+    public class OrderConfirmHolder extends RecyclerView.ViewHolder {
+        TextView name_tv, quantity_tv, price_tv;
 
-
-        ViewHolder(View v){
-            name_tv=v.findViewById(R.id.item_name);
-            quantity_tv=v.findViewById(R.id.item_quantity);
-            price_tv=v.findViewById(R.id.item_price);
+        public OrderConfirmHolder(@NonNull View itemView) {
+            super(itemView);
+            name_tv = itemView.findViewById(R.id.item_name);
+            quantity_tv = itemView.findViewById(R.id.item_quantity);
+            price_tv = itemView.findViewById(R.id.item_price);
         }
+    }
+    /* ------------------------------------------------------------------------------------------------------------- */
 
+    @NonNull
+    @Override
+    public OrderConfirmHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.order_confirm_item, viewGroup, false);
+        return new OrderConfirmHolder(view);
     }
 
-    public View getView(int position, View convertView,  ViewGroup parent) {
-        View r = convertView;
+    @Override
+    public void onBindViewHolder(@NonNull OrderConfirmHolder holder, int position) {
+        holder.name_tv.setText(shoppingItem.get(position).getName());
+        holder.quantity_tv.setText(Integer.toString(shoppingItem.get(position).getQuantity()));
+        holder.price_tv.setText(CurrencyHelper.getCurrency(shoppingItem.get(position).getPrice()));
+        if (animationFlag == 0)
+           runLayoutAnimation(recyclerView, 0);
+    }
 
-        ViewHolder viewHolder = null;
+    @Override
+    public int getItemCount() {
+        return shoppingItem.size();
+    }
 
-        if(r==null){
-            LayoutInflater layoutInflater=context.getLayoutInflater();
-            r=layoutInflater.inflate(R.layout.order_confirm_item,null,true);
-            viewHolder = new ViewHolder(r);
-            r.setTag(viewHolder);
-        }
-        else{
-            viewHolder=(ViewHolder) r.getTag();
-        }
-        viewHolder.name_tv.setText(names[position]);
-        viewHolder.quantity_tv.setText(Integer.toString(quantities[position]));
-        viewHolder.price_tv.setText(CurrencyHelper.getCurrency(prices[position]*quantities[position]));
+    private void runLayoutAnimation(final RecyclerView recyclerView, int type) {
+        final Context context = recyclerView.getContext();
+        LayoutAnimationController controller = null;
 
-        return r;
+        if (type == 0)
+            controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_left_to_right);
+
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.scheduleLayoutAnimation();
+        animationFlag = 1;
     }
 }
