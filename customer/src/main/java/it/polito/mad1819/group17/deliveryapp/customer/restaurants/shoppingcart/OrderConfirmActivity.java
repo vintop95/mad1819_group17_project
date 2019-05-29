@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,7 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +53,9 @@ import it.polito.mad1819.group17.deliveryapp.common.orders.ShoppingItem;
 import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
+import it.polito.mad1819.group17.deliveryapp.customer.MainActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
+import it.polito.mad1819.group17.deliveryapp.customer.orders.OrdersFragment;
 
 public class OrderConfirmActivity extends AppCompatActivity {
 
@@ -85,7 +88,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
     private ArrayList<String> itemIds;
     private ArrayList<ShoppingItem> itemValues;
 
-    ListView lst;
+    private RecyclerView recyclerView;
 
     private AtomicInteger countFetched = new AtomicInteger(0);
     private static int N_FIELD_TO_FETCH = 2;
@@ -140,21 +143,6 @@ public class OrderConfirmActivity extends AppCompatActivity {
         itemIds = new ArrayList<String>(itemsMap.keySet());
         itemValues = new ArrayList<ShoppingItem>(itemsMap.values());
 
-        ArrayList<String> arrNames = new ArrayList<>();
-        ArrayList<Integer> arrQuantities = new ArrayList<>();
-        ArrayList<Double> arrPrices = new ArrayList<>();
-        for (ShoppingItem details : itemsMap.values()) {
-            arrNames.add(details.getName());
-            arrQuantities.add(details.getQuantity());
-            arrPrices.add(details.getPrice());
-        }
-
-        String[] names = arrNames.toArray(new String[itemValues.size()]);
-        Integer[] quantities = arrQuantities.toArray(new Integer[itemValues.size()]);
-        Double[] prices = arrPrices.toArray(new Double[itemValues.size()]);
-
-        Log.d("elem_quantities", Integer.toString(quantities.length));
-        Log.d("elem_names", Integer.toString(names.length));
         itemquantity = intent.getIntExtra("items_quantity", 0);
         totalprice = intent.getDoubleExtra("items_tot_price", 0);
 
@@ -171,10 +159,15 @@ public class OrderConfirmActivity extends AppCompatActivity {
         final_results.setText(finalResultString);
         item_tot_price.setText(CurrencyHelper.getCurrency(totalprice));
 
-        lst = (ListView) findViewById(R.id.listview_items);
-        OrderConfirmAdapter orderConfirmAdapter = new OrderConfirmAdapter(names, quantities, prices, this);
-        lst.setAdapter(orderConfirmAdapter);
+        recyclerView = (RecyclerView) findViewById(R.id.listview_items);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        OrderConfirmAdapter orderConfirmAdapter = new OrderConfirmAdapter(itemValues, this, recyclerView);
+        recyclerView.setAdapter(orderConfirmAdapter);
 
+        Date dateNow = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        String dateNowString = df.format(dateNow);
+        deliveryDate_edit.setText(dateNowString);
 
         Calendar now = Calendar.getInstance();
         now.add(Calendar.MINUTE, 60);
@@ -367,11 +360,13 @@ public class OrderConfirmActivity extends AppCompatActivity {
                 Log.d("ORDER_CONFIRM",
                         "postTransaction:onComplete:" + databaseError);
 
-                // Push the order to get an id if quantites were reduced in a correct way
+                // Push the order to get an id if quantities were reduced in a correct way
                 if (committed) {
                     pushOrderToFirebase(ord);
                     setResult(RESULT_OK);
                     finish();
+                    Intent orders = new Intent(OrderConfirmActivity.this, MainActivity.class);
+                    startActivity(orders);
                 } else {
                     PopupHelper.showToast(
                             OrderConfirmActivity.this.getApplicationContext(),
@@ -407,7 +402,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
     public String getRestaurateurOrdersPath(@Nullable String orderId) {
         if (TextUtils.isEmpty(restaurant_id)) {
-            throw new IllegalStateException("restaurateur_id is NULL!!!");
+            throw new IllegalStateException("restaurateur_id is NULL!");
         }
 
         String path = "restaurateurs/" + restaurant_id + "/" + FIREBASE_ORDERS;
@@ -417,7 +412,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
     public String getCustomerOrdersPath(@Nullable String orderId) {
         if (TextUtils.isEmpty(customer_id)) {
-            throw new IllegalStateException("customer_id is NULL!!!");
+            throw new IllegalStateException("customer_id is NULL!");
         }
         String path = "customers/" + customer_id + "/" + FIREBASE_ORDERS;
         if (!TextUtils.isEmpty(orderId)) path = path + "/" + orderId;
@@ -427,7 +422,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
     public DatabaseReference getCustomerOrdersRef() {
         if (TextUtils.isEmpty(customer_id)) {
-            throw new IllegalStateException("customer_id is NULL!!!");
+            throw new IllegalStateException("customer_id is NULL!");
         }
 
         return FirebaseDatabase.getInstance().getReference()

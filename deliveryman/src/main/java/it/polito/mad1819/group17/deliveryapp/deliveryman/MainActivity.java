@@ -85,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private ProgressBarHandler progressBarHandler;
     private BottomNavigationView navigation;
 
+    private Boolean firstAccess = true;
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -293,8 +295,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         initUtils();
 
         instantiateFragments(savedInstanceState);
-
         initBottomNavigation();
+
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        if (user != null && firstAccess) {
+            checkNewSignUp(user.getUid(), FIREBASE_APP_NAME);
+        }
     }
 
     // Check if user exists in the db even if it's authenticated because
@@ -305,15 +311,16 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String key = dataSnapshot.getKey();
-//                if (key == null) key = "NONO";
-//                Log.d("SNAPSHOT NEW_SIGN_UP", key);
 
                 if (dataSnapshot.getValue() == null) {
                     Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
+                    editNewProfile.putExtra("firstAccess", firstAccess);
                     startActivity(editNewProfile);
                     if (navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
+                    Toast.makeText(MainActivity.this, "Please, complete your profile first!", Toast.LENGTH_LONG).show();
                 }
+                else
+                    firstAccess = false;
             }
 
             @Override
