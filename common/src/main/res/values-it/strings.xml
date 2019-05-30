@@ -7,6 +7,7 @@
     <string name="title_dailyoffer">Offerte Giornaliere</string>
     <string name="title_restaurants">Ristoranti</string>
     <string name="title_delivery_requests">Richieste di consegna</string>
+    <string name="title_activity_analytics">Recensioni</string>
 
     <string name="sign_out_menu">Esci</string>
 
@@ -243,4 +244,6 @@
     <string name="invalid_delivery_timestamp">ERRORE: data e ora per la consegna riferiscono al passato!</string>
     <string name="empty_delivery_timestamp">ERROR: data e ora di consegna non sono definite!</string>
 
+    <string name="no_reviews">Non ci sono ancora recensioni disponibili!</string>
+    <string name="reviews">Recensioni</string>
 </resources>
