@@ -20,6 +20,7 @@ import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -135,6 +136,21 @@ public class EditProfileActivity extends AppCompatActivity {
                 input_restaurant_type.setSelection(index);
             }
 
+            //************** SET SPINNER ITEMS WITHOUT THE FIRST: "FAVOURITES"!
+            CharSequence[] itemArray =
+                    getResources().getTextArray(R.array.restaurant_types);
+            List<CharSequence> itemList =
+                    new ArrayList<CharSequence>(Arrays.asList(itemArray));
+            itemList = itemList.subList(1,itemList.size()-1);
+
+            ArrayAdapter adapter = new ArrayAdapter(this,
+                    android.R.layout.simple_spinner_item,
+                    itemList);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            input_restaurant_type.setAdapter(adapter);
+            //*************************************************
+
             String free_day = restaurateur.getFree_day();
             if (free_day != null) {
                 Integer dayIndex;
@@ -216,7 +232,8 @@ public class EditProfileActivity extends AppCompatActivity {
         String bio = input_bio.getText().toString();
 
         String free_day = Integer.toString(input_free_day.getSelectedItemPosition());
-        String restaurant_type = Integer.toString(input_restaurant_type.getSelectedItemPosition());
+        int positionWithoutFavourites = input_restaurant_type.getSelectedItemPosition() + 1;
+        String restaurant_type = Integer.toString(positionWithoutFavourites);
 
         if (name.isEmpty() ||
                 phone.isEmpty() || !Patterns.PHONE.matcher(phone).matches() ||

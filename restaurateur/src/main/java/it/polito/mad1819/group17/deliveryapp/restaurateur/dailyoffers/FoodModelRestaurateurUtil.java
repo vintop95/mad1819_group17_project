@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
 class FoodModelRestaurateurUtil {
     private final static String FIREBASE_DAILYOFFERS = "daily_offers";
     private static String restaurateur_id = null;
+    public static OffersFragment offersFragment = null;
 
     public static DatabaseReference getDailyOffersRef(){
         if(FirebaseAuth.getInstance().getUid() != null){
@@ -47,6 +49,14 @@ class FoodModelRestaurateurUtil {
             Toast.makeText(context, err.getMessage(), Toast.LENGTH_LONG).show();
         }else{
             Log.d("FIREBASE_LOG", msg + " " + ref.toString());
+            if (offersFragment != null) {
+                offersFragment.fetch(new Comparator<FoodModel>() {
+                    @Override
+                    public int compare(FoodModel lhs, FoodModel rhs) {
+                        return lhs.name.compareTo(rhs.name);
+                    }
+                });
+            }
         }
     }
 

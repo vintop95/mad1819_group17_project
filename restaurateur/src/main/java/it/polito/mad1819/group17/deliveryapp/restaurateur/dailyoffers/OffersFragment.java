@@ -1,22 +1,34 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.dailyoffers;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.util.Comparator;
+
 import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
+import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
@@ -44,8 +56,6 @@ public class OffersFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        mAdapter.startListening();
-        progressBarHandler.show();
     }
 
     @Override
@@ -63,6 +73,7 @@ public class OffersFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         // Log.d(TAG, "onCreateView");
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_offers, container, false);
     }
 
@@ -72,6 +83,9 @@ public class OffersFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         // Log.d(TAG, "onViewCreated");
 
+        // Reference needed to fetch in that class
+        FoodModelRestaurateurUtil.offersFragment = this;
+
         // Bind your views
         recyclerView = view.findViewById(R.id.rv);
         recyclerView.setHasFixedSize(false);
@@ -80,8 +94,14 @@ public class OffersFragment extends Fragment {
         // from Linear/Grid/StaggeredLayoutManager
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Set the firebase adapter (automatically updates)
-        setFirebaseRecycler();
+        progressBarHandler = new ProgressBarHandler(getContext());
+        // Set the firebase adapter
+        fetch(new Comparator<FoodModel>() {
+            @Override
+            public int compare(FoodModel lhs, FoodModel rhs) {
+                return lhs.name.compareTo(rhs.name);
+            }
+        });
 
         // Set add button listener
         btnAddOffer = view.findViewById(R.id.btn_add_offer);
@@ -114,9 +134,6 @@ public class OffersFragment extends Fragment {
                 }
             }
         });
-
-        progressBarHandler = new ProgressBarHandler(getContext());
-        progressBarHandler.show();
     }
 
     /////// FIREBASE MGMT ////////
@@ -130,7 +147,7 @@ public class OffersFragment extends Fragment {
         FoodModelRestaurateurUtil.modifyInFirebase(getContext(), newFood);
     }
 
-    private void setFirebaseRecycler(){
+    public void fetch(Comparator comparator){
         Query query = FoodModelRestaurateurUtil.getDailyOffersRef();
 
         FirebaseRecyclerOptions<FoodModel> options =
@@ -139,7 +156,11 @@ public class OffersFragment extends Fragment {
                         .build();
 
         mAdapter = new FoodAdapter(this, options, recyclerView);
+        if (comparator != null) {
+            mAdapter.setSortComparator(comparator);
+        }
         recyclerView.setAdapter(mAdapter);
+        progressBarHandler.show();
         mAdapter.startListening();
     }
     ////////////////////////////
@@ -198,5 +219,61 @@ public class OffersFragment extends Fragment {
             if(btnEditItem != null) btnEditItem.setEnabled(true);
             btnAddOffer.setEnabled(true);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.menu_sort, menu);
+        super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.btn_sort) {
+            // setup the alert builder
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle(R.string.choose_sorting_field);
+            // add a list
+            String[] sortFields = {
+                    getString(R.string.label_food_name),
+                    getString(R.string.popularity)
+            };
+            builder.setItems(sortFields, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case 0: // by name
+                            fetch(new Comparator<FoodModel>() {
+                                @Override
+                                public int compare(FoodModel lhs, FoodModel rhs) {
+                                    return lhs.name.compareTo(rhs.name);
+                                }
+                            });
+                            break;
+                        case 1: // by popularity
+                            fetch(new Comparator<FoodModel>() {
+                                @Override
+                                public int compare(FoodModel lhs, FoodModel rhs) {
+                                    if (lhs.totalOrderedQty > rhs.totalOrderedQty) {
+                                        return -1;
+                                    } else if (lhs.totalOrderedQty < rhs.totalOrderedQty) {
+                                        return 1;
+                                    } else {
+                                        return 0;
+                                    }
+                                }
+                            });
+                            break;
+                    }
+                }
+            });
+            // create and show the alert dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+            return true;
+        }
+        return false;
     }
 }

@@ -175,7 +175,7 @@ public class RateActivity extends AppCompatActivity {
                                     for (String itemId : inputOrder.getItem_itemDetails().keySet()) {
 
 
-                                        MutableData currentIemRef = mutableData.child(itemId);
+                                        MutableData currentIemRef = mutableData.child("daily_offers").child(itemId);
                                         MutableData currentNumberOfRatesRef = currentIemRef.child("number_of_rates");
                                         MutableData currentTotalRateRef = currentIemRef.child("total_rate");
 

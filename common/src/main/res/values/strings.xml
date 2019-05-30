@@ -282,7 +282,7 @@
     <string name="restaurant_closed">ATTENTION: the restaurant is closed at the choosen date and time!</string>
     <string name="invalid_delivery_timestamp">ERROR: delivery date and time refer to the past!</string>
     <string name="empty_delivery_timestamp">ERROR: delivery date or time are not defined!</string>
-
+    <string name="ordered">Ordered</string>
 
 
 </resources>
