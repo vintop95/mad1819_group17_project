@@ -47,6 +47,7 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.orders.OrderDetailsAct
 import it.polito.mad1819.group17.deliveryapp.restaurateur.orders.OrdersFragment;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.profile.EditProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.profile.ProfileFragment;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.reviews.AnalyticsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -110,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
         fm.beginTransaction().attach(active).commit();
     }
 
-    private void initBottomNavigation(){
-        if(active == null) throw new IllegalStateException("'active' must be initialized");
+    private void initBottomNavigation() {
+        if (active == null) throw new IllegalStateException("'active' must be initialized");
 
         navigation = findViewById(R.id.navigation);
         mOnNavigationItemSelectedListener
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         navigation.setSelectedItemId(navSelected);
     }
 
-    private void initFirebaseAuth(){
+    private void initFirebaseAuth() {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mAuthStateListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -167,12 +168,12 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-    private void initFirebaseDb(String userId){
+    private void initFirebaseDb(String userId) {
         if (TextUtils.isEmpty(userId)) {
             throw new IllegalStateException("Log in with FirebaseAuth first");
         }
 
-        if(mOrdersRef != null)
+        if (mOrdersRef != null)
             return;
 
         progressBarHandler.hide();
@@ -250,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
         notificationManagerCompat.notify(notificationRequestCode++, builder.build());
     }
 
-    private void initUtils(){
+    private void initUtils() {
         PrefHelper.setMainContext(this);
 
         // TODO: LET THE USER CHANGE THE CURRENCY FROM SETTINGS?
@@ -284,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        
+
         initUtils();
 
         instantiateFragments(savedInstanceState);
@@ -311,8 +312,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(editNewProfile);
                     if (navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
                     Toast.makeText(MainActivity.this, "Please, complete your profile first!", Toast.LENGTH_LONG).show();
-                }
-                else
+                } else
                     firstAccess = false;
             }
 
@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_signout, menu);
+        inflater.inflate(R.menu.menu_signout_restaurateurs, menu);
         return true;
     }
 
@@ -377,6 +377,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
 
+            case R.id.analytics:
+                startActivity(new Intent(this, AnalyticsActivity.class));
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -389,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
             mOrdersRef.removeEventListener(onChildAddedListener);
     }
 
-    private void setAuthStateListener(){
+    private void setAuthStateListener() {
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
         Log.v("FIREBASE_LOG", "AuthListener added - MainActivity");
     }

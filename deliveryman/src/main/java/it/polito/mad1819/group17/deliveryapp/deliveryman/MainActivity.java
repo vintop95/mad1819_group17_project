@@ -318,8 +318,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     startActivity(editNewProfile);
                     if (navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
                     Toast.makeText(MainActivity.this, "Please, complete your profile first!", Toast.LENGTH_LONG).show();
-                }
-                else
+                } else
                     firstAccess = false;
             }
 
@@ -359,6 +358,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sign_out_menu:
+                setDeliverymanUnaivable(FirebaseAuth.getInstance().getUid());
                 AuthUI.getInstance().signOut(this);
                 Log.v("FIREBASE_LOG", "Sign Out - MainActivity");
                 return true;
@@ -416,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                         Toast.makeText(getApplicationContext(), "Turn " + provider.toUpperCase() + " on !", Toast.LENGTH_LONG).show();
                     }
                 };
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, mLocationListener);
+                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, mLocationListener);
 
             } else
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_REQUEST);

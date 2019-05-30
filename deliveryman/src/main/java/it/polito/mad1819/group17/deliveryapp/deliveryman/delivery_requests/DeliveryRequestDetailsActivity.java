@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -103,7 +104,7 @@ public class DeliveryRequestDetailsActivity extends AppCompatActivity {
                 btn_next_state.setTextColor(getResources().getColor(R.color.button_disabled_text));
                 btn_next_state.setEnabled(false);
             }
-            FirebaseDatabase.getInstance().getReference()
+            /*FirebaseDatabase.getInstance().getReference()
                     .child("deliverymen").child(FirebaseAuth.getInstance().getUid())
                     .child("delivery_requests").child(inputDeliveryRequest.getId()).child("state_stateTime")
                     .setValue(inputDeliveryRequest.getState_stateTime(),
@@ -111,7 +112,21 @@ public class DeliveryRequestDetailsActivity extends AppCompatActivity {
                                 if (databaseError == null) {
                                     updateOrderToFirebase(inputDeliveryRequest);
                                 }
-                            });
+                            });*/
+            DatabaseReference currentDeliveryRequestRef = FirebaseDatabase.getInstance().getReference()
+                    .child("deliverymen").child(FirebaseAuth.getInstance().getUid())
+                    .child("delivery_requests").child(inputDeliveryRequest.getId());
+
+            HashMap<String, Object> updates = new HashMap<>();
+            updates.put("state_stateTime", inputDeliveryRequest.getState_stateTime());
+            updates.put("sorting_field", inputDeliveryRequest.getSorting_field());
+
+            currentDeliveryRequestRef.updateChildren(updates,
+                    (databaseError, databaseReference) -> {
+                        if (databaseError == null) {
+                            updateOrderToFirebase(inputDeliveryRequest);
+                        }
+                    });
         }
 
     }
