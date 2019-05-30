@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,14 +12,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -46,8 +40,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +61,7 @@ public class EditProfileActivity extends AppCompatActivity {
     public static final int GALLERY_REQUEST = 1;
     public static final int AUTOCOMPLETE_REQUEST = 2;
 
+    private Customer current_user = new Customer();
     private Toolbar toolbar;
     private Boolean image_changed = false;
     private ImageView image_user_photo;
@@ -112,9 +105,11 @@ public class EditProfileActivity extends AppCompatActivity {
             input_address.setText(customer.getAddress());
             if (customer.getBio() != "")
                 input_bio.setText(customer.getBio());
+            setCurrentUser(customer, 0);
         } else {
             input_name.setText(mFirebaseAuth.getCurrentUser().getDisplayName());
             input_mail.setText(mFirebaseAuth.getCurrentUser().getEmail());
+            setCurrentUser(null, 1);
         }
     }
 
@@ -316,9 +311,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         intent = getIntent();
         firstAccess = intent.getBooleanExtra("firstAccess", false);
-        if (firstAccess) {
-        }
-        else {
+        if (!firstAccess) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -393,57 +386,31 @@ public class EditProfileActivity extends AppCompatActivity {
             confirmOnBackPressed();
     }
 
-    // TODO: update dataChange using data from Firebase
     private boolean dataChanged() {
-        /*String name = PrefHelper.getInstance().getString(ProfileFragment.NAME, null);
-        if ((name == null && input_name.getText().toString() != null) ||
-                (name != null && !name.equals(input_name.getText().toString())))
+        if ((current_user.getName() == null && input_name.getText().toString() != null) ||
+                (current_user.getName() != null && !current_user.getName().equals(input_name.getText().toString())))
             return true;
 
-        String phone = PrefHelper.getInstance().getString(ProfileFragment.PHONE, null);
-        if ((phone == null && input_phone.getText().toString() != null) ||
-                (phone != null && !phone.equals(input_phone.getText().toString())))
+        if ((current_user.getPhone() == null && input_phone.getText().toString() != null) ||
+                (current_user.getPhone() != null && !current_user.getPhone().equals(input_phone.getText().toString())))
             return true;
 
-        String mail = PrefHelper.getInstance().getString(ProfileFragment.MAIL, null);
-        if ((mail == null && input_mail.getText().toString() != null) ||
-                (mail != null && !mail.equals(input_mail.getText().toString())))
+        if ((current_user.getMail() == null && input_mail.getText().toString() != null) ||
+                (current_user.getMail() != null && !current_user.getMail().equals(input_mail.getText().toString())))
             return true;
 
-        String address = PrefHelper.getInstance().getString(ProfileFragment.ADDRESS, null);
-        if ((address == null && input_address.getText().toString() != null) ||
-                (address != null && !address.equals(input_address.getText().toString())))
+        if ((current_user.getAddress() == null && input_address.getText().toString() != null) ||
+                (current_user.getAddress() != null && !current_user.getAddress().equals(input_address.getText().toString())))
             return true;
 
-        String restaurant_type = PrefHelper.getInstance().getString(ProfileFragment.RESTAURANT_TYPE, null);
-        if ((restaurant_type == null && !input_restaurant_type.getSelectedItem().toString().isEmpty()) ||
-                (restaurant_type != null && !restaurant_type.equals(input_restaurant_type.getSelectedItem().toString())))
+        if ((current_user.getBio() == null && input_bio.getText().toString() != null) ||
+                (current_user.getBio() != null && !current_user.getBio().equals(input_bio.getText().toString())))
             return true;
-
-        String free_day = PrefHelper.getInstance().getString(ProfileFragment.FREE_DAY, null);
-        if ((free_day == null && !input_free_day.getSelectedItem().toString().isEmpty()) ||
-                (free_day != null && !free_day.equals(input_free_day.getSelectedItem().toString())))
-            return true;
-
-        String time_opening = PrefHelper.getInstance().getString(ProfileFragment.TIME_OPENING, null);
-        if ((time_opening == null && !input_working_time_opening.getText().toString().equals("--:--")) || (time_opening != null && !time_opening.equals(input_working_time_opening.getText().toString())))
-            return true;
-
-        String time_closing = PrefHelper.getInstance().getString(ProfileFragment.TIME_CLOSING, null);
-        if ((time_closing == null && !input_working_time_closing.getText().toString().equals("--:--")) ||
-                (time_closing != null && !time_closing.equals(input_working_time_closing.getText().toString())))
-            return true;
-
-        String bio = PrefHelper.getInstance().getString(ProfileFragment.BIO, null);
-        if ((bio == null && input_bio.getText().toString() != null) ||
-                (bio != null && !bio.equals(input_bio.getText().toString())))
-            return true;*/
 
         return false;
     }
 
     private void confirmOnBackPressed() {
-        // If no modification happened, then close without showing alert dialog.
         if (dataChanged()) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setTitle(R.string.warning_title)
@@ -474,5 +441,20 @@ public class EditProfileActivity extends AppCompatActivity {
             if (focus)
                 ((EditText) v).setSelection(((EditText) v).getText().length(), 0);
         });
+    }
+
+    private void setCurrentUser(Customer customer, int flag) {
+        if (flag == 0) {
+            current_user.setName(customer.getName());
+            current_user.setPhone(customer.getPhone());
+            current_user.setMail(customer.getMail());
+            current_user.setAddress(customer.getAddress());
+            if (customer.getBio() != null)
+                current_user.setBio(customer.getBio());
+        }
+        if (flag == 1 ) {
+            current_user.setName(mFirebaseAuth.getCurrentUser().getDisplayName());
+            current_user.setMail(mFirebaseAuth.getCurrentUser().getEmail());
+        }
     }
 }

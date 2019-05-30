@@ -72,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBarHandler progressBarHandler;
     private BottomNavigationView navigation;
 
+    private Boolean firstAccess = true;
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -271,14 +273,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         progressBarHandler = new ProgressBarHandler(this);
-        // progressBarHandler.show();
 
         initFirebaseAuth();
         createNotificationChannel();
-
-        // DONE IN SIGN IN CALLBACK because it needs a reference to the user
-        // that could not exist
-        // initFirebaseDb();
 
         // Init toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -289,6 +286,11 @@ public class MainActivity extends AppCompatActivity {
 
         instantiateFragments(savedInstanceState);
         initBottomNavigation();
+
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        if (user != null && firstAccess) {
+            checkNewSignUp(user.getUid(), FIREBASE_APP_NAME);
+        }
     }
 
     // Check if user exists in the db even if it's authenticated because
@@ -299,15 +301,16 @@ public class MainActivity extends AppCompatActivity {
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String key = dataSnapshot.getKey();
-//                if (key == null) key = "NONO";
-//                Log.d("SNAPSHOT NEW_SIGN_UP", key);
 
-                if(dataSnapshot.getValue() == null){
+                if (dataSnapshot.getValue() == null) {
                     Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
+                    editNewProfile.putExtra("firstAccess", firstAccess);
                     startActivity(editNewProfile);
-                    if(navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
+                    if (navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
+                    Toast.makeText(MainActivity.this, "Please, complete your profile first!", Toast.LENGTH_LONG).show();
                 }
+                else
+                    firstAccess = false;
             }
 
             @Override

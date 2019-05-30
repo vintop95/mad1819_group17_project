@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
@@ -71,6 +72,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mFirebaseStorageReference;
 
+    private Restaurateur current_user = new Restaurateur();
     private Toolbar toolbar;
     private Boolean image_changed = false;
     private ImageView image_user_photo;
@@ -85,6 +87,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText input_bio;
 
     private String newAddress = null;
+
+    private Intent intent;
+    private Boolean firstAccess;
 
 
     private void locateViews() {
@@ -128,11 +133,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
 
                 input_restaurant_type.setSelection(index);
-//                for (int i = 0; i < getResources().getStringArray(R.array.restaurant_types).length; i++)
-//                    if (getResources().getStringArray(R.array.restaurant_types)[i].equals(restaurant_type)) {
-//                        input_restaurant_type.setSelection(i);
-//                        break;
-//                    }
             }
 
             String free_day = restaurateur.getFree_day();
@@ -145,12 +145,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
 
                 input_free_day.setSelection(dayIndex);
-
-//                for (int i = 0; i < getResources().getStringArray(R.array.days_of_week).length; i++)
-//                    if (getResources().getStringArray(R.array.days_of_week)[i].equals(free_day)) {
-//                        input_free_day.setSelection(i);
-//                        break;
-//                    }
             }
 
             String time_opening = restaurateur.getWorking_time_opening();
@@ -162,9 +156,11 @@ public class EditProfileActivity extends AppCompatActivity {
                 input_working_time_closing.setText(time_closing);
             if (restaurateur.getBio() != "")
                 input_bio.setText(restaurateur.getBio());
+            setCurrentUser(restaurateur, 0);
         } else {
             input_name.setText(mFirebaseAuth.getCurrentUser().getDisplayName());
             input_mail.setText(mFirebaseAuth.getCurrentUser().getEmail());
+            setCurrentUser(null, 1);
         }
     }
 
@@ -403,8 +399,13 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void showBackArrowOnToolbar() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        intent = getIntent();
+        firstAccess = intent.getBooleanExtra("firstAccess", false);
+        if (!firstAccess) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
     }
 
     @Override
@@ -495,54 +496,50 @@ public class EditProfileActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        confirmOnBackPressed();
+        if (firstAccess) {
+            AuthUI.getInstance().signOut(this);
+            finish();
+        }
+        else
+            confirmOnBackPressed();
     }
 
-    // TODO: update dataChange using data from Firebase
     private boolean dataChanged() {
-        /*String name = PrefHelper.getInstance().getString(ProfileFragment.NAME, null);
-        if ((name == null && input_name.getText().toString() != null) ||
-                (name != null && !name.equals(input_name.getText().toString())))
+        if ((current_user.getName() == null && input_name.getText().toString() != null) ||
+                (current_user.getName() != null && !current_user.getName().equals(input_name.getText().toString())))
             return true;
 
-        String phone = PrefHelper.getInstance().getString(ProfileFragment.PHONE, null);
-        if ((phone == null && input_phone.getText().toString() != null) ||
-                (phone != null && !phone.equals(input_phone.getText().toString())))
+        if ((current_user.getPhone() == null && input_phone.getText().toString() != null) ||
+                (current_user.getPhone() != null && !current_user.getPhone().equals(input_phone.getText().toString())))
             return true;
 
-        String mail = PrefHelper.getInstance().getString(ProfileFragment.MAIL, null);
-        if ((mail == null && input_mail.getText().toString() != null) ||
-                (mail != null && !mail.equals(input_mail.getText().toString())))
+        if ((current_user.getMail() == null && input_mail.getText().toString() != null) ||
+                (current_user.getMail() != null && !current_user.getMail().equals(input_mail.getText().toString())))
             return true;
 
-        String address = PrefHelper.getInstance().getString(ProfileFragment.ADDRESS, null);
-        if ((address == null && input_address.getText().toString() != null) ||
-                (address != null && !address.equals(input_address.getText().toString())))
+        if ((current_user.getAddress() == null && input_address.getText().toString() != null) ||
+                (current_user.getAddress() != null && !current_user.getAddress().equals(input_address.getText().toString())))
+            return true;
+/*
+        if ((current_user.getRestaurant_type() == null && !input_restaurant_type.getSelectedItem().toString().isEmpty()) ||
+                (current_user.getRestaurant_type() != null && !current_user.getRestaurant_type().equals(input_restaurant_type.getSelectedItem().toString())))
             return true;
 
-        String restaurant_type = PrefHelper.getInstance().getString(ProfileFragment.RESTAURANT_TYPE, null);
-        if ((restaurant_type == null && !input_restaurant_type.getSelectedItem().toString().isEmpty()) ||
-                (restaurant_type != null && !restaurant_type.equals(input_restaurant_type.getSelectedItem().toString())))
+        if ((current_user.getFree_day() == null && !input_free_day.getSelectedItem().toString().isEmpty()) ||
+                (current_user.getFree_day() != null && !current_user.getFree_day().equals(input_free_day.getSelectedItem().toString())))
+            return true;
+*/
+        if ((current_user.getWorking_time_opening() == null && !input_working_time_opening.getText().toString().equals("--:--")) ||
+                (current_user.getWorking_time_opening() != null && !current_user.getWorking_time_opening().equals(input_working_time_opening.getText().toString())))
             return true;
 
-        String free_day = PrefHelper.getInstance().getString(ProfileFragment.FREE_DAY, null);
-        if ((free_day == null && !input_free_day.getSelectedItem().toString().isEmpty()) ||
-                (free_day != null && !free_day.equals(input_free_day.getSelectedItem().toString())))
+        if ((current_user.getWorking_time_closing() == null && !input_working_time_closing.getText().toString().equals("--:--")) ||
+                (current_user.getWorking_time_closing() != null && !current_user.getWorking_time_closing().equals(input_working_time_closing.getText().toString())))
             return true;
 
-        String time_opening = PrefHelper.getInstance().getString(ProfileFragment.TIME_OPENING, null);
-        if ((time_opening == null && !input_working_time_opening.getText().toString().equals("--:--")) || (time_opening != null && !time_opening.equals(input_working_time_opening.getText().toString())))
+        if ((current_user.getBio() == null && input_bio.getText().toString() != null) ||
+                (current_user.getBio() != null && !current_user.getBio().equals(input_bio.getText().toString())))
             return true;
-
-        String time_closing = PrefHelper.getInstance().getString(ProfileFragment.TIME_CLOSING, null);
-        if ((time_closing == null && !input_working_time_closing.getText().toString().equals("--:--")) ||
-                (time_closing != null && !time_closing.equals(input_working_time_closing.getText().toString())))
-            return true;
-
-        String bio = PrefHelper.getInstance().getString(ProfileFragment.BIO, null);
-        if ((bio == null && input_bio.getText().toString() != null) ||
-                (bio != null && !bio.equals(input_bio.getText().toString())))
-            return true;*/
 
         return false;
     }
@@ -579,5 +576,24 @@ public class EditProfileActivity extends AppCompatActivity {
             if (focus)
                 ((EditText) v).setSelection(((EditText) v).getText().length(), 0);
         });
+    }
+
+    private void setCurrentUser(Restaurateur restaurateur, int flag) {
+        if (flag == 0) {
+            current_user.setName(restaurateur.getName());
+            current_user.setPhone(restaurateur.getPhone());
+            current_user.setMail(restaurateur.getMail());
+            current_user.setAddress(restaurateur.getAddress());
+            current_user.setRestaurant_type(restaurateur.getRestaurant_type());
+            current_user.setFree_day(restaurateur.getFree_day());
+            current_user.setWorking_time_opening(restaurateur.getWorking_time_opening());
+            current_user.setWorking_time_closing(restaurateur.getWorking_time_closing());
+            if (restaurateur.getBio() != null)
+                current_user.setBio(restaurateur.getBio());
+        }
+        if (flag == 1 ) {
+            current_user.setName(mFirebaseAuth.getCurrentUser().getDisplayName());
+            current_user.setMail(mFirebaseAuth.getCurrentUser().getEmail());
+        }
     }
 }

@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
@@ -52,6 +53,7 @@ public class EditProfileActivity extends AppCompatActivity {
     public static final int CAMERA_REQUEST = 0;
     public static final int GALLERY_REQUEST = 1;
 
+    private Deliveryman current_user = new Deliveryman();
     private Toolbar toolbar;
     private Boolean image_changed = false;
     private ImageView image_user_photo;
@@ -60,6 +62,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText input_mail;
     private EditText input_city;
     private EditText input_bio;
+
+    private Intent intent;
+    private Boolean firstAccess;
 
 
     private void locateViews() {
@@ -90,9 +95,11 @@ public class EditProfileActivity extends AppCompatActivity {
             input_city.setText(deliveryman.getCity());
             if (deliveryman.getBio() != "")
                 input_bio.setText(deliveryman.getBio());
+            setCurrentUser(deliveryman, 0);
         } else {
             input_name.setText(mFirebaseAuth.getCurrentUser().getDisplayName());
             input_mail.setText(mFirebaseAuth.getCurrentUser().getEmail());
+            setCurrentUser(null, 1);
         }
     }
 
@@ -270,9 +277,15 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void showBackArrowOnToolbar() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        intent = getIntent();
+        firstAccess = intent.getBooleanExtra("firstAccess", false);
+        if (!firstAccess) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -336,54 +349,34 @@ public class EditProfileActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        confirmOnBackPressed();
+        if (firstAccess) {
+            AuthUI.getInstance().signOut(this);
+            finish();
+        }
+        else
+            confirmOnBackPressed();
     }
 
-    // TODO: update dataChange using data from Firebase
     private boolean dataChanged() {
-        /*String name = PrefHelper.getInstance().getString(ProfileFragment.NAME, null);
-        if ((name == null && input_name.getText().toString() != null) ||
-                (name != null && !name.equals(input_name.getText().toString())))
+        if ((current_user.getName() == null && input_name.getText().toString() != null) ||
+                (current_user.getName() != null && !current_user.getName().equals(input_name.getText().toString())))
             return true;
 
-        String phone = PrefHelper.getInstance().getString(ProfileFragment.PHONE, null);
-        if ((phone == null && input_phone.getText().toString() != null) ||
-                (phone != null && !phone.equals(input_phone.getText().toString())))
+        if ((current_user.getPhone() == null && input_phone.getText().toString() != null) ||
+                (current_user.getPhone() != null && !current_user.getPhone().equals(input_phone.getText().toString())))
             return true;
 
-        String mail = PrefHelper.getInstance().getString(ProfileFragment.MAIL, null);
-        if ((mail == null && input_mail.getText().toString() != null) ||
-                (mail != null && !mail.equals(input_mail.getText().toString())))
+        if ((current_user.getMail() == null && input_mail.getText().toString() != null) ||
+                (current_user.getMail() != null && !current_user.getMail().equals(input_mail.getText().toString())))
             return true;
 
-        String address = PrefHelper.getInstance().getString(ProfileFragment.ADDRESS, null);
-        if ((address == null && input_address.getText().toString() != null) ||
-                (address != null && !address.equals(input_address.getText().toString())))
+        if ((current_user.getCity() == null && input_city.getText().toString() != null) ||
+                (current_user.getCity() != null && !current_user.getCity().equals(input_city.getText().toString())))
             return true;
 
-        String restaurant_type = PrefHelper.getInstance().getString(ProfileFragment.RESTAURANT_TYPE, null);
-        if ((restaurant_type == null && !input_restaurant_type.getSelectedItem().toString().isEmpty()) ||
-                (restaurant_type != null && !restaurant_type.equals(input_restaurant_type.getSelectedItem().toString())))
+        if ((current_user.getBio() == null && input_bio.getText().toString() != null) ||
+                (current_user.getBio() != null && !current_user.getBio().equals(input_bio.getText().toString())))
             return true;
-
-        String free_day = PrefHelper.getInstance().getString(ProfileFragment.FREE_DAY, null);
-        if ((free_day == null && !input_free_day.getSelectedItem().toString().isEmpty()) ||
-                (free_day != null && !free_day.equals(input_free_day.getSelectedItem().toString())))
-            return true;
-
-        String time_opening = PrefHelper.getInstance().getString(ProfileFragment.TIME_OPENING, null);
-        if ((time_opening == null && !input_working_time_opening.getText().toString().equals("--:--")) || (time_opening != null && !time_opening.equals(input_working_time_opening.getText().toString())))
-            return true;
-
-        String time_closing = PrefHelper.getInstance().getString(ProfileFragment.TIME_CLOSING, null);
-        if ((time_closing == null && !input_working_time_closing.getText().toString().equals("--:--")) ||
-                (time_closing != null && !time_closing.equals(input_working_time_closing.getText().toString())))
-            return true;
-
-        String bio = PrefHelper.getInstance().getString(ProfileFragment.BIO, null);
-        if ((bio == null && input_bio.getText().toString() != null) ||
-                (bio != null && !bio.equals(input_bio.getText().toString())))
-            return true;*/
 
         return false;
     }
@@ -420,5 +413,20 @@ public class EditProfileActivity extends AppCompatActivity {
             if (focus)
                 ((EditText) v).setSelection(((EditText) v).getText().length(), 0);
         });
+    }
+
+    private void setCurrentUser(Deliveryman deliveryman, int flag) {
+        if (flag == 0) {
+            current_user.setName(deliveryman.getName());
+            current_user.setPhone(deliveryman.getPhone());
+            current_user.setMail(deliveryman.getMail());
+            current_user.setCity(deliveryman.getCity());
+            if (deliveryman.getBio() != null)
+                current_user.setBio(deliveryman.getBio());
+        }
+        if (flag == 1 ) {
+            current_user.setName(mFirebaseAuth.getCurrentUser().getDisplayName());
+            current_user.setMail(mFirebaseAuth.getCurrentUser().getEmail());
+        }
     }
 }

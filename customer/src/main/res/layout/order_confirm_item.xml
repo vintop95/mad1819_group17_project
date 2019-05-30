@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     app:cardElevation="0dp"
     app:cardPreventCornerOverlap="true"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="false">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp">
 
@@ -22,7 +22,7 @@
             android:layout_margin="10dp"
             android:layout_marginStart="60dp"
             android:layout_marginLeft="60dp"
-            android:text="Name"
+            android:text="@string/name_label"
             android:textColor="@color/textPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,9 +32,9 @@
             android:id="@+id/item_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:layout_margin="10dp"
-            android:text="100"
+            android:text="@string/label_quantity_dummy"
             android:textColor="@color/textSecondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/guideline_end"
@@ -44,9 +44,9 @@
             android:id="@+id/item_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:layout_margin="10dp"
-            android:text="100,00 €"
+            android:text="@string/label_food_price"
             android:textColor="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

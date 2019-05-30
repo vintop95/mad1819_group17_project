@@ -235,9 +235,6 @@ public class MainActivity extends AppCompatActivity {
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String key = dataSnapshot.getKey();
-//                if (key == null) key = "NONO";
-//                Log.d("SNAPSHOT NEW_SIGN_UP", key);
 
                 if (dataSnapshot.getValue() == null) {
                     Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
