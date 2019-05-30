@@ -75,6 +75,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private Intent intent;
     private Boolean firstAccess;
+    private Boolean addressFlag = true;
 
 
     private void locateViews() {
@@ -219,8 +220,7 @@ public class EditProfileActivity extends AppCompatActivity {
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Address has not been selected.", Toast.LENGTH_LONG).show();
             }
-
-
+            addressFlag = true;
         }
     }
 
@@ -243,9 +243,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
         Places.initialize(getApplicationContext(), "AIzaSyB7Tku5m9p0LVYU8k8-G7RB0DQoDXjvdSE");
         input_address.setOnClickListener(v -> {
-            List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.ADDRESS);
-            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
-            startActivityForResult(intent, AUTOCOMPLETE_REQUEST);
+            if (addressFlag) {
+                addressFlag = false;
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.ADDRESS);
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST);
+            }
         });
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
