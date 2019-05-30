@@ -29,10 +29,11 @@ import com.google.firebase.database.DatabaseError;
 import java.util.Locale;
 
 import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
+import it.polito.mad1819.group17.deliveryapp.common.utils.MadFirebaseRecyclerAdapter;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
 // https://github.com/firebase/FirebaseUI-Android/tree/master/database#using-firebaseui-to-populate-a-recyclerview
-public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.FoodHolder> {
+public class FoodAdapter extends MadFirebaseRecyclerAdapter<FoodModel, FoodAdapter.FoodHolder> {
     private static final String TAG = FoodAdapter.class.getName();
 
     private OffersFragment mOffersFragment;
@@ -40,7 +41,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
     private int animationFlag = 0;
 
     public FoodAdapter(OffersFragment of, FirebaseRecyclerOptions<FoodModel> options, RecyclerView recyclerView) {
-        super(options);
+        super(options, false);
         mOffersFragment = of;
         this.recyclerView = recyclerView;
     }
@@ -73,6 +74,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
         // ...
         super.onDataChanged();
         mOffersFragment.progressBarHandler.hide();
+        stopListening();
     }
 
     @Override
@@ -93,7 +95,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
 
     public class FoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView itemPhoto, itemImgModify, itemImgDelete;
-        TextView itemName, itemPlace, itemPrice, itemOrdered, itemAvailableQty;
+        TextView itemName, itemPlace, itemPrice, itemAvailableQty, itemTotalOrderedQty;
         RatingBar rb_mean_rate;
         FoodModel currentFoodItem;
 
@@ -106,6 +108,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
             itemPrice = itemView.findViewById(R.id.txt_food_price);
             itemOrdered = itemView.findViewById(R.id.txt_food_ordered);
             itemAvailableQty = itemView.findViewById(R.id.txt_food_available_qty);
+            itemTotalOrderedQty = itemView.findViewById(R.id.txt_food_total_ordered_qty);
             itemImgModify = itemView.findViewById(R.id.img_food_modify);
             itemImgDelete = itemView.findViewById(R.id.img_food_delete);
             rb_mean_rate = itemView.findViewById(R.id.rb_mean_rate);
@@ -143,6 +146,8 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
             itemOrdered.setText(String.format(Locale.getDefault(), "%d", currentFoodItem.totalOrderedQty));
             itemAvailableQty.setText(
                     String.format(Locale.getDefault(), "%d", currentFoodItem.availableQty));
+            itemTotalOrderedQty.setText(
+                    String.format(Locale.getDefault(), "%d", currentFoodItem.totalOrderedQty));
             if (currentFoodItem.total_rate != null && currentFoodItem.number_of_rates != null)
                 rb_mean_rate.setRating(currentFoodItem.total_rate / currentFoodItem.number_of_rates);
             else

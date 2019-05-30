@@ -298,6 +298,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 btn_next_state.setEnabled(true);
                 break;
             case Order.STATE3:
+            case Order.STATE4:
                 card_deliveryman.setVisibility(View.VISIBLE);
                 btn_next_state.setTextColor(getResources().getColor(R.color.button_disabled_text));
                 btn_next_state.setEnabled(false);

@@ -8,7 +8,7 @@
     <string name="title_restaurants">Ristoranti</string>
     <string name="title_delivery_requests">Richieste di consegna</string>
 
-    <string name="sign_out_menu">Esci</string>
+    <string name="sign_out_menu">Cambia Utente</string>
 
 
     <!-- ////////////// -->
@@ -243,5 +243,6 @@
     <string name="restaurant_closed">ATTENZIONE: il ristorante è chiuso all\'ora e data scelti!</string>
     <string name="invalid_delivery_timestamp">ERRORE: data e ora per la consegna riferiscono al passato!</string>
     <string name="empty_delivery_timestamp">ERROR: data e ora di consegna non sono definite!</string>
+    <string name="ordered">Ordinati</string>
 
 </resources>

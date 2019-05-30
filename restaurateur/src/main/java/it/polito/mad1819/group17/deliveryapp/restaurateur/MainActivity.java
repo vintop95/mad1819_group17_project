@@ -175,6 +175,8 @@ public class MainActivity extends AppCompatActivity {
         if(mOrdersRef != null)
             return;
 
+        progressBarHandler.hide();
+
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
         mOrdersRef = mRestaurateurDatabaseReference.child(userId).child("orders");
@@ -183,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+                        Log.d("!!!", dataSnapshot.getKey());
                         Order newOrder = dataSnapshot.getValue(Order.class);
                         if (newOrder.getNotified().equals("no")) {
                             sendNotification(newOrder.getId(), newOrder.getDelivery_timestamp());

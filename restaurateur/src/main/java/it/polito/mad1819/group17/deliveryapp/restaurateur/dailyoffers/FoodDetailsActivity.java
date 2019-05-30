@@ -218,7 +218,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
     private FoodModel getUpdatedFood() {
         FoodModel food = new FoodModel();
 //        food.pos = pos;
-        food.id = mFoodLoaded.id;
+        food = mFoodLoaded;
 
         for (ListItem field : mFields) {
             switch (field.fieldNameRes) {
