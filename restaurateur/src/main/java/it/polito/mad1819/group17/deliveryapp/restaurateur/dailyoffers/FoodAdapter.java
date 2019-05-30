@@ -93,9 +93,8 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
 
     public class FoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView itemPhoto, itemImgModify, itemImgDelete;
-        TextView itemName, itemPlace, itemPrice, itemAvailableQty;
+        TextView itemName, itemPlace, itemPrice, itemOrdered, itemAvailableQty;
         RatingBar rb_mean_rate;
-        //        int pos;
         FoodModel currentFoodItem;
 
         public FoodHolder(@NonNull View itemView) {
@@ -105,11 +104,11 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
             itemName = itemView.findViewById(R.id.txt_food_name);
             itemPlace = itemView.findViewById(R.id.txt_food_description);
             itemPrice = itemView.findViewById(R.id.txt_food_price);
+            itemOrdered = itemView.findViewById(R.id.txt_food_ordered);
             itemAvailableQty = itemView.findViewById(R.id.txt_food_available_qty);
             itemImgModify = itemView.findViewById(R.id.img_food_modify);
             itemImgDelete = itemView.findViewById(R.id.img_food_delete);
             rb_mean_rate = itemView.findViewById(R.id.rb_mean_rate);
-            // Log.d(TAG, "Holder " + itemName.getText().toString() + " created");
         }
 
         public void setData(FoodModel currentFoodItem, int pos) {
@@ -141,9 +140,9 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<FoodModel, FoodAdapter.
             itemName.setText(currentFoodItem.name);
             itemPlace.setText(currentFoodItem.description);
             itemPrice.setText(FoodModelRestaurateurUtil.getPriceFormatted(currentFoodItem.price));
+            itemOrdered.setText(String.format(Locale.getDefault(), "%d", currentFoodItem.totalOrderedQty));
             itemAvailableQty.setText(
                     String.format(Locale.getDefault(), "%d", currentFoodItem.availableQty));
-//            this.pos = pos;
             if (currentFoodItem.total_rate != null && currentFoodItem.number_of_rates != null)
                 rb_mean_rate.setRating(currentFoodItem.total_rate / currentFoodItem.number_of_rates);
             else

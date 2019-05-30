@@ -65,28 +65,52 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:text="@string/label_price_dummy"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorAccent"
             app:layout_constraintBottom_toBottomOf="@+id/txt_food_available_qty"
-            app:layout_constraintEnd_toStartOf="@+id/label_food_available_qty"
+            app:layout_constraintEnd_toStartOf="@+id/label_food_ordered"
             app:layout_constraintStart_toEndOf="@+id/img_food_photo"
             app:layout_constraintTop_toTopOf="@+id/label_food_available_qty" />
+
+        <TextView
+            android:id="@+id/label_food_ordered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/ordered"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/textPrimary"
+            app:layout_constraintEnd_toStartOf="@+id/label_food_available_qty"
+            app:layout_constraintTop_toTopOf="@+id/label_food_available_qty" />
+
+        <TextView
+            android:id="@+id/txt_food_ordered"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/label_quantity_dummy"
+            android:textColor="@color/textSecondary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/label_food_ordered"
+            app:layout_constraintStart_toStartOf="@+id/label_food_ordered" />
 
         <TextView
             android:id="@+id/label_food_available_qty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:text="@string/available"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textColor="@color/textPrimary"
             app:layout_constraintBottom_toTopOf="@id/txt_food_available_qty"
-            app:layout_constraintEnd_toStartOf="@+id/img_food_delete"
-            app:layout_constraintStart_toEndOf="@+id/txt_food_price" />
+            app:layout_constraintEnd_toStartOf="@+id/img_food_delete" />
 
         <TextView
             android:id="@+id/txt_food_available_qty"
@@ -96,7 +120,7 @@
             android:gravity="center"
             android:text="@string/label_quantity_dummy"
             android:textAlignment="center"
-            android:textColor="@color/textSecondary"
+            android:textColor="@color/colorAccent"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -124,8 +148,7 @@
             android:contentDescription="@string/icon_delete"
             android:src="@drawable/ic_delete_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/label_food_available_qty" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <RatingBar
             android:id="@+id/rb_mean_rate"
