@@ -106,7 +106,6 @@ public class FoodAdapter extends MadFirebaseRecyclerAdapter<FoodModel, FoodAdapt
             itemName = itemView.findViewById(R.id.txt_food_name);
             itemPlace = itemView.findViewById(R.id.txt_food_description);
             itemPrice = itemView.findViewById(R.id.txt_food_price);
-            itemOrdered = itemView.findViewById(R.id.txt_food_ordered);
             itemAvailableQty = itemView.findViewById(R.id.txt_food_available_qty);
             itemTotalOrderedQty = itemView.findViewById(R.id.txt_food_total_ordered_qty);
             itemImgModify = itemView.findViewById(R.id.img_food_modify);
@@ -143,7 +142,6 @@ public class FoodAdapter extends MadFirebaseRecyclerAdapter<FoodModel, FoodAdapt
             itemName.setText(currentFoodItem.name);
             itemPlace.setText(currentFoodItem.description);
             itemPrice.setText(FoodModelRestaurateurUtil.getPriceFormatted(currentFoodItem.price));
-            itemOrdered.setText(String.format(Locale.getDefault(), "%d", currentFoodItem.totalOrderedQty));
             itemAvailableQty.setText(
                     String.format(Locale.getDefault(), "%d", currentFoodItem.availableQty));
             itemTotalOrderedQty.setText(
