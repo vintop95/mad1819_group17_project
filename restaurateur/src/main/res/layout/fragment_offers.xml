@@ -20,14 +20,12 @@
         android:id="@+id/btn_add_offer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_margin="16dp"
         android:cropToPadding="false"
         android:src="@drawable/ic_add_white_24dp"
         app:elevation="6dp"
         app:fabSize="normal"
         app:layout_anchor="@id/rv"
-        app:layout_anchorGravity="bottom|start" />
+        app:layout_anchorGravity="bottom|end" />
 
 </android.support.design.widget.CoordinatorLayout>
