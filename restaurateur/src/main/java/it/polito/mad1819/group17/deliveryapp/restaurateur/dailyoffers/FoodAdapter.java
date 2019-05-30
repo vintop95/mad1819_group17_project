@@ -97,7 +97,6 @@ public class FoodAdapter extends MadFirebaseRecyclerAdapter<FoodModel, FoodAdapt
         ImageView itemPhoto, itemImgModify, itemImgDelete;
         TextView itemName, itemPlace, itemPrice, itemAvailableQty, itemTotalOrderedQty;
         RatingBar rb_mean_rate;
-        //        int pos;
         FoodModel currentFoodItem;
 
         public FoodHolder(@NonNull View itemView) {
@@ -107,12 +106,12 @@ public class FoodAdapter extends MadFirebaseRecyclerAdapter<FoodModel, FoodAdapt
             itemName = itemView.findViewById(R.id.txt_food_name);
             itemPlace = itemView.findViewById(R.id.txt_food_description);
             itemPrice = itemView.findViewById(R.id.txt_food_price);
+            itemOrdered = itemView.findViewById(R.id.txt_food_ordered);
             itemAvailableQty = itemView.findViewById(R.id.txt_food_available_qty);
             itemTotalOrderedQty = itemView.findViewById(R.id.txt_food_total_ordered_qty);
             itemImgModify = itemView.findViewById(R.id.img_food_modify);
             itemImgDelete = itemView.findViewById(R.id.img_food_delete);
             rb_mean_rate = itemView.findViewById(R.id.rb_mean_rate);
-            // Log.d(TAG, "Holder " + itemName.getText().toString() + " created");
         }
 
         public void setData(FoodModel currentFoodItem, int pos) {
@@ -144,11 +143,11 @@ public class FoodAdapter extends MadFirebaseRecyclerAdapter<FoodModel, FoodAdapt
             itemName.setText(currentFoodItem.name);
             itemPlace.setText(currentFoodItem.description);
             itemPrice.setText(FoodModelRestaurateurUtil.getPriceFormatted(currentFoodItem.price));
+            itemOrdered.setText(String.format(Locale.getDefault(), "%d", currentFoodItem.totalOrderedQty));
             itemAvailableQty.setText(
                     String.format(Locale.getDefault(), "%d", currentFoodItem.availableQty));
             itemTotalOrderedQty.setText(
                     String.format(Locale.getDefault(), "%d", currentFoodItem.totalOrderedQty));
-//            this.pos = pos;
             if (currentFoodItem.total_rate != null && currentFoodItem.number_of_rates != null)
                 rb_mean_rate.setRating(currentFoodItem.total_rate / currentFoodItem.number_of_rates);
             else

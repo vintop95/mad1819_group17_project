@@ -59,6 +59,7 @@
     <!-- Offer Card Strings -->
     <string name="title_activity_daily_offers">Offerte Giornaliere</string>
     <string name="available">Disponibile</string>
+    <string name="ordered">Ordinati</string>
     <!-- Images -->
     <string name="image_food_dummy">Immagine Cibo</string>
 

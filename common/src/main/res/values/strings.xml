@@ -74,6 +74,7 @@
     <!-- Offer Card Strings -->
     <string name="title_activity_daily_offers">Daily Offers</string>
     <string name="available">Available</string>
+    <string name="ordered">Ordered</string>
     <!-- icons -->
     <string name="icon_modify" translatable="false">Icon Modify</string>
     <string name="icon_delete" translatable="false">Icon Delete</string>

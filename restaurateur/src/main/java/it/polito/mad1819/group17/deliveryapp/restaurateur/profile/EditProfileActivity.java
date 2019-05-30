@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -47,10 +45,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -91,6 +87,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private Intent intent;
     private Boolean firstAccess;
+    private Boolean addressFlag = true;
 
 
     private void locateViews() {
@@ -207,18 +204,6 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
-    private double[] getLatitudeAndLongitudeFromLocation(String location) {
-        Geocoder geocoder = new Geocoder(getBaseContext());
-        List<Address> addresses;
-        try {
-            addresses = geocoder.getFromLocationName(location, 1);
-            return new double[]{addresses.get(0).getLatitude(), addresses.get(0).getLongitude()};
-        } catch (
-                IOException e) {
-            return null;
-        }
-    }
-
     private int saveProfile() {
         String id = mFirebaseAuth.getUid();
         String name = input_name.getText().toString();
@@ -326,8 +311,7 @@ public class EditProfileActivity extends AppCompatActivity {
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Address has not been selected.", Toast.LENGTH_LONG).show();
             }
-
-
+            addressFlag = true;
         }
     }
 
@@ -351,9 +335,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
         Places.initialize(getApplicationContext(), "AIzaSyB7Tku5m9p0LVYU8k8-G7RB0DQoDXjvdSE");
         input_address.setOnClickListener(v -> {
-            List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.ADDRESS);
-            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
-            startActivityForResult(intent, AUTOCOMPLETE_REQUEST);
+            if (addressFlag) {
+                addressFlag = false;
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.ADDRESS);
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST);
+            }
         });
 
         addTimePickerOnClick(input_working_time_opening);
@@ -537,15 +524,17 @@ public class EditProfileActivity extends AppCompatActivity {
         if ((current_user.getAddress() == null && input_address.getText().toString() != null) ||
                 (current_user.getAddress() != null && !current_user.getAddress().equals(input_address.getText().toString())))
             return true;
-/*
+
+        Long current_type = input_restaurant_type.getSelectedItemId();
         if ((current_user.getRestaurant_type() == null && !input_restaurant_type.getSelectedItem().toString().isEmpty()) ||
-                (current_user.getRestaurant_type() != null && !current_user.getRestaurant_type().equals(input_restaurant_type.getSelectedItem().toString())))
+                (current_user.getRestaurant_type() != null && !current_user.getRestaurant_type().equals(current_type.toString())))
             return true;
 
+        Long current_day = input_free_day.getSelectedItemId();
         if ((current_user.getFree_day() == null && !input_free_day.getSelectedItem().toString().isEmpty()) ||
-                (current_user.getFree_day() != null && !current_user.getFree_day().equals(input_free_day.getSelectedItem().toString())))
+                (current_user.getFree_day() != null && !current_user.getFree_day().equals(current_day.toString())))
             return true;
-*/
+
         if ((current_user.getWorking_time_opening() == null && !input_working_time_opening.getText().toString().equals("--:--")) ||
                 (current_user.getWorking_time_opening() != null && !current_user.getWorking_time_opening().equals(input_working_time_opening.getText().toString())))
             return true;

@@ -106,12 +106,7 @@ public class OffersFragment extends Fragment {
         // Set add button listener
         btnAddOffer = view.findViewById(R.id.btn_add_offer);
 
-        ////////////// test object
-//        Bitmap img1bmp = BitmapFactory.decodeResource(getResources(), R.drawable.food_photo_1);
-//        String img1 = PrefHelper.bitMapToStringLossJpg(img1bmp);
-//        FoodModel testFood = new FoodModel(mAdapter.getItemCount(), "Crispy bacon",
-//                "carne 500g, provolazza, bacon, insalata", img1,
-//                55.0, 3);
+
         ////////////////////////////////////////////////////////////
         btnAddOffer.setOnClickListener(e -> {
             // TO PREVENT DOUBLE CLICK -> DOUBLE OPEN ACTIVITY
@@ -171,19 +166,6 @@ public class OffersFragment extends Fragment {
         addFoodInList(food);
 
         openFoodDetailsActivityModify(food,null);
-
-//        Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
-//
-////        Bitmap img1bmp = BitmapFactory.decodeResource(getResources(), R.drawable.food_photo_1);
-////        String img1 = PrefHelper.bitMapToStringLossJpg(img1bmp);
-////        FoodModel testFood = new FoodModel(mAdapter.getItemCount(), "Crispy bacon",
-////                "carne 500g, provolazza, bacon, insalata", img1,
-////                55.0, 3);
-//        Bundle bundle = new Bundle();
-//        bundle.putInt("pos", mAdapter.getItemCount());
-//        intent.putExtra("args", bundle);
-//
-//        startActivityForResult(intent, ADD_FOOD_REQUEST);
     }
 
     private View btnEditItem;
@@ -194,7 +176,6 @@ public class OffersFragment extends Fragment {
         Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
 
         Bundle bundle = new Bundle();
-//        bundle.putInt("pos", foodToModify.pos);
         bundle.putSerializable("food", foodToModify);
         intent.putExtra("args", bundle);
 
