@@ -4,4 +4,11 @@
     <!-- FirebaseUI Auth -->
     <string name="fui_name_hint">Deliveryman Name</string>
     <string name="title_activity_location_map">Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_stats">Statistics</string>
+    <string name="remaining_kilometers">Remaining Kilometers</string>
+    <string name="kms_in_attendence">Kms in attendence</string>
+    <string name="number_of_requests">Number of requests</string>
 </resources>

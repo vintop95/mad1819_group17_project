@@ -52,6 +52,7 @@ import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.Deliv
 import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.DeliveryRequestsFragment;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.profile.EditProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.profile.ProfileFragment;
+import it.polito.mad1819.group17.deliveryapp.deliveryman.statistics.StatsFragment;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.CurrencyHelper;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.PrefHelper;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.ProgressBarHandler;
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     final FragmentManager fm = getSupportFragmentManager();
     Fragment active;
+    Fragment statsFragment = new StatsFragment();
     Fragment profileFragment = new ProfileFragment();
     Fragment deliveryRequestsFragment = new DeliveryRequestsFragment();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         fm.putFragment(outState, DeliveryRequestsFragment.class.getName(), deliveryRequestsFragment);
         fm.putFragment(outState, ProfileFragment.class.getName(), profileFragment);
+        fm.putFragment(outState, ProfileFragment.class.getName(), statsFragment);
         fm.putFragment(outState, "active", active);
     }
 
@@ -106,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         if (inState != null) {
             deliveryRequestsFragment = fm.getFragment(inState, DeliveryRequestsFragment.class.getName());
             profileFragment = fm.getFragment(inState, ProfileFragment.class.getName());
+            statsFragment = fm.getFragment(inState, StatsFragment.class.getName());
             active = fm.getFragment(inState, "active");
         } else {
             profileFragment = new ProfileFragment();
@@ -114,6 +118,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             deliveryRequestsFragment = new DeliveryRequestsFragment();
             fm.beginTransaction().add(R.id.main_container, deliveryRequestsFragment,
                     DeliveryRequestsFragment.class.getName()).detach(deliveryRequestsFragment).commit();
+            statsFragment = new StatsFragment();
+            fm.beginTransaction().add(R.id.main_container, statsFragment,
+                    StatsFragment.class.getName()).detach(statsFragment).commit();
             active = deliveryRequestsFragment;
         }
         fm.beginTransaction().attach(active).commit();
@@ -262,6 +269,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                         fm.beginTransaction().detach(active).attach(deliveryRequestsFragment).commit();
                         active = deliveryRequestsFragment;
                         return true;
+                    case R.id.navigation_stats:
+                        fm.beginTransaction().detach(active).attach(statsFragment).commit();
+                        active = statsFragment;
+                        return true;
                 }
                 return false;
             }
@@ -273,6 +284,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             navSelected = R.id.navigation_delivery_requests;
         else if (active.equals(profileFragment))
             navSelected = R.id.navigation_profile;
+        else if (active.equals(statsFragment))
+            navSelected = R.id.navigation_stats;
 
         navigation.setSelectedItemId(navSelected);
     }

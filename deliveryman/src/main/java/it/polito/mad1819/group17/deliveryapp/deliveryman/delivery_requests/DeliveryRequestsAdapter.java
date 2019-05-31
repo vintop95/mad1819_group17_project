@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
+import java.text.DecimalFormat;
+
 import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.R;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.ProgressBarHandler;
@@ -44,6 +46,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
         TextView txt_delivery_time;
         TextView txt_delivery_date;
         TextView txt_delivery_address;
+        TextView routeDistance;
         //TextView txt_customer_name;
         TextView txt_state;
         TextView txt_restaurant_name;
@@ -66,9 +69,12 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
             txt_restaurant_address = itemView.findViewById(R.id.txt_restaurant_address);
             image_state = itemView.findViewById(R.id.image_state);
             mapButton = itemView.findViewById(R.id.imageButton_map);
+            routeDistance = itemView.findViewById(R.id.RouteDistance);
+
             mapButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     DeliveryRequest clickedDeliveryRequest = getItem(getAdapterPosition());
                     Log.d("AAA", ""+getAdapterPosition());
                     //clickedDeliveryRequest.setId(getSnapshots().getSnapshot(getAdapterPosition()).getKey());
@@ -110,6 +116,23 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
         model.setId(getRef(position).getKey());
         holder.txt_delivery_time.setText(model.getDelivery_time());
         holder.txt_delivery_date.setText(model.getDelivery_date());
+
+        //Add DISTANCE
+        double distance = 0;
+        try{
+             distance = Double.valueOf(model.getDistance());
+             Log.d("AAAAAAAA","daje:"+distance);
+        } catch (Exception e){
+            Log.e("exception",e.getLocalizedMessage());
+             distance = model.computeDistance(fragment.getActivity().getApplicationContext());
+        }
+
+        distance = distance / 1000; //FROM METERS TO KILOMETERS
+        DecimalFormat df = new DecimalFormat("#");
+        Log.d("computeDistance", "done:"+distance + ","+ df.format(distance));
+        holder.routeDistance.setText("≈ "+df.format(distance)+" km");
+
+
         holder.txt_state.setText(model.getCurrentStateLocal());
         holder.txt_delivery_address.setText(model.getAddress());
         //holder.txt_customer_name.setText(model.getCustomer_name());
