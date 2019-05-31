@@ -235,7 +235,7 @@
                         android:layout_marginRight="8dp"
                         android:gravity="right"
                         android:text="delivered"
-                        android:textColor="@color/colorState3"
+                        android:textColor="@color/colorState4"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -252,7 +252,7 @@
                         android:layout_marginBottom="12dp"
                         android:text="0"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/colorState3"
+                        android:textColor="@color/colorState4"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
@@ -286,7 +286,7 @@
                 android:text="0"
                 android:id="@+id/kmDelivered"
                 android:layout_margin="10dp"
-                android:textColor="@color/colorState3"
+                android:textColor="@color/colorState4"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="match_parent"
                 android:gravity="right"

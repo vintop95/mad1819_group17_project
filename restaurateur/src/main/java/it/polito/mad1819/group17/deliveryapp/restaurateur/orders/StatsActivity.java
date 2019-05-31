@@ -50,18 +50,28 @@ public class StatsActivity extends AppCompatActivity {
     public ProgressBarHandler progressBarHandler;
     private ListView listView;
 
+    private TextView main_hourInterval_tv;
+    private TextView main_numOfOrders_tv;
+    public ProgressBar main_progressBar;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
+        main_hourInterval_tv=findViewById(R.id.mainHoursInterval);
+        main_numOfOrders_tv=findViewById(R.id.mainNumberOfOrders);
+        main_progressBar=findViewById(R.id.mainProgressBarNumberOfOrder);
         progressBarHandler = new ProgressBarHandler(this);
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         listView = findViewById(R.id.listview_stats);
+
         populateOrdersPerHour();
 
     }
@@ -203,6 +213,12 @@ public class StatsActivity extends AppCompatActivity {
             return returnValue;
         }
 
+        public String getNumberOfOrdersonTotalFormatted() {
+            float percentage = (m_numberOfOrders * 100 )/ sum;
+            String returnValue = ""+m_numberOfOrders+" ordini su "+sum+" totali ("+format.format(percentage)+"%)";
+            return returnValue;
+        }
+
         public void setNumberOfOrders(Integer m_numberOfOrders) {
             this.m_numberOfOrders = m_numberOfOrders;
         }
@@ -235,6 +251,13 @@ public class StatsActivity extends AppCompatActivity {
 
             int progress = (100 * h.getNumberOfOrders())/sum;
             progressBar.setProgress(progress);
+
+            //MAIN CARDVIEW FILL-UP
+            if(position == 0){
+                main_hourInterval_tv.setText(h.getHourFormatted());
+                main_numOfOrders_tv.setText(h.getNumberOfOrdersonTotalFormatted());
+                main_progressBar.setProgress(progress);
+            }
 
             return convertView;
         }
