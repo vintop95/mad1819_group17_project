@@ -14,28 +14,27 @@
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true">
 
+    <ImageView
+        android:id="@+id/category_image"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@android:color/white"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/image_background"
+        android:src="@drawable/pizza" />
 
-        <LinearLayout
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/category_image"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:background="@android:color/white"
-                android:scaleType="centerCrop"
-                android:src="@drawable/pizza"
-                app:layout_constraintBottom_toTopOf="@+id/category_name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/category_name" />
+            android:layout_height="wrap_content"
+            android:backgroundTint="#8000"
+            android:padding="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <TextView
                 android:id="@+id/category_name"
@@ -43,13 +42,15 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
+                android:fontFamily="sans-serif-thin"
                 android:gravity="center"
-                android:text="Pizza"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:text="@string/category"
                 android:textAllCaps="true"
-                android:textSize="29dp"
+                android:textColor="@android:color/white"
+                android:textSize="29sp"
                 android:textStyle="bold" />
+        </android.support.v7.widget.CardView>
 
-        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>
