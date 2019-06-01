@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ public class ProfileFragment extends Fragment {
     private TextView txt_mail;
     private TextView txt_address;
     private TextView txt_bio;
+    private Button logout;
 
     private ProgressBarHandler progressBarHandler;
 
@@ -54,6 +56,7 @@ public class ProfileFragment extends Fragment {
         txt_mail = view.findViewById(R.id.txt_mail);
         txt_address = view.findViewById(R.id.txt_address);
         txt_bio = view.findViewById(R.id.txt_bio);
+        logout = view.findViewById(R.id.logoutButton);
     }
 
     private void feedViews(Customer customer) {
@@ -84,6 +87,12 @@ public class ProfileFragment extends Fragment {
                 progressBarHandler.hide();
             }
 
+            logout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FirebaseAuth.getInstance().signOut();
+                }
+            });
             txt_name.setText(customer.getName());
             txt_phone.setText(customer.getPhone());
             txt_mail.setText(customer.getMail());
@@ -91,6 +100,8 @@ public class ProfileFragment extends Fragment {
             if (!customer.getBio().isEmpty())
                 txt_bio.setText(customer.getBio());
         }
+
+
     }
 
     @Override
