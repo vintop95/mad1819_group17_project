@@ -9,7 +9,8 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp">
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline_16dp_left"
@@ -93,8 +94,8 @@
 
         <!-- Name -->
         <ImageView
-            style="@style/smallIconStyle"
             android:id="@+id/image_name"
+            style="@style/smallIconStyle"
             android:contentDescription="@string/icon_restaurateur"
             app:layout_constraintBottom_toBottomOf="@+id/txt_name"
             app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
@@ -112,16 +113,16 @@
         <TextView
             android:id="@+id/txt_name"
             style="@style/standardTextStyle"
-            android:text="@string/hint_name"
             android:layout_marginLeft="64dp"
             android:layout_marginRight="16dp"
-            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            android:text="@string/hint_name"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
             app:layout_constraintTop_toBottomOf="@+id/label_name" />
 
         <View
-            style="@style/innerDividerStyle"
             android:id="@+id/view_divider_name"
+            style="@style/innerDividerStyle"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
             app:layout_constraintTop_toBottomOf="@+id/txt_name" />
@@ -129,8 +130,8 @@
 
         <!-- Phone -->
         <ImageView
-            style="@style/smallIconStyle"
             android:id="@+id/image_phone"
+            style="@style/smallIconStyle"
             android:contentDescription="@string/icon_phone"
             app:layout_constraintBottom_toBottomOf="@+id/txt_phone"
             app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
@@ -145,18 +146,18 @@
             app:layout_constraintTop_toBottomOf="@+id/view_divider_name" />
 
         <TextView
-            style="@style/standardTextStyle"
             android:id="@+id/txt_phone"
-            android:text="@string/hint_phone"
+            style="@style/standardTextStyle"
             android:layout_marginLeft="64dp"
             android:layout_marginRight="16dp"
-            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            android:text="@string/hint_phone"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
             app:layout_constraintTop_toBottomOf="@+id/label_phone" />
 
         <View
-            style="@style/innerDividerStyle"
             android:id="@+id/view_divider_phone"
+            style="@style/innerDividerStyle"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
             app:layout_constraintTop_toBottomOf="@+id/txt_phone" />
@@ -164,8 +165,8 @@
 
         <!-- Email -->
         <ImageView
-            style="@style/smallIconStyle"
             android:id="@+id/image_mail"
+            style="@style/smallIconStyle"
             android:contentDescription="@string/icon_mail"
             app:layout_constraintBottom_toBottomOf="@+id/txt_mail"
             app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
@@ -173,25 +174,25 @@
             app:srcCompat="@drawable/ic_email_black_24dp" />
 
         <TextView
-            style="@style/smallLabelStyle"
             android:id="@+id/label_mail"
+            style="@style/smallLabelStyle"
             android:text="@string/mail"
             app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
             app:layout_constraintTop_toBottomOf="@+id/view_divider_phone" />
 
         <TextView
-            style="@style/standardTextStyle"
             android:id="@+id/txt_mail"
-            android:text="@string/hint_mail"
+            style="@style/standardTextStyle"
             android:layout_marginLeft="64dp"
             android:layout_marginRight="16dp"
-            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            android:text="@string/hint_mail"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
             app:layout_constraintTop_toBottomOf="@+id/label_mail" />
 
         <View
-            style="@style/innerDividerStyle"
             android:id="@+id/view_divider_mail"
+            style="@style/innerDividerStyle"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
             app:layout_constraintTop_toBottomOf="@+id/txt_mail" />
@@ -218,12 +219,12 @@
         <TextView
             android:id="@+id/txt_city"
             style="@style/standardTextStyle.longText"
-            android:text="@string/hint_city"
             android:layout_marginLeft="64dp"
             android:layout_marginRight="16dp"
-            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            android:text="@string/hint_city"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
             app:layout_constraintTop_toBottomOf="@+id/label_city" />
 
         <View
@@ -274,9 +275,9 @@
             android:id="@+id/image_bio"
             style="@style/smallIconStyle"
             android:contentDescription="@string/icon_working_time"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_bio"
             app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
             app:layout_constraintTop_toTopOf="@+id/label_bio"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_bio"
             app:srcCompat="@drawable/ic_baseline_description_24px" />
 
         <TextView
@@ -289,23 +290,34 @@
         <TextView
             android:id="@+id/txt_bio"
             style="@style/standardTextStyle"
-            android:text="@string/hint_bio"
             android:layout_marginLeft="64dp"
             android:layout_marginRight="16dp"
-            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
+            android:text="@string/hint_bio"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
             app:layout_constraintTop_toBottomOf="@id/label_bio" />
 
         <View
             android:id="@+id/view_divider_bio"
             style="@style/innerDividerStyle"
             android:layout_marginBottom="16dp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
             app:layout_constraintTop_toBottomOf="@+id/txt_bio" />
+
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@android:color/holo_red_light"
+            android:paddingLeft="64dp"
+            android:paddingRight="64dp"
+            android:text="LOG OUT"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            app:layout_constraintTop_toBottomOf="@+id/view_divider_bio" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>

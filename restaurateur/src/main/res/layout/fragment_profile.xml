@@ -9,7 +9,9 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            >
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline_16dp_left"
@@ -377,13 +379,24 @@
                 android:id="@+id/view_divider_bio"
                 style="@style/innerDividerStyle"
                 android:layout_marginBottom="16dp"
-                android:visibility="invisible"
                 android:layout_marginLeft="64dp"
                 android:layout_marginRight="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toBottomOf="@+id/txt_bio" />
+
+            <Button
+                android:id="@+id/logoutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@android:color/holo_red_light"
+                android:paddingLeft="64dp"
+                android:paddingRight="64dp"
+                android:text="LOG OUT"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+                app:layout_constraintTop_toBottomOf="@+id/view_divider_bio" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
