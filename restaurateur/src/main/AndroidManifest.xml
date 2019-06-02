@@ -12,16 +12,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".orders.StatsActivity"></activity>
+        <activity
+            android:name=".orders.StatsActivity"
+            android:label="@string/title_hour_analytics"/>
         <activity
             android:name=".orders.AvailableDeliverymenActivity"
-            android:label="@string/title_activity_choose_deliveryman"></activity>
+            android:label="@string/title_activity_choose_deliveryman"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -35,7 +36,7 @@
             android:name=".orders.OrderDetailsActivity"
             android:label="@string/title_activity_order_details" />
         <activity android:name=".reviews.AnalyticsActivity"
-            android:label="@string/title_activity_analytics"/>
+            android:label="@string/title_review_analytics"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB7Tku5m9p0LVYU8k8-G7RB0DQoDXjvdSE" />

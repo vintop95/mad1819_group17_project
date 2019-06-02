@@ -47,7 +47,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
     private Restaurateur currentRestaurateur;
 
-    private TextView txt_restaurant_name;
+    private TextView txt_order_id;
     private TextView txt_delivery_time;
     private TextView txt_delivery_date;
     private TextView txt_order_content;
@@ -70,7 +70,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     }
 
     private void locateViews() {
-        txt_restaurant_name = findViewById(R.id.txt_restaurant_name);
+        txt_order_id = findViewById(R.id.txt_order_id);
         txt_delivery_time = findViewById(R.id.txt_delivery_time);
         txt_delivery_date = findViewById(R.id.txt_delivery_date);
         txt_order_content = findViewById(R.id.txt_order_content);
@@ -86,7 +86,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     }
 
     private void feedViews(Order selectedOrder) {
-        txt_restaurant_name.setText(selectedOrder.getRestaurant_name());
+        txt_order_id.setText(selectedOrder.getId());
         txt_delivery_time.setText(selectedOrder.getDelivery_timestamp().split(" ")[1]);
         txt_delivery_date.setText(selectedOrder.getDelivery_timestamp().split(" ")[0]);
         txt_customer_name.setText(selectedOrder.getCustomer_name());

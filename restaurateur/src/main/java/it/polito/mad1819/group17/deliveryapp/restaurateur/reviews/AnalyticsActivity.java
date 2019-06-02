@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -33,6 +34,8 @@ public class AnalyticsActivity extends AppCompatActivity {
     private ArrayList<Review> reviews;
     private Context context = this;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +49,8 @@ public class AnalyticsActivity extends AppCompatActivity {
 
         progressBar = new ProgressBarHandler(this);
         progressBar.show();
+
+        showBackArrowOnToolbar();
 
         if (FirebaseAuth.getInstance().getUid() != null) {
             FirebaseDatabase.getInstance().getReference()
@@ -92,5 +97,12 @@ public class AnalyticsActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    private void showBackArrowOnToolbar() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 }

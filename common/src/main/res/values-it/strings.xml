@@ -7,7 +7,8 @@
     <string name="title_dailyoffer">Offerte Giornaliere</string>
     <string name="title_restaurants">Ristoranti</string>
     <string name="title_delivery_requests">Richieste di consegna</string>
-    <string name="title_activity_analytics">Recensioni</string>
+    <string name="title_hour_analytics">Statistiche</string>
+    <string name="title_review_analytics">Recensioni</string>
 
     <string name="sign_out_menu">Cambia Utente</string>
 
@@ -146,6 +147,8 @@
     <!-- Images -->
     <string name="image_background">Immagine Sfondo</string>
     <string name="image_profile_photo">Immagine Profilo</string>
+    <!-- Button -->
+    <string name="logout">Disconnetti</string>
 
 
     <!-- Edit Profile Strings -->
@@ -175,7 +178,28 @@
         <item>Venerdì</item>
         <item>Sabato</item>
     </string-array>
+
+
+    <!-- ////////////// -->
+    <!-- Statistics Strings -->
+    <!-- ////////////// -->
+
+    <!-- Hour Stat Strings -->
+    <string name="most_popular_hour">Orario più popolare:</string>
+    <string name="number_orders">Num Ordini</string>
+
+    <!-- Review Stat Strings -->
+    <string name="label_score_summary">Riepilogo Valutazione:</string>
+    <string name="label_restaurant_score">Valutazione Ristorante</string>
+    <string name="label_service_score">Valutazione Servizio</string>
+    <string name="label_num_comments">Numero di Commenti:</string>
+    <string name="label_comment">Commento</string>
+    <string name="label_no_comment">Nessun commento disponibile</string>
+
+
+    <!-- ////////////// -->
     <!-- Alert Dialogs -->
+    <!-- ////////////// -->
     <string name="gallery_not_found">Applicazione Galleria non trovata!</string>
     <string name="camera_not_found">Applicazione Fotocamera non trovata!</string>
     <string name="name_not_valid">Il nome deve essere alfanumerico e non vuoto</string>
