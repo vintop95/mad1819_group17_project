@@ -1,30 +1,24 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.orders;
 
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.AttributeSet;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
@@ -38,7 +32,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import it.polito.mad1819.group17.deliveryapp.common.orders.Order;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
@@ -54,7 +47,7 @@ public class StatsActivity extends AppCompatActivity {
     private TextView main_numOfOrders_tv;
     public ProgressBar main_progressBar;
 
-
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +58,7 @@ public class StatsActivity extends AppCompatActivity {
         main_progressBar=findViewById(R.id.mainProgressBarNumberOfOrder);
         progressBarHandler = new ProgressBarHandler(this);
 
+        showBackArrowOnToolbar();
     }
 
     @Override
@@ -261,6 +255,13 @@ public class StatsActivity extends AppCompatActivity {
 
             return convertView;
         }
+    }
+
+    private void showBackArrowOnToolbar() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
 }

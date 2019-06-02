@@ -1,0 +1,208 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_restaurant_info"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="4dp"
+    card_view:cardPreventCornerOverlap="true"
+    card_view:cardUseCompatPadding="true">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/view_state_background"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            card_view:layout_constraintBottom_toTopOf="@+id/view_divider_order"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_delivery_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:padding="8dp"
+            android:text="@string/time"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Display2"
+            android:textColor="@color/textPrimary"
+            card_view:layout_constraintEnd_toStartOf="@+id/guideline"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/label_delivery_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delivery_time_card"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/textPrimary"
+            card_view:layout_constraintBottom_toTopOf="@+id/view_divider_order"
+            card_view:layout_constraintEnd_toEndOf="@+id/txt_delivery_time"
+            card_view:layout_constraintHorizontal_bias="0.555"
+            card_view:layout_constraintStart_toStartOf="@+id/txt_delivery_time"
+            card_view:layout_constraintTop_toBottomOf="@+id/txt_delivery_time" />
+
+        <TextView
+            android:id="@+id/label_delivery_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:autoSizeTextType="uniform"
+            android:text="@string/delivery_date"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/textPrimary"
+            android:textStyle="bold"
+            card_view:layout_constraintBottom_toTopOf="@+id/txt_delivery_date"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="@+id/guideline"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/txt_delivery_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoSizeTextType="uniform"
+            android:text="@string/delivery_date"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/textPrimary"
+            card_view:layout_constraintBottom_toBottomOf="@+id/label_order_state"
+            card_view:layout_constraintEnd_toEndOf="@+id/label_delivery_date"
+            card_view:layout_constraintStart_toStartOf="@+id/label_delivery_date"
+            card_view:layout_constraintTop_toBottomOf="@+id/label_delivery_date" />
+
+        <TextView
+            android:id="@+id/label_order_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:autoSizeTextType="uniform"
+            android:text="@string/order_state"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/textPrimary"
+            android:textStyle="bold"
+            card_view:layout_constraintBottom_toTopOf="@+id/txt_order_state"
+            card_view:layout_constraintEnd_toEndOf="@+id/view_state_background"
+            card_view:layout_constraintStart_toStartOf="@+id/guideline"
+            card_view:layout_constraintTop_toBottomOf="@+id/txt_delivery_date" />
+
+        <TextView
+            android:id="@+id/txt_order_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:autoSizeTextType="uniform"
+            android:text="@string/order_state"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/textPrimary"
+            card_view:layout_constraintBottom_toTopOf="@+id/view_divider_order"
+            card_view:layout_constraintEnd_toEndOf="@+id/label_order_state"
+            card_view:layout_constraintStart_toStartOf="@+id/label_order_state"
+            card_view:layout_constraintTop_toBottomOf="@+id/label_order_state" />
+
+        <View
+            android:id="@+id/view_divider_order"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="122dp"
+            android:background="@color/cardview_light_background"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/label_customer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/name_customer"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/textSecondary"
+            android:textStyle="bold"
+            card_view:layout_constraintBottom_toTopOf="@+id/txt_customer_name"
+            card_view:layout_constraintEnd_toStartOf="@+id/guideline"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/view_divider_order"
+            card_view:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/txt_customer_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/name_customer"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/textPrimary"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toStartOf="@+id/guideline"
+            card_view:layout_constraintStart_toStartOf="@+id/label_customer_name"
+            card_view:layout_constraintTop_toBottomOf="@+id/label_customer_name" />
+
+        <TextView
+            android:id="@+id/label_total_items"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/total_items"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/textSecondary"
+            android:textStyle="bold"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="@+id/guideline"
+            card_view:layout_constraintTop_toBottomOf="@+id/view_divider_order" />
+
+        <TextView
+            android:id="@+id/txt_total_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/total_items"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/textPrimary"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="@+id/label_total_items"
+            card_view:layout_constraintTop_toBottomOf="@+id/label_total_items" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            card_view:layout_constraintGuide_percent="0.5" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>

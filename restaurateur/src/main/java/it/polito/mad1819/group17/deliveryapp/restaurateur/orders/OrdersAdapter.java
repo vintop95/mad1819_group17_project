@@ -36,7 +36,7 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
         View state_background;
         TextView txt_delivery_time;
         TextView txt_delivery_date;
-        TextView txt_restaurant_name;
+        TextView txt_customer_name;
         TextView txt_total_items;
         TextView txt_order_state;
 
@@ -47,7 +47,7 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
             state_background = itemView.findViewById(R.id.view_state_background);
             txt_delivery_time = itemView.findViewById(R.id.txt_delivery_time);
             txt_delivery_date = itemView.findViewById(R.id.txt_delivery_date);
-            txt_restaurant_name = itemView.findViewById(R.id.txt_restaurant_name);
+            txt_customer_name = itemView.findViewById(R.id.txt_customer_name);
             txt_total_items = itemView.findViewById(R.id.txt_total_items);
             txt_order_state = itemView.findViewById(R.id.txt_order_state);
         }
@@ -68,7 +68,7 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
     protected void onBindViewHolder(OrderHolder holder, int position, Order model) {
         holder.txt_delivery_time.setText(model.getDelivery_time());
         holder.txt_delivery_date.setText(model.getDelivery_date());
-        holder.txt_restaurant_name.setText(model.getRestaurant_name());
+        holder.txt_customer_name.setText(model.getCustomer_name());
         holder.txt_total_items.setText("" + model.getTotalItemsQuantity());
         holder.txt_order_state.setText(model.getCurrentStateLocal());
         switch (model.getCurrentState()) {
@@ -110,10 +110,6 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
         if(fragment instanceof OrdersFragment) {
             ((OrdersFragment) fragment).progressBarHandler.hide();
         }
-    }
-
-    public static Order getOrderById(String id){
-        return null;
     }
 
     private void runLayoutAnimation(final RecyclerView recyclerView, int type) {

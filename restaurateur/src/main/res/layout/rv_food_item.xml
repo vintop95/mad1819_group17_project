@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_food_photo"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -38,7 +38,6 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:text="@string/label_food_dummy"
-            android:textColor="@color/textPrimary"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/img_food_modify"
             app:layout_constraintStart_toEndOf="@+id/img_food_photo"
@@ -50,10 +49,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:text="@string/hint_food_description"
-            android:textColor="@color/textSecondary"
             app:layout_constraintEnd_toStartOf="@+id/img_food_modify"
             app:layout_constraintStart_toEndOf="@+id/img_food_photo"
             app:layout_constraintTop_toBottomOf="@+id/txt_food_name" />
@@ -67,6 +66,8 @@
             android:text="@string/label_price_dummy"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorAccent"
+            android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/txt_food_available_qty"
             app:layout_constraintStart_toEndOf="@+id/img_food_photo"
             app:layout_constraintTop_toTopOf="@+id/label_food_available_qty" />
@@ -80,9 +81,8 @@
             android:layout_marginBottom="8dp"
             android:text="@string/available"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            android:textColor="@color/textPrimary"
-            app:layout_constraintEnd_toStartOf="@+id/label_food_total_ordered_qty"
             app:layout_constraintBottom_toTopOf="@id/txt_food_available_qty"
+            app:layout_constraintEnd_toStartOf="@+id/label_food_total_ordered_qty"
             app:layout_constraintStart_toEndOf="@+id/txt_food_price" />
 
         <TextView
@@ -106,7 +106,6 @@
             android:layout_height="wrap_content"
             android:text="@string/ordered"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/textPrimary"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="@+id/label_food_available_qty"
             app:layout_constraintEnd_toStartOf="@+id/img_food_delete"
@@ -121,7 +120,6 @@
             android:gravity="center"
             android:text="3"
             android:textAlignment="center"
-            android:textColor="@color/textSecondary"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/label_food_total_ordered_qty"

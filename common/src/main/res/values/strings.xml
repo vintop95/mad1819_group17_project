@@ -7,7 +7,8 @@
     <string name="title_orders">Orders</string>
     <string name="title_restaurants">Restaurants</string>
     <string name="title_delivery_requests">Delivery Requests</string>
-    <string name="title_activity_analytics">Reviews</string>
+    <string name="title_hour_analytics">Statistics</string>
+    <string name="title_review_analytics">Reviews</string>
 
     <string name="sign_out_menu">Sign Out</string>
 
@@ -185,7 +186,8 @@
     <!-- Images -->
     <string name="image_background">Background Picture</string>
     <string name="image_profile_photo">Profile photo</string>
-
+    <!-- Button -->
+    <string name="logout">Logout</string>
 
     <!-- Edit Profile Strings -->
     <string name="title_activity_edit_profile">Edit Profile</string>
@@ -214,7 +216,28 @@
         <item>Friday</item>
         <item>Saturday</item>
     </string-array>
+
+    <!-- ////////////// -->
+    <!-- Statistics Strings -->
+    <!-- ////////////// -->
+
+    <!-- Hour Stat Strings -->
+    <string name="most_popular_hour">Most Popular Timing:</string>
+    <string name="time_dummy" translatable="false">00:00/00:00</string>
+    <string name="number_orders">Num Orders</string>
+
+    <!-- Review Stat Strings -->
+    <string name="label_score_summary">Score Summary:</string>
+    <string name="label_restaurant_score">Restaurant Score</string>
+    <string name="label_service_score">Service Score</string>
+    <string name="label_num_comments">Number of Comments:</string>
+    <string name="label_comment">Comment</string>
+    <string name="label_no_comment">No comment available</string>
+
+
+    <!-- ////////////// -->
     <!-- Alert Dialogs -->
+    <!-- ////////////// -->
     <string name="gallery_not_found">Gallery app not found!</string>
     <string name="camera_not_found">Camera app not found!</string>
     <string name="name_not_valid">Name must be alphanumeric and not empty</string>
@@ -232,7 +255,7 @@
     <string name="new_order">NEW ORDER</string>
     <string name="confirm_order">Confirm Order</string>
     <string name="shopping_cart_empty">Shopping cart is empty</string>
-    <string name="label_order_id">Order id</string>
+    <string name="label_order_id">Order ID</string>
     <string name="restaurant_profile">Restaurant Profile</string>
     <string name="category">CATEGORY</string>
     <string name="choose_category">Choose Restaurant Category</string>

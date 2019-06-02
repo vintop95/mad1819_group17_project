@@ -58,8 +58,11 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewHo
             reviewHolder.rb_reviews_restaurant.setRating(review.getRestaurant_rate());
         if (review.getService_rate() != null)
             reviewHolder.rb_reviews_service.setRating(review.getService_rate());
-        if (!TextUtils.isEmpty(review.getComment()))
+        if (!TextUtils.isEmpty(review.getComment())) {
             reviewHolder.tv_reviews_comment.setText(review.getComment());
+        } else {
+            reviewHolder.tv_reviews_comment.setText(R.string.label_no_comment);
+        }
     }
 
     @Override
