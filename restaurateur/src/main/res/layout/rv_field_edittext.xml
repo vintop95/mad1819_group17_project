@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -25,5 +25,8 @@
         android:layout_marginBottom="16dp"
         android:singleLine="true"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:textColor="@color/textSecondary"></EditText>
+        android:textColor="@color/textSecondary"
+        android:inputType=""
+        android:hint="@string/name_label"
+        android:importantForAutofill="no" tools:targetApi="o"></EditText>
 </LinearLayout>

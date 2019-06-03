@@ -1,6 +1,6 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_restaurant_info"
+    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/card_restaurant_info"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -71,7 +71,7 @@
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="@+id/guideline"
             card_view:layout_constraintTop_toTopOf="parent"
-            card_view:layout_constraintVertical_chainStyle="packed" />
+            card_view:layout_constraintVertical_chainStyle="packed" tools:targetApi="o"/>
 
         <TextView
             android:id="@+id/txt_delivery_date"
@@ -84,7 +84,7 @@
             card_view:layout_constraintBottom_toBottomOf="@+id/label_order_state"
             card_view:layout_constraintEnd_toEndOf="@+id/label_delivery_date"
             card_view:layout_constraintStart_toStartOf="@+id/label_delivery_date"
-            card_view:layout_constraintTop_toBottomOf="@+id/label_delivery_date" />
+            card_view:layout_constraintTop_toBottomOf="@+id/label_delivery_date" tools:targetApi="o"/>
 
         <TextView
             android:id="@+id/label_order_state"
@@ -103,7 +103,7 @@
             card_view:layout_constraintBottom_toTopOf="@+id/txt_order_state"
             card_view:layout_constraintEnd_toEndOf="@+id/view_state_background"
             card_view:layout_constraintStart_toStartOf="@+id/guideline"
-            card_view:layout_constraintTop_toBottomOf="@+id/txt_delivery_date" />
+            card_view:layout_constraintTop_toBottomOf="@+id/txt_delivery_date" tools:targetApi="o"/>
 
         <TextView
             android:id="@+id/txt_order_state"
@@ -117,14 +117,14 @@
             card_view:layout_constraintBottom_toTopOf="@+id/view_divider_order"
             card_view:layout_constraintEnd_toEndOf="@+id/label_order_state"
             card_view:layout_constraintStart_toStartOf="@+id/label_order_state"
-            card_view:layout_constraintTop_toBottomOf="@+id/label_order_state" />
+            card_view:layout_constraintTop_toBottomOf="@+id/label_order_state" tools:targetApi="o"/>
 
         <View
             android:id="@+id/view_divider_order"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="122dp"
-            android:background="@color/cardview_light_background"
+            android:background="@color/colorPrimary"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent" />

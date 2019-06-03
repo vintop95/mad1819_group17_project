@@ -20,7 +20,8 @@
             android:orientation="vertical"
             app:layout_constraintGuide_begin="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="16dp" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline_64dp_left"
@@ -30,7 +31,8 @@
             android:orientation="vertical"
             app:layout_constraintGuide_begin="64dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="64dp" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline_16dp_right"
@@ -40,7 +42,8 @@
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintGuide_end="16dp"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginRight="16dp" />
 
         <FrameLayout
             android:layout_width="0dp"
@@ -118,7 +121,9 @@
             android:text="@string/hint_name"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-            app:layout_constraintTop_toBottomOf="@+id/label_name" />
+            app:layout_constraintTop_toBottomOf="@+id/label_name"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="16dp" />
 
         <View
             android:id="@+id/view_divider_name"
@@ -153,7 +158,9 @@
             android:text="@string/hint_phone"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-            app:layout_constraintTop_toBottomOf="@+id/label_phone" />
+            app:layout_constraintTop_toBottomOf="@+id/label_phone"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="16dp" />
 
         <View
             android:id="@+id/view_divider_phone"
@@ -188,7 +195,9 @@
             android:text="@string/hint_mail"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-            app:layout_constraintTop_toBottomOf="@+id/label_mail" />
+            app:layout_constraintTop_toBottomOf="@+id/label_mail"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="16dp" />
 
         <View
             android:id="@+id/view_divider_mail"
@@ -225,7 +234,9 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-            app:layout_constraintTop_toBottomOf="@+id/label_city" />
+            app:layout_constraintTop_toBottomOf="@+id/label_city"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="16dp" />
 
         <View
             android:id="@+id/view_divider_city"
@@ -234,41 +245,6 @@
             app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
             app:layout_constraintTop_toBottomOf="@+id/txt_city" />
 
-
-        <!--&lt;!&ndash; Birthday &ndash;&gt;
-        <TextView
-            android:id="@+id/label_birthday"
-            style="@style/smallLabelStyle"
-            android:text="@string/birthday"
-            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-            app:layout_constraintTop_toBottomOf="@+id/view_divider_city" />
-
-        <ImageView
-            android:id="@+id/image_birthday"
-            style="@style/smallIconStyle"
-            android:layout_marginBottom="8dp"
-            android:contentDescription="@string/icon_birthday"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_birthday"
-            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-            app:layout_constraintTop_toTopOf="@+id/label_birthday"
-            app:srcCompat="@drawable/ic_today_black_24dp" />
-
-        <TextView
-            android:id="@+id/txt_birthday"
-            style="@style/standardTextStyle.longText"
-            android:text="@string/hint_birthday"
-            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-            app:layout_constraintTop_toBottomOf="@+id/label_birthday" />
-
-        <View
-            android:id="@+id/view_divider_birthday"
-            style="@style/innerDividerStyle"
-            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
-            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-            app:layout_constraintTop_toBottomOf="@+id/txt_birthday" />
--->
 
         <!-- Bio -->
         <ImageView
@@ -296,7 +272,9 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-            app:layout_constraintTop_toBottomOf="@id/label_bio" />
+            app:layout_constraintTop_toBottomOf="@id/label_bio"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="16dp" />
 
         <View
             android:id="@+id/view_divider_bio"
@@ -311,12 +289,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:background="@android:color/holo_red_light"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/colorPrimary"
             android:paddingLeft="64dp"
             android:paddingRight="64dp"
-            android:text="LOG OUT"
-            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
-            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            android:text="@string/logout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_divider_bio" />
 
     </android.support.constraint.ConstraintLayout>

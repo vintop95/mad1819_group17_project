@@ -1,11 +1,10 @@
 package it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -14,11 +13,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
 
 import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.R;

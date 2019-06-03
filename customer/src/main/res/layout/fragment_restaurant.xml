@@ -32,7 +32,7 @@
             android:paddingEnd="8dp"
             android:text="@string/choose_category"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:textColor="@color/textPrimary" />
+            android:textColor="@color/textPrimary" tools:targetApi="o"/>
 
         <ListView
             android:id="@+id/list_view_category"

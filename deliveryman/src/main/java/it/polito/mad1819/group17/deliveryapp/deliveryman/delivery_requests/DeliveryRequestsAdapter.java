@@ -124,6 +124,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
              Log.d("AAAAAAAA","daje:"+distance);
         } catch (Exception e){
             Log.e("exception",e.getLocalizedMessage());
+            if (distance != 0)
              distance = model.computeDistance(fragment.getActivity().getApplicationContext());
         }
 

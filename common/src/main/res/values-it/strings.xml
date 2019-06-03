@@ -90,6 +90,10 @@
     <string name="title_activity_confirm_order">Conferma Ordine</string>
     <string name="total">Totale</string>
     <string name="hint_money">100€</string>
+    <!-- Hints -->
+    <string name="hint_date">Inserisci Data Consegna</string>
+    <string name="hint_time">Inserisci Orario Consegna</string>
+    <string name="hint_order_info">Inserisci Informazioni Aggiuntive</string>
 
     <!-- Restaurant Profile Strings -->
     <string name="title_activity_restaurant_profile">Profile Ristorante</string>
@@ -105,6 +109,17 @@
     <string name="new_delivery_request">NUOVA RICHIESTA CONSEGNA</string>
     <string name="button_map">Apri Mappa</string>
     <string name="button_google_map">Vai a Google Maps</string>
+
+    <!-- Deliveryman Statistics -->
+    <string name="label_delivered_total">consegnati / totali</string>
+    <string name="label_total">totale</string>
+    <string name="label_assigned">assegnati</string>
+    <string name="label_accepted">accettati</string>
+    <string name="label_delivered">consegnati</string>
+    <string name="kilometers_achieved">Chilometri percorsi</string>
+    <string name="kilometers_remaining">Chilometri rimanenti</string>
+    <string name="kilometers_attendence">Chilometri in attesa</string>
+    <string name="number_requests">Numero di richieste</string>
 
 
     <!-- ////////////// -->
