@@ -363,6 +363,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
                 if (committed) {
                     pushOrderToFirebase(ord);
                     setResult(RESULT_OK);
+                    Toast.makeText(getApplicationContext(), getString(R.string.order_confirmed), Toast.LENGTH_LONG).show();
                     finish();
                     Intent orders = new Intent(OrderConfirmActivity.this, MainActivity.class);
                     startActivity(orders);
@@ -541,9 +542,9 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance();
         try {
-            calendar.setTime(new SimpleDateFormat("yyyy/mm/dd").parse(delivery_date));
+            calendar.setTime(new SimpleDateFormat("yyyy/MM/dd").parse(delivery_date));
             // check that free day (of week) and delivery day (of week) are the same
-            if (Integer.parseInt(free_day) == calendar.get(Calendar.DAY_OF_WEEK)) {
+            if (Integer.parseInt(free_day) + 1 == calendar.get(Calendar.DAY_OF_WEEK)) {
                 Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.restaurant_closed), Toast.LENGTH_SHORT).show();
                 return true;
             }
@@ -554,6 +555,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
                 return false; // restaurant open
             else {
                 Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.restaurant_closed), Toast.LENGTH_SHORT).show();
+                Log.d("XYZW", "B");
                 return true;
             }
         } catch (ParseException e) {
