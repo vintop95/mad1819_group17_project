@@ -171,13 +171,15 @@
             <EditText
                 android:id="@+id/input_name_sign_in"
                 style="@style/standardInputStyle.name.autofill"
+                android:hint="@string/hint_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/label_name"
-                app:layout_constraintTop_toBottomOf="@+id/label_name" />
+                app:layout_constraintTop_toBottomOf="@+id/label_name"
+                android:autofillHints="" tools:targetApi="o"/>
 
             <View
                 android:id="@+id/view_divider_name"
@@ -216,13 +218,15 @@
             <EditText
                 android:id="@+id/input_phone_sign_in"
                 style="@style/standardInputStyle.phone"
+                android:hint="@string/hint_phone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/label_phone" />
+                app:layout_constraintTop_toBottomOf="@+id/label_phone"
+                android:autofillHints="" tools:targetApi="o"/>
 
             <View
                 android:id="@+id/view_divider_phone"
@@ -261,13 +265,15 @@
             <EditText
                 android:id="@+id/input_mail_sign_in"
                 style="@style/standardInputStyle.mail.autofill"
+                android:hint="@string/hint_mail"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/label_mail" />
+                app:layout_constraintTop_toBottomOf="@+id/label_mail"
+                android:autofillHints="" tools:targetApi="o"/>
 
             <View
                 android:id="@+id/view_divider_mail"
@@ -307,13 +313,15 @@
             <EditText
                 android:id="@+id/input_city_sign_in"
                 style="@style/standardInputStyle.city.autofill"
+                android:hint="@string/hint_city"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/label_city" />
+                app:layout_constraintTop_toBottomOf="@+id/label_city"
+                android:autofillHints="" tools:targetApi="o"/>
 
             <View
                 android:id="@+id/view_divider_city"
@@ -344,13 +352,15 @@
             <EditText
                 android:id="@+id/input_bio_sign_in"
                 style="@style/standardInputStyle.bio.autofill"
+                android:hint="@string/hint_bio"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
                 app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/label_bio" />
+                app:layout_constraintTop_toBottomOf="@+id/label_bio"
+                android:autofillHints="" tools:targetApi="o"/>
 
             <View
                 android:id="@+id/view_divider_bio"

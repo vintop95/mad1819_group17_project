@@ -9,14 +9,13 @@
     android:id="@+id/swipe_layout">
 
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
 
     <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <android.support.constraint.ConstraintLayout
@@ -61,7 +60,7 @@
             android:id="@+id/number_of_km"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1500/2000"
+            android:text="@string/kilometers_num_dummy"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +72,7 @@
             android:id="@+id/underTextProgressbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="delivered / total"
+            android:text="@string/label_delivered_total"
             app:layout_constraintEnd_toEndOf="@+id/number_of_km"
             app:layout_constraintStart_toStartOf="@+id/number_of_km"
             app:layout_constraintTop_toBottomOf="@+id/number_of_km" />
@@ -93,18 +92,19 @@
             android:orientation="vertical"
             android:gravity="center">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|center_vertical"
-            android:layout_margin="10dp"
-            android:text="@string/number_of_requests"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/number_requests"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:weightSum="100"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:baselineAligned="false">
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="0dp"
@@ -122,19 +122,20 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
-                        android:text="total"
+                        android:text="@string/label_total"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/requestCounter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
-                        android:layout_gravity="center"
                         android:layout_marginBottom="8dp"
-                        android:text="0"
+                        android:text="@string/label_quantity_dummy"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -154,7 +155,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="assigned"
+                        android:text="@string/label_assigned"
                         android:textColor="@color/colorState1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -164,11 +165,11 @@
                         android:id="@+id/requestCounterRed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
                         android:layout_marginBottom="8dp"
-                        android:layout_gravity="center"
-                        android:text="0"
+                        android:text="@string/label_quantity_dummy"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/colorState1"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -187,12 +188,12 @@
                         android:id="@+id/textView2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
-                        android:layout_gravity="center"
-                        android:text="accepted"
+                        android:text="@string/label_accepted"
                         android:textColor="@color/colorState2"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -207,7 +208,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
                         android:gravity="right"
-                        android:text="0"
+                        android:text="@string/label_quantity_dummy"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/colorState2"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -234,7 +235,7 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
                         android:gravity="right"
-                        android:text="delivered"
+                        android:text="@string/label_delivered"
                         android:textColor="@color/colorState4"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -250,7 +251,7 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginBottom="12dp"
-                        android:text="0"
+                        android:text="@string/label_quantity_dummy"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/colorState4"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -274,24 +275,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
+
             <TextView
-                android:text="Kilometers achieved"
-                android:layout_margin="10dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"
-                />
+                android:layout_margin="10dp"
+                android:text="@string/kilometers_achieved"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
             <TextView
-                android:text="0"
                 android:id="@+id/kmDelivered"
-                android:layout_margin="10dp"
-                android:textColor="@color/colorState4"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="match_parent"
-                android:gravity="right"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"/>
+                android:layout_gravity="right|center_vertical"
+                android:layout_margin="10dp"
+                android:gravity="right"
+                android:text="@string/label_quantity_dummy"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/colorState4" />
         </android.support.v7.widget.LinearLayoutCompat>
     </android.support.design.card.MaterialCardView>
 
@@ -304,24 +306,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
+
             <TextView
-                android:text="@string/remaining_kilometers"
-                android:layout_margin="10dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"
-                />
+                android:layout_margin="10dp"
+                android:text="@string/kilometers_remaining"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
             <TextView
-                android:text="0"
                 android:id="@+id/kmAccepted"
-                android:layout_margin="10dp"
-                android:textColor="@color/colorState2"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="match_parent"
-                android:gravity="right"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"/>
+                android:layout_gravity="right|center_vertical"
+                android:layout_margin="10dp"
+                android:gravity="right"
+                android:text="@string/label_quantity_dummy"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/colorState2" />
         </android.support.v7.widget.LinearLayoutCompat>
     </android.support.design.card.MaterialCardView>
 
@@ -334,24 +337,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
+
             <TextView
-                android:text="@string/kms_in_attendence"
-                android:layout_margin="10dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"
-                />
-            <TextView
-                android:text="0"
-                android:id="@+id/kmAssigned"
                 android:layout_margin="10dp"
-                android:textColor="@color/colorState1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:text="@string/kilometers_attendence"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+            <TextView
+                android:id="@+id/kmAssigned"
                 android:layout_width="match_parent"
-                android:gravity="right"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"/>
+                android:layout_gravity="right|center_vertical"
+                android:layout_margin="10dp"
+                android:gravity="right"
+                android:text="@string/label_quantity_dummy"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/colorState1" />
         </android.support.v7.widget.LinearLayoutCompat>
     </android.support.design.card.MaterialCardView>
 

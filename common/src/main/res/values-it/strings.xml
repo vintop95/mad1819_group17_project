@@ -110,6 +110,17 @@
     <string name="button_map">Apri Mappa</string>
     <string name="button_google_map">Vai a Google Maps</string>
 
+    <!-- Deliveryman Statistics -->
+    <string name="label_delivered_total">consegnati / totali</string>
+    <string name="label_total">totale</string>
+    <string name="label_assigned">assegnati</string>
+    <string name="label_accepted">accettati</string>
+    <string name="label_delivered">consegnati</string>
+    <string name="kilometers_achieved">Chilometri percorsi</string>
+    <string name="kilometers_remaining">Chilometri rimanenti</string>
+    <string name="kilometers_attendence">Chilometri in attesa</string>
+    <string name="number_requests">Numero di richieste</string>
+
 
     <!-- ////////////// -->
     <!-- Profile Strings -->

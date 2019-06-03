@@ -121,7 +121,9 @@
             android:text="@string/hint_name"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-            app:layout_constraintTop_toBottomOf="@+id/label_name" />
+            app:layout_constraintTop_toBottomOf="@+id/label_name"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="16dp" />
 
         <View
             android:id="@+id/view_divider_name"
@@ -156,7 +158,9 @@
             android:text="@string/hint_phone"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-            app:layout_constraintTop_toBottomOf="@+id/label_phone" />
+            app:layout_constraintTop_toBottomOf="@+id/label_phone"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="16dp" />
 
         <View
             android:id="@+id/view_divider_phone"
@@ -191,7 +195,9 @@
             android:text="@string/hint_mail"
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-            app:layout_constraintTop_toBottomOf="@+id/label_mail" />
+            app:layout_constraintTop_toBottomOf="@+id/label_mail"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="16dp" />
 
         <View
             android:id="@+id/view_divider_mail"
@@ -228,7 +234,9 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-            app:layout_constraintTop_toBottomOf="@+id/label_city" />
+            app:layout_constraintTop_toBottomOf="@+id/label_city"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="16dp" />
 
         <View
             android:id="@+id/view_divider_city"
@@ -265,7 +273,8 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
             app:layout_constraintTop_toBottomOf="@id/label_bio"
-            android:layout_marginStart="64dp" />
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="16dp" />
 
         <View
             android:id="@+id/view_divider_bio"
@@ -280,12 +289,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:background="@android:color/holo_red_light"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/colorPrimary"
             android:paddingLeft="64dp"
             android:paddingRight="64dp"
-            android:text="LOG OUT"
-            app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
-            app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
+            android:text="@string/logout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_divider_bio" />
 
     </android.support.constraint.ConstraintLayout>
