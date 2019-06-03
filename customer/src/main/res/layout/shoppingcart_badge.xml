@@ -6,7 +6,7 @@
     android:drawableLeft="@drawable/ic_shopping_cart_white_24dp"
     android:gravity="center"
     android:orientation="vertical"
-    android:text="@string/label_quantity_dummy"
+    android:text=""
     android:drawablePadding="5dp"
     android:paddingRight="10dp"
     android:paddingLeft="10dp"

@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         fm.putFragment(outState, DeliveryRequestsFragment.class.getName(), deliveryRequestsFragment);
         fm.putFragment(outState, ProfileFragment.class.getName(), profileFragment);
-        fm.putFragment(outState, ProfileFragment.class.getName(), statsFragment);
+        fm.putFragment(outState, StatsFragment.class.getName(), statsFragment);
         fm.putFragment(outState, "active", active);
     }
 

@@ -316,6 +316,7 @@
 
             <EditText
                 android:id="@+id/input_address_sign_in"
+                style="@style/standardInputStyle.mail.autofill"
                 android:hint="@string/hint_address"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

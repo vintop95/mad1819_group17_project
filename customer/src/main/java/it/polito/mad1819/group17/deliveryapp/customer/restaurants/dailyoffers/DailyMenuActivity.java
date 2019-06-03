@@ -562,7 +562,7 @@ public class DailyMenuActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (somethingAdded) {
+        if (somethingAdded && shoppingCart.getCounter() > 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.shopping_cart_exit_warning));
             builder.setPositiveButton(this.getString(android.R.string.ok), new DialogInterface.OnClickListener() {

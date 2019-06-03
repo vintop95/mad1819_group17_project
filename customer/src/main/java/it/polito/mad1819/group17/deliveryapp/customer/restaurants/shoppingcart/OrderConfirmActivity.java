@@ -146,6 +146,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
         totalprice = intent.getDoubleExtra("items_tot_price", 0);
 
         deliveryAddress_edit = findViewById(R.id.deliveryAddress);
+        deliveryAddress_edit.setKeyListener(null);
         deliveryHour_edit = (EditText) findViewById(R.id.deliveryHour);
         addTimePickerOnClick(deliveryHour_edit);
         deliveryDate_edit = findViewById(R.id.deliveryDate);
