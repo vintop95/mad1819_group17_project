@@ -90,6 +90,10 @@
     <string name="title_activity_confirm_order">Conferma Ordine</string>
     <string name="total">Totale</string>
     <string name="hint_money">100€</string>
+    <!-- Hints -->
+    <string name="hint_date">Inserisci Data Consegna</string>
+    <string name="hint_time">Inserisci Orario Consegna</string>
+    <string name="hint_order_info">Inserisci Informazioni Aggiuntive</string>
 
     <!-- Restaurant Profile Strings -->
     <string name="title_activity_restaurant_profile">Profile Ristorante</string>

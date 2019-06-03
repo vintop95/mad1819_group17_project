@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:cropToPadding="false"
-        android:src="@drawable/ic_add_white_24dp"
+        app:srcCompat="@drawable/ic_add_white_24dp"
         app:elevation="6dp"
         app:fabSize="normal"
         app:layout_anchor="@id/rv"

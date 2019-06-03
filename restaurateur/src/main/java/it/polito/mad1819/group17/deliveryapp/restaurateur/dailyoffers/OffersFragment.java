@@ -56,6 +56,13 @@ public class OffersFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        progressBarHandler.show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        progressBarHandler.hide();
     }
 
     @Override
@@ -155,7 +162,6 @@ public class OffersFragment extends Fragment {
             mAdapter.setSortComparator(comparator);
         }
         recyclerView.setAdapter(mAdapter);
-        progressBarHandler.show();
         mAdapter.startListening();
     }
     ////////////////////////////

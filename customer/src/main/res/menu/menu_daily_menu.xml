@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:title="sort"
+        android:title="@string/sort"
         android:id="@+id/sort_itemmenu"
         android:icon="@drawable/ic_sort_black_24dp"
         app:showAsAction="always"
         />
 
     <item
-        android:title="shoppingCart"
+        android:title="@string/shopping_cart"
         android:id="@+id/shoppingcart_itemmenu"
         app:actionLayout="@layout/shoppingcart_badge"
         app:showAsAction="always"

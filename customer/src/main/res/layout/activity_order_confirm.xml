@@ -131,17 +131,19 @@
 
             <EditText
                 android:id="@+id/deliveryAddress"
+                android:hint="@string/hint_address"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginRight="24dp"
-                android:editable="false"
                 android:ems="10"
                 android:textColor="@color/textPrimary"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
+                android:autofillHints=""
+                android:inputType="" tools:targetApi="o" />
 
             <TextView
                 android:id="@+id/oc_label_delivery_date"
@@ -162,15 +164,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
                 android:layout_marginRight="24dp"
+                android:autofillHints=""
                 android:cursorVisible="false"
+                android:ems="10"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:ems="10"
-                android:inputType="text"
+                android:hint="@string/hint_date"
+                android:inputType="date"
                 android:textColor="@color/textPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/deliveryAddress"
-                app:layout_constraintTop_toBottomOf="@+id/deliveryAddress" />
+                app:layout_constraintTop_toBottomOf="@+id/deliveryAddress"
+                tools:targetApi="o" />
 
 
             <TextView
@@ -188,6 +193,7 @@
 
             <EditText
                 android:id="@+id/deliveryHour"
+                android:hint="@string/hint_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
@@ -200,7 +206,8 @@
                 android:textColor="@color/textPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/deliveryDate"
-                app:layout_constraintTop_toBottomOf="@+id/deliveryDate" />
+                app:layout_constraintTop_toBottomOf="@+id/deliveryDate"
+                android:autofillHints="" tools:targetApi="o" />
 
             <TextView
                 android:id="@+id/oc_label_order_notes"
@@ -218,6 +225,7 @@
             <EditText
                 android:id="@+id/oc_input_order_notes"
                 android:layout_width="0dp"
+                android:hint="@string/hint_order_info"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
                 android:layout_marginRight="24dp"
@@ -226,7 +234,8 @@
                 android:textColor="@color/textPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/deliveryAddress"
-                app:layout_constraintTop_toBottomOf="@+id/deliveryHour" />
+                app:layout_constraintTop_toBottomOf="@+id/deliveryHour"
+                android:autofillHints="" tools:targetApi="o" />
 
             <TextView
                 android:id="@+id/final_tv"

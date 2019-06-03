@@ -1,10 +1,9 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.reviews;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.design.circularreveal.CircularRevealWidget;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;

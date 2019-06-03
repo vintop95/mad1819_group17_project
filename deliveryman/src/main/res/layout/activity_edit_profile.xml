@@ -144,7 +144,7 @@
                 android:id="@+id/image_name"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_person"
-                android:src="@drawable/ic_person_black_24dp"
+                app:srcCompat="@drawable/ic_person_black_24dp"
                 app:layout_constraintBottom_toBottomOf="@+id/input_name_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_name" />
@@ -192,7 +192,7 @@
                 android:id="@+id/image_phone"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_phone"
-                android:src="@drawable/ic_baseline_phone_24px"
+                app:srcCompat="@drawable/ic_baseline_phone_24px"
                 app:layout_constraintBottom_toBottomOf="@+id/input_phone_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_phone" />
@@ -237,7 +237,7 @@
                 android:id="@+id/image_mail"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_mail"
-                android:src="@drawable/ic_email_black_24dp"
+                app:srcCompat="@drawable/ic_email_black_24dp"
                 app:layout_constraintBottom_toBottomOf="@+id/input_mail_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_mail" />
@@ -299,7 +299,7 @@
                 android:id="@+id/image_city"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_city"
-                android:src="@drawable/ic_location_city_black_24dp"
+                app:srcCompat="@drawable/ic_location_city_black_24dp"
                 app:layout_constraintBottom_toBottomOf="@+id/input_city_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_city" />
@@ -324,56 +324,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/input_city_sign_in" />
 
 
-            <!--&lt;!&ndash; Birthday &ndash;&gt;
-            <TextView
-                android:id="@+id/label_birthday"
-                style="@style/smallLabelStyle"
-                android:text="@string/birthday"
-                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/view_divider_city" />
-
-            <TextView
-                android:id="@+id/text_birthday_req"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:text="@string/required"
-                android:textColor="@android:color/holo_red_dark"
-                app:layout_constraintRight_toLeftOf="@+id/label_birthday"
-                app:layout_constraintTop_toTopOf="@+id/label_birthday" />
-
-            <ImageView
-                android:id="@+id/image_birthday"
-                style="@style/smallIconStyle"
-                android:contentDescription="@string/icon_birthday"
-                app:layout_constraintBottom_toBottomOf="@+id/input_birthday_sign_in"
-                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toTopOf="@+id/label_birthday"
-                android:src="@drawable/ic_today_black_24dp" />
-
-            <EditText
-                android:id="@+id/input_birthday_sign_in"
-                style="@style/standardInputStyle.address.autofill"
-                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
-                app:layout_constraintStart_toStartOf="@+id/guideline_64dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/label_birthday" />
-
-            <View
-                android:id="@+id/view_divider_birthday"
-                style="@style/innerDividerStyle"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toStartOf="@+id/guideline_16dp_right"
-                app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
-                app:layout_constraintTop_toBottomOf="@+id/input_birthday_sign_in" />-->
-
-
             <!-- Bio -->
             <ImageView
                 android:id="@+id/image_bio"
                 style="@style/smallIconStyle"
                 android:contentDescription="@string/icon_bio"
-                android:src="@drawable/ic_baseline_description_24px"
+                app:srcCompat="@drawable/ic_baseline_description_24px"
                 app:layout_constraintBottom_toBottomOf="@+id/input_bio_sign_in"
                 app:layout_constraintStart_toStartOf="@+id/guideline_16dp_left"
                 app:layout_constraintTop_toTopOf="@+id/label_bio" />

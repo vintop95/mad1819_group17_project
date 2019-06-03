@@ -181,9 +181,6 @@ public class ProfileFragment extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Restaurateur restaurateur = dataSnapshot.getValue(Restaurateur.class);
                     feedViews(restaurateur);
-
-                    // already done for the image (it loads slower)
-                    // progressBarHandler.hide();
                 }
 
                 @Override

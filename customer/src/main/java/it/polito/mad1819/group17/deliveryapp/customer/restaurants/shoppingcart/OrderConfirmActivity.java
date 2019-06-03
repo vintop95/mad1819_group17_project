@@ -55,7 +55,6 @@ import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.customer.MainActivity;
 import it.polito.mad1819.group17.deliveryapp.customer.R;
-import it.polito.mad1819.group17.deliveryapp.customer.orders.OrdersFragment;
 
 public class OrderConfirmActivity extends AppCompatActivity {
 

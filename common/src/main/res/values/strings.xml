@@ -60,6 +60,10 @@
     <string name="title_activity_confirm_order">Confirm Order</string>
     <string name="total">Total</string>
     <string name="hint_money">100€</string>
+    <!-- Hints -->
+    <string name="hint_date">Insert Delivery Date</string>
+    <string name="hint_time">Insert Delivery Time</string>
+    <string name="hint_order_info">Insert Order Info</string>
 
     <!-- Restaurant Profile Strings -->
     <string name="title_activity_restaurant_profile">Restaurant Profile</string>
@@ -310,6 +314,11 @@
 
     <string name="no_reviews">Yet no available reviews!</string>
     <string name="reviews">Reviews</string>
+
+    <!-- Review Stat Strings -->
+    <string name="sort" translatable="false">sort</string>
+    <string name="shopping_cart" translatable="false">shopping cart</string>
+    <string name="rate" translatable="false">rate</string>
 
     <!-- Google API key -->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyB7Tku5m9p0LVYU8k8-G7RB0DQoDXjvdSE</string>

@@ -90,7 +90,7 @@
                         android:contentDescription="@string/icon_restaurateur"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:src="@drawable/ic_assignment_ind_black_24dp" />
+                        app:srcCompat="@drawable/ic_assignment_ind_black_24dp" />
 
                     <TextView
                         android:id="@+id/label_order_id"
@@ -278,7 +278,7 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginRight="16dp"
                         android:contentDescription="@string/icon_content"
-                        android:src="@drawable/ic_assignment_turned_in_black_24dp"
+                        app:srcCompat="@drawable/ic_assignment_turned_in_black_24dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -384,7 +384,7 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginRight="16dp"
                         android:contentDescription="@string/icon_rider"
-                        android:src="@drawable/ic_baseline_motorcycle_24px"
+                        app:srcCompat="@drawable/ic_baseline_motorcycle_24px"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -480,7 +480,7 @@
                         android:contentDescription="@string/icon_history"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:src="@drawable/ic_assignment_black_24dp" />
+                        app:srcCompat="@drawable/ic_assignment_black_24dp" />
 
                     <TextView
                         android:id="@+id/label_state_history"
@@ -519,7 +519,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/txt_state_history" />
+                        app:layout_constraintTop_toBottomOf="@+id/txt_state_history" tools:targetApi="lollipop"/>
 
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>

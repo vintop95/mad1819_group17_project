@@ -6,7 +6,11 @@
     android:drawableLeft="@drawable/ic_shopping_cart_white_24dp"
     android:gravity="center"
     android:orientation="vertical"
-    android:text="0"
+    android:text="@string/label_quantity_dummy"
     android:drawablePadding="5dp"
     android:paddingRight="10dp"
-    android:textColor="@android:color/white" />
+    android:paddingLeft="10dp"
+    android:textColor="@android:color/white"
+    android:focusable="true"
+    android:drawableStart="@drawable/ic_shopping_cart_white_24dp"
+    android:paddingEnd="10dp" />

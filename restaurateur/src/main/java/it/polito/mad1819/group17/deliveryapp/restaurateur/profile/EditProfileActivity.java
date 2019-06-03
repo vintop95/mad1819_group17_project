@@ -526,7 +526,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 (current_user.getAddress() != null && !current_user.getAddress().equals(input_address.getText().toString())))
             return true;
 
-        Long current_type = input_restaurant_type.getSelectedItemId();
+        Long current_type = input_restaurant_type.getSelectedItemId() + 1; // +1 needed for avoiding "favourite" hidden category
         if ((current_user.getRestaurant_type() == null && !input_restaurant_type.getSelectedItem().toString().isEmpty()) ||
                 (current_user.getRestaurant_type() != null && !current_user.getRestaurant_type().equals(current_type.toString())))
             return true;
