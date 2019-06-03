@@ -6,14 +6,14 @@
         android:title="@string/sort"
         android:id="@+id/sort_itemmenu"
         android:icon="@drawable/ic_sort_black_24dp"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
 
     <item
         android:title="@string/shopping_cart"
         android:id="@+id/shoppingcart_itemmenu"
         app:actionLayout="@layout/shoppingcart_badge"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
 
 

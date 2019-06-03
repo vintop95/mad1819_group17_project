@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -42,6 +44,7 @@ public class StatsActivity extends AppCompatActivity {
     public int sum;
     public ProgressBarHandler progressBarHandler;
     private ListView listView;
+    private CardView popular_hour_card;
 
     private TextView main_hourInterval_tv;
     private TextView main_numOfOrders_tv;
@@ -116,9 +119,15 @@ public class StatsActivity extends AppCompatActivity {
                             iterator.remove();                                      //REMOVING 0 VALUES
                         }
                     }
-                    Map.Entry<Integer,Integer> entry = orderPerHour.entrySet().iterator().next();
-                    Log.d("populateOrders_sum",""+sum);
-                    updateListView();
+                    if (!orderPerHour.isEmpty()) {
+                        Map.Entry<Integer, Integer> entry = orderPerHour.entrySet().iterator().next();
+                        Log.d("populateOrders_sum", "" + sum);
+                        updateListView();
+                    } else {
+                        popular_hour_card = findViewById(R.id.materialCardView);
+                        popular_hour_card.setAlpha(0.2f);
+                        Toast.makeText(StatsActivity.this, "No Orders Available!", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override

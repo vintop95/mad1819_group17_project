@@ -102,6 +102,7 @@ public class EditProfileActivity extends AppCompatActivity {
         input_phone = findViewById(R.id.input_phone_sign_in);
         input_mail = findViewById(R.id.input_mail_sign_in);
         input_address = findViewById(R.id.input_address_sign_in);
+        input_address.setKeyListener(null);
         input_restaurant_type = findViewById(R.id.input_restaurant_type_sign_in);
         input_free_day = findViewById(R.id.input_free_day_sign_in);
         input_working_time_opening = findViewById(R.id.input_working_time_opening_sign_in);
