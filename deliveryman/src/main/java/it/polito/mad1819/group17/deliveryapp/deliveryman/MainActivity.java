@@ -474,4 +474,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
         }
     }
+
+    public final LocationManager getLocationManager(){
+        return mLocationManager;
+    }
 }
