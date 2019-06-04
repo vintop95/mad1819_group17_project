@@ -28,6 +28,7 @@ import com.google.firebase.database.Query;
 import java.util.Comparator;
 
 import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
+import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModelUtil;
 import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
@@ -45,7 +46,7 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
 public class OffersFragment extends Fragment {
     private static final String TAG = OffersFragment.class.getName();
-    public final static int ADD_FOOD_REQUEST = 0;
+//    public final static int ADD_FOOD_REQUEST = 0;
     public final static int MODIFY_FOOD_REQUEST = 1;
 
     private FoodAdapter mAdapter;
@@ -171,18 +172,19 @@ public class OffersFragment extends Fragment {
         FoodModel food = new FoodModel();
         addFoodInList(food);
 
-        openFoodDetailsActivityModify(food,null);
+        openFoodDetailsActivityModify(food,null, true);
     }
 
     private View btnEditItem;
 
-    public void openFoodDetailsActivityModify(FoodModel foodToModify, View v){
+    public void openFoodDetailsActivityModify(FoodModel foodToModify, View v, boolean isNew){
         if(v != null) btnEditItem = v;
 
         Intent intent = new Intent(getContext(), FoodDetailsActivity.class);
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("food", foodToModify);
+        bundle.putBoolean("isNew",isNew);
         intent.putExtra("args", bundle);
 
         startActivityForResult(intent, MODIFY_FOOD_REQUEST);
@@ -190,17 +192,25 @@ public class OffersFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ADD_FOOD_REQUEST) {
-            if (data != null){
-                FoodModel addedFood = (FoodModel) data.getSerializableExtra("food");
-                if(addedFood != null) addFoodInList(addedFood);
-            }
-            btnAddOffer.setEnabled(true);
-        }else if (requestCode == MODIFY_FOOD_REQUEST) {
+//        if (requestCode == ADD_FOOD_REQUEST) {
+//            if (data != null){
+//                FoodModel addedFood = (FoodModel) data.getSerializableExtra("food");
+//                if(addedFood != null) addFoodInList(addedFood);
+//            }
+//            btnAddOffer.setEnabled(true);
+//        }else
+
+        if (requestCode == MODIFY_FOOD_REQUEST) {
+
             if (data != null){
                 FoodModel modifiedFood = (FoodModel) data.getSerializableExtra("food");
                 if(modifiedFood != null){
-                    modifyItem(modifiedFood);
+
+                    if (resultCode == FoodDetailsActivity.FOOD_TO_DELETE) {
+                        FoodModelRestaurateurUtil.removeFromFirebase(getContext(), modifiedFood);
+                    } else if (resultCode == FoodDetailsActivity.FOOD_OK) {
+                        modifyItem(modifiedFood);
+                    }
                 }
             }
             if(btnEditItem != null) btnEditItem.setEnabled(true);

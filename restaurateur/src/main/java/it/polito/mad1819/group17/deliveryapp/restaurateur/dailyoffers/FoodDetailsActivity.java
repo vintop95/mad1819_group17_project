@@ -41,6 +41,8 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
+import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModelUtil;
+import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.FormAdapter;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.utils.FormAdapter.ListItem;
@@ -53,6 +55,10 @@ public class FoodDetailsActivity extends AppCompatActivity {
     public final static int STATE_CHANGED = 1;
     public final static int STATE_NOT_CHANGED = 0;
 
+    public final static int FOOD_OK = 0;
+    public final static int FOOD_UNCHANGED = 1;
+    public final static int FOOD_TO_DELETE = 2;
+
     public final static int LABEL_FOOD_NUMBER = R.string.label_food_number;
     public final static int LABEL_FOOD_NAME = R.string.label_food_name;
     public final static int LABEL_FOOD_DESCRIPTION = R.string.label_food_description;
@@ -63,6 +69,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
     private ArrayList<ListItem> mFields = new ArrayList<>();
     private FormAdapter mFormAdapter;
     private FoodModel mFoodLoaded;
+    private boolean isNew = false;
     private AtomicInteger mFoodState = new AtomicInteger(STATE_NOT_CHANGED);
 //    private int pos = -1;
 
@@ -88,15 +95,18 @@ public class FoodDetailsActivity extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(this.getClass().getSimpleName(), "Saving...");
+                FoodModel foodToSave = getUpdatedFood();
+                if (!FoodModelUtil.isValid(foodToSave)) {
+                    PopupHelper.showToast(FoodDetailsActivity.this,
+                            FoodModelUtil.notValidMessage(FoodDetailsActivity.this));
+                } else {
+                    Log.d(this.getClass().getSimpleName(), "Saving...");
 
-                Intent intent = new Intent();
-
-                intent.putExtra("food", getUpdatedFood());
-
-                setResult(getFoodState(), intent);
-
-                FoodDetailsActivity.this.finish();
+                    Intent intent = new Intent();
+                    intent.putExtra("food", getUpdatedFood());
+                    setResult(FOOD_OK, intent);
+                    FoodDetailsActivity.this.finish();
+                }
             }
         });
 
@@ -139,7 +149,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
                         public boolean onResourceReady(Drawable resource, Object model,
                                                        Target<Drawable> target, DataSource dataSource,
                                                        boolean isFirstResource) {
-                            Log.v("GlideLog", "Image load OK");
+                            Log.v("GlideLog", "Image load FOOD_OK");
                             return false; // leave false
                         }
                     }).into(img_food_photo);
@@ -164,7 +174,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
             Bundle b2 = b.getBundle("args");
             if (b2 != null) {
                 mFoodLoaded = (FoodModel) b2.getSerializable("food");
-//                pos = b2.getInt("pos");
+                isNew = b2.getBoolean("isNew");
             }
         }
 
@@ -217,22 +227,33 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
     private FoodModel getUpdatedFood() {
         FoodModel food = new FoodModel();
-//        food.pos = pos;
         food = mFoodLoaded;
 
         for (ListItem field : mFields) {
             switch (field.fieldNameRes) {
                 case LABEL_FOOD_NAME:
-                    food.name = field.fieldValue;
+                    if (!food.name.equals(field.fieldValue)) {
+                        food.name = field.fieldValue;
+                        mFoodState.set(STATE_CHANGED);
+                    }
                     break;
                 case LABEL_FOOD_DESCRIPTION:
-                    food.description = field.fieldValue;
+                    if (!food.description.equals(field.fieldValue)) {
+                        food.description = field.fieldValue;
+                        mFoodState.set(STATE_CHANGED);
+                    }
                     break;
                 case LABEL_FOOD_PRICE:
-                    food.price = Double.valueOf(field.fieldValue);
+                    if (!(food.price == Double.valueOf(field.fieldValue))) {
+                        food.price = Double.valueOf(field.fieldValue);
+                        mFoodState.set(STATE_CHANGED);
+                    }
                     break;
                 case LABEL_FOOD_AVAILABLE_QTY:
-                    food.availableQty = Integer.valueOf(field.fieldValue);
+                    if (!(food.availableQty == Integer.valueOf(field.fieldValue))) {
+                        food.availableQty = Integer.valueOf(field.fieldValue);
+                        mFoodState.set(STATE_CHANGED);
+                    }
                     break;
             }
         }
@@ -281,16 +302,27 @@ public class FoodDetailsActivity extends AppCompatActivity {
         confirmDiscard();
     }
 
+    private void returnFoodNotModified() {
+        Intent intent = new Intent();
+        intent.putExtra("food", getUpdatedFood());
+        if (isNew) {
+            setResult(FOOD_TO_DELETE, intent);
+        } else {
+            setResult(FOOD_UNCHANGED, intent);
+        }
+        FoodDetailsActivity.this.finish();
+    }
+
     private void confirmDiscard() {
         // If no modification happened, then close without showing alert dialog.
-        if (getFoodState() == STATE_CHANGED) {
+        if (getFoodState() == STATE_CHANGED || !FoodModelUtil.isValid(getUpdatedFood())) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
             alertDialogBuilder.setTitle(R.string.warning_title);
             alertDialogBuilder.setMessage(R.string.discard_msg);
             alertDialogBuilder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                        super.onBackPressed();
-                    }
+                    returnFoodNotModified();
+                }
             );
 
             alertDialogBuilder.setNegativeButton(android.R.string.no, (dialog, which) -> {
@@ -301,7 +333,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         } else {
-            finish();
+            returnFoodNotModified();
         }
     }
     //////////////////////////////////////////////////////////////////////////

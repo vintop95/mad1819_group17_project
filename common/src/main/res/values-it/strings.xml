@@ -85,6 +85,7 @@
     <string name="save">SALVA</string>
     <string name="warning_title">Attenzione</string>
     <string name="discard_msg">Vuoi annullare le modifiche effettuate?</string>
+    <string name="delete_msg">Vuoi veramente cancellare l\'oggetto?</string>
 
     <!-- Order Confirm Strings -->
     <string name="title_activity_confirm_order">Conferma Ordine</string>
@@ -286,4 +287,5 @@
 
     <string name="no_reviews">Non ci sono ancora recensioni disponibili!</string>
     <string name="reviews">Recensioni</string>
+    <string name="food_not_valid">Il piatto deve avere un nome ed un prezzo maggiore di zero</string>
 </resources>

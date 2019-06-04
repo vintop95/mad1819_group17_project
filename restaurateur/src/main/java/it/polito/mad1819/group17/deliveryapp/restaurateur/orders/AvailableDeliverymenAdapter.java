@@ -125,7 +125,7 @@ public class AvailableDeliverymenAdapter extends RecyclerView.Adapter<AvailableD
                                             public boolean onResourceReady(Drawable resource, Object model,
                                                                            Target<Drawable> target, DataSource dataSource,
                                                                            boolean isFirstResource) {
-                                                Log.v("ProfileFragment", "Image load OK");
+                                                Log.v("ProfileFragment", "Image load FOOD_OK");
                                                 return false; // leave false
                                             }
                                         }).into(availableDeliverymanHolder.image_user_photo);

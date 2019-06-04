@@ -118,6 +118,7 @@
     <string name="save">SAVE</string>
     <string name="warning_title">Warning</string>
     <string name="discard_msg">Do you want to discard changes?</string>
+    <string name="delete_msg">Do you want to delete the item?</string>
 
 
     <!-- ////////////// -->
@@ -334,5 +335,6 @@
 
     <!-- Google API key -->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyB7Tku5m9p0LVYU8k8-G7RB0DQoDXjvdSE</string>
+    <string name="food_not_valid">Food must have a name and a price greater than zero</string>
 
 </resources>

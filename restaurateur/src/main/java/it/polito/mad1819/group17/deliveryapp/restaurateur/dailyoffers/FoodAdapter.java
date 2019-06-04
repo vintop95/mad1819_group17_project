@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import java.util.Locale;
 
 import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
+import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModelUtil;
 import it.polito.mad1819.group17.deliveryapp.common.utils.MadFirebaseRecyclerAdapter;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
@@ -130,7 +132,7 @@ public class FoodAdapter extends MadFirebaseRecyclerAdapter<FoodModel, FoodAdapt
                             public boolean onResourceReady(Drawable resource, Object model,
                                                            Target<Drawable> target, DataSource dataSource,
                                                            boolean isFirstResource) {
-                                Log.v("ProfileFragment", "Image load OK");
+                                Log.v("ProfileFragment", "Image load FOOD_OK");
                                 return false; // leave false
                             }
                         }).into(itemPhoto);
@@ -159,10 +161,10 @@ public class FoodAdapter extends MadFirebaseRecyclerAdapter<FoodModel, FoodAdapt
             switch (v.getId()) {
                 case R.id.img_food_modify:
                     v.setEnabled(false);
-                    mOffersFragment.openFoodDetailsActivityModify(currentFoodItem, v);
+                    mOffersFragment.openFoodDetailsActivityModify(currentFoodItem, v, false);
                     break;
                 case R.id.img_food_delete:
-                    deleteItem(currentFoodItem);
+                    confirmDelete(currentFoodItem);
                     break;
             }
         }
@@ -171,6 +173,26 @@ public class FoodAdapter extends MadFirebaseRecyclerAdapter<FoodModel, FoodAdapt
         public void setListeners() {
             itemImgModify.setOnClickListener(FoodHolder.this);
             itemImgDelete.setOnClickListener(FoodHolder.this);
+        }
+
+
+        private void confirmDelete(FoodModel foodToDelete) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mOffersFragment.getContext());
+
+            alertDialogBuilder.setTitle(R.string.warning_title);
+            alertDialogBuilder.setMessage(R.string.delete_msg);
+            alertDialogBuilder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                        deleteItem(foodToDelete);
+                    }
+            );
+
+            alertDialogBuilder.setNegativeButton(android.R.string.no, (dialog, which) -> {
+                        dialog.cancel();
+                    }
+            );
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
 
         public void deleteItem(FoodModel food) {
