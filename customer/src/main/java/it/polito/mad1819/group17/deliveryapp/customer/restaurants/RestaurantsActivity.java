@@ -560,12 +560,11 @@ public class RestaurantsActivity extends AppCompatActivity {
             if (Integer.parseInt(free_day) == calendar.get(Calendar.DAY_OF_WEEK))
                 return 1;
 
+            if (current_time.compareTo(closing_time) > 0)
+                return 1;
 
             if (current_time.compareTo(opening_time) < 0)
                 return 2;
-
-            if (current_time.compareTo(closing_time) > 0)
-                return 1;
 
             else
                 return 0;

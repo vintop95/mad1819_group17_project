@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -69,6 +70,7 @@ public class DailyMenuActivity extends AppCompatActivity {
     private FrameLayout frameLayout;
     private ImageView btnFavorite;
     private RecyclerView recyclerView;
+    private CardView restaurant_info;
     private LinearLayoutManager linearLayoutManager;
 
     private RatingBar rb_mean_rate_daily_menu;
@@ -188,6 +190,9 @@ public class DailyMenuActivity extends AppCompatActivity {
                 return lhs.name.compareTo(rhs.name);
             }
         });
+
+        restaurant_info = findViewById(R.id.card_restaurant_info);
+        runLayoutAnimation2(restaurant_info, 0);
     }
 
     private void addToFavorites() {
@@ -603,5 +608,16 @@ public class DailyMenuActivity extends AppCompatActivity {
         recyclerView.setLayoutAnimation(controller);
         recyclerView.scheduleLayoutAnimation();
         animationFlag = 1;
+    }
+
+    private void runLayoutAnimation2(final CardView recyclerView, int type) {
+        final Context context = recyclerView.getContext();
+        LayoutAnimationController controller = null;
+
+        if (type == 0)
+            controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fade_in);
+
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.scheduleLayoutAnimation();
     }
 }

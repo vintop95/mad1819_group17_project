@@ -182,12 +182,12 @@
         <item>Preferiti</item>
         <item>Pizza</item>
         <item>Hamburger</item>
-        <item>Pollo</item>
+        <item>Giapponese</item>
+        <item>Dessert</item>
         <item>Vegano</item>
         <item>Gelato</item>
-        <item>Dessert</item>
         <item>Salutare</item>
-        <item>Giapponese</item>
+        <item>Pollo</item>
         <item>Messicano</item>
     </string-array>
     <string-array name="days_of_week">
@@ -274,10 +274,10 @@
     <string name="removed_from_favorites">Rimosso dai preferiti!</string>
     <string name="added_to_favorites">Aggiunto ai preferiti!</string>
 
-    <string name="restaurant_rate">Restaurant rate</string>
-    <string name="service_rate">Service rate</string>
-    <string name="food_rate">Food rate</string>
-    <string name="comment">Give us a comment</string>
+    <string name="restaurant_rate">Punteggio Ristorante</string>
+    <string name="service_rate">Punteggio Servizio</string>
+    <string name="food_rate">Punteggio Cibo</string>
+    <string name="comment">Lascia un commento!</string>
     <string name="comment_hint">Scrivi un commento</string>
     <string name="btn_rates">INVIA FEEDBACK</string>
 

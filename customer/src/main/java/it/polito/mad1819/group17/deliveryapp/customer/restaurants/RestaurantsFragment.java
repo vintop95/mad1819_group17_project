@@ -1,5 +1,6 @@
 package it.polito.mad1819.group17.deliveryapp.customer.restaurants;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -20,15 +23,16 @@ public class RestaurantsFragment extends Fragment {
             R.drawable.favourite,
             R.drawable.pizza,       //pizza
             R.drawable.hamburger,    //hamburger
-            R.drawable.chicken,       //chicken
+            R.drawable.japanese,       //japanese
+            R.drawable.dessert,       //dessert
             R.drawable.vegan,        //vegan
             R.drawable.icecream,       //icecream
-            R.drawable.dessert,       //dessert
             R.drawable.healthy,       //healthy
-            R.drawable.japanese,       //japanese
+            R.drawable.chicken,       //chicken
             R.drawable.mexican,       //mexican
     };
     ListView lst;
+
 
 
     public RestaurantsFragment() {
@@ -39,7 +43,6 @@ public class RestaurantsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         categories = getResources().getStringArray(R.array.restaurant_types);
-
     }
 
     @Override
@@ -67,6 +70,18 @@ public class RestaurantsFragment extends Fragment {
         Log.d("aia", "onCreateView: "+categories.length+"///"+imgid.length);
         CategoryListView categoryListView = new CategoryListView(this.getActivity(),categories,imgid);
         lst.setAdapter(categoryListView);
+        runLayoutAnimation(lst, 0);
         return view;
+    }
+
+    private void runLayoutAnimation(final ListView listView, int type) {
+        final Context context = listView.getContext();
+        LayoutAnimationController controller = null;
+
+        if (type == 0)
+            controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_left_to_right);
+
+        listView.setLayoutAnimation(controller);
+        listView.scheduleLayoutAnimation();
     }
 }

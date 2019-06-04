@@ -221,12 +221,12 @@
         <item>Favourites</item>
         <item>Pizza</item>
         <item>Hamburger</item>
-        <item>Chicken</item>
+        <item>Japanese</item>
+        <item>Dessert</item>
         <item>Vegan</item>
         <item>Ice cream</item>
-        <item>Dessert</item>
         <item>Healthy</item>
-        <item>Japanese</item>
+        <item>Chicken</item>
         <item>Mexican</item>
     </string-array>
     <string-array name="days_of_week">

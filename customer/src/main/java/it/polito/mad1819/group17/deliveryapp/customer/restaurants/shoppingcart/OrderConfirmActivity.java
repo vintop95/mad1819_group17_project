@@ -545,7 +545,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
         try {
             calendar.setTime(new SimpleDateFormat("yyyy/MM/dd").parse(delivery_date));
             // check that free day (of week) and delivery day (of week) are the same
-            if (Integer.parseInt(free_day) + 1 == calendar.get(Calendar.DAY_OF_WEEK)) {
+            if (Integer.parseInt(free_day) == calendar.get(Calendar.DAY_OF_WEEK)) {
                 Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.restaurant_closed), Toast.LENGTH_SHORT).show();
                 return true;
             }

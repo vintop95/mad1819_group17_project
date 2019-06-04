@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
+    android:layout_height="180dp"
     android:layout_margin="8dp"
     app:cardCornerRadius="4dp"
     app:cardElevation="4dp"
@@ -12,18 +11,8 @@
     app:cardUseCompatPadding="true">
 
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start|bottom"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
-        android:alpha=".1"
-        app:srcCompat="@drawable/ic_restaurant_black_24dp"
-        android:contentDescription="@string/icon_restaurant" />
-
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -31,29 +20,53 @@
 
         <ImageView
             android:id="@+id/category_image"
-            android:layout_width="match_parent"
-            android:layout_height="128dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="@android:color/white"
+            android:contentDescription="@string/image_background"
             android:scaleType="centerCrop"
             android:src="@drawable/pizza"
-            app:layout_constraintBottom_toTopOf="@+id/category_name"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/category_name"
-            android:contentDescription="@string/image_background" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.70" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:alpha=".1"
+            android:contentDescription="@string/icon_restaurant"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline2"
+            app:srcCompat="@drawable/ic_restaurant_black_24dp" />
 
         <TextView
             android:id="@+id/category_name"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="4dp"
-            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="sans-serif-light"
             android:text="@string/restaurant_type"
-            android:textSize="24sp"
             android:textColor="@color/fui_bgGitHub"
-            android:textStyle="bold"/>
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/category_image"
+            app:layout_constraintTop_toBottomOf="@+id/category_image" />
 
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>
