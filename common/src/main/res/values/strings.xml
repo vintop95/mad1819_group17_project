@@ -337,4 +337,8 @@
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyB7Tku5m9p0LVYU8k8-G7RB0DQoDXjvdSE</string>
     <string name="food_not_valid">Food must have a name and a price greater than zero</string>
 
+
+
+    <string name = "rate_activity">Give your opinion</string>
+
 </resources>

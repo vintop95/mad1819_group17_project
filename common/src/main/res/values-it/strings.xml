@@ -288,4 +288,6 @@
     <string name="no_reviews">Non ci sono ancora recensioni disponibili!</string>
     <string name="reviews">Recensioni</string>
     <string name="food_not_valid">Il piatto deve avere un nome ed un prezzo maggiore di zero</string>
+
+    <string name = "rate_activity">Dai la tua opinione</string>
 </resources>
