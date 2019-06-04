@@ -9,6 +9,7 @@
     <string name="title_delivery_requests">Delivery Requests</string>
     <string name="title_hour_analytics">Statistics</string>
     <string name="title_review_analytics">Reviews</string>
+    <string name="title_activity_location_map">Map</string>
 
     <string name="sign_out_menu">Sign Out</string>
 
@@ -119,6 +120,11 @@
     <string name="warning_title">Warning</string>
     <string name="discard_msg">Do you want to discard changes?</string>
     <string name="delete_msg">Do you want to delete the item?</string>
+
+    <!-- Restaurant Item Card -->
+    <string name="label_closed">Scheduled for:</string>
+    <string name="closed_toast">Restaurant currently closed!</string>
+    <string name="closed_tomorrow">Tomorrow</string>
 
 
     <!-- ////////////// -->

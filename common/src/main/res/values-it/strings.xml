@@ -6,9 +6,10 @@
     <string name="title_orders">Ordini</string>
     <string name="title_dailyoffer">Offerte Giornaliere</string>
     <string name="title_restaurants">Ristoranti</string>
-    <string name="title_delivery_requests">Richieste di consegna</string>
+    <string name="title_delivery_requests">Richieste</string>
     <string name="title_hour_analytics">Statistiche</string>
     <string name="title_review_analytics">Recensioni</string>
+    <string name="title_activity_location_map">Mappa</string>
 
     <string name="sign_out_menu">Cambia Utente</string>
 
@@ -98,6 +99,11 @@
 
     <!-- Restaurant Profile Strings -->
     <string name="title_activity_restaurant_profile">Profile Ristorante</string>
+
+    <!-- Restaurant Item Card -->
+    <string name="label_closed">Programmato per:</string>
+    <string name="closed_toast">Ristorante attualmente chiuso!</string>
+    <string name="closed_tomorrow">Domani</string>
 
 
     <!-- ////////////// -->

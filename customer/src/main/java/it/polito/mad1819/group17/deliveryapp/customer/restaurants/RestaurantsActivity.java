@@ -3,6 +3,8 @@ package it.polito.mad1819.group17.deliveryapp.customer.restaurants;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -39,8 +42,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Map;
 
 import it.polito.mad1819.group17.deliveryapp.common.utils.MadFirebaseRecyclerAdapter;
@@ -86,9 +92,6 @@ public class RestaurantsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        // Just fetch one time data
-        // adapter.startListening();
-        // pbHandler.show();
     }
 
     @Override
@@ -244,11 +247,9 @@ public class RestaurantsActivity extends AppCompatActivity {
                         freeDay = 0;
                     }
 
-//                    Log.d("FREE_DAY", "" + freeDay);
 
                     Calendar calendar = Calendar.getInstance();
                     int day = calendar.get(Calendar.DAY_OF_WEEK);
-//                    Log.d("day", "" + day);
 
                     // If today is not closed
                     if (!freeDay.equals(day)) {
@@ -258,10 +259,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                         String currentTime = TimeHelper.getTimeAsString(hour, minute);
                         String openingTime = model.working_time_opening;
                         String closingTime = model.working_time_closing;
-//
-//                        Log.d("currentTime", currentTime);
-//                        Log.d("openingTime", openingTime);
-//                        Log.d("closingTime", closingTime);
+
 
                         if (currentTime.compareTo(openingTime) > 0 &&
                                 currentTime.compareTo(closingTime) < 0) {
@@ -277,9 +275,6 @@ public class RestaurantsActivity extends AppCompatActivity {
         adapter.setSortComparator(new Comparator<RestaurantModel>() {
             @Override
             public int compare(RestaurantModel lhs, RestaurantModel rhs) {
-//                Log.d("SORT", lhs.id + " , " + rhs.id);
-//                Log.d("SORT", lhs.price + " < " + rhs.price);
-//                Log.d("SORT", lhs.totalOrderedQty + " , " + rhs.totalOrderedQty);
                 if (lhs.orders_count > rhs.orders_count) {
                     return -1;
                 } else if (lhs.orders_count < rhs.orders_count) {
@@ -302,6 +297,9 @@ public class RestaurantsActivity extends AppCompatActivity {
         public ImageView photo;
         public TextView address;
         public TextView avgPrice;
+        public TextView label_closed;
+        public TextView txt_closed;
+
         public String id;
         public String phone;
         public String image_path;
@@ -321,6 +319,8 @@ public class RestaurantsActivity extends AppCompatActivity {
             address = itemView.findViewById(R.id.restaurant_address);
             avgPrice = itemView.findViewById(R.id.restaurant_avgprice);
             rb_mean_rate_restaurant = itemView.findViewById(R.id.rb_mean_rate_restaurant);
+            label_closed = itemView.findViewById(R.id.label_closed);
+            txt_closed = itemView.findViewById(R.id.txt_closed);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -371,6 +371,31 @@ public class RestaurantsActivity extends AppCompatActivity {
             else if (model.total_restaurant_rate == null && model.total_service_rate != null)
                 overallRate = model.total_service_rate / model.number_of_service_rates;
             rb_mean_rate_restaurant.setRating(overallRate);
+
+            int switch_closed = restaurantClosed(free_day, opening_time, closing_time);
+            if (switch_closed != 0)
+            {
+                ColorMatrix matrix = new ColorMatrix();
+                matrix.setSaturation(0);
+                ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+                photo.setColorFilter(filter);
+
+                label_closed.setVisibility(View.VISIBLE);
+                txt_closed.setVisibility(View.VISIBLE);
+
+                if (switch_closed ==1)
+                    txt_closed.setText(R.string.closed_tomorrow);
+
+                if (switch_closed == 2)
+                    txt_closed.setText(opening_time);
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(RestaurantsActivity.this, R.string.closed_toast, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
 
         private void setId(String id) {
@@ -521,6 +546,35 @@ public class RestaurantsActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    private int restaurantClosed(String free_day, String opening_time, String closing_time) {
+        String current_timestamp = new SimpleDateFormat("yyyy/MM/dd HH:mm").format(new Date());
+
+        String current_date = current_timestamp.split(" ")[0];
+        String current_time = current_timestamp.split(" ")[1];
+
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(new SimpleDateFormat("yyyy/MM/dd").parse(current_date));
+            if (Integer.parseInt(free_day) == calendar.get(Calendar.DAY_OF_WEEK))
+                return 1;
+
+
+            if (current_time.compareTo(opening_time) < 0)
+                return 2;
+
+            if (current_time.compareTo(closing_time) > 0)
+                return 1;
+
+            else
+                return 0;
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.restaurant_closed), Toast.LENGTH_SHORT).show();
+            return 1;
+        }
     }
 
     private void runLayoutAnimation(final RecyclerView recyclerView, int type) {

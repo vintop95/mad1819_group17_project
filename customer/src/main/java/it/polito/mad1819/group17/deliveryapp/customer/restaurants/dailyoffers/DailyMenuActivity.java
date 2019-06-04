@@ -3,6 +3,8 @@ package it.polito.mad1819.group17.deliveryapp.customer.restaurants.dailyoffers;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -284,6 +286,13 @@ public class DailyMenuActivity extends AppCompatActivity {
 //                            + getString(R.string.removed), Toast.LENGTH_SHORT).show();
                 }
             });
+
+            if (getAvailableQty() == 0) {
+                ColorMatrix matrix = new ColorMatrix();
+                matrix.setSaturation(0);
+                ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+                photo.setColorFilter(filter);
+            }
         }
 
         // false if trying to add more than possible

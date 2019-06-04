@@ -114,14 +114,15 @@
                 app:layout_constraintBottom_toBottomOf="@+id/if_ordered_qty"
                 app:layout_constraintEnd_toStartOf="@+id/if_ordered_qty"
                 app:layout_constraintTop_toTopOf="@+id/if_ordered_qty"
-                app:layout_constraintStart_toEndOf="@id/if_label_food_available_qty3"/>
+                app:layout_constraintStart_toEndOf="@id/if_label_food_available_qty3"
+                android:layout_marginRight="8dp" />
 
             <TextView
                 android:id="@+id/if_ordered_qty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="(15)"
+                android:text="@string/label_quantity_dummy"
                 android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_end_card" />

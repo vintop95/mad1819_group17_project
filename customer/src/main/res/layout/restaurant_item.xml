@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="160dp"
     android:layout_gravity="center"
@@ -126,5 +127,29 @@
             app:layout_constraintBottom_toBottomOf="@+id/view_restaurant_info"
             app:layout_constraintStart_toEndOf="@+id/icon_rating"
             app:layout_constraintTop_toTopOf="@+id/view_restaurant_info" />
+
+        <TextView
+            android:id="@+id/label_closed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/label_closed"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/txt_closed"
+            app:layout_constraintEnd_toEndOf="@+id/restaurant_background" />
+
+        <TextView
+            android:id="@+id/txt_closed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/time_dummy"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/view_restaurant_info"
+            app:layout_constraintEnd_toEndOf="@+id/label_closed"
+            app:layout_constraintStart_toStartOf="@+id/label_closed" />
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

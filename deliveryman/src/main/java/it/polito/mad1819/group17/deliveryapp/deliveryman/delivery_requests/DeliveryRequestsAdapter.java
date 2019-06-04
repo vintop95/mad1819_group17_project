@@ -49,7 +49,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
         TextView routeDistance;
         //TextView txt_customer_name;
         TextView txt_state;
-        TextView txt_restaurant_name;
+        //TextView txt_restaurant_name;
         TextView txt_restaurant_address;
         ImageView image_state;
         Button mapButton;
@@ -66,7 +66,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
             txt_delivery_address = itemView.findViewById(R.id.txt_address);
             //txt_customer_name = itemView.findViewById(R.id.txt_customer_name);
             txt_state = itemView.findViewById(R.id.txt_state);
-            txt_restaurant_name = itemView.findViewById(R.id.txt_restaurant_name);
+            //txt_restaurant_name = itemView.findViewById(R.id.txt_restaurant_name);
             txt_restaurant_address = itemView.findViewById(R.id.txt_restaurant_address);
             image_state = itemView.findViewById(R.id.image_state);
             mapButton = itemView.findViewById(R.id.imageButton_map);
@@ -91,6 +91,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
                     int order_st = LocationMapActivity.ACCEPTED_STATUS;
                     if (clickedDeliveryRequest.getCurrentState() == clickedDeliveryRequest.STATE1) order_st = LocationMapActivity.ASSIGNED_STATUS;
                     intent.putExtra("order_status",order_st);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     fragment.getActivity().getApplicationContext().startActivity(intent);
 
                 }
@@ -124,12 +125,12 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
         //Add DISTANCE
         double distance = 0;
         try{
-             distance = Double.valueOf(model.getDistance());
-             Log.d("AAAAAAAA","daje:"+distance);
+            distance = Double.valueOf(model.getDistance());
+            Log.d("AAAAAAAA","daje:"+distance);
         } catch (Exception e){
             Log.e("exception",e.getLocalizedMessage());
             if (distance != 0)
-             distance = model.computeDistance(fragment.getActivity().getApplicationContext());
+                distance = model.computeDistance(fragment.getActivity().getApplicationContext());
         }
 
         distance = distance / 1000; //FROM METERS TO KILOMETERS
@@ -141,7 +142,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
         holder.txt_state.setText(model.getCurrentStateLocal());
         holder.txt_delivery_address.setText(model.getAddress());
         //holder.txt_customer_name.setText(model.getCustomer_name());
-        holder.txt_restaurant_name.setText(model.getRestaurant_name());
+        //holder.txt_restaurant_name.setText(model.getRestaurant_name());
         holder.txt_restaurant_address.setText(model.getRestaurant_address());
         switch (model.getCurrentState()) {
             case DeliveryRequest.STATE1:

@@ -183,7 +183,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"
                 android:layout_margin="10dp"
-                android:text="@string/number_of_requests"
+                android:text="@string/number_requests"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
             <TextView
