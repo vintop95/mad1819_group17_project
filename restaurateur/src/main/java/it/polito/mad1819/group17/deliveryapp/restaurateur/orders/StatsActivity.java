@@ -16,6 +16,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,7 +43,7 @@ import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
 public class StatsActivity extends AppCompatActivity {
 
-    private HashMap<Integer,Integer> orderPerHour;
+    private HashMap<Integer, Integer> orderPerHour;
     private Integer[] orders;
     public int sum;
     public ProgressBarHandler progressBarHandler;
@@ -56,12 +60,35 @@ public class StatsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
-        main_hourInterval_tv=findViewById(R.id.mainHoursInterval);
-        main_numOfOrders_tv=findViewById(R.id.mainNumberOfOrders);
-        main_progressBar=findViewById(R.id.mainProgressBarNumberOfOrder);
+        main_hourInterval_tv = findViewById(R.id.mainHoursInterval);
+        main_numOfOrders_tv = findViewById(R.id.mainNumberOfOrders);
+        main_progressBar = findViewById(R.id.mainProgressBarNumberOfOrder);
         progressBarHandler = new ProgressBarHandler(this);
 
         showBackArrowOnToolbar();
+    }
+
+    private void drawBarchart(Map<Integer, Integer> orderPerHour, int sum) {
+
+        BarChart chart = findViewById(R.id.barchart);
+        ArrayList barEntryList = new ArrayList();
+        for (int i = 0; i < 24; i++)
+            if (orderPerHour.get(i) != null)
+                barEntryList.add(new BarEntry(orderPerHour.get(i), i));
+            else
+                barEntryList.add(new BarEntry(0, i));
+
+        ArrayList hours = new ArrayList();
+        for (int i = 0; i < 24; i++)
+            hours.add(i + ":00");
+
+        BarDataSet bardataset = new BarDataSet(barEntryList, "Orders per hour");
+        bardataset.setColor(getResources().getColor(R.color.colorPrimaryDark));
+        chart.setDescription("");
+        chart.getAxisRight().setEnabled(false);
+        chart.animateY(2000);
+        BarData data = new BarData(hours, bardataset);
+        chart.setData(data);
     }
 
     @Override
@@ -73,10 +100,10 @@ public class StatsActivity extends AppCompatActivity {
 
     }
 
-    public void populateOrdersPerHour (){
+    public void populateOrdersPerHour() {
 
-        orderPerHour = new HashMap<Integer,Integer>();
-        orders = new Integer[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        orderPerHour = new HashMap<Integer, Integer>();
+        orders = new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         sum = 0;
 
         if (FirebaseAuth.getInstance().getUid() != null) {
@@ -98,18 +125,18 @@ public class StatsActivity extends AppCompatActivity {
 
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         str_hour = ds.child("delivery_time").getValue(String.class); //HOUR ("hh:mm" format)
-                        if(str_hour != null && str_hour.contains(":")) {
+                        if (str_hour != null && str_hour.contains(":")) {
                             hour = Integer.parseInt(str_hour.split(":")[0]);//HOUR (hh format)
-                            if (hour >= 0 && hour < 24){
-                                Log.d("populateOrders...","hour:"+hour);
-                                orders[hour]=orders[hour]+1;
+                            if (hour >= 0 && hour < 24) {
+                                Log.d("populateOrders...", "hour:" + hour);
+                                orders[hour] = orders[hour] + 1;
                                 sum = sum + 1;
-                                Log.d("populateOrders...","orders[" + hour + "]=" + orders[hour]);
+                                Log.d("populateOrders...", "orders[" + hour + "]=" + orders[hour]);
                             }
                         }
                     }
-                    for (int i=0;i<24;i++){
-                        orderPerHour.put(i,orders[i]);  //making an HashMap (Hour,#_of_order)
+                    for (int i = 0; i < 24; i++) {
+                        orderPerHour.put(i, orders[i]);  //making an HashMap (Hour,#_of_order)
                     }
                     orderPerHour = sortByValue(orderPerHour); //SORTING
 
@@ -119,10 +146,12 @@ public class StatsActivity extends AppCompatActivity {
                             iterator.remove();                                      //REMOVING 0 VALUES
                         }
                     }
+
                     if (!orderPerHour.isEmpty()) {
                         Map.Entry<Integer, Integer> entry = orderPerHour.entrySet().iterator().next();
                         Log.d("populateOrders_sum", "" + sum);
                         updateListView();
+                        drawBarchart(orderPerHour, sum);
                     } else {
                         popular_hour_card = findViewById(R.id.materialCardView);
                         popular_hour_card.setAlpha(0.2f);
@@ -135,6 +164,8 @@ public class StatsActivity extends AppCompatActivity {
 
                 }
             });
+
+
             progressBarHandler.hide();
         }
     }
@@ -142,15 +173,14 @@ public class StatsActivity extends AppCompatActivity {
     // function to sort hashmap by values
     public HashMap<Integer, Integer> sortByValue(HashMap<Integer, Integer> hm) {
         // Create a list from elements of HashMap
-        List<Map.Entry<Integer, Integer> > list =
-                new LinkedList<Map.Entry<Integer, Integer> >(hm.entrySet());
+        List<Map.Entry<Integer, Integer>> list =
+                new LinkedList<Map.Entry<Integer, Integer>>(hm.entrySet());
         Comparator<Integer> cmp = Collections.reverseOrder();
 
         // Sort the list
-        Collections.sort(list, new Comparator<Map.Entry<Integer, Integer> >() {
+        Collections.sort(list, new Comparator<Map.Entry<Integer, Integer>>() {
             public int compare(Map.Entry<Integer, Integer> o1,
-                               Map.Entry<Integer, Integer> o2)
-            {
+                               Map.Entry<Integer, Integer> o2) {
 
                 return -((o1.getValue()).compareTo(o2.getValue()));// - to reverse the order!
             }
@@ -165,12 +195,14 @@ public class StatsActivity extends AppCompatActivity {
     }
 
 
-    public void updateListView(){
+    public void updateListView() {
 
+        Log.d("XYWZ", orderPerHour.toString());
         ArrayList<Hour> hourArrayList = new ArrayList<Hour>();
-        for(Map.Entry<Integer, Integer> entry : orderPerHour.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : orderPerHour.entrySet()) {
             hourArrayList.add(new Hour(entry.getKey(), entry.getValue()));
         }
+        Log.d("XYWZ", hourArrayList.toString());
         HourAdapter arrayAdapter = new HourAdapter(
                 this, R.layout.hour_orders_layout_item, hourArrayList);
 
@@ -198,7 +230,7 @@ public class StatsActivity extends AppCompatActivity {
         }
 
         public String getHourFormatted() {
-            String returnValue = ""+m_hour+":00/"+m_hour+":59";
+            String returnValue = "" + m_hour + ":00/" + m_hour + ":59";
             return returnValue;
         }
 
@@ -211,14 +243,14 @@ public class StatsActivity extends AppCompatActivity {
         }
 
         public String getNumberOfOrdersFormatted() {
-            float percentage = (m_numberOfOrders * 100 )/ sum;
-            String returnValue = ""+format.format(percentage)+"% ("+m_numberOfOrders+" ordini)";
+            float percentage = (m_numberOfOrders * 100) / sum;
+            String returnValue = "" + format.format(percentage) + "% (" + m_numberOfOrders + " ordini)";
             return returnValue;
         }
 
         public String getNumberOfOrdersonTotalFormatted() {
-            float percentage = (m_numberOfOrders * 100 )/ sum;
-            String returnValue = ""+m_numberOfOrders+" ordini su "+sum+" totali ("+format.format(percentage)+"%)";
+            float percentage = (m_numberOfOrders * 100) / sum;
+            String returnValue = "" + m_numberOfOrders + " ordini su " + sum + " totali (" + format.format(percentage) + "%)";
             return returnValue;
         }
 
@@ -227,7 +259,7 @@ public class StatsActivity extends AppCompatActivity {
         }
     }
 
-    public class HourAdapter extends ArrayAdapter<Hour>{
+    public class HourAdapter extends ArrayAdapter<Hour> {
         public HourAdapter(Context context, int resource) {
             super(context, resource);
         }
@@ -238,13 +270,13 @@ public class StatsActivity extends AppCompatActivity {
 
         @NonNull
         @Override
-        public View getView(int position,  View convertView, @NonNull ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.hour_orders_layout_item,null);
+            convertView = inflater.inflate(R.layout.hour_orders_layout_item, null);
 
-            TextView hour_tv = (TextView)convertView.findViewById(R.id.hoursInterval);
-            TextView  order_tv = (TextView)convertView.findViewById(R.id.numberOfOrders);
+            TextView hour_tv = (TextView) convertView.findViewById(R.id.hoursInterval);
+            TextView order_tv = (TextView) convertView.findViewById(R.id.numberOfOrders);
             ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressBarNumberOfOrder);
 
             Hour h = getItem(position);
@@ -252,11 +284,11 @@ public class StatsActivity extends AppCompatActivity {
             order_tv.setText(h.getNumberOfOrdersFormatted());
             hour_tv.setText(h.getHourFormatted());
 
-            int progress = (100 * h.getNumberOfOrders())/sum;
+            int progress = (100 * h.getNumberOfOrders()) / sum;
             progressBar.setProgress(progress);
 
             //MAIN CARDVIEW FILL-UP
-            if(position == 0){
+            if (position == 0) {
                 main_hourInterval_tv.setText(h.getHourFormatted());
                 main_numOfOrders_tv.setText(h.getNumberOfOrdersonTotalFormatted());
                 main_progressBar.setProgress(progress);
