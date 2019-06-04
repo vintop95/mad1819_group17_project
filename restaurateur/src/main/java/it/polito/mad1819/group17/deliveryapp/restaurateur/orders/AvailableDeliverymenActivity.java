@@ -15,6 +15,7 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
+import com.google.android.gms.location.Geofence;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -132,50 +133,52 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
 
                         availableDeliverymen = new ArrayList<AvailableDeliveryman>();
 
-                        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(restaurantLatitude, restaurantLongitude), RADIUS_KM);
-                        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
-                            @Override
-                            public void onKeyEntered(String key, GeoLocation location) {
-                                //Log.d("XX", (new AvailableDeliveryman(key, location.latitude, location.longitude, restaurantLatitude, restaurantLongitude)).toString());
-                                availableDeliverymen.add(new AvailableDeliveryman(key, location, new GeoLocation(restaurantLatitude, restaurantLongitude)));
-                            }
+                        if(geoFire!=null && restaurantLatitude!=null && restaurantLongitude!=null) {
+                            GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(restaurantLatitude, restaurantLongitude), RADIUS_KM);
 
-                            @Override
-                            public void onKeyExited(String key) {
+                            geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+                                @Override
+                                public void onKeyEntered(String key, GeoLocation location) {
+                                    //Log.d("XX", (new AvailableDeliveryman(key, location.latitude, location.longitude, restaurantLatitude, restaurantLongitude)).toString());
+                                    availableDeliverymen.add(new AvailableDeliveryman(key, location, new GeoLocation(restaurantLatitude, restaurantLongitude)));
+                                }
 
-                            }
+                                @Override
+                                public void onKeyExited(String key) {
 
-                            @Override
-                            public void onKeyMoved(String key, GeoLocation location) {
+                                }
 
-                            }
+                                @Override
+                                public void onKeyMoved(String key, GeoLocation location) {
 
-                            @Override
-                            public void onGeoQueryReady() {
-                                if (availableDeliverymen.size() == 0)
-                                    Toast.makeText(getApplicationContext(), "No currently deliverymen available. Try again in a while!", Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void onGeoQueryReady() {
+                                    if (availableDeliverymen.size() == 0)
+                                        Toast.makeText(getApplicationContext(), "No currently deliverymen available. Try again in a while!", Toast.LENGTH_LONG).show();
 
                                 /*for (AvailableDeliveryman p : availableDeliverymen)
                                     Log.d("BEFORE_SORT", p.toString());*/
 
-                                else {
-                                    Collections.sort(availableDeliverymen);
+                                    else {
+                                        Collections.sort(availableDeliverymen);
 
                                 /*for (AvailableDeliveryman p : availableDeliverymen)
                                     Log.d("AFTER_SORT", p.toString());*/
 
-                                    AvailableDeliverymenAdapter availableDeliverymenAdapter = new AvailableDeliverymenAdapter(availableDeliverymen, context, recyclerView);
-                                    recyclerView.setAdapter(availableDeliverymenAdapter);
-                                    progressBarHandler.hide();
+                                        AvailableDeliverymenAdapter availableDeliverymenAdapter = new AvailableDeliverymenAdapter(availableDeliverymen, context, recyclerView);
+                                        recyclerView.setAdapter(availableDeliverymenAdapter);
+                                        progressBarHandler.hide();
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onGeoQueryError(DatabaseError error) {
+                                @Override
+                                public void onGeoQueryError(DatabaseError error) {
 
-                            }
-                        });
-
+                                }
+                            });
+                        }
 
                     }
 
