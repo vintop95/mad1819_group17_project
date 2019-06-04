@@ -170,6 +170,7 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
 
     }
 
+
     private double[] getLatitudeAndLongitudeFromLocation(String location) {
         Geocoder geocoder = new Geocoder(getBaseContext());
         List<Address> addresses;
@@ -308,7 +309,7 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
         });
 
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng_restaurant, 13));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng_restaurant, 13));
         //////////////////
     }
 
@@ -329,9 +330,9 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
 
                 MarkerOptions mo = new MarkerOptions();
                 mo.position(new LatLng(location.getLatitude(),location.getLongitude()));
-                currentPosMarker = mMap.addMarker(mo);
-
+                //currentPosMarker = mMap.addMarker(mo);
                 plotRoutes(current,origin);
+                if(locationManager!=null && locationListener!=null)locationManager.removeUpdates(locationListener);
             }
 
             @Override
