@@ -123,17 +123,6 @@ public class EditProfileActivity extends AppCompatActivity {
             input_phone.setText(restaurateur.getPhone());
             input_mail.setText(restaurateur.getMail());
             input_address.setText(restaurateur.getAddress());
-            String restaurant_type = restaurateur.getRestaurant_type();
-            if (restaurant_type != null) {
-                Integer index;
-                try {
-                    index = Integer.valueOf(restaurateur.getRestaurant_type());
-                } catch (NumberFormatException e) {
-                    index = 0;
-                }
-
-                input_restaurant_type.setSelection(index);
-            }
 
             //************** SET SPINNER ITEMS WITHOUT THE FIRST: "FAVOURITES"!
             CharSequence[] itemArray =
@@ -149,6 +138,18 @@ public class EditProfileActivity extends AppCompatActivity {
 
             input_restaurant_type.setAdapter(adapter);
             //*************************************************
+            String restaurant_type = restaurateur.getRestaurant_type();
+            if (restaurant_type != null) {
+                Integer index;
+                try {
+                    index = Integer.valueOf(restaurateur.getRestaurant_type());
+                } catch (NumberFormatException e) {
+                    index = 0;
+                }
+
+                // -1 because we removed the first category
+                input_restaurant_type.setSelection(index-1);
+            }
 
             String free_day = restaurateur.getFree_day();
             if (free_day != null) {

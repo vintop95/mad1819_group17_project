@@ -15,6 +15,7 @@ android {
 
         vectorDrawables.useSupportLibrary = true
 
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -66,5 +67,7 @@ dependencies {
 
     implementation 'com.google.maps:google-maps-services:0.2.11'
     implementation 'org.slf4j:slf4j-simple:1.7.25'
+
+    implementation 'com.android.support:multidex:1.0.3'
 }
 apply plugin: 'com.google.gms.google-services'
