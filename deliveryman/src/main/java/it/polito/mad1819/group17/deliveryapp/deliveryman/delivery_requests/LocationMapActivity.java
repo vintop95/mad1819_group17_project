@@ -1,14 +1,20 @@
 package it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +23,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,6 +31,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -44,8 +52,13 @@ import java.util.List;
 
 import it.polito.mad1819.group17.deliveryapp.deliveryman.R;
 
+import static it.polito.mad1819.group17.deliveryapp.deliveryman.MainActivity.ACCESS_FINE_LOCATION_REQUEST;
+
 
 public class LocationMapActivity extends FragmentActivity implements OnMapReadyCallback {
+
+    public static int ASSIGNED_STATUS = 0;
+    public static int ACCEPTED_STATUS = 1;
 
     public GoogleMap mMap;
     LocationRequest mLocationRequest;
@@ -53,7 +66,7 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
     GeoApiContext context;
     String restaurantAddress;
     String customerAddress;
-    String meantime, origin, destination;
+    String meantime, origin, destination, current;
     GoogleApiClient mGoogleApiClient;
     DateTime now, arrive;
     DirectionsResult result;
@@ -62,6 +75,12 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
     Button goToGoogleMaps;
     double[] restaurantCoordinates;
     double[] customerCoordinates;
+    double[] currentCoordinates;
+    int orderState;
+    LocationManager locationManager = null;
+    LocationListener locationListener = null;
+    Marker currentPosMarker;
+
 
     private static final int MY_PERMISSION_ACCESS_COARSE_LOCATION = 11;
 
@@ -72,13 +91,20 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
         intent = getIntent();
         restaurantAddress = intent.getStringExtra("restaurant_address");
         customerAddress = intent.getStringExtra("customer_address");
+        orderState = intent.getIntExtra("order_status", 0);
+
 
         Log.d("AAA", restaurantAddress);
         Log.d("AAA", customerAddress);
 
 
+
         restaurantCoordinates = getLatitudeAndLongitudeFromLocation(restaurantAddress);
         customerCoordinates = getLatitudeAndLongitudeFromLocation(customerAddress);
+        currentCoordinates = getLatitudeAndLongitudeFromLocation(customerAddress);
+
+
+
 
         try {
             Log.d("AAA", Double.toString(restaurantCoordinates[0]) + " " + Double.toString(restaurantCoordinates[1]));
@@ -93,6 +119,7 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
             Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.one_px);
             trasparent = BitmapDescriptorFactory.fromBitmap(img);
 
+
             goToGoogleMaps = findViewById(R.id.goToGoogleMapsButton);
         } catch (Exception e) {
             Log.e("exception", e.getLocalizedMessage());
@@ -105,17 +132,14 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
         super.onStart();
 
         try {
+
+
             origin = Double.toString(restaurantCoordinates[0]) + "," + Double.toString(restaurantCoordinates[1]);
             destination = Double.toString(customerCoordinates[0]) + "," + Double.toString(customerCoordinates[1]);
 
-            goToGoogleMaps.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
+            Log.d("orderstate",orderState+"");
 
-                    String url = "http://maps.google.com/maps?saddr=" + origin + "&daddr=" + destination;
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(intent);
-                }
-            });
+
         } catch (Exception e) {
             Log.e("exception", e.getLocalizedMessage());
             Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -136,18 +160,64 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if(orderState == ASSIGNED_STATUS) {
+            setLocationManagerListener();
+        }
+        else {
+            plotRoutes(origin,destination);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(restaurantCoordinates[0], restaurantCoordinates[1]), 13));
+        }
 
-        // Add a marker in Sydney and move the camera
+    }
+
+
+    private double[] getLatitudeAndLongitudeFromLocation(String location) {
+        Geocoder geocoder = new Geocoder(getBaseContext());
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocationName(location, 1);
+            if (addresses.size() != 0)
+                return new double[]{addresses.get(0).getLatitude(), addresses.get(0).getLongitude()};
+            else
+                return null;
+        } catch (
+                IOException e) {
+            return null;
+        }
+    }
+
+
+    public LatLng getPolylineCentroid(@NonNull Polyline p) {
+
+        LatLng return_points = p.getPoints().get(0);
+        if(p.getPoints().size()>0){
+            int middle_length = (int) p.getPoints().size()/2;
+            return_points = p.getPoints().get(middle_length);
+        }
+        return return_points;
+    }
+
+
+    private void plotRoutes(String origin, String destination){
         LatLng latLng_restaurant = new LatLng(restaurantCoordinates[0], restaurantCoordinates[1]);
         LatLng latLng_customer = new LatLng(customerCoordinates[0], customerCoordinates[1]);
 
         mMap.addMarker(new MarkerOptions().position(latLng_customer).title("CUSTOMER"));
         mMap.addMarker(new MarkerOptions().position(latLng_restaurant).title("RESTAURATEUR")).showInfoWindow();
 
-        try{
+        try {
             mMap.setMyLocationEnabled(true);
-        }catch (SecurityException se){
-            Log.e("security_exception",se.getLocalizedMessage());
+
+            goToGoogleMaps.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+
+                    String url = "http://maps.google.com/maps?saddr=" + origin + "&daddr=" + destination;
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                }
+            });
+        } catch (SecurityException se) {
+            Log.e("security_exception", se.getLocalizedMessage());
         }
 
 
@@ -158,8 +228,10 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
         //Execute Directions API request
         context = new GeoApiContext.Builder().apiKey(getString(R.string.google_api_key)).build();
         // DirectionsApiRequest req = DirectionsApi.getDirections(context, "41.385064,2.173403", "40.416775,-3.70379");
-        DirectionsApiRequest req = DirectionsApi.getDirections(context, origin,destination);
+        DirectionsApiRequest req = DirectionsApi.getDirections(context, origin, destination);
 
+
+        //ROUTE RESTAURANT -> CUSTOMER
         try {
             now = new DateTime();
             DirectionsResult res = req.departureTime(now).await();
@@ -167,14 +239,14 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
             if (res.routes != null && res.routes.length > 0) {
                 DirectionsRoute route = res.routes[0];
 
-                if (route.legs !=null) {
-                    for(int i=0; i<route.legs.length; i++) {
+                if (route.legs != null) {
+                    for (int i = 0; i < route.legs.length; i++) {
                         DirectionsLeg leg = route.legs[i];
                         if (leg.steps != null) {
-                            for (int j=0; j<leg.steps.length;j++){
+                            for (int j = 0; j < leg.steps.length; j++) {
                                 DirectionsStep step = leg.steps[j];
-                                if (step.steps != null && step.steps.length >0) {
-                                    for (int k=0; k<step.steps.length;k++){
+                                if (step.steps != null && step.steps.length > 0) {
+                                    for (int k = 0; k < step.steps.length; k++) {
                                         DirectionsStep step1 = step.steps[k];
                                         EncodedPolyline points1 = step1.polyline;
                                         if (points1 != null) {
@@ -203,12 +275,9 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
                 }
             }
 
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             Log.e("exception_catched", ex.getLocalizedMessage());
         }
-
-
-
 
 
         //Draw the polyline
@@ -216,22 +285,22 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
             PolylineOptions opts = new PolylineOptions().addAll(path).color(Color.BLUE).width(10).clickable(true);
             line = mMap.addPolyline(opts);
             //line.setTag("" + path.size());
-            Log.d("polyline",Integer.toString(path.size()));
+            Log.d("polyline", Integer.toString(path.size()));
         }
 
         mMap.setOnPolylineClickListener(new GoogleMap.OnPolylineClickListener() {
             @Override
             public void onPolylineClick(Polyline polyline) {
-                try{
+                try {
                     now = new DateTime();
                     result = DirectionsApi.newRequest(context)
                             .origin(origin)
                             .destination(destination)
                             .departureTime(now).await();
 
-                    meantime = "Time: "+ result.routes[0].legs[0].duration.humanReadable + ", Distance: " + result.routes[0].legs[0].distance.humanReadable;
+                    meantime = "Time: " + result.routes[0].legs[0].duration.humanReadable + ", Distance: " + result.routes[0].legs[0].distance.humanReadable;
                     mMap.addMarker(new MarkerOptions().position(getPolylineCentroid(line)).title(meantime).icon(trasparent)).showInfoWindow();
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     Log.e("exception_catched_2", ex.getLocalizedMessage());
                 }
                 Log.e("Polyline position", " -- " + polyline.getTag());
@@ -242,37 +311,53 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng_restaurant, 13));
         //////////////////
-
     }
 
-    private double[] getLatitudeAndLongitudeFromLocation(String location) {
-        Geocoder geocoder = new Geocoder(getBaseContext());
-        List<Address> addresses;
-        try {
-            addresses = geocoder.getFromLocationName(location, 1);
-            if (addresses.size() != 0)
-                return new double[]{addresses.get(0).getLatitude(), addresses.get(0).getLongitude()};
-            else
-                return null;
-        } catch (
-                IOException e) {
-            return null;
+
+    private void setLocationManagerListener(){
+        Log.d("setLocationManagerListener", currentCoordinates[0]+ " "+currentCoordinates[1]);
+
+        locationManager=(LocationManager)getSystemService(LOCATION_SERVICE);
+
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+                currentCoordinates[0] = location.getLatitude();
+                currentCoordinates[1] = location.getLongitude();
+                Log.d("setLocationManagerListener", currentCoordinates[0]+ " "+currentCoordinates[1]);
+                current = Double.toString(currentCoordinates[0]) + "," + Double.toString(currentCoordinates[1]);
+
+                MarkerOptions mo = new MarkerOptions();
+                mo.position(new LatLng(location.getLatitude(),location.getLongitude()));
+                //currentPosMarker = mMap.addMarker(mo);
+                plotRoutes(current,origin);
+                if(locationManager!=null && locationListener!=null)locationManager.removeUpdates(locationListener);
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 4000, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 4000, 0, locationListener);
         }
+        else
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_REQUEST);
+
     }
-
-
-    public LatLng getPolylineCentroid(@NonNull Polyline p) {
-
-        LatLng return_points = p.getPoints().get(0);
-        if(p.getPoints().size()>0){
-            int middle_length = (int) p.getPoints().size()/2;
-            return_points = p.getPoints().get(middle_length);
-        }
-        return return_points;
-    }
-
 }
-
-
-
 

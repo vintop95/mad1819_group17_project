@@ -54,6 +54,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
         ImageView image_state;
         Button mapButton;
         Intent intent;
+        int order_status;
 
 
         public DeliveryRequestHolder(View itemView) {
@@ -87,6 +88,9 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
                     Log.d("AAAA",customer_addr);
                     intent.putExtra("restaurant_address", restaurant_addr);
                     intent.putExtra("customer_address", customer_addr);
+                    int order_st = LocationMapActivity.ACCEPTED_STATUS;
+                    if (clickedDeliveryRequest.getCurrentState() == clickedDeliveryRequest.STATE1) order_st = LocationMapActivity.ASSIGNED_STATUS;
+                    intent.putExtra("order_status",order_st);
                     fragment.getActivity().getApplicationContext().startActivity(intent);
 
                 }
@@ -144,13 +148,15 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
                 holder.state_background.setBackgroundColor(
                         fragment.getActivity().getResources().getColor(R.color.colorState1));
                 holder.image_state.setBackgroundResource(R.drawable.ic_remove_circle_black_24dp);
-                holder.mapButton.setVisibility(View.GONE);
+                holder.mapButton.setVisibility(View.VISIBLE);
+                holder.order_status = LocationMapActivity.ASSIGNED_STATUS;
                 break;
             case DeliveryRequest.STATE2:
                 holder.state_background.setBackgroundColor(
                         fragment.getActivity().getResources().getColor(R.color.colorState2));
                 holder.image_state.setBackgroundResource(R.drawable.ic_play_circle_filled_black_24dp);
                 holder.mapButton.setVisibility(View.VISIBLE);
+                holder.order_status = LocationMapActivity.ACCEPTED_STATUS;
                 break;
             case DeliveryRequest.STATE3:
                 holder.state_background.setBackgroundColor(
