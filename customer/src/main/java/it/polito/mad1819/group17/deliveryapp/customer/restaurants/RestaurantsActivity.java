@@ -234,7 +234,8 @@ public class RestaurantsActivity extends AppCompatActivity {
                     return count >= 3;
                 } else if (filterPattern.startsWith(FILTER_SEARCH + "=")) {
                     String search = filterPattern.replace(FILTER_SEARCH + "=", "");
-                    return model.name.contains(search);
+//                    Log.d("[FILTER]",model.name.toLowerCase() + " contains " + search + " ?");
+                    return model.name.toLowerCase().contains(search);
                 } else if (filterPattern.startsWith(FILTER_OPEN_NOW)) {
                     Integer freeDay;
                     try {

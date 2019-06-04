@@ -61,11 +61,14 @@
                 android:layout_marginRight="8dp"
                 android:autoSizeTextType="uniform"
                 android:text="@string/hint_food_name"
+                android:maxLines="2"
+                app:autoSizeTextType="uniform"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_end_card"
                 app:layout_constraintStart_toStartOf="@+id/guideline_start_card"
-                app:layout_constraintTop_toTopOf="parent" tools:targetApi="o" />
+                app:layout_constraintTop_toTopOf="parent" tools:targetApi="o"
+                app:layout_constraintBottom_toTopOf="@id/if_description"/>
 
             <TextView
                 android:id="@+id/if_description"
@@ -74,23 +77,31 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
+                android:maxLines="3"
                 android:ellipsize="end"
                 android:text="@string/hint_food_description"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_end_card"
                 app:layout_constraintStart_toStartOf="@+id/if_name"
-                app:layout_constraintTop_toBottomOf="@+id/if_name" />
+                app:layout_constraintTop_toBottomOf="@+id/if_name"
+                app:layout_constraintBottom_toTopOf="@id/rb_mean_rate"/>
 
             <TextView
                 android:id="@+id/if_label_food_available_qty3"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+                android:gravity="end"
+                android:textSize="13sp"
                 android:text="@string/available"
+                android:ellipsize="end"
+                app:autoSizeTextType="uniform"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 app:layout_constraintBottom_toBottomOf="@+id/if_available_qty"
                 app:layout_constraintEnd_toStartOf="@+id/if_available_qty"
+                app:layout_constraintStart_toEndOf="@+id/if_price"
                 app:layout_constraintTop_toTopOf="@+id/if_available_qty" />
 
             <TextView
@@ -98,20 +109,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
                 android:text="@string/label_quantity_dummy"
+                android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="@+id/if_ordered_qty"
                 app:layout_constraintEnd_toStartOf="@+id/if_ordered_qty"
-                app:layout_constraintTop_toTopOf="@+id/if_ordered_qty" />
+                app:layout_constraintTop_toTopOf="@+id/if_ordered_qty"
+                app:layout_constraintStart_toEndOf="@id/if_label_food_available_qty3"/>
 
             <TextView
                 android:id="@+id/if_ordered_qty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginBottom="8dp"
-                android:text="@string/label_quantity_dummy"
+                android:text="(15)"
+                android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_end_card" />
 
@@ -119,14 +130,15 @@
                 android:id="@+id/if_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/label_food_price"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/if_label_food_available_qty3"
                 app:layout_constraintStart_toStartOf="@+id/rb_mean_rate"
-                app:layout_constraintTop_toTopOf="@+id/if_label_food_available_qty3" />
+                app:layout_constraintTop_toTopOf="@+id/if_label_food_available_qty3"
+                app:layout_constraintRight_toLeftOf="@id/if_label_food_available_qty3"/>
 
             <RatingBar
                 android:id="@+id/rb_mean_rate"
@@ -143,7 +155,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_end="32dp" />
+                app:layout_constraintGuide_end="27dp" />
 
 
         </android.support.constraint.ConstraintLayout>
