@@ -308,6 +308,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (dataSnapshot.getValue() == null) {
                     Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
+                    firstAccess = true;
                     editNewProfile.putExtra("firstAccess", firstAccess);
                     startActivity(editNewProfile);
                     if (navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
@@ -376,10 +377,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, EditProfileActivity.class);
                 startActivity(intent);
                 return true;
-
-            /*case R.id.analytics:
-                startActivity(new Intent(this, AnalyticsActivity.class));
-                return true;*/
 
             default:
                 return super.onOptionsItemSelected(item);

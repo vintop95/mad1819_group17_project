@@ -238,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (dataSnapshot.getValue() == null) {
                     Intent editNewProfile = new Intent(MainActivity.this, EditProfileActivity.class);
+                    firstAccess = true;
                     editNewProfile.putExtra("firstAccess", firstAccess);
                     startActivity(editNewProfile);
                     if (navigation != null) navigation.setSelectedItemId(R.id.navigation_profile);
