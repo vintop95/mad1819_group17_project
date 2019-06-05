@@ -107,7 +107,7 @@ public class StatsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        pullToRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);
+        pullToRefresh = view.findViewById(R.id.swipe_layout);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -238,6 +238,6 @@ public class StatsFragment extends Fragment {
         synchronized (this) {
             pieChart.setProgress(0);
             pieChart.setProgress(progress);
-        };
+        }
     }
 }

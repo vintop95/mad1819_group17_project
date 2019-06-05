@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private void initBottomNavigation() {
         if (active == null) throw new IllegalStateException("'active' must be initialized");
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         mOnNavigationItemSelectedListener
                 = new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

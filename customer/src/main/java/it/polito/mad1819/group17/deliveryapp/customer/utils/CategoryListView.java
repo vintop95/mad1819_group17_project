@@ -41,7 +41,7 @@ public class CategoryListView extends ArrayAdapter<String> {
         }
 
         Log.d("aia", "onCreateView: "+categories.length+"///"+imgid.length);
-        viewHolder.ivw.setImageResource((Integer)imgid[position]);
+        viewHolder.ivw.setImageResource(imgid[position]);
         viewHolder.tv1.setText(categories[position]);
 
         return r;

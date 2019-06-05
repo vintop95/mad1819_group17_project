@@ -90,7 +90,7 @@ public class DailyMenuActivity extends AppCompatActivity {
     public static int RC_RESTAURANT_DETAILS = 1;
 
     private void showBackArrowOnToolbar() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
@@ -420,7 +420,7 @@ public class DailyMenuActivity extends AppCompatActivity {
                                 if (totalOrderedQty == null) totalOrderedQty = 0;
 
                                 FoodModel foodModel = new FoodModel();
-                                foodModel.id = (String) snapshot.getKey();
+                                foodModel.id = snapshot.getKey();
                                 foodModel.name = snapshot.child("name").getValue(String.class);
                                 foodModel.description = snapshot.child("description").getValue(String.class);
                                 foodModel.image_path = snapshot.child("image_path").getValue(String.class);

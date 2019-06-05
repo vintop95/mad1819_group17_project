@@ -99,7 +99,7 @@ public class DeliveryRequestDetailsActivity extends AppCompatActivity {
         if (inputDeliveryRequest.moveToNextState()) {
             txt_state_history.setText(inputDeliveryRequest.getStateHistoryToString());
 
-            if (inputDeliveryRequest.getCurrentState().equals(inputDeliveryRequest.STATE3)) {
+            if (inputDeliveryRequest.getCurrentState().equals(DeliveryRequest.STATE3)) {
                 btn_next_state.setTextColor(getResources().getColor(R.color.button_disabled_text));
                 btn_next_state.setEnabled(false);
             }
@@ -137,7 +137,7 @@ public class DeliveryRequestDetailsActivity extends AppCompatActivity {
 
 
     private void showBackArrowOnToolbar() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }

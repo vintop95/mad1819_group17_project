@@ -341,8 +341,8 @@ public class DeliveryRequest implements Serializable  {
             DirectionsResult result;
             distance = 0.0;
             String origin,destination;
-            origin = Double.toString(latlngRestaurant[0]) + "," + Double.toString(latlngRestaurant[1]);
-            destination = Double.toString(latlngConsumer[0]) + "," + Double.toString(latlngConsumer[1]);
+            origin = latlngRestaurant[0] + "," + latlngRestaurant[1];
+            destination = latlngConsumer[0] + "," + latlngConsumer[1];
             // distance between latitudes and longitudes
             result = DirectionsApi.newRequest(geoApiContext)
                     .origin(origin)

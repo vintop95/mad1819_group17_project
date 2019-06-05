@@ -100,8 +100,8 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
 
 
         try {
-            Log.d("AAA", Double.toString(restaurantCoordinates[0]) + " " + Double.toString(restaurantCoordinates[1]));
-            Log.d("AAA", Double.toString(customerCoordinates[0]) + " " + Double.toString(customerCoordinates[1]));
+            Log.d("AAA", restaurantCoordinates[0] + " " + restaurantCoordinates[1]);
+            Log.d("AAA", customerCoordinates[0] + " " + customerCoordinates[1]);
 
             setContentView(R.layout.activity_location_map);
             // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -127,8 +127,8 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
         try {
 
 
-            origin = Double.toString(restaurantCoordinates[0]) + "," + Double.toString(restaurantCoordinates[1]);
-            destination = Double.toString(customerCoordinates[0]) + "," + Double.toString(customerCoordinates[1]);
+            origin = restaurantCoordinates[0] + "," + restaurantCoordinates[1];
+            destination = customerCoordinates[0] + "," + customerCoordinates[1];
 
             Log.d("orderstate",orderState+"");
 
@@ -184,7 +184,7 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
 
         LatLng return_points = p.getPoints().get(0);
         if(p.getPoints().size()>0){
-            int middle_length = (int) p.getPoints().size()/2;
+            int middle_length = p.getPoints().size() /2;
             return_points = p.getPoints().get(middle_length);
         }
         return return_points;
@@ -316,7 +316,7 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
                 currentCoordinates[0] = location.getLatitude();
                 currentCoordinates[1] = location.getLongitude();
                 Log.d("setLocationManager", currentCoordinates[0]+ " "+currentCoordinates[1]);
-                current = Double.toString(currentCoordinates[0]) + "," + Double.toString(currentCoordinates[1]);
+                current = currentCoordinates[0] + "," + currentCoordinates[1];
 
                 MarkerOptions mo = new MarkerOptions();
                 mo.position(new LatLng(location.getLatitude(),location.getLongitude()));

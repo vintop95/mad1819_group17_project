@@ -39,14 +39,14 @@ public class ShoppingCart {
             retValue = true;
         } else {
             Log.d("if_else","else");
-            ShoppingItem currItem = (ShoppingItem) items.elementAt(currIndex);
+            ShoppingItem currItem = items.elementAt(currIndex);
             currItem.addOne();
             retValue = false;
         }
         Log.d("price",newItem.getPrice().toString());
         total_price += newItem.getPrice();
         counter += 1;
-        Log.d("price_tot_and_quantity",Double.toString(total_price)+";"+Integer.toString(counter));
+        Log.d("price_tot_and_quantity", total_price +";"+ counter);
         return retValue;
     }
 
@@ -55,7 +55,7 @@ public class ShoppingCart {
         if (currIndex == -1){
             return;
         }else{
-            ShoppingItem currItem = (ShoppingItem) items.elementAt(currIndex);
+            ShoppingItem currItem = items.elementAt(currIndex);
             total_price -= oldItem.getPrice();
             currItem.subtractOne();
             counter -= 1;

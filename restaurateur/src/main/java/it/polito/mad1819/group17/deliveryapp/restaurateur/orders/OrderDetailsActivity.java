@@ -64,7 +64,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     private Order inputOrder;
 
     private void showBackArrowOnToolbar() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }

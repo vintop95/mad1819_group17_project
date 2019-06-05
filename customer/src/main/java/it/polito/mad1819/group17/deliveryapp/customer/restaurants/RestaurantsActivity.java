@@ -86,7 +86,7 @@ public class RestaurantsActivity extends AppCompatActivity {
 
 
     private void showBackArrowOnToolbar() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
@@ -264,10 +264,8 @@ public class RestaurantsActivity extends AppCompatActivity {
                         String closingTime = model.working_time_closing;
 
 
-                        if (currentTime.compareTo(openingTime) > 0 &&
-                                currentTime.compareTo(closingTime) < 0) {
-                            return true;
-                        } else return false;
+                        return currentTime.compareTo(openingTime) > 0 &&
+                                currentTime.compareTo(closingTime) < 0;
                     } else return false;
                 } else {
                     return true;

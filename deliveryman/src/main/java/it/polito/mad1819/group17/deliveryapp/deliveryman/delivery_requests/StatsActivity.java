@@ -134,7 +134,7 @@ public class StatsActivity extends AppCompatActivity {
     }
 
     private void showBackArrowOnToolbar() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar_stats));
+        setSupportActionBar(findViewById(R.id.toolbar_stats));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }

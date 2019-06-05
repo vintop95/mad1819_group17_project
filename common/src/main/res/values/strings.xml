@@ -6,7 +6,7 @@
     <string name="title_dailyoffer">Daily Offers</string>
     <string name="title_orders">Orders</string>
     <string name="title_restaurants">Restaurants</string>
-    <string name="title_delivery_requests">Delivery Requests</string>
+    <string name="title_delivery_requests">Requests</string>
     <string name="title_hour_analytics">Statistics</string>
     <string name="title_review_analytics">Reviews</string>
     <string name="title_activity_location_map">Map</string>

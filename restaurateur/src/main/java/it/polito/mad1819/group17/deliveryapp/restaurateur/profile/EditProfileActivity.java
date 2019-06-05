@@ -546,11 +546,9 @@ public class EditProfileActivity extends AppCompatActivity {
                 (current_user.getWorking_time_closing() != null && !current_user.getWorking_time_closing().equals(input_working_time_closing.getText().toString())))
             return true;
 
-        if ((current_user.getBio() == null && input_bio.getText().toString() != null) ||
-                (current_user.getBio() != null && !current_user.getBio().equals(input_bio.getText().toString())))
-            return true;
+        return (current_user.getBio() == null && input_bio.getText().toString() != null) ||
+                (current_user.getBio() != null && !current_user.getBio().equals(input_bio.getText().toString()));
 
-        return false;
     }
 
     private void confirmOnBackPressed() {

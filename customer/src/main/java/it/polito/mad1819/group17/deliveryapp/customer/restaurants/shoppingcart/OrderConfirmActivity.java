@@ -96,7 +96,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
     private String newAddress = null;
 
     private void showBackArrowOnToolbar() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar_confirm));
+        setSupportActionBar(findViewById(R.id.toolbar_confirm));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
@@ -147,7 +147,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
 
         deliveryAddress_edit = findViewById(R.id.deliveryAddress);
         deliveryAddress_edit.setKeyListener(null);
-        deliveryHour_edit = (EditText) findViewById(R.id.deliveryHour);
+        deliveryHour_edit = findViewById(R.id.deliveryHour);
         addTimePickerOnClick(deliveryHour_edit);
         deliveryDate_edit = findViewById(R.id.deliveryDate);
         addDatePickerOnClick(deliveryDate_edit);
@@ -159,7 +159,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
         final_results.setText(finalResultString);
         item_tot_price.setText(CurrencyHelper.getCurrency(totalprice));
 
-        recyclerView = (RecyclerView) findViewById(R.id.listview_items);
+        recyclerView = findViewById(R.id.listview_items);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         OrderConfirmAdapter orderConfirmAdapter = new OrderConfirmAdapter(itemValues, this, recyclerView);
         recyclerView.setAdapter(orderConfirmAdapter);

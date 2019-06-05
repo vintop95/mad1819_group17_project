@@ -284,9 +284,9 @@ public class StatsActivity extends AppCompatActivity {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.hour_orders_layout_item, null);
 
-            TextView hour_tv = (TextView) convertView.findViewById(R.id.hoursInterval);
-            TextView order_tv = (TextView) convertView.findViewById(R.id.numberOfOrders);
-            ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressBarNumberOfOrder);
+            TextView hour_tv = convertView.findViewById(R.id.hoursInterval);
+            TextView order_tv = convertView.findViewById(R.id.numberOfOrders);
+            ProgressBar progressBar = convertView.findViewById(R.id.progressBarNumberOfOrder);
 
             Hour h = getItem(position);
 

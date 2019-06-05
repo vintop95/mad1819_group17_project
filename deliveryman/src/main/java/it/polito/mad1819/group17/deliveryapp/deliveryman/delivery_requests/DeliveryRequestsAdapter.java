@@ -84,7 +84,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
                     intent.putExtra("restaurant_address", restaurant_addr);
                     intent.putExtra("customer_address", customer_addr);
                     int order_st = LocationMapActivity.ACCEPTED_STATUS;
-                    if (clickedDeliveryRequest.getCurrentState() == clickedDeliveryRequest.STATE1) order_st = LocationMapActivity.ASSIGNED_STATUS;
+                    if (clickedDeliveryRequest.getCurrentState() == DeliveryRequest.STATE1) order_st = LocationMapActivity.ASSIGNED_STATUS;
                     intent.putExtra("order_status",order_st);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     fragment.getActivity().getApplicationContext().startActivity(intent);
