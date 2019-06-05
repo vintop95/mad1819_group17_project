@@ -1,8 +1,10 @@
 package it.polito.mad1819.group17.deliveryapp.restaurateur.profile;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import it.polito.mad1819.group17.deliveryapp.common.Restaurateur;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
+import it.polito.mad1819.group17.deliveryapp.restaurateur.reviews.AnalyticsActivity;
 
 
 public class ProfileFragment extends Fragment {
@@ -133,6 +136,8 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    private FloatingActionButton fab_reviews;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -140,6 +145,7 @@ public class ProfileFragment extends Fragment {
         progressBarHandler = new ProgressBarHandler(getContext());
         setHasOptionsMenu(true);
         locateViews(view);
+        fab_reviews = view.findViewById(R.id.fab_reviews);
         return view;
     }
 
@@ -150,6 +156,8 @@ public class ProfileFragment extends Fragment {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mRestaurateurDatabaseReference = mFirebaseDatabase.getReference().child("restaurateurs");
+        fab_reviews.setOnClickListener(
+                v -> startActivity(new Intent(getActivity(), AnalyticsActivity.class)));
     }
 
     @Override

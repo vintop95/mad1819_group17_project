@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_signout_restaurateurs, menu);
+        inflater.inflate(R.menu.menu_signout, menu);
         return true;
     }
 
@@ -377,9 +377,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
 
-            case R.id.analytics:
+            /*case R.id.analytics:
                 startActivity(new Intent(this, AnalyticsActivity.class));
-                return true;
+                return true;*/
 
             default:
                 return super.onOptionsItemSelected(item);
