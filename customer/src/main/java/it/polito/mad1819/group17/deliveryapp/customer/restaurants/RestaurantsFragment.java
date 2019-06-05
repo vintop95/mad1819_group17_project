@@ -23,12 +23,12 @@ public class RestaurantsFragment extends Fragment {
             R.drawable.favourite,
             R.drawable.pizza,       //pizza
             R.drawable.hamburger,    //hamburger
-            R.drawable.japanese,       //japanese
-            R.drawable.dessert,       //dessert
+            R.drawable.chicken,       //chicken
             R.drawable.vegan,        //vegan
             R.drawable.icecream,       //icecream
+            R.drawable.dessert,       //dessert
             R.drawable.healthy,       //healthy
-            R.drawable.chicken,       //chicken
+            R.drawable.japanese,       //japanese
             R.drawable.mexican,       //mexican
     };
     ListView lst;

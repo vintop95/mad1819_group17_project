@@ -182,12 +182,12 @@
         <item>Preferiti</item>
         <item>Pizza</item>
         <item>Hamburger</item>
-        <item>Giapponese</item>
-        <item>Dessert</item>
+        <item>Pollo</item>
         <item>Vegano</item>
         <item>Gelato</item>
+        <item>Dessert</item>
         <item>Salutare</item>
-        <item>Pollo</item>
+        <item>Giapponese</item>
         <item>Messicano</item>
     </string-array>
     <string-array name="days_of_week">
