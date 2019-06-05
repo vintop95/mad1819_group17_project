@@ -133,15 +133,6 @@ public class StatsActivity extends AppCompatActivity {
 
     }
 
-    /*public String getCurrentState(HashMap state_stateTime) {
-        if (state_stateTime.get("state3") != null)
-            return STATE3;
-        else if (state_stateTime.get("state2") != null)
-            return STATE2;
-        else
-            return STATE1;
-    }*/
-
     private void showBackArrowOnToolbar() {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_stats));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

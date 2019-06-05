@@ -98,21 +98,12 @@ public class DeliveryRequestDetailsActivity extends AppCompatActivity {
     private void positiveButtonAction() {
         if (inputDeliveryRequest.moveToNextState()) {
             txt_state_history.setText(inputDeliveryRequest.getStateHistoryToString());
-            //Log.d("XX", inputDeliveryRequest.getStateHistoryToString());
 
             if (inputDeliveryRequest.getCurrentState().equals(inputDeliveryRequest.STATE3)) {
                 btn_next_state.setTextColor(getResources().getColor(R.color.button_disabled_text));
                 btn_next_state.setEnabled(false);
             }
-            /*FirebaseDatabase.getInstance().getReference()
-                    .child("deliverymen").child(FirebaseAuth.getInstance().getUid())
-                    .child("delivery_requests").child(inputDeliveryRequest.getId()).child("state_stateTime")
-                    .setValue(inputDeliveryRequest.getState_stateTime(),
-                            (databaseError, databaseReference) -> {
-                                if (databaseError == null) {
-                                    updateOrderToFirebase(inputDeliveryRequest);
-                                }
-                            });*/
+
             DatabaseReference currentDeliveryRequestRef = FirebaseDatabase.getInstance().getReference()
                     .child("deliverymen").child(FirebaseAuth.getInstance().getUid())
                     .child("delivery_requests").child(inputDeliveryRequest.getId());

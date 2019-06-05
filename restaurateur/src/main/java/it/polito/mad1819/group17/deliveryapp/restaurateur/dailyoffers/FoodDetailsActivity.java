@@ -214,6 +214,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
                     .getDownloadUrl()
                     .addOnSuccessListener((Uri uri) -> {
                         Uri downUri = uri;
+                        mFoodLoaded.image_path = downUri.toString();
                         Log.v("FIREBASE_LOG", "Picture Upload Success - EditProfileActivity");
                         FirebaseDatabase.getInstance().getReference()
                                 .child("restaurateurs")
@@ -226,46 +227,41 @@ public class FoodDetailsActivity extends AppCompatActivity {
     }
 
     private FoodModel getUpdatedFood() {
-        FoodModel food = new FoodModel();
-        food = mFoodLoaded;
+
+        if (!TextUtils.isEmpty(mFoodLoaded.id)) {
+            uploadImage(getApplicationContext(), img_food_photo, mFoodLoaded);
+        }
 
         for (ListItem field : mFields) {
             switch (field.fieldNameRes) {
                 case LABEL_FOOD_NAME:
-                    if (!food.name.equals(field.fieldValue)) {
-                        food.name = field.fieldValue;
+                    if (!mFoodLoaded.name.equals(field.fieldValue)) {
+                        mFoodLoaded.name = field.fieldValue;
                         mFoodState.set(STATE_CHANGED);
                     }
                     break;
                 case LABEL_FOOD_DESCRIPTION:
-                    if (!food.description.equals(field.fieldValue)) {
-                        food.description = field.fieldValue;
+                    if (!mFoodLoaded.description.equals(field.fieldValue)) {
+                        mFoodLoaded.description = field.fieldValue;
                         mFoodState.set(STATE_CHANGED);
                     }
                     break;
                 case LABEL_FOOD_PRICE:
-                    if (!(food.price == Double.valueOf(field.fieldValue))) {
-                        food.price = Double.valueOf(field.fieldValue);
+                    if (!(mFoodLoaded.price == Double.valueOf(field.fieldValue))) {
+                        mFoodLoaded.price = Double.valueOf(field.fieldValue);
                         mFoodState.set(STATE_CHANGED);
                     }
                     break;
                 case LABEL_FOOD_AVAILABLE_QTY:
-                    if (!(food.availableQty == Integer.valueOf(field.fieldValue))) {
-                        food.availableQty = Integer.valueOf(field.fieldValue);
+                    if (!(mFoodLoaded.availableQty == Integer.valueOf(field.fieldValue))) {
+                        mFoodLoaded.availableQty = Integer.valueOf(field.fieldValue);
                         mFoodState.set(STATE_CHANGED);
                     }
                     break;
             }
         }
 
-        // GET PHOTO FROM IMAGEVIEW
-        if (TextUtils.isEmpty(food.id)) {
-
-        } else {
-            uploadImage(getApplicationContext(), img_food_photo, mFoodLoaded);
-        }
-
-        return food;
+        return mFoodLoaded;
     }
 
     private int getFoodState() {

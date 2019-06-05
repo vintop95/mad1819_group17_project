@@ -53,9 +53,9 @@ import it.polito.mad1819.group17.deliveryapp.deliveryman.delivery_requests.Deliv
 import it.polito.mad1819.group17.deliveryapp.deliveryman.profile.EditProfileActivity;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.profile.ProfileFragment;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.statistics.StatsFragment;
-import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.CurrencyHelper;
-import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.PrefHelper;
-import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.ProgressBarHandler;
+import it.polito.mad1819.group17.deliveryapp.common.utils.CurrencyHelper;
+import it.polito.mad1819.group17.deliveryapp.common.utils.PrefHelper;
+import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -139,7 +139,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                                 .createSignInIntentBuilder()
                                 .setIsSmartLockEnabled(false)
                                 .setAvailableProviders(Arrays.asList(
-                                        // new AuthUI.IdpConfig.GoogleBuilder().build(), //TODO: google not working
                                         new AuthUI.IdpConfig.EmailBuilder().build()))
                                 .build(),
                         RC_SIGN_IN);
@@ -235,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private void initUtils() {
         PrefHelper.setMainContext(this);
 
-        // TODO: LET THE USER CHANGE THE CURRENCY FROM SETTINGS?
         String language = Locale.ITALY.getLanguage();
         String country = Locale.ITALY.getCountry();
         CurrencyHelper.setLocaleCurrency(new Locale(language, country));

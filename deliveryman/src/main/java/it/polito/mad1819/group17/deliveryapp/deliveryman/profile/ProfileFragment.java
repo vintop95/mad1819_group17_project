@@ -1,9 +1,6 @@
 package it.polito.mad1819.group17.deliveryapp.deliveryman.profile;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +19,6 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.firebase.geofire.GeoFire;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,7 +28,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import it.polito.mad1819.group17.deliveryapp.common.Deliveryman;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
-import it.polito.mad1819.group17.deliveryapp.deliveryman.MainActivity;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.R;
 
 
@@ -149,9 +143,6 @@ public class ProfileFragment extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Deliveryman deliveryman = dataSnapshot.getValue(Deliveryman.class);
                     feedViews(deliveryman);
-
-                    // already done for the image (it loads slower)
-                    // progressBarHandler.hide();
                 }
 
                 @Override

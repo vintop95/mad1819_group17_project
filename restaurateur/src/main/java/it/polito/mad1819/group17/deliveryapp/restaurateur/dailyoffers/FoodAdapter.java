@@ -29,7 +29,6 @@ import com.google.firebase.database.DatabaseError;
 import java.util.Locale;
 
 import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
-import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModelUtil;
 import it.polito.mad1819.group17.deliveryapp.common.utils.MadFirebaseRecyclerAdapter;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 

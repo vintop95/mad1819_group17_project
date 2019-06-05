@@ -169,8 +169,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
             startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
         });
         frame_layout.setOnClickListener(v -> openRestaurantProfile());
-//        image_restaurant_info.setOnClickListener(v -> openRestaurantProfile());
-//        txt_restaurant_name.setOnClickListener(v -> openRestaurantProfile());
+
 
         if (!TextUtils.isEmpty(getIntent().getStringExtra("id"))) {
             // we came here due to a tap on the notification so let us read the (updated) order from firebase

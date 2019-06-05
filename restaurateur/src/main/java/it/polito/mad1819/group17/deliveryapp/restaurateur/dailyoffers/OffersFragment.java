@@ -19,17 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.firebase.ui.database.SnapshotParser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.Comparator;
 
 import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModel;
-import it.polito.mad1819.group17.deliveryapp.common.dailyoffers.FoodModelUtil;
-import it.polito.mad1819.group17.deliveryapp.common.utils.PopupHelper;
 import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.restaurateur.R;
 
@@ -192,14 +186,6 @@ public class OffersFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == ADD_FOOD_REQUEST) {
-//            if (data != null){
-//                FoodModel addedFood = (FoodModel) data.getSerializableExtra("food");
-//                if(addedFood != null) addFoodInList(addedFood);
-//            }
-//            btnAddOffer.setEnabled(true);
-//        }else
-
         if (requestCode == MODIFY_FOOD_REQUEST) {
 
             if (data != null){

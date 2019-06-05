@@ -173,9 +173,6 @@ public class RestaurantProfileActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Restaurateur restaurateur = dataSnapshot.getValue(Restaurateur.class);
                     feedViews(restaurateur);
-
-                    // already done for the image (it loads slower)
-                    // progressBarHandler.hide();
                 }
 
                 @Override
@@ -210,7 +207,6 @@ public class RestaurantProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // getMenuInflater().inflate(R.menu.activity_edit_profile, menu);
         return true;
     }
 }

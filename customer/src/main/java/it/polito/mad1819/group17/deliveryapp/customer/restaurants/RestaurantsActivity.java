@@ -480,17 +480,14 @@ public class RestaurantsActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case 0://no filter
-                            // fetch(currentSorting);
                             adapter.stopListening();
                             adapter.getFilter().filter("");
                             break;
                         case 1: // popular
-                            // fetch(currentSorting);
                             adapter.stopListening();
                             adapter.getFilter().filter(FILTER_ORDERS_COUNT);
                             break;
                         case 2: // Free Day
-                            // fetch(currentSorting);
                             adapter.stopListening();
                             adapter.getFilter().filter(FILTER_OPEN_NOW);
                             break;

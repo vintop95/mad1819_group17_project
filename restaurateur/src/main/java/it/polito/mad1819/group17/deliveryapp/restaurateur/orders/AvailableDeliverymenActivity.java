@@ -15,7 +15,6 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
-import com.google.android.gms.location.Geofence;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -60,7 +59,6 @@ public class AvailableDeliverymenActivity extends AppCompatActivity {
     private void initUtils() {
         PrefHelper.setMainContext(this);
 
-        // TODO: LET THE USER CHANGE THE CURRENCY FROM SETTINGS?
         String language = Locale.ITALY.getLanguage();
         String country = Locale.ITALY.getCountry();
         CurrencyHelper.setLocaleCurrency(new Locale(language, country));

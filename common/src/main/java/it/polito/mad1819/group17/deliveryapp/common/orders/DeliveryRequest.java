@@ -16,9 +16,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import it.polito.mad1819.group17.deliveryapp.common.R;
-
-import static android.provider.Settings.System.getString;
 import static java.lang.Double.valueOf;
 
 public class DeliveryRequest implements Serializable  {

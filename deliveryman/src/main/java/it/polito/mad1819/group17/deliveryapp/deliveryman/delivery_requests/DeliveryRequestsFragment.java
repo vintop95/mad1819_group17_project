@@ -15,7 +15,7 @@ import com.google.firebase.database.Query;
 
 import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.R;
-import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.ProgressBarHandler;
+import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 
 
 public class DeliveryRequestsFragment extends Fragment {
@@ -39,14 +39,6 @@ public class DeliveryRequestsFragment extends Fragment {
 
         progressBarHandler = new ProgressBarHandler(getContext());
 
-        /*button_stats = view.findViewById(R.id.statsButton);
-        button_stats.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), StatsActivity.class);
-                startActivity(intent);
-            }
-        });*/
         return view;
     }
 

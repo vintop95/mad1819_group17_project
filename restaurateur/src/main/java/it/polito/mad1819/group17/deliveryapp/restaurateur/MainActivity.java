@@ -160,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
                                 .createSignInIntentBuilder()
                                 .setIsSmartLockEnabled(false)
                                 .setAvailableProviders(Arrays.asList(
-                                        // new AuthUI.IdpConfig.GoogleBuilder().build(), //TODO: google not working
                                         new AuthUI.IdpConfig.EmailBuilder().build()))
                                 .build(),
                         RC_SIGN_IN);
@@ -254,7 +253,6 @@ public class MainActivity extends AppCompatActivity {
     private void initUtils() {
         PrefHelper.setMainContext(this);
 
-        // TODO: LET THE USER CHANGE THE CURRENCY FROM SETTINGS?
         String language = Locale.ITALY.getLanguage();
         String country = Locale.ITALY.getCountry();
         CurrencyHelper.setLocaleCurrency(new Locale(language, country));

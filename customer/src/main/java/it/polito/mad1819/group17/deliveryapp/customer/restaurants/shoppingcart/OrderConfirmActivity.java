@@ -253,8 +253,6 @@ public class OrderConfirmActivity extends AppCompatActivity {
         SimpleDateFormat simpleDateFormat =
                 new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault());
         String current_timestamp = simpleDateFormat.format(new Date());
-        /*String day = current_timestamp.split(" ")[0];
-        String delivery_timestamp = day + " " + deliveryHour_edit.getText().toString();*/
         String delivery_timestamp = deliveryDate_edit.getText().toString() + " " + deliveryHour_edit.getText();
         state_stateTime.put("state1", current_timestamp);
 
@@ -399,7 +397,6 @@ public class OrderConfirmActivity extends AppCompatActivity {
     public final static String FIREBASE_DAILY_OFFERS = "daily_offers";
     public final static String FIREBASE_ORDERS_COUNT = "orders_count";
     public final static String FIREBASE_FILTER_BY_VOTE = "filter_by_vote";
-    public final static String FIREBASE_FILTER_BY_FREE_DAY = "filter_by_free_day";
 
     public String getRestaurateurOrdersPath(@Nullable String orderId) {
         if (TextUtils.isEmpty(restaurant_id)) {

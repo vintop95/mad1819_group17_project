@@ -469,18 +469,6 @@ public class DailyMenuActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        // adapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        // adapter.stopListening();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_daily_menu, menu);
         final Menu m = menu;

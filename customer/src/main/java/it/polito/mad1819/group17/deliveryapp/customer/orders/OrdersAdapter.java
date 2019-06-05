@@ -107,10 +107,6 @@ public class OrdersAdapter extends FirebaseRecyclerAdapter<Order, OrdersAdapter.
         }
     }
 
-    public static Order getOrderById(String id) {
-        return null;
-    }
-
     private void runLayoutAnimation(final RecyclerView recyclerView, int type) {
         final Context context = recyclerView.getContext();
         LayoutAnimationController controller = null;

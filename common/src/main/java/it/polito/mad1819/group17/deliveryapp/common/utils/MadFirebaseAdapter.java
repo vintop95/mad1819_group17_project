@@ -7,7 +7,6 @@ import android.support.annotation.RestrictTo;
 import com.firebase.ui.database.ChangeEventListener;
 import com.firebase.ui.database.FirebaseArray;
 import com.firebase.ui.database.ObservableSnapshotArray;
-import com.google.firebase.database.DatabaseReference;
 
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 interface MadFirebaseAdapter<T> extends ChangeEventListener, LifecycleObserver {

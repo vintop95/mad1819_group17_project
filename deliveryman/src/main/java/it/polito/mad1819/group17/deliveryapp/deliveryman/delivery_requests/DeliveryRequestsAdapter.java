@@ -22,7 +22,7 @@ import java.text.DecimalFormat;
 
 import it.polito.mad1819.group17.deliveryapp.common.orders.DeliveryRequest;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.R;
-import it.polito.mad1819.group17.deliveryapp.deliveryman.utils.ProgressBarHandler;
+import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 
 public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryRequest, DeliveryRequestsAdapter.DeliveryRequestHolder> {
 
@@ -47,9 +47,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
         TextView txt_delivery_date;
         TextView txt_delivery_address;
         TextView routeDistance;
-        //TextView txt_customer_name;
         TextView txt_state;
-        //TextView txt_restaurant_name;
         TextView txt_restaurant_address;
         ImageView image_state;
         Button mapButton;
@@ -64,9 +62,7 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
             txt_delivery_time = itemView.findViewById(R.id.txt_delivery_time);
             txt_delivery_date = itemView.findViewById(R.id.txt_delivery_date);
             txt_delivery_address = itemView.findViewById(R.id.txt_address);
-            //txt_customer_name = itemView.findViewById(R.id.txt_customer_name);
             txt_state = itemView.findViewById(R.id.txt_state);
-            //txt_restaurant_name = itemView.findViewById(R.id.txt_restaurant_name);
             txt_restaurant_address = itemView.findViewById(R.id.txt_restaurant_address);
             image_state = itemView.findViewById(R.id.image_state);
             mapButton = itemView.findViewById(R.id.imageButton_map);
@@ -78,7 +74,6 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
 
                     DeliveryRequest clickedDeliveryRequest = getItem(getAdapterPosition());
                     Log.d("AAA", ""+getAdapterPosition());
-                    //clickedDeliveryRequest.setId(getSnapshots().getSnapshot(getAdapterPosition()).getKey());
                     String restaurant_addr = clickedDeliveryRequest.getRestaurant_address();
                     String customer_addr = clickedDeliveryRequest.getAddress();
                     if(restaurant_addr==null)restaurant_addr="unknown";
@@ -141,8 +136,6 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
 
         holder.txt_state.setText(model.getCurrentStateLocal());
         holder.txt_delivery_address.setText(model.getAddress());
-        //holder.txt_customer_name.setText(model.getCustomer_name());
-        //holder.txt_restaurant_name.setText(model.getRestaurant_name());
         holder.txt_restaurant_address.setText(model.getRestaurant_address());
         switch (model.getCurrentState()) {
             case DeliveryRequest.STATE1:
@@ -177,10 +170,6 @@ public class DeliveryRequestsAdapter extends FirebaseRecyclerAdapter<DeliveryReq
     public DeliveryRequestHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_delivery_request, viewGroup, false);
         return new DeliveryRequestHolder(view);
-    }
-
-    public static DeliveryRequest getOrderById(String id) {
-        return null;
     }
 
     private void runLayoutAnimation(final RecyclerView recyclerView, int type) {

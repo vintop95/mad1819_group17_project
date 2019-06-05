@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -61,14 +60,12 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
     public static int ACCEPTED_STATUS = 1;
 
     public GoogleMap mMap;
-    LocationRequest mLocationRequest;
     Intent intent;
     GeoApiContext context;
     String restaurantAddress;
     String customerAddress;
     String meantime, origin, destination, current;
-    GoogleApiClient mGoogleApiClient;
-    DateTime now, arrive;
+    DateTime now;
     DirectionsResult result;
     Polyline line;
     BitmapDescriptor trasparent;
@@ -79,10 +76,6 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
     int orderState;
     LocationManager locationManager = null;
     LocationListener locationListener = null;
-    Marker currentPosMarker;
-
-
-    private static final int MY_PERMISSION_ACCESS_COARSE_LOCATION = 11;
 
 
     @Override
@@ -227,7 +220,6 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
 
         //Execute Directions API request
         context = new GeoApiContext.Builder().apiKey(getString(R.string.google_api_key)).build();
-        // DirectionsApiRequest req = DirectionsApi.getDirections(context, "41.385064,2.173403", "40.416775,-3.70379");
         DirectionsApiRequest req = DirectionsApi.getDirections(context, origin, destination);
 
 
@@ -256,8 +248,6 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
                                                 path.add(new LatLng(coord1.lat, coord1.lng));
                                             }
                                         }
-                                        //meantime = "Time :"+ result.routes[0].legs[0].duration.humanReadable + " Distance :" + result.routes[0].legs[0].distance.humanReadable;
-                                        //Log.d("meantime",meantime);
                                     }
                                 } else {
                                     EncodedPolyline points = step.polyline;
@@ -315,7 +305,7 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
 
 
     private void setLocationManagerListener(){
-        Log.d("setLocationManagerListener", currentCoordinates[0]+ " "+currentCoordinates[1]);
+        Log.d("setLocationManager", currentCoordinates[0]+ " "+currentCoordinates[1]);
 
         locationManager=(LocationManager)getSystemService(LOCATION_SERVICE);
 
@@ -325,7 +315,7 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
 
                 currentCoordinates[0] = location.getLatitude();
                 currentCoordinates[1] = location.getLongitude();
-                Log.d("setLocationManagerListener", currentCoordinates[0]+ " "+currentCoordinates[1]);
+                Log.d("setLocationManager", currentCoordinates[0]+ " "+currentCoordinates[1]);
                 current = Double.toString(currentCoordinates[0]) + "," + Double.toString(currentCoordinates[1]);
 
                 MarkerOptions mo = new MarkerOptions();

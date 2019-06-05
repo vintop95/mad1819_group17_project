@@ -318,29 +318,6 @@ public class Order implements Serializable {
         return state_history;
     }
 
-    /*public boolean moveToNextState() {
-        if (getCurrentState() == STATE3)
-            return false;
-        else {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-            String currentTimestamp = formatter.format(new Date());
-
-            if (getCurrentState() == STATE1) {
-                this.state_stateTime.put("state2", currentTimestamp);
-                //this.sorting_field = this.sorting_field.split("_")[0] + "_state0_" + this.sorting_field.split("_")[2];
-
-            } else if (getCurrentState() == STATE2) {
-                this.state_stateTime.put("state3", currentTimestamp);
-                //this.sorting_field = this.sorting_field.split("_")[0] + "_state3_" + this.sorting_field.split("_")[2];
-                this.sorting_field = "state3_" + this.sorting_field.split("_")[1];
-            } else if (getCurrentState() == STATE3) {
-                this.state_stateTime.put("state4", currentTimestamp);
-                //this.sorting_field = this.sorting_field.split("_")[0] + "_state3_" + this.sorting_field.split("_")[2];
-                this.sorting_field = "state4_" + this.sorting_field.split("_")[1];
-            }
-            return true;
-        }
-    }*/
     public boolean moveToNextState() {
         if (getCurrentState() == STATE4)
             return false;

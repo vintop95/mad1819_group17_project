@@ -87,7 +87,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
+                android:layout_gravity="start|center_vertical"
                 android:layout_margin="10dp"
                 android:text="@string/kilometers_achieved"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
@@ -96,9 +96,9 @@
                 android:id="@+id/kmDelivered"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
+                android:layout_gravity="end|center_vertical"
                 android:layout_margin="10dp"
-                android:gravity="right"
+                android:gravity="end"
                 android:text="@string/label_quantity_dummy"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/colorState3" />
@@ -118,7 +118,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
+                android:layout_gravity="start|center_vertical"
                 android:layout_margin="10dp"
                 android:text="@string/kilometers_remaining"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
@@ -127,9 +127,9 @@
                 android:id="@+id/kmAccepted"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
+                android:layout_gravity="end|center_vertical"
                 android:layout_margin="10dp"
-                android:gravity="right"
+                android:gravity="end"
                 android:text="@string/label_quantity_dummy"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/colorState2" />
@@ -149,7 +149,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
+                android:layout_gravity="start|center_vertical"
                 android:layout_margin="10dp"
                 android:text="@string/kilometers_attendence"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
@@ -158,9 +158,9 @@
                 android:id="@+id/kmAssigned"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
+                android:layout_gravity="end|center_vertical"
                 android:layout_margin="10dp"
-                android:gravity="right"
+                android:gravity="end"
                 android:text="@string/label_quantity_dummy"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/colorState1" />
@@ -181,7 +181,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
+                android:layout_gravity="start|center_vertical"
                 android:layout_margin="10dp"
                 android:text="@string/number_requests"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
@@ -190,9 +190,9 @@
                 android:id="@+id/requestCounter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
+                android:layout_gravity="end|center_vertical"
                 android:layout_margin="10dp"
-                android:gravity="right"
+                android:gravity="end"
                 android:text="@string/label_quantity_dummy"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
         </android.support.v7.widget.LinearLayoutCompat>

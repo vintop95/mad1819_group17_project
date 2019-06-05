@@ -256,9 +256,6 @@ public class OrderDetailsActivity extends AppCompatActivity {
                         updateOrderInFirebase(inputOrder);
 
                         // update UI
-                        /*txt_state_history.setText(inputOrder.getStateHistoryToString());
-                        txt_deliveryman_name.setText(inputOrder.getDeliveryman_name());
-                        txt_deliveryman_phone.setText(Html.fromHtml("<u>" + inputOrder.getDeliveryman_phone() + "<u/>"));*/
                         feedViews(inputOrder);
                         adjustLayoutProgrammatically();
                     }

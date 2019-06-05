@@ -88,9 +88,6 @@ public class RateActivity extends AppCompatActivity {
             String restaurateurOrderPath = "/restaurateurs/" + inputOrder.getRestaurant_id() + "/orders/" + inputOrder.getId();
             String customerOrderPath = "/customers/" + inputOrder.getCustomer_id() + "/orders/" + inputOrder.getId();
 
-            //String dailyOffersPath = "/restaurateurs/" + inputOrder.getRestaurant_id() + "/daily_offers/";
-            //String restaurantPath = "/restaurateurs/" + inputOrder.getRestaurant_id();
-
             HashMap<String, Object> ratesMap = new HashMap<>();
             rate = new Rate(FirebaseAuth.getInstance().getUid(), rb_restaurant.getRating(), rb_service.getRating(), input_comment.getText().toString());
             if (!rate.isEmpty()) {
@@ -108,40 +105,6 @@ public class RateActivity extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference().updateChildren(ratesMap, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                        /*if (rb_food.getRating() != 0) {
-                            FirebaseDatabase.getInstance().getReference(dailyOffersPath).runTransaction(new Transaction.Handler() {
-                                @NonNull
-                                @Override
-                                public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                                    for (String itemId : inputOrder.getItem_itemDetails().keySet()) {
-                                        MutableData currentIemRef = mutableData.child(itemId);
-                                        MutableData currentNumberOfRatesRef = currentIemRef.child("number_of_rates");
-                                        MutableData currentTotalRateRef = currentIemRef.child("total_rate");
-
-                                        Integer number_of_rates = currentNumberOfRatesRef.getValue(Integer.class);
-                                        Float total_rate = currentTotalRateRef.getValue(Float.class);
-                                        if (number_of_rates == null || total_rate == null) {
-                                            number_of_rates = new Integer(0);
-                                            total_rate = new Float(0);
-                                        }
-
-                                        number_of_rates += 1;
-                                        total_rate += new Float(rb_food.getRating());
-
-                                        currentNumberOfRatesRef.setValue(number_of_rates);
-                                        currentTotalRateRef.setValue(total_rate);
-                                    }
-
-                                    return Transaction.success(mutableData);
-                                }
-
-                                @Override
-                                public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
-
-                                }
-                            });
-                        }*/
-
                         FirebaseDatabase.getInstance().getReference(/*dailyOffersPath*/"/restaurateurs/" + inputOrder.getRestaurant_id()).runTransaction(new Transaction.Handler() {
                             @NonNull
                             @Override
@@ -221,7 +184,6 @@ public class RateActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         setResult(OrderDetailsActivity.RATE_NOT_SENT);
         finish();
     }

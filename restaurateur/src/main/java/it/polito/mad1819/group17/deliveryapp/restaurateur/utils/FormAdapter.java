@@ -43,11 +43,6 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FieldHolder> {
     private LayoutInflater mInflater;
     private AtomicInteger mFormState;
 
-    public void updateList(List<ListItem> updatedData) {
-        mList = updatedData;
-        notifyDataSetChanged();
-    }
-
     public FormAdapter(Context context, List<ListItem> list, AtomicInteger formState) {
         Log.d(TAG, "created");
         mContext = context;

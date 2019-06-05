@@ -5,8 +5,6 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Toast;
 
-import it.polito.mad1819.group17.deliveryapp.common.R;
-
 public class PopupHelper {
     public static void showSnackbar(View v, String msg){
         final Snackbar snackBar = Snackbar
