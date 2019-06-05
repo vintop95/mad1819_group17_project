@@ -111,7 +111,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:text="@string/label_quantity_dummy"
+        android:text="0"
         android:textColor="@color/textSecondary"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/label_num_comments"
