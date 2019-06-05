@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.polito.mad1819.group17.deliveryapp.common.utils.ProgressBarHandler;
 import it.polito.mad1819.group17.deliveryapp.deliveryman.R;
 
 import static it.polito.mad1819.group17.deliveryapp.deliveryman.MainActivity.ACCESS_FINE_LOCATION_REQUEST;
@@ -58,6 +59,8 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
 
     public static int ASSIGNED_STATUS = 0;
     public static int ACCEPTED_STATUS = 1;
+
+    private ProgressBarHandler progressBarHandler;
 
     public GoogleMap mMap;
     Intent intent;
@@ -91,12 +94,9 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
         Log.d("AAA", customerAddress);
 
 
-
         restaurantCoordinates = getLatitudeAndLongitudeFromLocation(restaurantAddress);
         customerCoordinates = getLatitudeAndLongitudeFromLocation(customerAddress);
         currentCoordinates = getLatitudeAndLongitudeFromLocation(customerAddress);
-
-
 
 
         try {
@@ -130,7 +130,7 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
             origin = restaurantCoordinates[0] + "," + restaurantCoordinates[1];
             destination = customerCoordinates[0] + "," + customerCoordinates[1];
 
-            Log.d("orderstate",orderState+"");
+            Log.d("orderstate", orderState + "");
 
 
         } catch (Exception e) {
@@ -152,12 +152,13 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        progressBarHandler = new ProgressBarHandler(this);
+        progressBarHandler.show();
         mMap = googleMap;
-        if(orderState == ASSIGNED_STATUS) {
+        if (orderState == ASSIGNED_STATUS) {
             setLocationManagerListener();
-        }
-        else {
-            plotRoutes(origin,destination);
+        } else {
+            plotRoutes(origin, destination);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(restaurantCoordinates[0], restaurantCoordinates[1]), 13));
         }
 
@@ -183,15 +184,15 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
     public LatLng getPolylineCentroid(@NonNull Polyline p) {
 
         LatLng return_points = p.getPoints().get(0);
-        if(p.getPoints().size()>0){
-            int middle_length = p.getPoints().size() /2;
+        if (p.getPoints().size() > 0) {
+            int middle_length = p.getPoints().size() / 2;
             return_points = p.getPoints().get(middle_length);
         }
         return return_points;
     }
 
 
-    private void plotRoutes(String origin, String destination){
+    private void plotRoutes(String origin, String destination) {
         LatLng latLng_restaurant = new LatLng(restaurantCoordinates[0], restaurantCoordinates[1]);
         LatLng latLng_customer = new LatLng(customerCoordinates[0], customerCoordinates[1]);
 
@@ -301,13 +302,15 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng_restaurant, 13));
         //////////////////
+
+        progressBarHandler.hide();
     }
 
 
-    private void setLocationManagerListener(){
-        Log.d("setLocationManager", currentCoordinates[0]+ " "+currentCoordinates[1]);
+    private void setLocationManagerListener() {
+        Log.d("setLocationManager", currentCoordinates[0] + " " + currentCoordinates[1]);
 
-        locationManager=(LocationManager)getSystemService(LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         locationListener = new LocationListener() {
             @Override
@@ -315,14 +318,15 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
 
                 currentCoordinates[0] = location.getLatitude();
                 currentCoordinates[1] = location.getLongitude();
-                Log.d("setLocationManager", currentCoordinates[0]+ " "+currentCoordinates[1]);
+                Log.d("setLocationManager", currentCoordinates[0] + " " + currentCoordinates[1]);
                 current = currentCoordinates[0] + "," + currentCoordinates[1];
 
                 MarkerOptions mo = new MarkerOptions();
-                mo.position(new LatLng(location.getLatitude(),location.getLongitude()));
+                mo.position(new LatLng(location.getLatitude(), location.getLongitude()));
                 //currentPosMarker = mMap.addMarker(mo);
-                plotRoutes(current,origin);
-                if(locationManager!=null && locationListener!=null)locationManager.removeUpdates(locationListener);
+                plotRoutes(current, origin);
+                if (locationManager != null && locationListener != null)
+                    locationManager.removeUpdates(locationListener);
             }
 
             @Override
@@ -344,8 +348,7 @@ public class LocationMapActivity extends FragmentActivity implements OnMapReadyC
         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 4000, 0, locationListener);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 4000, 0, locationListener);
-        }
-        else
+        } else
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_REQUEST);
 
     }
