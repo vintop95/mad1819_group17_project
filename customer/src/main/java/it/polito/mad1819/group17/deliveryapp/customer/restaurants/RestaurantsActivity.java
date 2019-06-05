@@ -69,6 +69,13 @@ public class RestaurantsActivity extends AppCompatActivity {
     private LinearLayoutManager linearLayoutManager;
     private MadFirebaseRecyclerAdapter adapter;
     private String userId;
+    private Comparator<RestaurantModel> currentSorting =
+            new Comparator<RestaurantModel>() {
+                @Override
+                public int compare(RestaurantModel lhs, RestaurantModel rhs) {
+                    return lhs.name.compareTo(rhs.name);
+                }
+            };
 
     private SearchView input_search;
     private TextView label_subtitle;
@@ -155,12 +162,8 @@ public class RestaurantsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        fetch(new Comparator<RestaurantModel>() {
-            @Override
-            public int compare(RestaurantModel lhs, RestaurantModel rhs) {
-                return lhs.name.compareTo(rhs.name);
-            }
-        });
+
+        fetch(currentSorting);
         adapter.startListening();
     }
 
@@ -383,18 +386,15 @@ public class RestaurantsActivity extends AppCompatActivity {
                 label_closed.setVisibility(View.VISIBLE);
                 txt_closed.setVisibility(View.VISIBLE);
 
-                if (switch_closed ==1)
+                if (switch_closed == 1)
                     txt_closed.setText(R.string.closed_tomorrow);
 
                 if (switch_closed == 2)
                     txt_closed.setText(opening_time);
-
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(RestaurantsActivity.this, R.string.closed_toast, Toast.LENGTH_SHORT).show();
-                    }
-                });
+            } else {
+                photo.clearColorFilter();
+                label_closed.setVisibility(View.GONE);
+                txt_closed.setVisibility(View.GONE);
             }
         }
 
@@ -480,14 +480,17 @@ public class RestaurantsActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case 0://no filter
+                            // fetch(currentSorting);
                             adapter.stopListening();
                             adapter.getFilter().filter("");
                             break;
                         case 1: // popular
+                            // fetch(currentSorting);
                             adapter.stopListening();
                             adapter.getFilter().filter(FILTER_ORDERS_COUNT);
                             break;
                         case 2: // Free Day
+                            // fetch(currentSorting);
                             adapter.stopListening();
                             adapter.getFilter().filter(FILTER_OPEN_NOW);
                             break;
@@ -515,15 +518,16 @@ public class RestaurantsActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case 0: // by name
-                            fetch(new Comparator<RestaurantModel>() {
+                            currentSorting = new Comparator<RestaurantModel>() {
                                 @Override
                                 public int compare(RestaurantModel lhs, RestaurantModel rhs) {
                                     return lhs.name.compareTo(rhs.name);
                                 }
-                            });
+                            };
+                            fetch(currentSorting);
                             break;
                         case 1: // by popularity
-                            fetch(new Comparator<RestaurantModel>() {
+                            currentSorting = new Comparator<RestaurantModel>() {
                                 @Override
                                 public int compare(RestaurantModel lhs, RestaurantModel rhs) {
                                     if (lhs.orders_count > rhs.orders_count) {
@@ -534,7 +538,8 @@ public class RestaurantsActivity extends AppCompatActivity {
                                         return 0;
                                     }
                                 }
-                            });
+                            };
+                            fetch(currentSorting);
                             break;
                     }
                 }
