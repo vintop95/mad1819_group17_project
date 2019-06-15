@@ -1,6 +1,16 @@
-# Delivery App Project
+# Delivery App Project - AppetiTO
+![AppetiTO logo](https://github.com/vintop95/mad1819_group17_project/blob/develop/logo_mad1819_group17_project.png)  
+
 **Project of Mobile Application Development @PoliTO 2018-19 of the Group 17 developed with Android SDK in Java**  
 More info on ``mad1819_assignment.pdf`` and all ``LAB_.pdf``
+* **ASSIGNMENT:** https://github.com/vintop95/mad1819_group17_project/blob/develop/mad1819_assignment.pdf
+* **LAB1:** https://github.com/vintop95/mad1819_group17_project/blob/develop/lab1.pdf
+* **LAB2:** https://github.com/vintop95/mad1819_group17_project/blob/develop/lab2.pdf
+* **LAB3:** https://github.com/vintop95/mad1819_group17_project/blob/develop/lab3.pdf
+* **LAB4:** https://github.com/vintop95/mad1819_group17_project/blob/develop/lab4.pdf
+* **LAB5:** https://github.com/vintop95/mad1819_group17_project/blob/develop/lab5.pdf
+
+**Presentation with embedded videos:** https://drive.google.com/file/d/1xr6M5hPOjB74ZfzSrLo5SWCbF83MMbA5/view?usp=sharing
 
 ## Files
 - DB_scheme.pdf: Model of Firebase Db
