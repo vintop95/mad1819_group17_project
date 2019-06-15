@@ -1,4 +1,7 @@
 # Delivery App Project
+**Project of Mobile Application Development @PoliTO 2018-19 of the Group 17 developed with Android SDK in Java**  
+More info on ``mad1819_assignment.pdf`` and all ``LAB_.pdf``
+
 ## Files
 - DB_scheme.pdf: Model of Firebase Db
 
